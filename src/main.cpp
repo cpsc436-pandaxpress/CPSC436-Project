@@ -1,5 +1,7 @@
-#define GL3W_IMPLEMENTATION
+#include "common.hpp"
+#include "world.hpp"
 
+#define GL3W_IMPLEMENTATION
 #include <gl3w.h>
 
 // stlib
@@ -9,14 +11,41 @@
 using Clock = std::chrono::high_resolution_clock;
 
 // Global
+World world;
 const int width = 600;
 const int height = 400;
 const char *title = "Panda Express";
 
 // Entry point
 int main(int argc, char *argv[]) {
-    printf("You should see this message (QWERTY)\n");
-    std::cout << "Press any key to exit" << std::endl;
-    std::cin.get();
-    return EXIT_SUCCESS;
+
+	// Initializing world (after renderer.init().. sorry)
+	if (!world.init({ (float)width, (float)height }))
+	{
+		// Time to read the error message
+		std::cout << "Press any key to exit" << std::endl;
+		std::cin.get();
+		return EXIT_FAILURE;
+	}
+
+	auto t = Clock::now();
+
+	// variable timestep loop.. can be improved (:
+	while (!world.is_over())
+	{
+		// Processes system messages, if this wasn't present the window would become unresponsive
+		glfwPollEvents();
+
+		// Calculating elapsed times in milliseconds from the previous iteration
+		auto now = Clock::now();
+		float elapsed_sec = (float)(std::chrono::duration_cast<std::chrono::microseconds>(now - t)).count() / 1000;
+		t = now;
+
+		world.update(elapsed_sec);
+		world.draw();
+	}
+
+	world.destroy();
+
+	return EXIT_SUCCESS;
 }

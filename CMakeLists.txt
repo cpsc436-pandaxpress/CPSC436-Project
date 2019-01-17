@@ -30,9 +30,11 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp.in" "${CMAKE_CU
 # You can switch to use the file GLOB for simplicity but at your own risk
 # file(GLOB SOURCE_FILES src/*.cpp src/*.hpp)
 
+
 # Add source files as we code (QWERTY)
-set(SOURCE_FILES
-        src/main.cpp
+file(GLOB SOURCE_FILES
+        src/*.cpp
+		src/*.hpp
         )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
