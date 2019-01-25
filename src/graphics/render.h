@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "sprite.h"
 
 #include "../util/gl_utils.h"
 
@@ -16,6 +15,6 @@ public:
 // interface for renderables, like framebuffers or the window
 class RenderTarget {
 public:
-    virtual void draw(Renderable& renderable, const mat3& projection) = 0;
+    virtual void draw(Renderable* renderable, const mat3& projection) = 0;
 
 };

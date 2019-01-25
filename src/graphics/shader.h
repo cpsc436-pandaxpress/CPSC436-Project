@@ -19,6 +19,7 @@ private:
 
 public:
     Shader(GLuint vert_id, GLuint frag_id, GLuint program_id);
+    Shader(const Shader& other);
 
     void bind();
 

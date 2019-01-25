@@ -5,11 +5,12 @@
 #pragma once
 
 #include "mesh.h"
+#include "render.h"
 #include "shader.h"
 #include "shader_manager.h"
 #include "texture.h"
 
-class Sprite {
+class Sprite : public Renderable {
 private:
     Mesh mesh_;
     Shader shader_;

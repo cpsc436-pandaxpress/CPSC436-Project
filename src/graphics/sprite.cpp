@@ -32,8 +32,11 @@ Sprite::Sprite(Texture texture, Shader shader) :
     shader_(shader),
     texture_(texture)
 {
-    position_ = { 0, 9};
-
+    position_ = { 0.f, 0.f};
+    pixel_scale_ = {(float)texture.width, (float)texture.height};
+    scale_ = {1.f, 1.f};
+    color_ = {1.f, 1.f, 1.f};
+    rotation_ = 0.f;
 }
 
 void Sprite::draw(const mat3& projection) {
@@ -68,6 +71,7 @@ void Sprite::draw(const mat3& projection) {
     shader_.set_uniform_mat3("projection", projection);
 
     // bind texture
+    glActiveTexture(GL_TEXTURE0);
     texture_.bind();
 
     // draw!

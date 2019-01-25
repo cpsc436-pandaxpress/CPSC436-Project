@@ -33,7 +33,7 @@ set(SOURCE_FILES
         src/util/input_manager.cpp
         src/graphics/window.cpp
         src/graphics/texture.cpp
-        src/graphics/texture_manager.cpp src/graphics/shader.cpp src/graphics/shader_manager.cpp src/util/gl_utils.cpp src/graphics/sprite.cpp src/graphics/mesh.cpp)
+        src/graphics/texture_manager.cpp src/graphics/shader.cpp src/graphics/shader_manager.cpp src/util/gl_utils.cpp src/graphics/sprite.cpp src/graphics/mesh.cpp src/graphics/camera.cpp)
 
 # Create executable target
 

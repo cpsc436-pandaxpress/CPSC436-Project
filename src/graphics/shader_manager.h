@@ -11,8 +11,6 @@
 #include "shader.h"
 
 
-//TODO: define
-//TODO: implement
 class ShaderManager {
 private:
     std::unordered_map<std::string, Shader> shaders_;
@@ -23,7 +21,7 @@ public:
 
     bool load_shader(const char* vert_path, const char* frag_path, const char* name);
 
-    std::optional<Shader> get_shader(const char* name);
+    Shader get_shader(const char* name);
 
 private:
 

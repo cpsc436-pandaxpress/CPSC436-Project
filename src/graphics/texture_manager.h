@@ -23,5 +23,5 @@ public:
 
     bool load_texture(const char* path, const char* name);
 
-    std::optional<Texture> get_texture(const char* name);
+    Texture get_texture(const char* name);
 };

@@ -38,6 +38,6 @@ public:
     float delta_time();
 
 
-    void draw(Renderable& renderable, const mat3& projection) override;
+    void draw(Renderable* renderable, const mat3& projection) override;
 
 };

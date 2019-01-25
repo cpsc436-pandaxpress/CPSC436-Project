@@ -11,6 +11,12 @@ Shader::Shader(GLuint vert_id, GLuint frag_id, GLuint program_id) :
     program_id_(program_id)
 {}
 
+Shader::Shader(const Shader& other) :
+    vert_id_(other.vert_id_),
+    frag_id_(other.frag_id_),
+    program_id_(other.program_id_)
+{}
+
 void Shader::bind() {
     glUseProgram(program_id_);
 }

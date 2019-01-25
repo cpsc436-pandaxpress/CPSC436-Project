@@ -54,12 +54,7 @@ bool TextureManager::load_texture(const char *path, const char *name) {
     return result;
 }
 
-std::optional<Texture> TextureManager::get_texture(const char *name) {
+Texture TextureManager::get_texture(const char *name) {
     auto key_str = std::string(name);
-    if (textures_.count(key_str) > 0) {
-        return textures_.at(key_str);
-    }
-    else {
-        return std::nullopt; //texture not loaded!
-    }
+    return textures_.at(key_str);
 }

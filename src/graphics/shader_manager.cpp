@@ -104,14 +104,9 @@ bool ShaderManager::load_shader(const char *vert_path, const char *frag_path, co
     return true;
 }
 
-std::optional<Shader> ShaderManager::get_shader(const char* name) {
+Shader ShaderManager::get_shader(const char* name) {
     auto key_str = std::string(name);
-    if (shaders_.count(key_str) > 0) {
-        return shaders_.at(key_str);
-    }
-    else {
-        return {};
-    }
+    return shaders_.at(key_str);
 }
 
 void ShaderManager::release_shader(GLuint vert_id, GLuint frag_id, GLuint program_id) {

@@ -11,6 +11,12 @@ Texture::Texture(int width, int height, GLuint id) :
     id_(id)
 {}
 
+Texture::Texture(const Texture& other) :
+    width(other.width),
+    height(other.height),
+    id_(other.id_)
+{}
+
 void Texture::bind() {
     glBindTexture(GL_TEXTURE_2D, id_);
 }

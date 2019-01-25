@@ -7,6 +7,8 @@
 #include <SDL.h>
 #include <stdio.h>
 
+#include "graphics/camera.h"
+#include "graphics/sprite.h"
 #include "graphics/window.h"
 #include "scene/scene_manager.h"
 #include "util/blackboard.h"
@@ -34,8 +36,16 @@ int main(int argc, char** argv) {
 
     //sprite test
 
+    Camera camera(800.f, 600.f, 0.f, 0.f);
+
     blackboard.textureManager.load_texture("data/textures/panda.png", "panda");
     blackboard.shader_manager.load_shader("data/shaders/sprite.vs.glsl", "data/shaders/sprite.fs.glsl", "sprite");
+
+    Texture texture = blackboard.textureManager.get_texture("panda");
+    Shader shader = blackboard.shader_manager.get_shader("sprite");
+
+    Sprite sprite(texture, shader);
+
 
     bool quit = false;
     while (!quit) {
@@ -44,6 +54,8 @@ int main(int argc, char** argv) {
 
         window.clear();
         scene_manager.render(blackboard);
+        window.draw((Renderable*)(&sprite), camera.get_projection());
+
         window.display();
 
         quit = blackboard.input_manager.should_exit();

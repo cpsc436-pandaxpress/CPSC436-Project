@@ -7,7 +7,9 @@
 #include "input_manager.h"
 
 
-InputManager::InputManager() {}
+InputManager::InputManager() :
+    should_exit_(false)
+{}
 
 void InputManager::update() {
     //TODO: implement more

@@ -18,6 +18,7 @@ private:
 
 public:
     Texture(int width, int height, GLuint id);
+    Texture(const Texture& other);
 
     // bind the texture for rendering
     void bind();
