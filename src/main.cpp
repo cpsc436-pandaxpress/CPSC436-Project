@@ -9,7 +9,12 @@
 
 #include "graphics/window.h"
 #include "scene/scene_manager.h"
-#include "util/input_manager.h"
+#include "util/blackboard.h"
+
+
+void initialize_scenes(SceneManager& scene_manager, Blackboard& blackboard) {
+    //TODO: initialize scenes here
+}
 
 int main(int argc, char** argv) {
 
@@ -17,14 +22,23 @@ int main(int argc, char** argv) {
 
     window.initialize("Express Panda", 800, 600);
 
-    auto input_manager = InputManager();
+    Blackboard blackboard;
+    blackboard.input_manager = InputManager();
+
     auto scene_manager = SceneManager();
+
+    initialize_scenes(scene_manager, blackboard);
 
     bool quit = false;
     while (!quit) {
-        input_manager.update();
+        blackboard.input_manager.update();
+        scene_manager.update(window.delta_time(), blackboard);
 
-        quit = input_manager.should_exit();
+        window.clear();
+        scene_manager.render(blackboard);
+        window.display();
+
+        quit = blackboard.input_manager.should_exit();
     }
 
     window.destroy();

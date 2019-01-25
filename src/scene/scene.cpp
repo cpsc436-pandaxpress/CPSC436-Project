@@ -5,8 +5,8 @@
 #include "scene.h"
 #include "scene_manager.h"
 
-Scene::Scene(SceneManager &manager) :
-    scene_manager_(manager),
+Scene::Scene(SceneManager &scene_manager) :
+    scene_manager_(scene_manager),
     registry_()
 {}
 

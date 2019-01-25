@@ -4,8 +4,10 @@
 
 #pragma once
 
-#include "entt/entity/registry.hpp"
+#include <entt/entity/registry.hpp>
 
+#include "../util/blackboard.h"
+#include "../util/input_manager.h"
 
 // Simple int ID
 typedef uint32_t SceneID;
@@ -21,17 +23,16 @@ protected:
     entt::registry<uint32_t> registry_;
 
 public:
-    Scene(SceneManager& manager);
+    Scene(SceneManager& scene_manager);
 
     // the "=0" denotes pure virtual functions
-    // which establish Scene class as abstract
+    // which establish the Scene class as abstract
 
     // update the scene
-    virtual void update(float delta_time) = 0;
+    virtual void update(float delta_time, Blackboard& blackboard) = 0;
 
     // render the scene
-    // TODO: define better
-    virtual void render() = 0;
+    virtual void render(Blackboard& blackboard) = 0;
 
 
 protected:

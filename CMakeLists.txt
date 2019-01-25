@@ -26,9 +26,12 @@ endif()
 #file(GLOB SOURCE_FILES src/*.cpp src/*.hpp)
 
 set(SOURCE_FILES
-        src/main.cpp
-        #src/scene/scene.h
-        src/scene/scene_manager.cpp src/scene/scene.cpp src/util/input_manager.cpp src/graphics/window.cpp)
+    src/main.cpp
+    src/scene/scene_manager.cpp
+    src/scene/scene.cpp
+    src/util/input_manager.cpp
+    src/graphics/window.cpp
+)
 
 # Create executable target
 

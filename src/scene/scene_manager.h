@@ -7,6 +7,7 @@
 #include <unordered_map>
 
 #include "scene.h"
+#include "../util/blackboard.h"
 
 
 
@@ -32,5 +33,8 @@ public:
     bool change_scene(SceneID id);
 
     // attempts to update the current scene, if one exists
-    void update(float delta_time);
+    void update(float delta_time, Blackboard& blackboard);
+
+    // attempts to render the current scene, if one exists
+    void render(Blackboard& blackboard);
 };

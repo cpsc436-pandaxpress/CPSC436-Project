@@ -15,4 +15,6 @@ public:
 
     // returns true if an exit event has been polled
     bool should_exit();
+
+    //TODO: implement input handling methods
 };

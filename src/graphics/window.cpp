@@ -30,6 +30,11 @@ bool Window::initialize(char* title, uint32_t width, uint32_t height) {
 
     gl_context_ = SDL_GL_CreateContext(sdl_window_);
 
+    SDL_GL_SetSwapInterval(-1); // -1 for Vsync
+
+    last_time_ = SDL_GetPerformanceCounter();
+    recent_time_ = SDL_GetPerformanceCounter();
+
     if (glewInit()) {
         printf("Failed to initialize OpenGL!\n");
         return false;
@@ -40,4 +45,21 @@ bool Window::initialize(char* title, uint32_t width, uint32_t height) {
 
 void Window::destroy() {
     SDL_DestroyWindow(sdl_window_);
+}
+
+void Window::clear() {
+    glClearColor(1, 0.5, 0.7, 1); // hot pink for visibility
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void Window::display() {
+    SDL_GL_SwapWindow(sdl_window_);
+
+    last_time_ = recent_time_;
+    recent_time_ = SDL_GetPerformanceCounter();
+    delta_time_ = ((recent_time_ - last_time_) / (float)SDL_GetPerformanceFrequency());
+}
+
+float Window::delta_time() {
+    return delta_time_;
 }

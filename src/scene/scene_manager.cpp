@@ -33,8 +33,14 @@ bool SceneManager::change_scene(SceneID id) {
     }
 }
 
-void SceneManager::update(float delta_time) {
+void SceneManager::update(float delta_time, Blackboard& blackboard) {
     if (current_scene_set_) {
-        scenes_[current_scene_]->update(delta_time);
+        scenes_[current_scene_]->update(delta_time, blackboard);
+    }
+}
+
+void SceneManager::render(Blackboard& blackboard) {
+    if (current_scene_set_) {
+        scenes_[current_scene_]->render(blackboard);
     }
 }
