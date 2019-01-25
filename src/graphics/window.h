@@ -6,8 +6,11 @@
 
 #include "SDL.h"
 
+#include "render.h"
+#include "sprite.h"
+
 // Wrap SDL calls with a window creation/management class
-class Window {
+class Window : public RenderTarget {
 private:
     SDL_Window* sdl_window_;
     SDL_GLContext gl_context_;
@@ -15,7 +18,7 @@ private:
     float delta_time_ = 0;
 
 public:
-    Window(): sdl_window_(NULL), gl_context_() {}
+    Window(): sdl_window_(nullptr), gl_context_() {}
 
     // Initialize the window
     // returns false if some part of initialization fails
@@ -34,5 +37,7 @@ public:
     // returns the time elapsed between the last 2 display() calls, in seconds
     float delta_time();
 
+
+    void draw(Renderable& renderable, const mat3& projection) override;
 
 };

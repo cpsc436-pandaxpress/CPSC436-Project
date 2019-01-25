@@ -10,7 +10,6 @@
 #include "../util/blackboard.h"
 
 
-
 class SceneManager {
 private:
     std::unordered_map<SceneID, Scene*> scenes_;

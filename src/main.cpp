@@ -24,10 +24,18 @@ int main(int argc, char** argv) {
 
     Blackboard blackboard;
     blackboard.input_manager = InputManager();
+    blackboard.shader_manager = ShaderManager();
+    blackboard.textureManager = TextureManager();
 
     auto scene_manager = SceneManager();
 
     initialize_scenes(scene_manager, blackboard);
+
+
+    //sprite test
+
+    blackboard.textureManager.load_texture("data/textures/panda.png", "panda");
+    blackboard.shader_manager.load_shader("data/shaders/sprite.vs.glsl", "data/shaders/sprite.fs.glsl", "sprite");
 
     bool quit = false;
     while (!quit) {

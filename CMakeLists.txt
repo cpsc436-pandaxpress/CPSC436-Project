@@ -7,6 +7,7 @@ if (POLICY CMP0025)
     cmake_policy(SET CMP0025 NEW)
 endif ()
 set (CMAKE_CXX_STANDARD 17)
+set (CMAKE_CXX_STANDARD_REQUIRED)
 
 # nice hierarchichal structure in MSVC
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -26,12 +27,13 @@ endif()
 #file(GLOB SOURCE_FILES src/*.cpp src/*.hpp)
 
 set(SOURCE_FILES
-    src/main.cpp
-    src/scene/scene_manager.cpp
-    src/scene/scene.cpp
-    src/util/input_manager.cpp
-    src/graphics/window.cpp
-)
+        src/main.cpp
+        src/scene/scene_manager.cpp
+        src/scene/scene.cpp
+        src/util/input_manager.cpp
+        src/graphics/window.cpp
+        src/graphics/texture.cpp
+        src/graphics/texture_manager.cpp src/graphics/shader.cpp src/graphics/shader_manager.cpp src/util/gl_utils.cpp src/graphics/sprite.cpp src/graphics/mesh.cpp)
 
 # Create executable target
 

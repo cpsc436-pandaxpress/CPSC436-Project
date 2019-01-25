@@ -63,3 +63,8 @@ void Window::display() {
 float Window::delta_time() {
     return delta_time_;
 }
+
+void Window::draw(Renderable& renderable, const mat3& projection) {
+    // no need to do any setup
+    renderable.draw(projection);
+}
