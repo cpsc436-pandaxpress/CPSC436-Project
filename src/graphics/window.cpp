@@ -6,13 +6,16 @@
 
 #include "window.h"
 
-bool Window::initialize(char* title, uint32_t width, uint32_t height) {
+bool Window::initialize(const char* title, uint32_t width, uint32_t height) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         // Could not initialize video!
         printf("SDL could not initialize video subsystems! ERROR: %s\n", SDL_GetError());
         return false;
     }
 
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
     SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 5 );
     SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 5 );
     SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
@@ -29,6 +32,7 @@ bool Window::initialize(char* title, uint32_t width, uint32_t height) {
     );
 
     gl_context_ = SDL_GL_CreateContext(sdl_window_);
+
     glViewport(0, 0, width, height);
 
     SDL_GL_SetSwapInterval(-1); // -1 for Vsync

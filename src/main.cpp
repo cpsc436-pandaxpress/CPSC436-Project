@@ -39,7 +39,11 @@ int main(int argc, char** argv) {
     Camera camera(800.f, 600.f, 0.f, 0.f);
 
     blackboard.textureManager.load_texture("data/textures/panda.png", "panda");
-    blackboard.shader_manager.load_shader("data/shaders/sprite.vs.glsl", "data/shaders/sprite.fs.glsl", "sprite");
+    blackboard.shader_manager.load_shader(
+        "data/shaders/sprite.vs.glsl",
+        "data/shaders/sprite.fs.glsl",
+        "sprite"
+    );
 
     Texture texture = blackboard.textureManager.get_texture("panda");
     Shader shader = blackboard.shader_manager.get_shader("sprite");

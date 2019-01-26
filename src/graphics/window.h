@@ -23,7 +23,7 @@ public:
     // Initialize the window
     // returns false if some part of initialization fails
     // otherwise returns true
-    bool initialize(char* title, uint32_t width, uint32_t height);
+    bool initialize(const char* title, uint32_t width, uint32_t height);
 
     // destroy the window when finished
     void destroy();
