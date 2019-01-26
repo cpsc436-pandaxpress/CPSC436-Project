@@ -38,11 +38,6 @@ bool ShaderManager::load_shader(const char *vert_path, const char *frag_path, co
     vs_is.open(vert_path, std::ifstream::in);
     fs_is.open(frag_path,  std::ifstream::in);
 
-    auto goodbit = vs_is.good();
-    auto eofbit = vs_is.eof();
-    auto failbit = vs_is.fail();
-    auto badbit = vs_is.bad();
-
     if (!vs_is.good() || !fs_is.good())
     {
         fprintf(stderr, "Failed to load shader files %s, %s\n", vert_path, frag_path);
