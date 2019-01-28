@@ -4,7 +4,12 @@
 
 #pragma once
 
+
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 // Non-owning wrapper of an OpenGL texture
 //TODO: define
 //TODO: implement
