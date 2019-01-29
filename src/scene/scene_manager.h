@@ -18,10 +18,9 @@ private:
 
 public:
     SceneManager();
-    ~SceneManager();
 
     // adds scene to scenes_ with key of id
-    // DOES manage memory of provided scene, deleting when done
+    // DOES NOT manage memory of provided scene, should be done elsewhere
     // fails and returns false if another scene exists with the given ID
     // returns true otherwise
     bool add_scene(SceneID id, Scene* scene);

@@ -12,11 +12,6 @@ SceneManager::SceneManager() :
     current_scene_set_(false)
 {}
 
-SceneManager::~SceneManager() {
-    for (auto scene: scenes_) {
-        delete scene.second;
-    }
-}
 
 bool SceneManager::add_scene(SceneID id, Scene *scene) {
     if (scenes_.count(id) > 0) {

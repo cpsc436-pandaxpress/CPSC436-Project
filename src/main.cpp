@@ -17,12 +17,6 @@
 
 static const SceneID TEST_SCENE_ID = 0;
 
-void initialize_scenes(SceneManager& scene_manager, Blackboard& blackboard) {
-    //TODO: initialize scenes here
-    scene_manager.add_scene(TEST_SCENE_ID, new TestScene(blackboard, scene_manager));
-    scene_manager.change_scene(TEST_SCENE_ID);
-}
-
 int main(int argc, char** argv) {
 
     auto window = Window();
@@ -49,7 +43,14 @@ int main(int argc, char** argv) {
         "sprite"
     );
 
-    initialize_scenes(scene_manager, blackboard);
+    // initialize scenes here
+
+    TestScene test_scene(blackboard, scene_manager);
+
+    scene_manager.add_scene(TEST_SCENE_ID, (Scene*)(&test_scene));
+
+    // set the first scene
+    scene_manager.change_scene(TEST_SCENE_ID);
 
     bool quit = false;
     while (!quit) {
