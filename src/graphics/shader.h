@@ -6,17 +6,11 @@
 
 #include <GL/glew.h>
 
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include "gl_include.h"
 
 #include "../util/gl_utils.h"
 
 // Non-owning wrapper of an OpenGL shader program
-//TODO: define
-//TODO: implement
 class Shader {
     friend class ShaderManager;
 private:

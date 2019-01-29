@@ -5,14 +5,10 @@
 #pragma once
 
 
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+
+#include "gl_include.h"
+
 // Non-owning wrapper of an OpenGL texture
-//TODO: define
-//TODO: implement
 class Texture {
     friend class TextureManager;
 

@@ -11,8 +11,7 @@
 #include "texture.h"
 
 // Manages loading/unloading of textures
-//TODO: define
-//TODO: implement
+
 class TextureManager {
 private:
     std::unordered_map<std::string, Texture> textures_;

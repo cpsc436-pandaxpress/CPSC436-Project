@@ -7,8 +7,6 @@
 #include "../util/gl_utils.h"
 
 // Defines an orthographic camera for use with OpenGL
-//TODO: define
-//TODO: implement
 class Camera {
 private:
     mat3 projection_;

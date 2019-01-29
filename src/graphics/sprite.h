@@ -26,7 +26,6 @@ private:
 public:
     Sprite(Texture texture, Shader shader);
     Sprite(const Sprite& other);
-    Sprite(Sprite&& other);
 
     void draw(const mat3& projection);
 
@@ -45,6 +44,5 @@ public:
     void set_color(const vec3& color);
     void set_color(float r, float g, float b);
 
-    Sprite& operator=(const Sprite&);
 
 };

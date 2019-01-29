@@ -51,8 +51,6 @@ Sprite::Sprite(const Sprite& other) :
 {}
 
 
-Sprite::Sprite(Sprite&& other) : Sprite(other) {}
-
 void Sprite::draw(const mat3& projection) {
     // transform
     mat3 transform = {
@@ -135,7 +133,7 @@ void Sprite::set_rotation_rad(float theta) {
 }
 
 vec3 Sprite::color() {
-
+    return color_;
 }
 
 void Sprite::set_color(const vec3& color) {
@@ -144,10 +142,4 @@ void Sprite::set_color(const vec3& color) {
 
 void Sprite::set_color(float r, float g, float b) {
     color_ = { r, g, b };
-}
-
-Sprite& Sprite::operator=(const Sprite& other) {
-    //texture_ = other.texture_;
-    shader_ = other.shader_;
-    position_ = other.position_;
 }
