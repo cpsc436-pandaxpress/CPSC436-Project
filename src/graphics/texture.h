@@ -11,14 +11,16 @@
 class Texture {
     friend class TextureManager;
 
-public:
-    const uint32_t width, height;
 private:
-    const GLuint id_;
+    uint32_t width_, height_;
+    GLuint id_;
 
 public:
     Texture(int width, int height, GLuint id);
     Texture(const Texture& other);
+
+    uint32_t width();
+    uint32_t height();
 
     // bind the texture for rendering
     void bind();

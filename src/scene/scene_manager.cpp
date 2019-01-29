@@ -12,6 +12,12 @@ SceneManager::SceneManager() :
     current_scene_set_(false)
 {}
 
+SceneManager::~SceneManager() {
+    for (auto scene: scenes_) {
+        delete scene.second;
+    }
+}
+
 bool SceneManager::add_scene(SceneID id, Scene *scene) {
     if (scenes_.count(id) > 0) {
         return false;
@@ -33,9 +39,9 @@ bool SceneManager::change_scene(SceneID id) {
     }
 }
 
-void SceneManager::update(float delta_time, Blackboard& blackboard) {
+void SceneManager::update(Blackboard& blackboard) {
     if (current_scene_set_) {
-        scenes_[current_scene_]->update(delta_time, blackboard);
+        scenes_[current_scene_]->update(blackboard);
     }
 }
 

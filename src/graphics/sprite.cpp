@@ -33,11 +33,25 @@ Sprite::Sprite(Texture texture, Shader shader) :
     texture_(texture)
 {
     position_ = { 0.f, 0.f};
-    pixel_scale_ = {(float)texture.width, (float)texture.height};
+    pixel_scale_ = {(float)texture.width(), (float)texture.height()};
     scale_ = {1.f, 1.f};
     color_ = {1.f, 1.f, 1.f};
     rotation_ = 0.f;
 }
+
+Sprite::Sprite(const Sprite& other) :
+    mesh_(4, vertices, 6, indices),
+    shader_(other.shader_),
+    texture_(other.texture_),
+    position_(other.position_),
+    pixel_scale_(other.pixel_scale_),
+    scale_(other.scale_),
+    color_(other.color_),
+    rotation_(other.rotation_)
+{}
+
+
+Sprite::Sprite(Sprite&& other) : Sprite(other) {}
 
 void Sprite::draw(const mat3& projection) {
     // transform
@@ -130,4 +144,10 @@ void Sprite::set_color(const vec3& color) {
 
 void Sprite::set_color(float r, float g, float b) {
     color_ = { r, g, b };
+}
+
+Sprite& Sprite::operator=(const Sprite& other) {
+    //texture_ = other.texture_;
+    shader_ = other.shader_;
+    position_ = other.position_;
 }

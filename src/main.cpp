@@ -11,11 +11,16 @@
 #include "graphics/sprite.h"
 #include "graphics/window.h"
 #include "scene/scene_manager.h"
+#include "scene/test_scene.h"
 #include "util/blackboard.h"
 
 
+static const SceneID TEST_SCENE_ID = 0;
+
 void initialize_scenes(SceneManager& scene_manager, Blackboard& blackboard) {
     //TODO: initialize scenes here
+    scene_manager.add_scene(TEST_SCENE_ID, new TestScene(blackboard, scene_manager));
+    scene_manager.change_scene(TEST_SCENE_ID);
 }
 
 int main(int argc, char** argv) {
@@ -24,19 +29,18 @@ int main(int argc, char** argv) {
 
     window.initialize("Express Panda", 800, 600);
 
-    Blackboard blackboard;
+    Blackboard blackboard {
+        camera: Camera (800.f, 600.f, 0.f, 0.f),
+        window: window
+    };
+    blackboard.delta_time = 0;
     blackboard.input_manager = InputManager();
     blackboard.shader_manager = ShaderManager();
     blackboard.textureManager = TextureManager();
 
     auto scene_manager = SceneManager();
 
-    initialize_scenes(scene_manager, blackboard);
-
-
-    //sprite test
-
-    Camera camera(800.f, 600.f, 0.f, 0.f);
+    //load assets
 
     blackboard.textureManager.load_texture("data/textures/panda.png", "panda");
     blackboard.shader_manager.load_shader(
@@ -45,20 +49,18 @@ int main(int argc, char** argv) {
         "sprite"
     );
 
-    Texture texture = blackboard.textureManager.get_texture("panda");
-    Shader shader = blackboard.shader_manager.get_shader("sprite");
-
-    Sprite sprite(texture, shader);
-
+    initialize_scenes(scene_manager, blackboard);
 
     bool quit = false;
     while (!quit) {
+        //update blackboard
+        blackboard.delta_time = window.delta_time();
         blackboard.input_manager.update();
-        scene_manager.update(window.delta_time(), blackboard);
+
+        scene_manager.update(blackboard);
 
         window.clear();
         scene_manager.render(blackboard);
-        window.draw((Renderable*)(&sprite), camera.get_projection());
 
         window.display();
 
