@@ -4,7 +4,12 @@
 
 #include "texture_manager.h"
 
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
+
 #include <optional>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
