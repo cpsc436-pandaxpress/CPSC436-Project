@@ -114,8 +114,6 @@ if (NOT SDL2_FOUND)
     message(FATAL_ERROR "Can't find SDL." )
 endif()
 
-message("${CMAKE_CURRENT_SOURCE_DIR}")
-
 target_include_directories(${PROJECT_NAME} PUBLIC ${GLEW_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS})
 
 target_link_libraries(${PROJECT_NAME} PUBLIC ${GLEW_LIBRARIES} ${SDL2_LIBRARIES} ${SDL2MIXER_LIBRARIES})
