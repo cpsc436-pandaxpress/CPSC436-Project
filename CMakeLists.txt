@@ -24,6 +24,10 @@ else()
 endif()
 
 # Add source files as we code (QWERTY)
+# Generate the shader folder location to the header
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp")
+
+
 #file(GLOB SOURCE_FILES src/*.cpp src/*.hpp)
 
 set(SOURCE_FILES
@@ -33,7 +37,7 @@ set(SOURCE_FILES
         src/util/input_manager.cpp
         src/graphics/window.cpp
         src/graphics/texture.cpp
-        src/graphics/texture_manager.cpp src/graphics/shader.cpp src/graphics/shader_manager.cpp src/util/gl_utils.cpp src/graphics/sprite.cpp src/graphics/mesh.cpp src/graphics/camera.cpp src/systems/sprite_render_system.cpp src/systems/sprite_transform_system.cpp src/scene/test_scene.cpp)
+        src/graphics/texture_manager.cpp src/graphics/shader.cpp src/graphics/shader_manager.cpp src/util/gl_utils.cpp src/graphics/sprite.cpp src/graphics/mesh.cpp src/graphics/camera.cpp src/systems/sprite_render_system.cpp src/systems/sprite_transform_system.cpp src/scene/test_scene.cpp src/util/constants.h)
 
 # Create executable target
 

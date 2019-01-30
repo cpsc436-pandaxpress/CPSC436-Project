@@ -6,6 +6,7 @@
 #include <GL/glew.h>
 #include <SDL.h>
 #include <stdio.h>
+#include <util/constants.h>
 
 #include "graphics/camera.h"
 #include "graphics/sprite.h"
@@ -41,10 +42,10 @@ int main(int argc, char** argv) {
     blackboard.input_manager.track(SDL_SCANCODE_LEFT);
     blackboard.input_manager.track(SDL_SCANCODE_RIGHT);
 
-    blackboard.textureManager.load_texture("data/textures/panda.png", "panda");
+    blackboard.textureManager.load_texture(textures_path("panda.png"), "panda");
     blackboard.shader_manager.load_shader(
-        "data/shaders/sprite.vs.glsl",
-        "data/shaders/sprite.fs.glsl",
+        shaders_path("sprite.vs.glsl"),
+        shaders_path("sprite.fs.glsl"),
         "sprite"
     );
 
