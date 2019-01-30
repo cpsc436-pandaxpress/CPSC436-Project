@@ -11,7 +11,7 @@ TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
     sprite_render_system(),
     sprite_transform_system()
 {
-    auto test_entity = registry_.create();
+    test_entity = registry_.create();
 
     auto texture = blackboard.textureManager.get_texture("panda");
     auto shader = blackboard.shader_manager.get_shader("sprite");
@@ -21,7 +21,23 @@ TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
 }
 
 void TestScene::update(Blackboard& blackboard) {
-    // update the systems
+    // some sample input handling
+    auto& position = registry_.get<Position>(test_entity);
+
+    if (blackboard.input_manager.key_pressed(SDL_SCANCODE_UP)) {
+        position.y -= 1;
+    }
+    if (blackboard.input_manager.key_pressed(SDL_SCANCODE_DOWN)) {
+        position.y += 1;
+    }
+    if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
+        position.x -= 1;
+    }
+    if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
+        position.x += 1;
+    }
+
+    // update the systems here
     sprite_transform_system.update(blackboard, registry_);
 }
 

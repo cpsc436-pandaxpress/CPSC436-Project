@@ -12,6 +12,7 @@
 
 class TestScene : public Scene {
 private:
+    uint32_t test_entity;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
 public:

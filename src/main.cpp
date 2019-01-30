@@ -34,7 +34,12 @@ int main(int argc, char** argv) {
 
     auto scene_manager = SceneManager();
 
-    //load assets
+    //load assets and configure
+
+    blackboard.input_manager.track(SDL_SCANCODE_UP);
+    blackboard.input_manager.track(SDL_SCANCODE_DOWN);
+    blackboard.input_manager.track(SDL_SCANCODE_LEFT);
+    blackboard.input_manager.track(SDL_SCANCODE_RIGHT);
 
     blackboard.textureManager.load_texture("data/textures/panda.png", "panda");
     blackboard.shader_manager.load_shader(

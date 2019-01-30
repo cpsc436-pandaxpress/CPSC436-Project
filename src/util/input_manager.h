@@ -18,7 +18,7 @@ enum KeyStatus {
 
 class InputManager {
 private:
-    std::unordered_map<SDL_Keycode, KeyStatus> key_states_;
+    std::unordered_map<SDL_Scancode, KeyStatus> key_states_;
     bool should_exit_;
 
 public:
@@ -31,13 +31,18 @@ public:
     bool should_exit();
 
     // returns true if key successfully added to track list, false otherwise
-    bool track(SDL_Keycode key);
+    bool track(SDL_Scancode key);
 
     // returns the status of the given key,
     // JUST_PRESSED/JUST_RELEASED if this is the first frame since press/release
     // PRESSED/RELEASED if this is not the first frame since press/release
     // UNTRACKED if the key hasn't been registered with track()
-    KeyStatus get_status(SDL_Keycode key);
+    KeyStatus get_status(SDL_Scancode key);
+
+    bool key_just_pressed(SDL_Scancode key);
+    bool key_just_released(SDL_Scancode key);
+    bool key_pressed(SDL_Scancode key);
+    bool key_released(SDL_Scancode key);
 
 private:
 

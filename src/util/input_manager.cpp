@@ -15,13 +15,26 @@ InputManager::InputManager() :
 void InputManager::update() {
     SDL_Event event;
 
-    // update states that were "JUST_XYZ" last frame
+    auto* keystate = SDL_GetKeyboardState(NULL);
+
+    // update tracked states
     for (auto& entry : key_states_) {
-        switch (entry.second) {
-            case JUST_PRESSED:
+
+        if (keystate[entry.first]) {
+            if (entry.second == JUST_PRESSED) {
                 entry.second = PRESSED;
-            case JUST_RELEASED:
+            }
+            else {
+                entry.second = JUST_PRESSED;
+            }
+        }
+        else {
+            if (entry.second == JUST_RELEASED) {
                 entry.second = RELEASED;
+            }
+            else {
+                entry.second = JUST_RELEASED;
+            }
         }
     }
 
@@ -29,10 +42,6 @@ void InputManager::update() {
         switch(event.type) {
             case SDL_QUIT:
                 should_exit_ = true;
-                break;
-            case SDL_KEYDOWN: // back-to-back cases like this
-            case SDL_KEYUP:   // give both cases the same behavior
-                set_key_status_from_event(event);
                 break;
         }
     }
@@ -42,17 +51,17 @@ bool InputManager::should_exit() {
     return should_exit_;
 }
 
-bool InputManager::track(SDL_Keycode key) {
+bool InputManager::track(SDL_Scancode key) {
     if (key_states_.count(key) > 0) {
         return false;
     }
     else {
-        key_states_.insert(std::pair<SDL_Keycode, KeyStatus>(key, RELEASED));
+        key_states_.insert(std::pair<SDL_Scancode, KeyStatus>(key, RELEASED));
         return true;
     }
 }
 
-KeyStatus InputManager::get_status(SDL_Keycode key) {
+KeyStatus InputManager::get_status(SDL_Scancode key) {
     if (key_states_.count(key) > 0) {
         return key_states_.at(key);
     }
@@ -61,17 +70,59 @@ KeyStatus InputManager::get_status(SDL_Keycode key) {
     }
 }
 
+bool InputManager::key_just_pressed(SDL_Scancode key) {
+    if (key_states_.count(key) > 0) {
+        auto status = key_states_[key];
+        return status == JUST_PRESSED;
+    }
+    else {
+        return false;
+    }
+}
+
+bool InputManager::key_just_released(SDL_Scancode key) {
+    if (key_states_.count(key) > 0) {
+        auto status = key_states_[key];
+        return status == JUST_RELEASED;
+    }
+    else {
+        return false;
+    }
+}
+
+bool InputManager::key_pressed(SDL_Scancode key) {
+    if (key_states_.count(key) > 0) {
+        auto status = key_states_[key];
+        return status == PRESSED || status == JUST_PRESSED;
+    }
+    else {
+        return false;
+    }
+}
+
+bool InputManager::key_released(SDL_Scancode key) {
+    if (key_states_.count(key) > 0) {
+        auto status = key_states_[key];
+        return status == RELEASED || status == JUST_RELEASED;
+    }
+    else {
+        return false;
+    }
+}
+
+
 void InputManager::set_key_status_from_event(SDL_Event& event) {
     if (event.type == SDL_KEYDOWN) {
-        auto key = event.key.keysym.sym;
+        auto key = event.key.keysym.scancode;
         if (key_states_.count(key) > 0) {
             key_states_[key] = JUST_PRESSED;
         }
     }
     if (event.type == SDL_KEYUP) {
-        auto key = event.key.keysym.sym;
+        auto key = event.key.keysym.scancode;
         if (key_states_.count(key) > 0) {
             key_states_[key] = JUST_RELEASED;
         }
     }
 }
+
