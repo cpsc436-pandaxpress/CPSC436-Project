@@ -10,6 +10,6 @@ class SpriteRenderSystem : public System {
 public:
     SpriteRenderSystem();
 
-    virtual void update(Blackboard& blackboard, entt::registry<uint32_t>& registry) override;
+    virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;
 
 };

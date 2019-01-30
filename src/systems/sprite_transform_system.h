@@ -9,5 +9,5 @@
 class SpriteTransformSystem : public System {
 public:
     SpriteTransformSystem();
-    virtual void update(Blackboard& blackboard, entt::registry<uint32_t>& registry) override;
+    virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;
 };

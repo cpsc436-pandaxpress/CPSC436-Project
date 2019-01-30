@@ -9,7 +9,7 @@
 
 SpriteTransformSystem::SpriteTransformSystem() {}
 
-void SpriteTransformSystem::update(Blackboard &blackboard, entt::registry <uint32_t> &registry) {
+void SpriteTransformSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry) {
     // construct a view for all entites with a position and sprite component
     auto view = registry.view<Position, Sprite>();
 

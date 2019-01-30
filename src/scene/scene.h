@@ -20,7 +20,7 @@ private:
     SceneManager& scene_manager_;
 
 protected:
-    entt::registry<uint32_t> registry_;
+    entt::DefaultRegistry registry_;
 
 public:
     Scene(SceneManager& scene_manager);

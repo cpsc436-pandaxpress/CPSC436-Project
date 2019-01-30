@@ -100,7 +100,7 @@ bool ShaderManager::load_shader(const char *vert_path, const char *frag_path, co
     }
 
     auto shader = Shader(vert, frag, program);
-    shaders_.insert(std::pair(key_str, shader));
+    shaders_.insert(std::pair<std::string, Shader>(key_str, shader));
 
     return true;
 }

@@ -50,7 +50,7 @@ bool TextureManager::load_texture(const char *path, const char *name) {
     bool result = !gl_has_errors();
 
     auto texture = Texture(width, height, id);
-    textures_.insert(std::pair(key_str, texture));
+    textures_.insert(std::pair<std::string, Texture>(key_str, texture));
 
     return result;
 }

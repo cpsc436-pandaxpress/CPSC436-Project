@@ -10,7 +10,7 @@ SpriteRenderSystem::SpriteRenderSystem() {
 
 }
 
-void SpriteRenderSystem::update(Blackboard &blackboard, entt::registry<uint32_t> &registry) {
+void SpriteRenderSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     // construct a view for all entities with a sprite
     auto view = registry.view<Sprite>();
 
