@@ -29,7 +29,7 @@ void InputManager::update() {
             }
         }
         else {
-            if (entry.second == JUST_RELEASED) {
+            if (entry.second == JUST_RELEASED || entry.second == RELEASED) {
                 entry.second = RELEASED;
             }
             else {
@@ -81,6 +81,7 @@ bool InputManager::key_just_pressed(SDL_Scancode key) {
 }
 
 bool InputManager::key_just_released(SDL_Scancode key) {
+    auto x = key_states_.count(key);
     if (key_states_.count(key) > 0) {
         auto status = key_states_[key];
         return status == JUST_RELEASED;
