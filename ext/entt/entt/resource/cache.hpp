@@ -26,27 +26,27 @@ namespace entt {
  * @tparam Resource Type of resources managed by a cache.
  */
 template<typename Resource>
-class resource_cache {
-    using container_type = std::unordered_map<hashed_string::hash_type, std::shared_ptr<Resource>>;
+class ResourceCache {
+    using container_type = std::unordered_map<HashedString::hash_type, std::shared_ptr<Resource>>;
 
 public:
     /*! @brief Unsigned integer type. */
     using size_type = typename container_type::size_type;
     /*! @brief Type of resources managed by a cache. */
-    using resource_type = typename hashed_string::hash_type;
+    using resource_type = HashedString;
 
     /*! @brief Default constructor. */
-    resource_cache() = default;
+    ResourceCache() = default;
 
     /*! @brief Copying a cache isn't allowed. */
-    resource_cache(const resource_cache &) ENTT_NOEXCEPT = delete;
+    ResourceCache(const ResourceCache &) ENTT_NOEXCEPT = delete;
     /*! @brief Default move constructor. */
-    resource_cache(resource_cache &&) ENTT_NOEXCEPT = default;
+    ResourceCache(ResourceCache &&) ENTT_NOEXCEPT = default;
 
     /*! @brief Copying a cache isn't allowed. @return This cache. */
-    resource_cache & operator=(const resource_cache &) ENTT_NOEXCEPT = delete;
+    ResourceCache & operator=(const ResourceCache &) ENTT_NOEXCEPT = delete;
     /*! @brief Default move assignment operator. @return This cache. */
-    resource_cache & operator=(resource_cache &&) ENTT_NOEXCEPT = default;
+    ResourceCache & operator=(ResourceCache &&) ENTT_NOEXCEPT = default;
 
     /**
      * @brief Number of resources managed by a cache.
@@ -94,7 +94,7 @@ public:
      */
     template<typename Loader, typename... Args>
     bool load(const resource_type id, Args &&... args) {
-        static_assert(std::is_base_of_v<resource_loader<Loader, Resource>, Loader>);
+        static_assert(std::is_base_of<ResourceLoader<Loader, Resource>, Loader>::value, "!");
 
         bool loaded = true;
 
@@ -143,7 +143,7 @@ public:
      * @return A handle for the given resource.
      */
     template<typename Loader, typename... Args>
-    resource_handle<Resource> temp(Args &&... args) const {
+    ResourceHandle<Resource> temp(Args &&... args) const {
         return { Loader{}.get(std::forward<Args>(args)...) };
     }
 
@@ -155,12 +155,12 @@ public:
      * cache contains the resource itself. Otherwise the returned handle is
      * uninitialized and accessing it results in undefined behavior.
      *
-     * @sa resource_handle
+     * @sa ResourceHandle
      *
      * @param id Unique resource identifier.
      * @return A handle for the given resource.
      */
-    resource_handle<Resource> handle(const resource_type id) const {
+    ResourceHandle<Resource> handle(const resource_type id) const {
         auto it = resources.find(id);
         return { it == resources.end() ? nullptr : it->second };
     }

@@ -20,7 +20,7 @@ private:
     SceneManager& scene_manager_;
 
 protected:
-    entt::registry<uint32_t> registry_;
+    entt::DefaultRegistry registry_;
 
 public:
     Scene(SceneManager& scene_manager);
@@ -29,7 +29,7 @@ public:
     // which establish the Scene class as abstract
 
     // update the scene
-    virtual void update(float delta_time, Blackboard& blackboard) = 0;
+    virtual void update(Blackboard& blackboard) = 0;
 
     // render the scene
     virtual void render(Blackboard& blackboard) = 0;

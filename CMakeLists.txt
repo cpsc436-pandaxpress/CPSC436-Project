@@ -6,7 +6,8 @@ project(pandaExpress)
 if (POLICY CMP0025)
     cmake_policy(SET CMP0025 NEW)
 endif ()
-set (CMAKE_CXX_STANDARD 17)
+set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_STANDARD_REQUIRED)
 
 # nice hierarchichal structure in MSVC
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -23,15 +24,20 @@ else()
 endif()
 
 # Add source files as we code (QWERTY)
+# Generate the shader folder location to the header
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp")
+
+
 #file(GLOB SOURCE_FILES src/*.cpp src/*.hpp)
 
 set(SOURCE_FILES
-    src/main.cpp
-    src/scene/scene_manager.cpp
-    src/scene/scene.cpp
-    src/util/input_manager.cpp
-    src/graphics/window.cpp
-)
+        src/main.cpp
+        src/scene/scene_manager.cpp
+        src/scene/scene.cpp
+        src/util/input_manager.cpp
+        src/graphics/window.cpp
+        src/graphics/texture.cpp
+        src/graphics/texture_manager.cpp src/graphics/shader.cpp src/graphics/shader_manager.cpp src/util/gl_utils.cpp src/graphics/sprite.cpp src/graphics/mesh.cpp src/graphics/camera.cpp src/systems/sprite_render_system.cpp src/systems/sprite_transform_system.cpp src/scene/test_scene.cpp src/util/constants.h)
 
 # Create executable target
 
@@ -111,8 +117,6 @@ endif()
 if (NOT SDL2_FOUND)
     message(FATAL_ERROR "Can't find SDL." )
 endif()
-
-message("${CMAKE_CURRENT_SOURCE_DIR}")
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${GLEW_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS})
 

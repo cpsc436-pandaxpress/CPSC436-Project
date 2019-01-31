@@ -9,5 +9,5 @@
 #include "../util/blackboard.h"
 
 class System {
-    virtual void update(float delta_time, Blackboard& blackboard, entt::registry<uint32_t>& registry) = 0;=
+    virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) = 0;
 };

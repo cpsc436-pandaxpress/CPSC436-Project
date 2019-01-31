@@ -11,7 +11,7 @@
 #include <unordered_map>
 #include "../config/config.h"
 #include "entt_traits.hpp"
-#include "entity.hpp"
+#include "utility.hpp"
 
 
 namespace entt {
@@ -21,28 +21,28 @@ namespace entt {
  * @brief Forward declaration of the registry class.
  */
 template<typename>
-class registry;
+class Registry;
 
 
 /**
  * @brief Utility class to create snapshots from a registry.
  *
  * A _snapshot_ can be either a dump of the entire registry or a narrower
- * selection of components of interest.<br/>
+ * selection of components and tags of interest.<br/>
  * This type can be used in both cases if provided with a correctly configured
  * output archive.
  *
  * @tparam Entity A valid entity type (see entt_traits for more details).
  */
 template<typename Entity>
-class snapshot final {
+class Snapshot final {
     /*! @brief A registry is allowed to create snapshots. */
-    friend class registry<Entity>;
+    friend class Registry<Entity>;
 
-    using follow_fn_type = Entity(const registry<Entity> &, const Entity);
+    using follow_fn_type = Entity(const Registry<Entity> &, const Entity);
 
-    snapshot(const registry<Entity> &reg, Entity seed, follow_fn_type *follow) ENTT_NOEXCEPT
-        : reg{reg},
+    Snapshot(const Registry<Entity> &registry, Entity seed, follow_fn_type *follow) ENTT_NOEXCEPT
+        : registry{registry},
           seed{seed},
           follow{follow}
     {}
@@ -54,8 +54,8 @@ class snapshot final {
         while(first != last) {
             const auto entity = *(first++);
 
-            if(reg.template has<Component>(entity)) {
-                archive(entity, reg.template get<Component>(entity));
+            if(registry.template has<Component>(entity)) {
+                archive(entity, registry.template get<Component>(entity));
             }
         }
     }
@@ -67,22 +67,26 @@ class snapshot final {
 
         while(begin != last) {
             const auto entity = *(begin++);
-            ((reg.template has<Component>(entity) ? ++size[Indexes] : size[Indexes]), ...);
+            using accumulator_type = std::size_t[];
+            accumulator_type accumulator = { (registry.template has<Component>(entity) ? ++size[Indexes] : size[Indexes])... };
+            (void)accumulator;
         }
 
-        (get<Component>(archive, size[Indexes], first, last), ...);
+        using accumulator_type = int[];
+        accumulator_type accumulator = { (get<Component>(archive, size[Indexes], first, last), 0)... };
+        (void)accumulator;
     }
 
 public:
     /*! @brief Copying a snapshot isn't allowed. */
-    snapshot(const snapshot &) = delete;
+    Snapshot(const Snapshot &) = delete;
     /*! @brief Default move constructor. */
-    snapshot(snapshot &&) = default;
+    Snapshot(Snapshot &&) = default;
 
     /*! @brief Copying a snapshot isn't allowed. @return This snapshot. */
-    snapshot & operator=(const snapshot &) = delete;
+    Snapshot & operator=(const Snapshot &) = delete;
     /*! @brief Default move assignment operator. @return This snapshot. */
-    snapshot & operator=(snapshot &&) = default;
+    Snapshot & operator=(Snapshot &&) = default;
 
     /**
      * @brief Puts aside all the entities that are still in use.
@@ -95,9 +99,9 @@ public:
      * @return An object of this type to continue creating the snapshot.
      */
     template<typename Archive>
-    const snapshot & entities(Archive &archive) const {
-        archive(static_cast<Entity>(reg.alive()));
-        reg.each([&archive](const auto entity) { archive(entity); });
+    const Snapshot & entities(Archive &archive) const {
+        archive(static_cast<Entity>(registry.alive()));
+        registry.each([&archive](const auto entity) { archive(entity); });
         return *this;
     }
 
@@ -112,8 +116,8 @@ public:
      * @return An object of this type to continue creating the snapshot.
      */
     template<typename Archive>
-    const snapshot & destroyed(Archive &archive) const {
-        auto size = reg.size() - reg.alive();
+    const Snapshot & destroyed(Archive &archive) const {
+        auto size = registry.size() - registry.alive();
         archive(static_cast<Entity>(size));
 
         if(size) {
@@ -121,10 +125,36 @@ public:
             archive(curr);
 
             for(--size; size; --size) {
-                curr = follow(reg, curr);
+                curr = follow(registry, curr);
                 archive(curr);
             }
         }
+
+        return *this;
+    }
+
+    /**
+     * @brief Puts aside the given component.
+     *
+     * Each instance is serialized together with the entity to which it belongs.
+     * Entities are serialized along with their versions.
+     *
+     * @tparam Component Type of component to serialize.
+     * @tparam Archive Type of output archive.
+     * @param archive A valid reference to an output archive.
+     * @return An object of this type to continue creating the snapshot.
+     */
+    template<typename Component, typename Archive>
+    const Snapshot & component(Archive &archive) const {
+        const auto sz = registry.template size<Component>();
+        const auto *entities = registry.template data<Component>();
+
+        archive(static_cast<Entity>(sz));
+
+        for(std::remove_const_t<decltype(sz)> i{}; i < sz; ++i) {
+            const auto entity = entities[i];
+            archive(entity, registry.template get<Component>(entity));
+        };
 
         return *this;
     }
@@ -141,21 +171,11 @@ public:
      * @return An object of this type to continue creating the snapshot.
      */
     template<typename... Component, typename Archive>
-    const snapshot & component(Archive &archive) const {
-        if constexpr(sizeof...(Component) == 1) {
-            const auto sz = reg.template size<Component...>();
-            const auto *entities = reg.template data<Component...>();
-
-            archive(static_cast<Entity>(sz));
-
-            for(std::remove_const_t<decltype(sz)> i{}; i < sz; ++i) {
-                const auto entity = entities[i];
-                archive(entity, reg.template get<Component...>(entity));
-            };
-        } else {
-            (component<Component>(archive), ...);
-        }
-
+    std::enable_if_t<(sizeof...(Component) > 1), const Snapshot &>
+    component(Archive &archive) const {
+        using accumulator_type = int[];
+        accumulator_type accumulator = { 0, (component<Component>(archive), 0)... };
+        (void)accumulator;
         return *this;
     }
 
@@ -174,13 +194,58 @@ public:
      * @return An object of this type to continue creating the snapshot.
      */
     template<typename... Component, typename Archive, typename It>
-    const snapshot & component(Archive &archive, It first, It last) const {
+    const Snapshot & component(Archive &archive, It first, It last) const {
         component<Component...>(archive, first, last, std::make_index_sequence<sizeof...(Component)>{});
         return *this;
     }
 
+    /**
+     * @brief Puts aside the given tag.
+     *
+     * Each instance is serialized together with the entity to which it belongs.
+     * Entities are serialized along with their versions.
+     *
+     * @tparam Tag Type of tag to serialize.
+     * @tparam Archive Type of output archive.
+     * @param archive A valid reference to an output archive.
+     * @return An object of this type to continue creating the snapshot.
+     */
+    template<typename Tag, typename Archive>
+    const Snapshot & tag(Archive &archive) const {
+        const bool has = registry.template has<Tag>();
+
+        // numerical length is forced for tags to facilitate loading
+        archive(has ? Entity(1): Entity{});
+
+        if(has) {
+            archive(registry.template attachee<Tag>(), registry.template get<Tag>());
+        }
+
+        return *this;
+    }
+
+    /**
+     * @brief Puts aside the given tags.
+     *
+     * Each instance is serialized together with the entity to which it belongs.
+     * Entities are serialized along with their versions.
+     *
+     * @tparam Tag Types of tags to serialize.
+     * @tparam Archive Type of output archive.
+     * @param archive A valid reference to an output archive.
+     * @return An object of this type to continue creating the snapshot.
+     */
+    template<typename... Tag, typename Archive>
+    std::enable_if_t<(sizeof...(Tag) > 1), const Snapshot &>
+    tag(Archive &archive) const {
+        using accumulator_type = int[];
+        accumulator_type accumulator = { 0, (tag<Tag>(archive), 0)... };
+        (void)accumulator;
+        return *this;
+    }
+
 private:
-    const registry<Entity> &reg;
+    const Registry<Entity> &registry;
     const Entity seed;
     follow_fn_type *follow;
 };
@@ -197,18 +262,18 @@ private:
  * @tparam Entity A valid entity type (see entt_traits for more details).
  */
 template<typename Entity>
-class snapshot_loader final {
+class SnapshotLoader final {
     /*! @brief A registry is allowed to create snapshot loaders. */
-    friend class registry<Entity>;
+    friend class Registry<Entity>;
 
-    using force_fn_type = void(registry<Entity> &, const Entity, const bool);
+    using assure_fn_type = void(Registry<Entity> &, const Entity, const bool);
 
-    snapshot_loader(registry<Entity> &reg, force_fn_type *force) ENTT_NOEXCEPT
-        : reg{reg},
-          force{force}
+    SnapshotLoader(Registry<Entity> &registry, assure_fn_type *assure_fn) ENTT_NOEXCEPT
+        : registry{registry},
+          assure_fn{assure_fn}
     {
         // restore a snapshot as a whole requires a clean registry
-        assert(!reg.capacity());
+        assert(!registry.capacity());
     }
 
     template<typename Archive>
@@ -219,7 +284,7 @@ class snapshot_loader final {
         while(length--) {
             Entity entity{};
             archive(entity);
-            force(reg, entity, destroyed);
+            assure_fn(registry, entity, destroyed);
         }
     }
 
@@ -233,21 +298,21 @@ class snapshot_loader final {
             Type instance{};
             archive(entity, instance);
             static constexpr auto destroyed = false;
-            force(reg, entity, destroyed);
-            reg.template assign<Type>(args..., entity, std::as_const(instance));
+            assure_fn(registry, entity, destroyed);
+            registry.template assign<Type>(args..., entity, static_cast<const Type &>(instance));
         }
     }
 
 public:
     /*! @brief Copying a snapshot loader isn't allowed. */
-    snapshot_loader(const snapshot_loader &) = delete;
+    SnapshotLoader(const SnapshotLoader &) = delete;
     /*! @brief Default move constructor. */
-    snapshot_loader(snapshot_loader &&) = default;
+    SnapshotLoader(SnapshotLoader &&) = default;
 
     /*! @brief Copying a snapshot loader isn't allowed. @return This loader. */
-    snapshot_loader & operator=(const snapshot_loader &) = delete;
+    SnapshotLoader & operator=(const SnapshotLoader &) = delete;
     /*! @brief Default move assignment operator. @return This loader. */
-    snapshot_loader & operator=(snapshot_loader &&) = default;
+    SnapshotLoader & operator=(SnapshotLoader &&) = default;
 
     /**
      * @brief Restores entities that were in use during serialization.
@@ -260,7 +325,7 @@ public:
      * @return A valid loader to continue restoring data.
      */
     template<typename Archive>
-    const snapshot_loader & entities(Archive &archive) const {
+    const SnapshotLoader & entities(Archive &archive) const {
         static constexpr auto destroyed = false;
         assure(archive, destroyed);
         return *this;
@@ -277,7 +342,7 @@ public:
      * @return A valid loader to continue restoring data.
      */
     template<typename Archive>
-    const snapshot_loader & destroyed(Archive &archive) const {
+    const SnapshotLoader & destroyed(Archive &archive) const {
         static constexpr auto destroyed = true;
         assure(archive, destroyed);
         return *this;
@@ -297,32 +362,55 @@ public:
      * @return A valid loader to continue restoring data.
      */
     template<typename... Component, typename Archive>
-    const snapshot_loader & component(Archive &archive) const {
-        (assign<Component>(archive), ...);
+    const SnapshotLoader & component(Archive &archive) const {
+        using accumulator_type = int[];
+        accumulator_type accumulator = { 0, (assign<Component>(archive), 0)... };
+        (void)accumulator;
         return *this;
     }
 
     /**
-     * @brief Destroys those entities that have no components.
+     * @brief Restores tags and assigns them to the right entities.
+     *
+     * The template parameter list must be exactly the same used during
+     * serialization. In the event that the entity to which the tag is assigned
+     * doesn't exist yet, the loader will take care to create it with the
+     * version it originally had.
+     *
+     * @tparam Tag Types of tags to restore.
+     * @tparam Archive Type of input archive.
+     * @param archive A valid reference to an input archive.
+     * @return A valid loader to continue restoring data.
+     */
+    template<typename... Tag, typename Archive>
+    const SnapshotLoader & tag(Archive &archive) const {
+        using accumulator_type = int[];
+        accumulator_type accumulator = { 0, (assign<Tag>(archive, tag_t{}), 0)... };
+        (void)accumulator;
+        return *this;
+    }
+
+    /**
+     * @brief Destroys those entities that have neither components nor tags.
      *
      * In case all the entities were serialized but only part of the components
-     * was saved, it could happen that some of the entities have no components
-     * once restored.<br/>
+     * and tags was saved, it could happen that some of the entities have
+     * neither components nor tags once restored.<br/>
      * This functions helps to identify and destroy those entities.
      *
      * @return A valid loader to continue restoring data.
      */
-    const snapshot_loader & orphans() const {
-        reg.orphans([this](const auto entity) {
-            reg.destroy(entity);
+    const SnapshotLoader & orphans() const {
+        registry.orphans([this](const auto entity) {
+            registry.destroy(entity);
         });
 
         return *this;
     }
 
 private:
-    registry<Entity> &reg;
-    force_fn_type *force;
+    Registry<Entity> &registry;
+    assure_fn_type *assure_fn;
 };
 
 
@@ -343,16 +431,16 @@ private:
  * @tparam Entity A valid entity type (see entt_traits for more details).
  */
 template<typename Entity>
-class continuous_loader final {
+class ContinuousLoader final {
     using traits_type = entt_traits<Entity>;
 
     void destroy(Entity entity) {
         const auto it = remloc.find(entity);
 
         if(it == remloc.cend()) {
-            const auto local = reg.create();
+            const auto local = registry.create();
             remloc.emplace(entity, std::make_pair(local, true));
-            reg.destroy(local);
+            registry.destroy(local);
         }
     }
 
@@ -360,35 +448,39 @@ class continuous_loader final {
         const auto it = remloc.find(entity);
 
         if(it == remloc.cend()) {
-            const auto local = reg.create();
+            const auto local = registry.create();
             remloc.emplace(entity, std::make_pair(local, true));
         } else {
             remloc[entity].first =
-                    reg.valid(remloc[entity].first)
+                    registry.valid(remloc[entity].first)
                     ? remloc[entity].first
-                    : reg.create();
+                    : registry.create();
 
             // set the dirty flag
             remloc[entity].second = true;
         }
     }
 
-    template<typename Other, typename Type, typename Member>
-    void update(Other &instance, Member Type:: *member) {
-        if constexpr(!std::is_same_v<Other, Type>) {
-            return;
-        } else if constexpr(std::is_same_v<Member, Entity>) {
-            instance.*member = map(instance.*member);
-        } else {
-            // maybe a container? let's try...
-            for(auto &entity: instance.*member) {
-                entity = map(entity);
-            }
+    template<typename Type, typename Member>
+    std::enable_if_t<std::is_same<Member, Entity>::value>
+    update(Type &instance, Member Type:: *member) {
+        instance.*member = map(instance.*member);
+    }
+
+    template<typename Type, typename Member>
+    std::enable_if_t<std::is_same<typename std::iterator_traits<typename Member::iterator>::value_type, Entity>::value>
+    update(Type &instance, Member Type:: *member) {
+        for(auto &entity: instance.*member) {
+            entity = map(entity);
         }
     }
 
+    template<typename Other, typename Type, typename Member>
+    std::enable_if_t<!std::is_same<Other, Type>::value>
+    update(Other &, Member Type:: *) {}
+
     template<typename Archive>
-    void assure(Archive &archive, void(continuous_loader:: *member)(Entity)) {
+    void assure(Archive &archive, void(ContinuousLoader:: *member)(Entity)) {
         Entity length{};
         archive(length);
 
@@ -404,8 +496,8 @@ class continuous_loader final {
         for(auto &&ref: remloc) {
             const auto local = ref.second.first;
 
-            if(reg.valid(local)) {
-                reg.template reset<Component>(local);
+            if(registry.valid(local)) {
+                registry.template reset<Component>(local);
             }
         }
     }
@@ -418,9 +510,14 @@ class continuous_loader final {
         while(length--) {
             Entity entity{};
             Other instance{};
+
             archive(entity, instance);
             restore(entity);
-            (update(instance, member), ...);
+
+            using accumulator_type = int[];
+            accumulator_type accumulator = { 0, (update(instance, member), 0)... };
+            (void)accumulator;
+
             func(map(entity), instance);
         }
     }
@@ -431,21 +528,21 @@ public:
 
     /**
      * @brief Constructs a loader that is bound to a given registry.
-     * @param reg A valid reference to a registry.
+     * @param registry A valid reference to a registry.
      */
-    continuous_loader(registry<entity_type> &reg) ENTT_NOEXCEPT
-        : reg{reg}
+    ContinuousLoader(Registry<entity_type> &registry) ENTT_NOEXCEPT
+        : registry{registry}
     {}
 
     /*! @brief Copying a snapshot loader isn't allowed. */
-    continuous_loader(const continuous_loader &) = delete;
+    ContinuousLoader(const ContinuousLoader &) = delete;
     /*! @brief Default move constructor. */
-    continuous_loader(continuous_loader &&) = default;
+    ContinuousLoader(ContinuousLoader &&) = default;
 
     /*! @brief Copying a snapshot loader isn't allowed. @return This loader. */
-    continuous_loader & operator=(const continuous_loader &) = delete;
+    ContinuousLoader & operator=(const ContinuousLoader &) = delete;
     /*! @brief Default move assignment operator. @return This loader. */
-    continuous_loader & operator=(continuous_loader &&) = default;
+    ContinuousLoader & operator=(ContinuousLoader &&) = default;
 
     /**
      * @brief Restores entities that were in use during serialization.
@@ -458,8 +555,8 @@ public:
      * @return A non-const reference to this loader.
      */
     template<typename Archive>
-    continuous_loader & entities(Archive &archive) {
-        assure(archive, &continuous_loader::restore);
+    ContinuousLoader & entities(Archive &archive) {
+        assure(archive, &ContinuousLoader::restore);
         return *this;
     }
 
@@ -474,8 +571,8 @@ public:
      * @return A non-const reference to this loader.
      */
     template<typename Archive>
-    continuous_loader & destroyed(Archive &archive) {
-        assure(archive, &continuous_loader::destroy);
+    ContinuousLoader & destroyed(Archive &archive) {
+        assure(archive, &ContinuousLoader::destroy);
         return *this;
     }
 
@@ -499,13 +596,45 @@ public:
      * @return A non-const reference to this loader.
      */
     template<typename... Component, typename Archive, typename... Type, typename... Member>
-    continuous_loader & component(Archive &archive, Member Type:: *... member) {
+    ContinuousLoader & component(Archive &archive, Member Type:: *... member) {
         auto apply = [this](const auto entity, const auto &component) {
-            reg.template assign_or_replace<std::decay_t<decltype(component)>>(entity, component);
+            registry.template accommodate<std::decay_t<decltype(component)>>(entity, component);
         };
 
-        (reset<Component>(), ...);
-        (assign<Component>(archive, apply, member...), ...);
+        using accumulator_type = int[];
+        accumulator_type accumulator = { 0, (reset<Component>(), assign<Component>(archive, apply, member...), 0)... };
+        (void)accumulator;
+        return *this;
+    }
+
+    /**
+     * @brief Restores tags and assigns them to the right entities.
+     *
+     * The template parameter list must be exactly the same used during
+     * serialization. In the event that the entity to which the tag is assigned
+     * doesn't exist yet, the loader will take care to create a local
+     * counterpart for it.<br/>
+     * Members can be either data members of type entity_type or containers of
+     * entities. In both cases, the loader will visit them and update the
+     * entities by replacing each one with its local counterpart.
+     *
+     * @tparam Tag Type of tag to restore.
+     * @tparam Archive Type of input archive.
+     * @tparam Type Types of components to update with local counterparts.
+     * @tparam Member Types of members to update with their local counterparts.
+     * @param archive A valid reference to an input archive.
+     * @param member Members to update with their local counterparts.
+     * @return A non-const reference to this loader.
+     */
+    template<typename... Tag, typename Archive, typename... Type, typename... Member>
+    ContinuousLoader & tag(Archive &archive, Member Type:: *... member) {
+        auto apply = [this](const auto entity, const auto &tag) {
+            registry.template assign<std::decay_t<decltype(tag)>>(tag_t{}, entity, tag);
+        };
+
+        using accumulator_type = int[];
+        accumulator_type accumulator = { 0, (registry.template remove<Tag>(), assign<Tag>(archive, apply, member...), 0)... };
+        (void)accumulator;
         return *this;
     }
 
@@ -517,7 +646,7 @@ public:
      *
      * @return A non-const reference to this loader.
      */
-    continuous_loader & shrink() {
+    ContinuousLoader & shrink() {
         auto it = remloc.begin();
 
         while(it != remloc.cend()) {
@@ -528,8 +657,8 @@ public:
                 dirty = false;
                 ++it;
             } else {
-                if(reg.valid(local)) {
-                    reg.destroy(local);
+                if(registry.valid(local)) {
+                    registry.destroy(local);
                 }
 
                 it = remloc.erase(it);
@@ -540,18 +669,18 @@ public:
     }
 
     /**
-     * @brief Destroys those entities that have no components.
+     * @brief Destroys those entities that have neither components nor tags.
      *
      * In case all the entities were serialized but only part of the components
-     * was saved, it could happen that some of the entities have no components
-     * once restored.<br/>
+     * and tags was saved, it could happen that some of the entities have
+     * neither components nor tags once restored.<br/>
      * This functions helps to identify and destroy those entities.
      *
      * @return A non-const reference to this loader.
      */
-    continuous_loader & orphans() {
-        reg.orphans([this](const auto entity) {
-            reg.destroy(entity);
+    ContinuousLoader & orphans() {
+        registry.orphans([this](const auto entity) {
+            registry.destroy(entity);
         });
 
         return *this;
@@ -568,23 +697,24 @@ public:
 
     /**
      * @brief Returns the identifier to which an entity refers.
+     *
+     * @warning
+     * Attempting to use an entity that isn't managed by the loader results in
+     * undefined behavior.<br/>
+     * An assertion will abort the execution at runtime in debug mode if the
+     * loader doesn't knows about the entity.
+     *
      * @param entity An entity identifier.
-     * @return The local identifier if any, the null entity otherwise.
+     * @return The identifier to which `entity` refers in the target registry.
      */
     entity_type map(entity_type entity) const ENTT_NOEXCEPT {
-        const auto it = remloc.find(entity);
-        entity_type other = null;
-
-        if(it != remloc.cend()) {
-            other = it->second.first;
-        }
-
-        return other;
+        assert(has(entity));
+        return remloc.find(entity)->second.first;
     }
 
 private:
     std::unordered_map<Entity, std::pair<Entity, bool>> remloc;
-    registry<Entity> &reg;
+    Registry<Entity> &registry;
 };
 
 

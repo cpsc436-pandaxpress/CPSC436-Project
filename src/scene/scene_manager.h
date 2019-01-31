@@ -10,7 +10,6 @@
 #include "../util/blackboard.h"
 
 
-
 class SceneManager {
 private:
     std::unordered_map<SceneID, Scene*> scenes_;
@@ -21,7 +20,7 @@ public:
     SceneManager();
 
     // adds scene to scenes_ with key of id
-    // DOES NOT manage memory of provided scene, this should be done elsewhere
+    // DOES NOT manage memory of provided scene, should be done elsewhere
     // fails and returns false if another scene exists with the given ID
     // returns true otherwise
     bool add_scene(SceneID id, Scene* scene);
@@ -33,7 +32,7 @@ public:
     bool change_scene(SceneID id);
 
     // attempts to update the current scene, if one exists
-    void update(float delta_time, Blackboard& blackboard);
+    void update(Blackboard& blackboard);
 
     // attempts to render the current scene, if one exists
     void render(Blackboard& blackboard);
