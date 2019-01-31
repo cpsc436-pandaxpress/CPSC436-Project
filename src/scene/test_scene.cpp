@@ -8,9 +8,6 @@
 
 #include "components/transform.h"
 
-void create_panda();
-void create_platforms();
-
 TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
     Scene(scene_manager),
     sprite_render_system(),
@@ -35,6 +32,8 @@ void TestScene::update(Blackboard& blackboard) {
 
     if (transform.x + panda.width / 2 < cam_position.x - cam_size.x / 2) {
         reset_scene(blackboard);
+    } else if (transform.x + panda.width / 2 > cam_position.x + cam_size.x / 2) {
+        transform.x = cam_position.x + cam_size.x / 2 - panda.width / 2;
     }
 
 
