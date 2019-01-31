@@ -14,6 +14,10 @@ void Camera::set_size(float width, float height) {
     dimensions_ = {width, height};
 }
 
+vec2 Camera::size() const {
+    return dimensions_;
+}
+
 void Camera::set_position(float x, float y) {
     position_ = {x, y};
 }
