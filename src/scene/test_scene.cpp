@@ -2,14 +2,16 @@
 // Created by alex on 29/01/19.
 //
 
+#include <components/physics.h>
 #include "test_scene.h"
 
-#include "../components/position.h"
+#include "components/transform.h"
 
 TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
     Scene(scene_manager),
     sprite_render_system(),
-    sprite_transform_system()
+    sprite_transform_system(),
+    physics_system()
 {
     test_entity = registry_.create();
 
@@ -18,6 +20,7 @@ TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
 
     registry_.assign<Transform>(test_entity, 0., 0., 0., 0.5, 0.5);
     registry_.assign<Sprite>(test_entity, texture, shader);
+    registry_.assign<Physics>(test_entity, true);
 
     auto platform_texture = blackboard.textureManager.get_texture("platform");
     float scale = 100.f / platform_texture.width();
@@ -27,6 +30,8 @@ TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
 
         registry_.assign<Transform>(platform, 200 * i - 200., 200., 0., scale, scale);
         registry_.assign<Sprite>(platform, platform_texture, shader);
+
+        platforms.push_back(platform);
     }
 }
 
@@ -48,6 +53,8 @@ void TestScene::update(Blackboard& blackboard) {
     }
 
     // update the systems here
+    physics_system.update(blackboard, registry_);
+
     sprite_transform_system.update(blackboard, registry_);
 }
 

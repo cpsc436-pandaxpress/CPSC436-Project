@@ -4,7 +4,7 @@
 
 #include "sprite_transform_system.h"
 
-#include "../components/position.h"
+#include "components/transform.h"
 #include "../graphics/sprite.h"
 
 SpriteTransformSystem::SpriteTransformSystem() {}
