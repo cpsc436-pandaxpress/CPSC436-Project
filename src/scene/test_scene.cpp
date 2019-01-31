@@ -16,13 +16,23 @@ TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
     auto texture = blackboard.textureManager.get_texture("panda");
     auto shader = blackboard.shader_manager.get_shader("sprite");
 
-    registry_.assign<Position>(test_entity, 0., 0., 0.);
+    registry_.assign<Transform>(test_entity, 0., 0., 0., 0.5, 0.5);
     registry_.assign<Sprite>(test_entity, texture, shader);
+
+    auto platform_texture = blackboard.textureManager.get_texture("platform");
+    float scale = 100.f / platform_texture.width();
+
+    for (int i = 0; i < 5; i++) {
+        auto platform = registry_.create();
+
+        registry_.assign<Transform>(platform, 200 * i - 200., 200., 0., scale, scale);
+        registry_.assign<Sprite>(platform, platform_texture, shader);
+    }
 }
 
 void TestScene::update(Blackboard& blackboard) {
     // some sample input handling
-    auto& position = registry_.get<Position>(test_entity);
+    auto& position = registry_.get<Transform>(test_entity);
 
     if (blackboard.input_manager.key_pressed(SDL_SCANCODE_UP)) {
         position.y -= 1;

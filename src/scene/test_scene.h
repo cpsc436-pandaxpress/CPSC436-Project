@@ -15,6 +15,8 @@ private:
     uint32_t test_entity;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
+    std::vector<uint32_t> platforms;
+
 public:
     TestScene(Blackboard& blackboard, SceneManager& scene_manager);
 
