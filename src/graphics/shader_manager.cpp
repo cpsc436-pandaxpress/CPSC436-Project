@@ -38,8 +38,7 @@ bool ShaderManager::load_shader(const char *vert_path, const char *frag_path, co
     vs_is.open(vert_path, std::ifstream::in);
     fs_is.open(frag_path,  std::ifstream::in);
 
-    if (!vs_is.good() || !fs_is.good())
-    {
+    if (!vs_is.good() || !fs_is.good()) {
         fprintf(stderr, "Failed to load shader files %s, %s\n", vert_path, frag_path);
         return false;
     }
