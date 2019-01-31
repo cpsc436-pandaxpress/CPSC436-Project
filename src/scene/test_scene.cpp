@@ -22,7 +22,10 @@ TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
 }
 
 void TestScene::update(Blackboard& blackboard) {
-    // some sample input handling
+    vec2 cam_position = blackboard.camera.position();
+    blackboard.camera.set_position(cam_position.x + 2, cam_position.y);
+    blackboard.camera.compose();
+
     auto& transform = registry_.get<Transform>(panda_entity);
     auto& panda = registry_.get<Panda>(panda_entity);
 

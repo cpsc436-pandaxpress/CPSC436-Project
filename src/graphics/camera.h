@@ -19,6 +19,8 @@ public:
 
     void set_position(float x, float y);
 
+    vec2 position() const;
+
     void compose();
 
     const mat3& get_projection();

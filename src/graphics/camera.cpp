@@ -18,6 +18,10 @@ void Camera::set_position(float x, float y) {
     position_ = {x, y};
 }
 
+vec2 Camera::position() const {
+    return position_;
+}
+
 void Camera::compose() {
     float h_width = dimensions_.x * 0.5f;
     float h_height = dimensions_.y * 0.5f;
