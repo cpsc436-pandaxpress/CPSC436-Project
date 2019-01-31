@@ -13,7 +13,7 @@
 
 class TestScene : public Scene {
 private:
-    uint32_t panda;
+    uint32_t panda_entity;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
     std::vector<uint32_t> platforms;

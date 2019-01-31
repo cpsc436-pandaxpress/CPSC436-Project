@@ -41,6 +41,7 @@ int main(int argc, char** argv) {
     blackboard.input_manager.track(SDL_SCANCODE_DOWN);
     blackboard.input_manager.track(SDL_SCANCODE_LEFT);
     blackboard.input_manager.track(SDL_SCANCODE_RIGHT);
+    blackboard.input_manager.track(SDL_SCANCODE_SPACE);
 
     blackboard.textureManager.load_texture(textures_path("panda.png"), "panda");
     blackboard.shader_manager.load_shader(
