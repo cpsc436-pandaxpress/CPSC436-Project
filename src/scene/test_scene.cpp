@@ -29,9 +29,9 @@ void TestScene::update(Blackboard& blackboard) {
 
 
     // update the systems here
+    player_movement_system.update(blackboard, registry_);
     collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
-    player_movement_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
 }
 

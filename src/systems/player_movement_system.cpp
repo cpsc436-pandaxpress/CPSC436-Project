@@ -16,9 +16,9 @@ void playerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
         auto &transform = view.get<Transform>(entity);
 
         if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_LEFT)) {
-            panda.x_velocity = -5;
+            panda.x_velocity = -2;
         } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RIGHT)) {
-            panda.x_velocity = 5;
+            panda.x_velocity = 2;
         } else if (blackboard.input_manager.key_just_released(SDL_SCANCODE_LEFT) ||
                    blackboard.input_manager.key_just_released(SDL_SCANCODE_RIGHT)) {
             panda.x_velocity = 0;
@@ -26,8 +26,8 @@ void playerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
 
         if (panda.grounded && blackboard.input_manager.key_just_pressed(SDL_SCANCODE_SPACE)) {
 
-            transform.y -= 2;
-            panda.y_velocity = -2;
+            transform.y -= 1;
+            panda.y_velocity = -1;
             panda.grounded = false;
         }
 

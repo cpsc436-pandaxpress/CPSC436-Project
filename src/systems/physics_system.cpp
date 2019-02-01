@@ -20,7 +20,7 @@ void PhysicsSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regist
         auto& panda = view.get<Panda>(entity);
         auto& transform = view.get<Transform>(entity);
 
-        if (!panda.grounded) {
+        if (! panda.grounded) {
             panda.y_velocity += GRAVITY;
         }
 
