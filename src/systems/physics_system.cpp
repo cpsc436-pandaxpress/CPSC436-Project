@@ -22,6 +22,7 @@ void PhysicsSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regist
 
         if (! panda.grounded) {
             panda.y_velocity += GRAVITY;
+            //transform.y += panda.y_velocity;
         }
 
         transform.x += panda.x_velocity;

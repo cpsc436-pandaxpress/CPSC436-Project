@@ -26,7 +26,7 @@ void playerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
 
         if (panda.grounded && blackboard.input_manager.key_just_pressed(SDL_SCANCODE_SPACE)) {
 
-            transform.y -= 1;
+
             panda.y_velocity = -1;
             panda.grounded = false;
         }

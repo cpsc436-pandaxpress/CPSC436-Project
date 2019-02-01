@@ -28,8 +28,13 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
             auto& pl_transform = pl_view.get<Transform>(pl_entity);
 
             if (checkCollision(panda, transform, platform, pl_transform)) {
-                transform.y = pl_transform.y - panda.height;
-                panda.grounded = true;
+                if(transform.y < pl_transform.y) {
+                    transform.y = pl_transform.y - panda.height;
+                    panda.grounded = true;
+                }else{
+                    //panda.y_velocity=0;
+                    panda.grounded=false;
+                }
             }
             else{
                 panda.grounded = false;
