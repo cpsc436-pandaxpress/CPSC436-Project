@@ -16,19 +16,19 @@ void playerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
         auto &transform = view.get<Transform>(entity);
 
         if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_LEFT)) {
-            panda.x_velocity = -2;
+            panda.x_velocity = -2.f;
         } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RIGHT)) {
-            panda.x_velocity = 2;
+            panda.x_velocity = 2.f;
         } else if (blackboard.input_manager.key_just_released(SDL_SCANCODE_LEFT) ||
                    blackboard.input_manager.key_just_released(SDL_SCANCODE_RIGHT)) {
-            panda.x_velocity = 0;
+            panda.x_velocity = 0.f;
         }
 
         if (panda.grounded && blackboard.input_manager.key_just_pressed(SDL_SCANCODE_SPACE)) {
 
-
-            panda.y_velocity = -1;
             panda.grounded = false;
+            panda.y_velocity = -1.f;
+
         }
 
 

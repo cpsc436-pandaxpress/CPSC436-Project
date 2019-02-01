@@ -22,10 +22,15 @@ void PhysicsSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regist
 
         if (! panda.grounded) {
             panda.y_velocity += GRAVITY;
-            //transform.y += panda.y_velocity;
+        } else{
+            panda.y_velocity=0.f;
         }
 
+
         transform.x += panda.x_velocity;
-        transform.y += panda.y_velocity;
+        if(! panda.grounded){
+            transform.y += panda.y_velocity;
+        }
+
     }
 }

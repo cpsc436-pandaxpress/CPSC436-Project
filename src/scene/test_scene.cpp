@@ -59,11 +59,11 @@ void TestScene::create_platforms(Blackboard& blackboard) {
     auto shader = blackboard.shader_manager.get_shader("sprite");
     float scale = 100.f / texture.width();
 
-    auto platform = registry_.create();
-    auto platform2 = registry_.create();
-    auto platform3 = registry_.create();
-    auto platform4 = registry_.create();
-    auto platform5 = registry_.create();
+    uint32_t platform = registry_.create();
+    uint32_t platform2 = registry_.create();
+    uint32_t platform3 = registry_.create();
+    uint32_t platform4 = registry_.create();
+    uint32_t platform5 = registry_.create();
 
     registry_.assign<Transform>(platform, 0., 200., 0., scale, scale);
     registry_.assign<Sprite>(platform, texture, shader);

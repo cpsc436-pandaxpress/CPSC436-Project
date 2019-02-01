@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
 
     auto window = Window();
 
-    window.initialize("Express Panda", 800, 600);
+    window.initialize("Express Panda", 1600, 1200);
 
     Blackboard blackboard = {
         Camera(1600.f, 1200.f, 0.f, 0.f),

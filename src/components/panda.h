@@ -14,8 +14,8 @@ struct Panda {
         width(width),
         height(height),
         grounded(false),
-        x_velocity(0),
-        y_velocity(0) {}
+        x_velocity(0.f),
+        y_velocity(0.f) {}
 };
 
 #endif //PANDAEXPRESS_PHYSICS_H
