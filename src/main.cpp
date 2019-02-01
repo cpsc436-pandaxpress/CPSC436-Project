@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
     window.initialize("Express Panda", 800, 600);
 
     Blackboard blackboard = {
-        Camera(800.f, 600.f, 0.f, 0.f),
+        Camera(1600.f, 1200.f, 0.f, 0.f),
         0,
         InputManager(),
         ShaderManager(),

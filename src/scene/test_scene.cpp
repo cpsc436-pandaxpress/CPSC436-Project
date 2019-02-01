@@ -15,7 +15,8 @@ TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
     Scene(scene_manager),
     sprite_render_system(),
     sprite_transform_system(),
-    physics_system()
+    physics_system(),
+    player_movement_system()
 {
     create_panda(blackboard);
     create_platforms(blackboard);
@@ -23,27 +24,11 @@ TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
 
 void TestScene::update(Blackboard& blackboard) {
     // some sample input handling
-    auto& transform = registry_.get<Transform>(panda_entity);
-    auto& panda = registry_.get<Panda>(panda_entity);
 
-    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_LEFT)) {
-        panda.x_velocity = -5;
-    } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RIGHT)) {
-        panda.x_velocity = 5;
-    } else if (blackboard.input_manager.key_just_released(SDL_SCANCODE_LEFT) ||
-        blackboard.input_manager.key_just_released(SDL_SCANCODE_RIGHT)) {
-        panda.x_velocity = 0;
-    }
-
-    if (panda.grounded && blackboard.input_manager.key_just_pressed(SDL_SCANCODE_SPACE)) {
-        transform.y -= 5;
-        panda.y_velocity = -5;
-        panda.grounded = false;
-    }
 
     // update the systems here
     physics_system.update(blackboard, registry_);
-
+    player_movement_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
 }
 
