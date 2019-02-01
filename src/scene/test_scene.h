@@ -11,6 +11,7 @@
 #include "../util/blackboard.h"
 #include "../systems/physics_system.h"
 #include "../systems/player_movement_system.h"
+#include "../systems/collision_system.h"
 
 class TestScene : public Scene {
 private:
@@ -20,6 +21,7 @@ private:
     std::vector<uint32_t> platforms;
     PhysicsSystem physics_system;
     playerMovementSystem player_movement_system;
+    CollisionSystem collision_system;
     void create_panda(Blackboard& blackboard);
     void create_platforms(Blackboard& blackboard);
 
