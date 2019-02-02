@@ -28,7 +28,7 @@ void PhysicsSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regist
             auto& pl_transform = pl_view.get<Transform>(pl_entity);
 
             if (checkCollision(panda, transform, platform, pl_transform)) {
-                transform.y = pl_transform.y - panda.height;
+                transform.y = pl_transform.y - (platform.width + panda.height);
                 panda.grounded = true;
                 panda.y_velocity = 0;
             }

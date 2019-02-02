@@ -15,6 +15,7 @@ TestScene::TestScene(Blackboard &blackboard, SceneManager &scene_manager) :
         physics_system() {
     initScene(blackboard);
 }
+
 void TestScene::initScene(Blackboard &blackboard) {
     srand(0);
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
@@ -74,7 +75,7 @@ void TestScene::create_panda(Blackboard &blackboard) {
     auto texture = blackboard.textureManager.get_texture("panda");
     auto shader = blackboard.shader_manager.get_shader("sprite");
 
-    float scale = 0.5;
+    float scale = 0.15f;
     registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scale, scale);
     registry_.assign<Sprite>(panda_entity, texture, shader);
     registry_.assign<Panda>(panda_entity, texture.width() * scale, texture.height() * scale);
@@ -82,15 +83,13 @@ void TestScene::create_panda(Blackboard &blackboard) {
 }
 
 void TestScene::generate_platforms(Blackboard &blackboard) {
-    auto texture = blackboard.textureManager.get_texture("platform");
     auto shader = blackboard.shader_manager.get_shader("sprite");
-    float scale = 50.0f / texture.width();
-    float max_x = blackboard.camera.position().x + blackboard.camera.size().x; // some distance off camera
+    float max_x =
+            blackboard.camera.position().x + blackboard.camera.size().x; // some distance off camera
     while (last_placed_x < max_x) {
-//        if (rand() % 100 > 75) {
-//            last_placed_x += texture.width();
-//            continue;
-//        }
+        auto texture = blackboard.textureManager.get_texture(
+                (rand() % 2 == 0) ? "platform1" : "platform2");
+        float scale = 50.0f / texture.width();
         auto platform = registry_.create();
         registry_.assign<Transform>(platform, last_placed_x, PLATFORM_START_Y, 0., scale,
                                     scale);
@@ -100,13 +99,6 @@ void TestScene::generate_platforms(Blackboard &blackboard) {
 
         platforms.push(platform);
     }
-    while (platforms.size() > 30) {
-        uint32_t platform = platforms.front();
-        registry_.destroy(platform);
-        platforms.pop();
-    }
-    const auto firstP = registry_.get<Transform>(platforms.front());
-    printf("lastPlaced: %f, #platforms:%lu, firstPlatformX:%f\n", last_placed_x, platforms.size(), firstP.x);
 }
 
 void TestScene::reset_scene(Blackboard &blackboard) {
