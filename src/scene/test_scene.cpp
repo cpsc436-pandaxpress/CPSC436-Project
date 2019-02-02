@@ -90,14 +90,24 @@ void TestScene::generate_platforms(Blackboard &blackboard) {
         auto texture = blackboard.textureManager.get_texture(
                 (rand() % 2 == 0) ? "platform1" : "platform2");
         float scale = 50.0f / texture.width();
-        auto platform = registry_.create();
-        registry_.assign<Transform>(platform, last_placed_x, PLATFORM_START_Y, 0., scale,
-                                    scale);
-        last_placed_x += texture.width();
-        registry_.assign<Sprite>(platform, texture, shader);
-        registry_.assign<Platform>(platform, texture.width() * scale, texture.height() * scale);
+        if (platforms.size() > 30) {//reuse
+            auto platform = platforms.front();
+            platforms.pop();
+            registry_.replace<Transform>(platform, last_placed_x, PLATFORM_START_Y, 0.f, scale,
+                                         scale);
+            platforms.push(platform);
+        } else {
+            auto platform = registry_.create();
+            registry_.assign<Transform>(platform, last_placed_x, PLATFORM_START_Y, 0., scale,
+                                        scale);
+            registry_.assign<Sprite>(platform, texture, shader);
+            registry_.assign<Platform>(platform, texture.width() * scale, texture.height() * scale);
 
-        platforms.push(platform);
+            platforms.push(platform);
+        }
+        last_placed_x += texture.width();
+        const auto firstP = registry_.get<Transform>(platforms.front());
+        printf("lastPlaced: %f, #platforms:%lu, firstPlatformX:%f\n", last_placed_x, platforms.size(), firstP.x);
     }
 }
 
