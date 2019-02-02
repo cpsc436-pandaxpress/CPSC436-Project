@@ -47,6 +47,27 @@ void PhysicsSystem::applyGravity(Blackboard& blackboard, entt::DefaultRegistry& 
 
     }
 
+    /***
+     * Applying gravity to objects that can't walk on platforms
+     ***/
+
+    auto viewunWalkable = registry.view<ObeysGravity, Transform, Velocity>();
+
+    for (auto entity: viewunWalkable) {
+
+        auto& transform = viewunWalkable.get<Transform>(entity);
+        auto& velocity = viewunWalkable.get<Velocity>(entity);
+        auto& gravity  = viewunWalkable.get<ObeysGravity>(entity);
+
+        velocity.y_velocity += gravity.gravityConstant;
+
+
+
+
+
+
+    }
+
 }
 
 void PhysicsSystem::applyVelocity(Blackboard& blackboard, entt::DefaultRegistry& registry) {

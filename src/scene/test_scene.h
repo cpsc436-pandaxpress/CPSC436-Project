@@ -16,7 +16,7 @@
 class TestScene : public Scene {
 private:
     uint32_t panda_entity;
-    uint32_t platform, platform2, platform3, platform4, platform5, platform6;
+    uint32_t platform, platform2, platform3, platform4, platform5, platform6, platform7, platform8;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
     std::vector<uint32_t> platforms;

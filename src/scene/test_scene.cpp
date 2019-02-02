@@ -97,5 +97,33 @@ void TestScene::create_platforms(Blackboard& blackboard) {
     registry_.assign<Sprite>(platform5, texture2, shader);
     registry_.assign<Collidable>(platform5, texture.width() * scale, texture.height() * scale);
 
+    /*
+     * Makes a platform that falls since it is assigned gravity
+     */
+    platform6 = registry_.create();
+    registry_.assign<Transform>(platform6, 300., -500., 0., scale, scale);
+    registry_.assign<Sprite>(platform6, texture2, shader);
+    registry_.assign<Collidable>(platform6, texture.width() * scale, texture.height() * scale);
+    registry_.assign<ObeysGravity>(platform6);
+    registry_.assign<Velocity>(platform6,0.f,0.f);
+
+    /*
+     * Makes a platform that falls but assigns it walkable so it will fall on top of the other platform
+     */
+    platform7 = registry_.create();
+    registry_.assign<Transform>(platform7, -400., -500., 0., scale, scale);
+    registry_.assign<Sprite>(platform7, texture2, shader);
+    registry_.assign<Collidable>(platform7, texture.width() * scale, texture.height() * scale);
+    registry_.assign<ObeysGravity>(platform7);
+    registry_.assign<Velocity>(platform7,0.f,0.f);
+    registry_.assign<Walkable>(platform7);
+
+    platform8 = registry_.create();
+    registry_.assign<Transform>(platform8, -400., 500., 0., scale, scale);
+    registry_.assign<Sprite>(platform8, texture2, shader);
+    registry_.assign<Collidable>(platform8, texture.width() * scale, texture.height() * scale);
+    registry_.assign<ObeysGravity>(platform8);
+
+
 }
 
