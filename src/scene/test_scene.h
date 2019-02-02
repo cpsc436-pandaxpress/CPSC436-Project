@@ -13,7 +13,7 @@
 
 class TestScene : public Scene {
 private:
-    uint32_t panda_entity;
+    uint32_t panda_entity, enemy_entity;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
     std::vector<uint32_t> platforms;
@@ -30,6 +30,7 @@ private:
     const float PLATFORM_START_Y = 200.f;
 
     void create_panda(Blackboard& blackboard);
+    void create_bread(Blackboard& blackboard);
     void create_platforms(Blackboard& blackboard);
     void reset_scene(Blackboard& blackboard);
 
