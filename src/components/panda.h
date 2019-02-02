@@ -7,13 +7,14 @@
 
 struct Panda {
     float width, height;
-    bool grounded;
+    bool grounded, alive;
     float x_velocity, y_velocity;
 
     Panda(float width, float height) :
         width(width),
         height(height),
         grounded(false),
+        alive(true),
         x_velocity(0),
         y_velocity(0) {}
 };

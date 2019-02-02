@@ -14,7 +14,7 @@
 
 class TestScene : public Scene {
 private:
-    uint32_t panda_entity;
+    uint32_t panda_entity, enemy_entity;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
     std::queue<uint32_t> platforms; // platforms are in order of x
