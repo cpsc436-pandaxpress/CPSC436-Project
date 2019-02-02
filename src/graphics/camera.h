@@ -17,7 +17,11 @@ public:
 
     void set_size(float width, float height);
 
+    vec2 size() const;
+
     void set_position(float x, float y);
+
+    vec2 position() const;
 
     void compose();
 
