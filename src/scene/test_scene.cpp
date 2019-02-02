@@ -36,6 +36,8 @@ void TestScene::update(Blackboard &blackboard) {
     if (transform.x + panda.width / 2 < cam_position.x - cam_size.x / 2
         || transform.y + panda.height / 2 > cam_position.y + cam_size.y) {
         reset_scene(blackboard);
+    } else if (transform.x + panda.width / 2 > cam_position.x + cam_size.x / 2) {
+        transform.x = cam_position.x + cam_size.x / 2 - panda.width / 2;
     }
 
 
