@@ -5,6 +5,9 @@
 #include "mesh.h"
 
 Mesh::Mesh(size_t vertex_count, TexturedVertex *vertices, size_t index_count, uint16_t *indices) {
+    glGenVertexArrays(1, &vao_);
+    glBindVertexArray(vao_);
+
     glGenBuffers(1, &vbo_);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_);
     glBufferData(GL_ARRAY_BUFFER, sizeof(TexturedVertex) * vertex_count, vertices, GL_STATIC_DRAW);
@@ -13,10 +16,7 @@ Mesh::Mesh(size_t vertex_count, TexturedVertex *vertices, size_t index_count, ui
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16_t) * index_count, indices, GL_STATIC_DRAW);
 
-    glGenVertexArrays(1, &vao_);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }
 
 Mesh::~Mesh() {
@@ -27,12 +27,12 @@ Mesh::~Mesh() {
 
 void Mesh::bind() {
     glBindVertexArray(vao_);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_);
+    //glBindBuffer(GL_ARRAY_BUFFER, vbo_);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_);
 }
 
 void Mesh::unbind() {
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    //glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }

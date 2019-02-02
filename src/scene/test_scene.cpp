@@ -18,8 +18,9 @@ TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
     player_movement_system(),
     collision_system()
 {
-    create_panda(blackboard);
+    //create_panda(blackboard);
     create_platforms(blackboard);
+    gl_has_errors();
 }
 
 void TestScene::update(Blackboard& blackboard) {
@@ -63,24 +64,29 @@ void TestScene::create_platforms(Blackboard& blackboard) {
     platform3 = registry_.create();
     platform4 = registry_.create();
     platform5 = registry_.create();
+    platform6 = registry_.create();
 
-    registry_.assign<Transform>(platform2, -200., 0., 0., scale, scale);
-    registry_.assign<Sprite>(platform2, texture, shader);
+    registry_.assign<Transform>(platform, -200., 0., 0., scale, scale);
+    registry_.assign<Sprite>(platform, texture, shader);
+    registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale, false);
+
+    registry_.assign<Transform>(platform2, -100., 100., 0., scale, scale);
+    registry_.assign<Sprite>(platform2, texture2, shader);
     registry_.assign<Collidable>(platform2, texture.width() * scale, texture.height() * scale, false);
 
-    registry_.assign<Transform>(platform3, 200., 0., 0., scale, scale);
+    registry_.assign<Transform>(platform3, 0., 200., 0., scale, scale);
     registry_.assign<Sprite>(platform3, texture2, shader);
     registry_.assign<Collidable>(platform3, texture.width() * scale, texture.height() * scale, false);
 
-    registry_.assign<Transform>(platform, 0., 200., 0., scale, scale);
-    registry_.assign<Sprite>(platform, texture2, shader);
-    registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale, false);
-
-    registry_.assign<Transform>(platform4, -200., 400., 0., scale, scale);
+    registry_.assign<Transform>(platform4, 100., 300., 0., scale, scale);
     registry_.assign<Sprite>(platform4, texture2, shader);
     registry_.assign<Collidable>(platform4, texture.width() * scale, texture.height() * scale, false);
 
     registry_.assign<Transform>(platform5, 200., 400., 0., scale, scale);
     registry_.assign<Sprite>(platform5, texture2, shader);
     registry_.assign<Collidable>(platform5, texture.width() * scale, texture.height() * scale, false);
+
+    registry_.assign<Transform>(platform6, 300., 500., 0., scale, scale);
+    registry_.assign<Sprite>(platform6, texture, shader);
+    registry_.assign<Collidable>(platform6, texture.width() * scale, texture.height() * scale, false);
 }
