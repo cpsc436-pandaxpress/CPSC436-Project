@@ -67,7 +67,8 @@ void Sprite::draw(const mat3& projection) {
     shader_.bind();
 
     // setup blending
-    glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_DEPTH_TEST);
 
     // bind buffers
@@ -76,6 +77,7 @@ void Sprite::draw(const mat3& projection) {
     // setup attributes
     shader_.set_input_vec3("in_position", sizeof(TexturedVertex), 0);
     shader_.set_input_vec3("in_texcoord", sizeof(TexturedVertex), sizeof(vec3));
+
 
     //setup uniforms
     shader_.set_uniform_mat3("transform", transform);
@@ -97,6 +99,11 @@ void Sprite::draw(const mat3& projection) {
 
     // unbind shader
     shader_.unbind();
+
+    if(gl_has_errors()) {
+        int i = 0;
+    }
+
 
 }
 
