@@ -3,7 +3,6 @@
 //
 
 #include <components/panda.h>
-#include <components/platform.h>
 #include <components/collidable.h>
 #include <components/obeysGravity.h>
 #include <components/health.h>
