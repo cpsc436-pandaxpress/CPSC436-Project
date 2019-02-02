@@ -2,6 +2,7 @@
 // Created by alex on 29/01/19.
 //
 
+#include <components/bread.h>
 #include <components/panda.h>
 #include <components/platform.h>
 #include "test_scene.h"
@@ -18,6 +19,7 @@ TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
     blackboard.camera.compose();
 
     create_panda(blackboard);
+    create_bread(blackboard);
     create_platforms(blackboard);
 }
 
@@ -29,9 +31,11 @@ void TestScene::update(Blackboard& blackboard) {
 
     auto& transform = registry_.get<Transform>(panda_entity);
     auto& panda = registry_.get<Panda>(panda_entity);
+    auto& enemy = registry_.get<Bread>(enemy_entity);
+    auto& transform_enemy = registry_.get<Transform>(enemy_entity);
 
     if (transform.x + panda.width < cam_position.x - cam_size.x / 2 ||
-        transform.y - panda.height > cam_position.y + cam_size.y / 2) {
+        transform.y - panda.height > cam_position.y + cam_size.y / 2 || !panda.alive) {
         reset_scene(blackboard);
     } else if (transform.x + panda.width / 2 > cam_position.x + cam_size.x / 2) {
         transform.x = cam_position.x + cam_size.x / 2 - panda.width / 2;
@@ -94,16 +98,30 @@ void TestScene::create_platforms(Blackboard& blackboard) {
     }
 }
 
+void TestScene::create_bread(Blackboard& blackboard) {
+    enemy_entity = registry_.create();
+    auto texture = blackboard.textureManager.get_texture("bread");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+
+    float scale = 0.3;
+    registry_.assign<Transform>(enemy_entity, 350., 140., 0., scale, scale);
+    registry_.assign<Sprite>(enemy_entity, texture, shader);
+    registry_.assign<Bread>(enemy_entity, texture.width() * scale, texture.height() * scale);
+
+}
+
 void TestScene::reset_scene(Blackboard& blackboard) {
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
 
     registry_.destroy(panda_entity);
+    registry_.destroy(enemy_entity);
     for (uint32_t &platform : platforms) {
         registry_.destroy(platform);
     }
     platforms.clear();
 
     create_panda(blackboard);
+    create_bread(blackboard);
     create_platforms(blackboard);
 }
