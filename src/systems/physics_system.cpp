@@ -3,6 +3,7 @@
 //
 
 #include "components/platform.h"
+#include "components/bread.h"
 #include "physics_system.h"
 #include "components/panda.h"
 #include "components/transform.h"
@@ -13,6 +14,7 @@ PhysicsSystem::PhysicsSystem() {}
 
 void PhysicsSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry) {
     auto view = registry.view<Panda, Transform>();
+    auto bread_view = registry.view<Bread, Transform>();
 
     auto pl_view = registry.view<Platform, Transform>();
 
@@ -33,6 +35,14 @@ void PhysicsSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regist
                 panda.y_velocity = 0;
             }
         }
+
+        for (auto enemy_entity: bread_view) {
+            auto& enemy = bread_view.get<Bread>(enemy_entity);
+            auto& enemy_transform = bread_view.get<Transform>(enemy_entity);
+
+            enemy_transform.x = enemy_transform.x + enemy.x_velocity;
+        }
+
 
         if (!panda.grounded) {
             panda.y_velocity += GRAVITY;
