@@ -24,7 +24,7 @@ TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
 void TestScene::update(Blackboard& blackboard) {
     vec2 cam_size = blackboard.camera.size();
     vec2 cam_position = blackboard.camera.position();
-    blackboard.camera.set_position(cam_position.x + 2, cam_position.y);
+    blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time, cam_position.y);
     blackboard.camera.compose();
 
     auto& transform = registry_.get<Transform>(panda_entity);
@@ -39,9 +39,9 @@ void TestScene::update(Blackboard& blackboard) {
 
 
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_LEFT)) {
-        panda.x_velocity = -5;
+        panda.x_velocity = -PANDA_SPEED;
     } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RIGHT)) {
-        panda.x_velocity = 5;
+        panda.x_velocity = PANDA_SPEED;
     } else if (blackboard.input_manager.key_just_released(SDL_SCANCODE_LEFT) ||
         blackboard.input_manager.key_just_released(SDL_SCANCODE_RIGHT)) {
         panda.x_velocity = 0;
@@ -49,7 +49,7 @@ void TestScene::update(Blackboard& blackboard) {
 
     if (panda.grounded && blackboard.input_manager.key_just_pressed(SDL_SCANCODE_SPACE)) {
         transform.y -= 5;
-        panda.y_velocity = -5;
+        panda.y_velocity = -PANDA_JUMP_SPEED;
         panda.grounded = false;
     }
 

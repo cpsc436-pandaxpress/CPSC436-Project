@@ -21,8 +21,11 @@ private:
 
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;
+    const float CAMERA_SPEED = 150.f;
     const float PANDA_START_X = 0.f;
     const float PANDA_START_Y = 0.f;
+    const float PANDA_SPEED = 200.f;
+    const float PANDA_JUMP_SPEED = 200.f;
     const float PLATFORM_START_X = -200.f;
     const float PLATFORM_START_Y = 200.f;
 

@@ -35,11 +35,11 @@ void PhysicsSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regist
         }
 
         if (!panda.grounded) {
-            panda.y_velocity += GRAVITY;
+            panda.y_velocity += GRAVITY * blackboard.delta_time;
         }
 
-        transform.x += panda.x_velocity;
-        transform.y += panda.y_velocity;
+        transform.x += panda.x_velocity * blackboard.delta_time;
+        transform.y += panda.y_velocity * blackboard.delta_time;
     }
 }
 
