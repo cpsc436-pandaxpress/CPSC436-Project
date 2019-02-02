@@ -28,7 +28,7 @@ void TestScene::update(Blackboard &blackboard) {
     vec2 cam_size = blackboard.camera.size();
     vec2 cam_position = blackboard.camera.position();
     generate_platforms(blackboard);
-    blackboard.camera.set_position(cam_position.x + 0.4f, cam_position.y);
+    blackboard.camera.set_position(cam_position.x + 2, cam_position.y);
     blackboard.camera.compose();
 
     auto &transform = registry_.get<Transform>(panda_entity);
@@ -43,9 +43,9 @@ void TestScene::update(Blackboard &blackboard) {
 
 
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_LEFT)) {
-        panda.x_velocity = -1;
+        panda.x_velocity = -5;
     } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RIGHT)) {
-        panda.x_velocity = 1;
+        panda.x_velocity = 5;
     } else if (blackboard.input_manager.key_just_released(SDL_SCANCODE_LEFT) ||
                blackboard.input_manager.key_just_released(SDL_SCANCODE_RIGHT)) {
         panda.x_velocity = 0;
@@ -90,7 +90,7 @@ void TestScene::generate_platforms(Blackboard &blackboard) {
         auto texture = blackboard.textureManager.get_texture(
                 (rand() % 2 == 0) ? "platform1" : "platform2");
         float scale = 50.0f / texture.width();
-        if (platforms.size() > 30) {//reuse
+        if (platforms.size() > MAX_PLATFORMS) {//reuse
             auto platform = platforms.front();
             platforms.pop();
             registry_.replace<Transform>(platform, last_placed_x, PLATFORM_START_Y, 0.f, scale,

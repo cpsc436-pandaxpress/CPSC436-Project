@@ -27,6 +27,7 @@ private:
     const float PANDA_START_Y = 0.f;
     const float PLATFORM_START_X = -200.f;
     const float PLATFORM_START_Y = 200.f;
+    const int MAX_PLATFORMS = 30;
 
     void create_panda(Blackboard& blackboard);
     void generate_platforms(Blackboard &blackboard);
