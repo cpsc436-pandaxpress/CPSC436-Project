@@ -30,6 +30,7 @@ private:
     const int MAX_PLATFORMS = 30;
 
     void create_panda(Blackboard& blackboard);
+    void create_bread(Blackboard& blackboard);
     void generate_platforms(Blackboard &blackboard);
     void reset_scene(Blackboard& blackboard);
     void initScene(Blackboard &blackboard);

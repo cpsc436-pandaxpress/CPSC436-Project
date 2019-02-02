@@ -33,10 +33,10 @@ void TestScene::update(Blackboard &blackboard) {
     blackboard.camera.set_position(cam_position.x + 2, cam_position.y);
     blackboard.camera.compose();
 
-    auto& transform = registry_.get<Transform>(panda_entity);
-    auto& panda = registry_.get<Panda>(panda_entity);
-    auto& enemy = registry_.get<Bread>(enemy_entity);
-    auto& transform_enemy = registry_.get<Transform>(enemy_entity);
+    auto &transform = registry_.get<Transform>(panda_entity);
+    auto &panda = registry_.get<Panda>(panda_entity);
+    auto &enemy = registry_.get<Bread>(enemy_entity);
+    auto &transform_enemy = registry_.get<Transform>(enemy_entity);
 
     if (transform.x + panda.width < cam_position.x - cam_size.x / 2 ||
         transform.y - panda.height > cam_position.y + cam_size.y / 2 || !panda.alive) {
@@ -110,18 +110,17 @@ void TestScene::generate_platforms(Blackboard &blackboard) {
             platforms.push(platform);
         }
         last_placed_x += texture.width();
-        const auto firstP = registry_.get<Transform>(platforms.front());
-        printf("lastPlaced: %f, #platforms:%lu, firstPlatformX:%f\n", last_placed_x, platforms.size(), firstP.x);
     }
 }
 
-void TestScene::create_bread(Blackboard& blackboard) {
+void TestScene::create_bread(Blackboard &blackboard) {
     enemy_entity = registry_.create();
     auto texture = blackboard.textureManager.get_texture("bread");
     auto shader = blackboard.shader_manager.get_shader("sprite");
 
-    float scale = 0.3;
-    registry_.assign<Transform>(enemy_entity, 350., 140., 0., scale, scale);
+    float scale = 0.5;
+    registry_.assign<Transform>(enemy_entity, 350., PLATFORM_START_Y - texture.height(), 0.,
+                                scale, scale);
     registry_.assign<Sprite>(enemy_entity, texture, shader);
     registry_.assign<Bread>(enemy_entity, texture.width() * scale, texture.height() * scale);
 
