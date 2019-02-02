@@ -30,7 +30,8 @@ void TestScene::update(Blackboard& blackboard) {
     auto& transform = registry_.get<Transform>(panda_entity);
     auto& panda = registry_.get<Panda>(panda_entity);
 
-    if (transform.x + panda.width / 2 < cam_position.x - cam_size.x / 2) {
+    if (transform.x + panda.width < cam_position.x - cam_size.x / 2 ||
+        transform.y - panda.height > cam_position.y + cam_size.y / 2) {
         reset_scene(blackboard);
     } else if (transform.x + panda.width / 2 > cam_position.x + cam_size.x / 2) {
         transform.x = cam_position.x + cam_size.x / 2 - panda.width / 2;
