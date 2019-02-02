@@ -15,6 +15,8 @@ CollisionSystem::CollisionSystem() {}
 
 
 void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry) {
+
+
     auto view = registry.view<Panda, Transform>();
 
     auto pl_view = registry.view<Collidable, Transform>();
@@ -34,8 +36,8 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
                     transform.y = pl_transform.y - panda.height;
                     panda.grounded = true;
                     hitTheGround = true;
-                    cout << "GROUNDED \n";
-                    cout << "VELOCITY Y: "<< panda.y_velocity <<  "\n";
+                    //cout << "GROUNDED \n";
+                    //cout << "VELOCITY Y: "<< panda.y_velocity <<  "\n";
                 }else{
                     panda.y_velocity = 0.f;
                     panda.grounded=false;
