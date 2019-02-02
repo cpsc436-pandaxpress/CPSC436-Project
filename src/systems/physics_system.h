@@ -14,6 +14,8 @@ public:
 
 private:
     const float GRAVITY = 0.002;
+    void applyGravity(Blackboard& blackboard, entt::DefaultRegistry& registry);
+    void applyVelocity(Blackboard& blackboard, entt::DefaultRegistry& registry);
 };
 
 

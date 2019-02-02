@@ -5,29 +5,42 @@
 #include "player_movement_system.h"
 #include "physics_system.h"
 #include "components/panda.h"
+#include "components/velocity.h"
+#include "components/walkable.h"
 #include "components/transform.h"
+
 
 playerMovementSystem::playerMovementSystem() {}
 
 void playerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry) {
-    auto view = registry.view<Panda, Transform>();
+    auto view = registry.view<Panda, Transform, Velocity, Walkable>();
     for (auto entity: view) {
         auto &panda = view.get<Panda>(entity);
         auto &transform = view.get<Transform>(entity);
+        auto &velocity = view.get<Velocity>(entity);
+        auto &walkable = view.get<Walkable>(entity);
+
+        /*
+         * Walking Left and Right
+         */
 
         if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_LEFT)) {
-            panda.x_velocity = -2.f;
+            velocity.x_velocity = -2.f;
         } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RIGHT)) {
-            panda.x_velocity = 2.f;
+            velocity.x_velocity = 2.f;
         } else if (blackboard.input_manager.key_just_released(SDL_SCANCODE_LEFT) ||
                    blackboard.input_manager.key_just_released(SDL_SCANCODE_RIGHT)) {
-            panda.x_velocity = 0.f;
+            velocity.x_velocity = 0.f;
         }
 
-        if (panda.grounded && blackboard.input_manager.key_just_pressed(SDL_SCANCODE_SPACE)) {
+        /*
+         * Jumping
+         */
 
-            panda.grounded = false;
-            panda.y_velocity = -1.f;
+        if (walkable.grounded && blackboard.input_manager.key_just_pressed(SDL_SCANCODE_SPACE)) {
+
+            walkable.grounded = false;
+            velocity.y_velocity = -2.f;
 
         }
 

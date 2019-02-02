@@ -5,11 +5,11 @@
 #ifndef PANDAEXPRESS_HEALTH_H
 #define PANDAEXPRESS_HEALTH_H
 
-struct health {
+struct Health {
     int healthPoints;
 
 
-    health(int healthPoints) :
+    Health(int healthPoints) :
             healthPoints(healthPoints) {}
 };
 #endif //PANDAEXPRESS_HEALTH_H

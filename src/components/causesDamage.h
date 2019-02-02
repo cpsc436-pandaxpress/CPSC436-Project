@@ -5,12 +5,12 @@
 #ifndef PANDAEXPRESS_CAUSESDAMAGE_H
 #define PANDAEXPRESS_CAUSESDAMAGE_H
 
-struct causesDamage {
+struct CausesDamage {
     bool xDamage, yDamage;
     int hitPoints;
 
 
-    causesDamage(bool xDamage, bool yDamage, int hitPoints) :
+    CausesDamage(bool xDamage, bool yDamage, int hitPoints) :
             xDamage(xDamage), yDamage(yDamage), hitPoints(hitPoints) {}
 };
 

@@ -7,15 +7,12 @@
 
 struct Panda {
     float width, height;
-    bool grounded;
-    float x_velocity, y_velocity;
+
 
     Panda(float width, float height) :
         width(width),
-        height(height),
-        grounded(false),
-        x_velocity(0.f),
-        y_velocity(0.f) {}
+        height(height)
+        {}
 };
 
 #endif //PANDAEXPRESS_PHYSICS_H

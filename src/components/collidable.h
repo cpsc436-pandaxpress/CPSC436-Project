@@ -8,10 +8,9 @@
 
 struct Collidable {
     float width, height;
-    bool hurtsPanda;
 
-    Collidable(float width, float height, bool hurtsPanda) :
-            width(width), height(height), hurtsPanda(hurtsPanda) {}
+    Collidable(float width, float height) :
+            width(width), height(height) {}
 };
 
 #endif //PANDAEXPRESS_COLLIDABLE_H
