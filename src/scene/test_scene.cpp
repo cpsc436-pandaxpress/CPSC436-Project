@@ -5,45 +5,46 @@
 #include <components/panda.h>
 #include <components/platform.h>
 #include "test_scene.h"
-
+#include <random>
 #include "components/transform.h"
 
-void create_panda();
-void create_platforms();
-
-TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
-    Scene(scene_manager),
-    sprite_render_system(),
-    sprite_transform_system(),
-    physics_system()
-{
+TestScene::TestScene(Blackboard &blackboard, SceneManager &scene_manager) :
+        Scene(scene_manager),
+        sprite_render_system(),
+        sprite_transform_system(),
+        physics_system() {
+    initScene(blackboard);
+}
+void TestScene::initScene(Blackboard &blackboard) {
+    srand(0);
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
-
+    last_placed_x = PLATFORM_START_X;
     create_panda(blackboard);
-    create_platforms(blackboard);
 }
 
-void TestScene::update(Blackboard& blackboard) {
+void TestScene::update(Blackboard &blackboard) {
     vec2 cam_size = blackboard.camera.size();
     vec2 cam_position = blackboard.camera.position();
-    blackboard.camera.set_position(cam_position.x + 2, cam_position.y);
+    generate_platforms(blackboard);
+    blackboard.camera.set_position(cam_position.x + 0.4f, cam_position.y);
     blackboard.camera.compose();
 
-    auto& transform = registry_.get<Transform>(panda_entity);
-    auto& panda = registry_.get<Panda>(panda_entity);
+    auto &transform = registry_.get<Transform>(panda_entity);
+    auto &panda = registry_.get<Panda>(panda_entity);
 
-    if (transform.x + panda.width / 2 < cam_position.x - cam_size.x / 2) {
+    if (transform.x + panda.width / 2 < cam_position.x - cam_size.x / 2
+        || transform.y + panda.height / 2 > cam_position.y + cam_size.y) {
         reset_scene(blackboard);
     }
 
 
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_LEFT)) {
-        panda.x_velocity = -5;
+        panda.x_velocity = -1;
     } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RIGHT)) {
-        panda.x_velocity = 5;
+        panda.x_velocity = 1;
     } else if (blackboard.input_manager.key_just_released(SDL_SCANCODE_LEFT) ||
-        blackboard.input_manager.key_just_released(SDL_SCANCODE_RIGHT)) {
+               blackboard.input_manager.key_just_released(SDL_SCANCODE_RIGHT)) {
         panda.x_velocity = 0;
     }
 
@@ -59,13 +60,13 @@ void TestScene::update(Blackboard& blackboard) {
     sprite_transform_system.update(blackboard, registry_);
 }
 
-void TestScene::render(Blackboard& blackboard) {
+void TestScene::render(Blackboard &blackboard) {
     // update the rendering systems
     sprite_render_system.update(blackboard, registry_);
 
 }
 
-void TestScene::create_panda(Blackboard& blackboard) {
+void TestScene::create_panda(Blackboard &blackboard) {
     panda_entity = registry_.create();
 
     auto texture = blackboard.textureManager.get_texture("panda");
@@ -78,32 +79,40 @@ void TestScene::create_panda(Blackboard& blackboard) {
 
 }
 
-void TestScene::create_platforms(Blackboard& blackboard) {
+void TestScene::generate_platforms(Blackboard &blackboard) {
     auto texture = blackboard.textureManager.get_texture("platform");
     auto shader = blackboard.shader_manager.get_shader("sprite");
-    float scale = 100.f / texture.width();
-
-    for (int i = 0; i < 5; i++) {
+    float scale = 50.0f / texture.width();
+    float max_x = blackboard.camera.position().x + blackboard.camera.size().x; // some distance off camera
+    while (last_placed_x < max_x) {
+//        if (rand() % 100 > 75) {
+//            last_placed_x += texture.width();
+//            continue;
+//        }
         auto platform = registry_.create();
-
-        registry_.assign<Transform>(platform, 200 * i + PLATFORM_START_X, PLATFORM_START_Y, 0., scale, scale);
+        registry_.assign<Transform>(platform, last_placed_x, PLATFORM_START_Y, 0., scale,
+                                    scale);
+        last_placed_x += texture.width();
         registry_.assign<Sprite>(platform, texture, shader);
         registry_.assign<Platform>(platform, texture.width() * scale, texture.height() * scale);
 
-        platforms.push_back(platform);
+        platforms.push(platform);
     }
+    while (platforms.size() > 30) {
+        uint32_t platform = platforms.front();
+        registry_.destroy(platform);
+        platforms.pop();
+    }
+    const auto firstP = registry_.get<Transform>(platforms.front());
+    printf("lastPlaced: %f, #platforms:%lu, firstPlatformX:%f\n", last_placed_x, platforms.size(), firstP.x);
 }
 
-void TestScene::reset_scene(Blackboard& blackboard) {
-    blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
-    blackboard.camera.compose();
-
+void TestScene::reset_scene(Blackboard &blackboard) {
     registry_.destroy(panda_entity);
-    for (uint32_t &platform : platforms) {
+    while (!platforms.empty()) {
+        uint32_t platform = platforms.front();
         registry_.destroy(platform);
+        platforms.pop();
     }
-    platforms.clear();
-
-    create_panda(blackboard);
-    create_platforms(blackboard);
+    initScene(blackboard);
 }

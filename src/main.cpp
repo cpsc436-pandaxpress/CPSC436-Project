@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
         "sprite"
     );
 
-    blackboard.textureManager.load_texture(textures_path("platform center grass.png"), "platform");
+    blackboard.textureManager.load_texture(textures_path("simple_block.png"), "platform");
 
     // initialize scenes here
 
