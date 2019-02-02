@@ -9,6 +9,9 @@
 #include "components/transform.h"
 
 bool checkCollision(Panda pa, Transform pa_tr, Platform pl, Transform pl_tr);
+bool checkEnemyFloorCollision(Bread brd, Transform brd_tr, Platform pl, Transform pl_tr);
+bool checkEnemyPandaCollisionFatal(Panda pa, Transform pa_tr, Bread brd, Transform brd_tr);
+bool checkEnemyPandaCollisionSafe(Panda pa, Transform pa_tr, Bread brd, Transform brd_tr);
 
 PhysicsSystem::PhysicsSystem() {}
 
@@ -37,10 +40,24 @@ void PhysicsSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regist
         }
 
         for (auto enemy_entity: bread_view) {
-            auto& enemy = bread_view.get<Bread>(enemy_entity);
-            auto& enemy_transform = bread_view.get<Transform>(enemy_entity);
+            auto& bread = bread_view.get<Bread>(enemy_entity);
+            auto& bread_transform = bread_view.get<Transform>(enemy_entity);
 
-            enemy_transform.x = enemy_transform.x + enemy.x_velocity;
+            if (!bread.alive) {
+                bread.y_velocity = 5;
+                bread_transform.y = bread_transform.y + bread.y_velocity;
+                break;
+            }
+
+            bread_transform.x = bread_transform.x + bread.x_velocity;
+            bread_transform.y = bread_transform.y + bread.y_velocity;
+
+
+            if (checkEnemyPandaCollisionSafe(panda, transform, bread, bread_transform)) {
+                bread.alive = false;
+            } else if (checkEnemyPandaCollisionFatal(panda, transform, bread, bread_transform)) {
+                panda.alive = false;
+            }
         }
 
 
@@ -59,4 +76,32 @@ bool checkCollision(Panda pa, Transform pa_tr, Platform pl, Transform pl_tr) {
         pa_tr.x + pa.width >= pl_tr.x &&
         pa_tr.y <= pl_tr.y + pl.height &&
         pa_tr.y + pa.height >= pl_tr.y;
+}
+
+// todo: call this
+bool checkEnemyFloorCollision(Bread brd, Transform brd_tr, Platform pl, Transform pl_tr) {
+    return
+            brd_tr.x <= pl_tr.x + pl.width &&
+            brd_tr.x + brd.width >= pl_tr.x &&
+            brd_tr.y <= pl_tr.y + pl.height &&
+            brd_tr.y + brd.height >= pl_tr.y;
+}
+
+// Check if enemy collides with Panda and Panda is killed
+bool checkEnemyPandaCollisionFatal(Panda pa, Transform pa_tr, Bread brd, Transform brd_tr) {
+    return
+            pa_tr.x <= brd_tr.x + brd.width &&
+            pa_tr.x + 3*pa.width/4 >= brd_tr.x &&
+            pa_tr.y <= brd_tr.y + brd.height &&
+            pa_tr.y + pa.height >= brd_tr.y;
+}
+
+// Check if panda jumps on enemy
+bool checkEnemyPandaCollisionSafe(Panda pa, Transform pa_tr, Bread brd, Transform brd_tr) {
+    return
+            pa_tr.x <= brd_tr.x + brd.width &&
+            pa_tr.x + 3*pa.width/4 >= brd_tr.x &&
+            pa_tr.y + pa.height + 5 >= brd_tr.y &&
+            pa_tr.y + pa.height <= brd_tr.y &&
+            pa.y_velocity > 0;
 }

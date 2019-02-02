@@ -35,7 +35,7 @@ void TestScene::update(Blackboard& blackboard) {
     auto& transform_enemy = registry_.get<Transform>(enemy_entity);
 
     if (transform.x + panda.width < cam_position.x - cam_size.x / 2 ||
-        transform.y - panda.height > cam_position.y + cam_size.y / 2) {
+        transform.y - panda.height > cam_position.y + cam_size.y / 2 || !panda.alive) {
         reset_scene(blackboard);
     } else if (transform.x + panda.width / 2 > cam_position.x + cam_size.x / 2) {
         transform.x = cam_position.x + cam_size.x / 2 - panda.width / 2;
@@ -115,11 +115,13 @@ void TestScene::reset_scene(Blackboard& blackboard) {
     blackboard.camera.compose();
 
     registry_.destroy(panda_entity);
+    registry_.destroy(enemy_entity);
     for (uint32_t &platform : platforms) {
         registry_.destroy(platform);
     }
     platforms.clear();
 
     create_panda(blackboard);
+    create_bread(blackboard);
     create_platforms(blackboard);
 }
