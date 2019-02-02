@@ -9,7 +9,6 @@
 #include "components/transform.h"
 
 bool checkCollision(Panda pa, Transform pa_tr, Platform pl, Transform pl_tr);
-bool checkEnemyFloorCollision(Bread brd, Transform brd_tr, Platform pl, Transform pl_tr);
 bool checkEnemyPandaCollisionFatal(Panda pa, Transform pa_tr, Bread brd, Transform brd_tr);
 bool checkEnemyPandaCollisionSafe(Panda pa, Transform pa_tr, Bread brd, Transform brd_tr);
 
@@ -76,15 +75,6 @@ bool checkCollision(Panda pa, Transform pa_tr, Platform pl, Transform pl_tr) {
         pa_tr.x + pa.width >= pl_tr.x &&
         pa_tr.y <= pl_tr.y + pl.height &&
         pa_tr.y + pa.height >= pl_tr.y;
-}
-
-// todo: call this
-bool checkEnemyFloorCollision(Bread brd, Transform brd_tr, Platform pl, Transform pl_tr) {
-    return
-            brd_tr.x <= pl_tr.x + pl.width &&
-            brd_tr.x + brd.width >= pl_tr.x &&
-            brd_tr.y <= pl_tr.y + pl.height &&
-            brd_tr.y + brd.height >= pl_tr.y;
 }
 
 // Check if enemy collides with Panda and Panda is killed

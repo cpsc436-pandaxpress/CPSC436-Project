@@ -7,13 +7,12 @@
 
 struct Bread {
     float width, height;
-    bool grounded, alive;
+    bool alive;
     float x_velocity, y_velocity;
 
     Bread(float width, float height) :
             width(width),
             height(height),
-            grounded(false),
             alive(true),
             x_velocity(-0.5f),
             y_velocity(0) {}
