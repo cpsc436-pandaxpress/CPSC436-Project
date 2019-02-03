@@ -14,7 +14,7 @@ struct Bread {
             width(width),
             height(height),
             alive(true),
-            x_velocity(-0.5f),
+            x_velocity(-50.f),
             y_velocity(0) {}
 };
 

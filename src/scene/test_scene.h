@@ -25,7 +25,7 @@ private:
     const float PANDA_START_X = 0.f;
     const float PANDA_START_Y = 0.f;
     const float PANDA_SPEED = 200.f;
-    const float PANDA_JUMP_SPEED = 200.f;
+    const float PANDA_JUMP_SPEED = 350.f;
     const float PLATFORM_START_X = -200.f;
     const float PLATFORM_START_Y = 200.f;
 

@@ -43,13 +43,13 @@ void PhysicsSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regist
             auto& bread_transform = bread_view.get<Transform>(enemy_entity);
 
             if (!bread.alive) {
-                bread.y_velocity = 5;
-                bread_transform.y = bread_transform.y + bread.y_velocity;
+                bread.y_velocity = 400;
+                bread_transform.y = bread_transform.y + bread.y_velocity * blackboard.delta_time;
                 break;
             }
 
-            bread_transform.x = bread_transform.x + bread.x_velocity;
-            bread_transform.y = bread_transform.y + bread.y_velocity;
+            bread_transform.x = bread_transform.x + bread.x_velocity * blackboard.delta_time;
+            bread_transform.y = bread_transform.y + bread.y_velocity * blackboard.delta_time;
 
 
             if (checkEnemyPandaCollisionSafe(panda, transform, bread, bread_transform)) {
