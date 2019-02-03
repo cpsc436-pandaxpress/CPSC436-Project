@@ -5,14 +5,16 @@
 #ifndef PANDAEXPRESS_PHYSICS_H
 #define PANDAEXPRESS_PHYSICS_H
 
+/***
+ * The entity assigned the Panda component is able to be controlled by the player_movement_system
+ *
+ */
+
 struct Panda {
-    float width, height;
 
 
-    Panda(float width, float height) :
-        width(width),
-        height(height)
-        {}
+
+    Panda(){}
 };
 
 #endif //PANDAEXPRESS_PHYSICS_H

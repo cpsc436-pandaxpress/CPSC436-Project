@@ -53,7 +53,7 @@ void TestScene::create_panda(Blackboard& blackboard) {
     float scale = 0.5;
     registry_.assign<Transform>(panda_entity, 0., -100., 0., scale, scale);
     registry_.assign<Sprite>(panda_entity, texture, shader);
-    registry_.assign<Panda>(panda_entity, texture.width() * scale, texture.height() * scale);
+    registry_.assign<Panda>(panda_entity);
     registry_.assign<ObeysGravity>(panda_entity);
     registry_.assign<Health>(panda_entity,1);
     registry_.assign<Interactable>(panda_entity);
