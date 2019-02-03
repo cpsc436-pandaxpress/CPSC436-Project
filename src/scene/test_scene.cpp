@@ -7,7 +7,7 @@
 #include <components/obeysGravity.h>
 #include <components/health.h>
 #include <components/velocity.h>
-#include <components/walkable.h>
+#include <components/interactable.h>
 #include <components/causesDamage.h>
 #include "test_scene.h"
 
@@ -56,7 +56,7 @@ void TestScene::create_panda(Blackboard& blackboard) {
     registry_.assign<Panda>(panda_entity, texture.width() * scale, texture.height() * scale);
     registry_.assign<ObeysGravity>(panda_entity);
     registry_.assign<Health>(panda_entity,1);
-    registry_.assign<Walkable>(panda_entity);
+    registry_.assign<Interactable>(panda_entity);
     registry_.assign<CausesDamage>(panda_entity, false, true, 1);
     registry_.assign<Velocity>(panda_entity,0.f,0.f);
     registry_.assign<Collidable>(panda_entity, texture.width() * scale, texture.height() * scale);
@@ -116,7 +116,7 @@ void TestScene::create_platforms(Blackboard& blackboard) {
     registry_.assign<Collidable>(platform7, texture.width() * scale, texture.height() * scale);
     registry_.assign<ObeysGravity>(platform7);
     registry_.assign<Velocity>(platform7,0.f,0.f);
-    registry_.assign<Walkable>(platform7);
+    registry_.assign<Interactable>(platform7);
 
     platform8 = registry_.create();
     registry_.assign<Transform>(platform8, -400., 500., 0., scale, scale);

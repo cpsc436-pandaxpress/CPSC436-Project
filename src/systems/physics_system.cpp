@@ -3,7 +3,7 @@
 //
 #include "components/obeysGravity.h"
 #include "components/collidable.h"
-#include "components/walkable.h"
+#include "components/interactable.h"
 #include "components/velocity.h"
 #include "physics_system.h"
 #include "components/panda.h"
@@ -29,12 +29,12 @@ void PhysicsSystem::applyGravity(Blackboard& blackboard, entt::DefaultRegistry& 
      * Applying gravity to objects that can walk on platforms
      ***/
 
-    auto view = registry.view<ObeysGravity, Walkable, Transform, Velocity>();
+    auto view = registry.view<ObeysGravity, Interactable, Transform, Velocity>();
 
     for (auto entity: view) {
 
         auto& transform = view.get<Transform>(entity);
-        auto& walkable = view.get<Walkable>(entity);
+        auto& walkable = view.get<Interactable>(entity);
         auto& velocity = view.get<Velocity>(entity);
         auto& gravity  = view.get<ObeysGravity>(entity);
         if (! walkable.grounded) {
@@ -51,13 +51,13 @@ void PhysicsSystem::applyGravity(Blackboard& blackboard, entt::DefaultRegistry& 
      * Applying gravity to objects that can't walk on platforms
      ***/
 
-    auto viewunWalkable = registry.view<ObeysGravity, Transform, Velocity>();
+    auto viewNonWalkable = registry.view<ObeysGravity, Transform, Velocity>();
 
-    for (auto entity: viewunWalkable) {
+    for (auto entity: viewNonWalkable) {
 
-        auto& transform = viewunWalkable.get<Transform>(entity);
-        auto& velocity = viewunWalkable.get<Velocity>(entity);
-        auto& gravity  = viewunWalkable.get<ObeysGravity>(entity);
+        auto& transform = viewNonWalkable.get<Transform>(entity);
+        auto& velocity = viewNonWalkable.get<Velocity>(entity);
+        auto& gravity  = viewNonWalkable.get<ObeysGravity>(entity);
 
         velocity.y_velocity += gravity.gravityConstant;
 

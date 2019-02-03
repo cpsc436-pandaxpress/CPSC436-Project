@@ -6,7 +6,7 @@
 #include <iostream>
 #include "components/collidable.h"
 #include "components/velocity.h"
-#include "components/walkable.h"
+#include "components/interactable.h"
 #include "collision_system.h"
 #include "components/panda.h"
 #include "components/transform.h"
@@ -22,17 +22,19 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
      * Checking Collisions between walkables (entities able to walk on platforms) and platforms
      */
 
-    auto walkable_view = registry.view<Walkable, Collidable, Transform, Velocity>();
+    auto interactable_view = registry.view<Interactable, Collidable, Transform, Velocity>();
 
     auto platform_view = registry.view<Collidable, Transform>();
 
-    for (auto entity: walkable_view) {
-        auto& walkable = walkable_view.get<Walkable>(entity);
-        auto& transform1 = walkable_view.get<Transform>(entity);
-        auto& velocity = walkable_view.get<Velocity>(entity);
-        auto& collidable1 = walkable_view.get<Collidable>(entity);
+    for (auto entity: interactable_view) {
+        auto& interactable = interactable_view.get<Interactable>(entity);
+        auto& transform1 = interactable_view.get<Transform>(entity);
+        auto& velocity = interactable_view.get<Velocity>(entity);
+        auto& collidable1 = interactable_view.get<Collidable>(entity);
 
         bool hitTheGround = false;
+        bool hitTheCeiling = false;
+
         for (auto pl_entity: platform_view) {
 
             auto& collidable2 = platform_view.get<Collidable>(pl_entity);
@@ -41,22 +43,17 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
             if (checkCollision(collidable1, transform1, velocity, collidable2, transform2)) {
                 if(transform1.y < transform2.y) {
                     transform1.y = transform2.y - collidable1.height;
-                    //walkable.grounded = true;
                     hitTheGround = true;
-                    //cout << "GROUNDED \n";
-                    //cout << "VELOCITY Y: "<< panda.y_velocity <<  "\n";
                 }else{
-                    //velocity.y_velocity = 0.f;
-                    //walkable.grounded=false;
 
                 }
             }
 
         }
         if(!hitTheGround){
-            walkable.grounded = false;
+            interactable.grounded = false;
         } else{
-            walkable.grounded = true;
+            interactable.grounded = true;
         }
 
     }

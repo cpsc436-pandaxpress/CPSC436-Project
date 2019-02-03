@@ -5,6 +5,10 @@
 #ifndef PANDAEXPRESS_VELOCITY_H
 #define PANDAEXPRESS_VELOCITY_H
 
+/***
+ * This component should be assigned to anything that will be given a velocity
+ * Without this component the object will remain in place even if camera moves
+ */
 struct Velocity {
     float x_velocity, y_velocity;
 
