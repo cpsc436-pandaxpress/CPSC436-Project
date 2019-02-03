@@ -32,7 +32,7 @@ void PhysicsSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regist
             auto& pl_transform = pl_view.get<Transform>(pl_entity);
 
             if (checkCollision(panda, transform, platform, pl_transform)) {
-                transform.y = pl_transform.y - panda.height;
+                transform.y = pl_transform.y - (platform.height + panda.height);
                 panda.grounded = true;
                 panda.y_velocity = 0;
             }
@@ -73,8 +73,8 @@ bool checkCollision(Panda pa, Transform pa_tr, Platform pl, Transform pl_tr) {
     return
         pa_tr.x <= pl_tr.x + pl.width &&
         pa_tr.x + pa.width >= pl_tr.x &&
-        pa_tr.y <= pl_tr.y + pl.height &&
-        pa_tr.y + pa.height >= pl_tr.y;
+        pa_tr.y + pa.height <= pl_tr.y &&
+        pa_tr.y + pa.height >= pl_tr.y - pl.height;
 }
 
 // Check if enemy collides with Panda and Panda is killed
