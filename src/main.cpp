@@ -14,6 +14,7 @@
 #include "scene/scene_manager.h"
 #include "scene/test_scene.h"
 #include "util/blackboard.h"
+#include "util/random.h"
 
 
 static const SceneID TEST_SCENE_ID = 0;
@@ -30,7 +31,8 @@ int main(int argc, char** argv) {
         InputManager(),
         ShaderManager(),
         TextureManager(),
-        window
+        window,
+        Random(0)
     };
 
     auto scene_manager = SceneManager();

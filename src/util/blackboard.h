@@ -10,6 +10,7 @@
 #include "../graphics/shader_manager.h"
 #include "../graphics/texture_manager.h"
 #include "../graphics/window.h"
+#include "../util/random.h"
 
 
 // Struct containing all our singletons
@@ -21,4 +22,5 @@ struct Blackboard {
     ShaderManager shader_manager;
     TextureManager textureManager;
     Window& window;
+    Random randNumGenerator;
 };

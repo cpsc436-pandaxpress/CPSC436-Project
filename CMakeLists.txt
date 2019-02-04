@@ -37,7 +37,23 @@ set(SOURCE_FILES
         src/util/input_manager.cpp
         src/graphics/window.cpp
         src/graphics/texture.cpp
-        src/graphics/texture_manager.cpp src/graphics/shader.cpp src/graphics/shader_manager.cpp src/util/gl_utils.cpp src/graphics/sprite.cpp src/graphics/mesh.cpp src/graphics/camera.cpp src/systems/sprite_render_system.cpp src/systems/sprite_transform_system.cpp src/scene/test_scene.cpp src/util/constants.h src/systems/physics_system.cpp src/systems/physics_system.h src/components/bread.h)
+        src/graphics/texture_manager.cpp
+        src/graphics/shader.cpp
+        src/graphics/shader_manager.cpp
+        src/util/gl_utils.cpp
+        src/graphics/sprite.cpp
+        src/graphics/mesh.cpp
+        src/graphics/camera.cpp
+        src/systems/sprite_render_system.cpp
+        src/systems/sprite_transform_system.cpp
+        src/scene/test_scene.cpp
+        src/util/constants.h
+        src/systems/physics_system.cpp
+        src/systems/physics_system.h
+        src/components/bread.h
+        src/util/random.cpp
+        src/util/random.h
+)
 
 # Create executable target
 
