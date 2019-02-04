@@ -32,6 +32,7 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp.in" "${CMAKE_CU
 
 set(SOURCE_FILES
         src/main.cpp
+        src/scene/test_scene.cpp
         src/scene/scene_manager.cpp
         src/scene/scene.cpp
         src/util/input_manager.cpp
