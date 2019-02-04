@@ -122,7 +122,7 @@ void TestScene::create_bread(Blackboard &blackboard) {
     auto shader = blackboard.shader_manager.get_shader("sprite");
 
     float scale = 0.5;
-    registry_.assign<Transform>(enemy_entity, 350., PLATFORM_START_Y - texture.height(), 0.,
+    registry_.assign<Transform>(enemy_entity, 350., PANDA_START_Y - texture.height(), 0.,
                                 scale, scale);
     registry_.assign<Sprite>(enemy_entity, texture, shader);
     registry_.assign<Bread>(enemy_entity);
