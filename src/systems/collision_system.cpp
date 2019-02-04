@@ -100,8 +100,9 @@ bool checkCollision(Collidable collidable1, Transform transform1, Velocity veloc
     return
             transform1.x - collidable1.width <= transform2.x + collidable2.width &&
                     transform1.x + collidable1.width >= transform2.x - collidable2.width &&
-                    transform1.y + velocity1.y_velocity - collidable1.height <= transform2.y + collidable2.height &&
-                    transform1.y + velocity1.y_velocity + collidable1.height >= transform2.y - collidable2.height;
+                    transform1.y - collidable1.height <= transform2.y + collidable2.height &&
+                    transform1.y + collidable1.height >= transform2.y - collidable2.height &&
+                    velocity1.y_velocity > 0;
     /*
             pa_tr.x <= pl_tr.x + pl.width &&
             pa_tr.x + pa.width >= pl_tr.x &&

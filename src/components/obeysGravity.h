@@ -17,7 +17,7 @@ struct ObeysGravity {
             gravityConstant(gravityConstant) {}
 
     ObeysGravity() :
-            gravityConstant(0.01f) {}
+            gravityConstant(500.f) {}
 };
 
 #endif //PANDAEXPRESS_OBEYSGRAVITY_H

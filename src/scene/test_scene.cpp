@@ -14,7 +14,6 @@
 #include <random>
 #include "components/transform.h"
 
-//<<<<<<< HEAD
 
 TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
     Scene(scene_manager),
@@ -38,68 +37,11 @@ void TestScene::init_scene(Blackboard &blackboard) {
 }
 
 void TestScene::update(Blackboard& blackboard) {
-    // some sample input handling
-
-//=======
-//TestScene::TestScene(Blackboard &blackboard, SceneManager &scene_manager) :
-//        Scene(scene_manager),
-//        sprite_render_system(),
-//        sprite_transform_system(),
-//        physics_system() {
-//    init_scene(blackboard);
-//}
-//
-//void TestScene::init_scene(Blackboard &blackboard) {
-//    srand(0);
-//    blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
-//    blackboard.camera.compose();
-//    last_placed_x = PLATFORM_START_X;
-//    create_panda(blackboard);
-//    create_bread(blackboard);
-//}
-//
-//void TestScene::update(Blackboard &blackboard) {
-//    vec2 cam_size = blackboard.camera.size();
-//    vec2 cam_position = blackboard.camera.position();
-//    generate_platforms(blackboard);
-//    blackboard.camera.set_position(cam_position.x + 2, cam_position.y);
-//    blackboard.camera.compose();
-//
-//    auto &transform = registry_.get<Transform>(panda_entity);
-//    auto &panda = registry_.get<Panda>(panda_entity);
-//    auto &enemy = registry_.get<Bread>(enemy_entity);
-//    auto &transform_enemy = registry_.get<Transform>(enemy_entity);
-//
-//    if (transform.x + panda.width < cam_position.x - cam_size.x / 2 ||
-//        transform.y - panda.height > cam_position.y + cam_size.y / 2 || !panda.alive) {
-//        reset_scene(blackboard);
-//    } else if (transform.x + panda.width / 2 > cam_position.x + cam_size.x / 2) {
-//        transform.x = cam_position.x + cam_size.x / 2 - panda.width / 2;
-//    }
-//
-//
-//    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_LEFT)) {
-//        panda.x_velocity = -5;
-//    } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RIGHT)) {
-//        panda.x_velocity = 5;
-//    } else if (blackboard.input_manager.key_just_released(SDL_SCANCODE_LEFT) ||
-//               blackboard.input_manager.key_just_released(SDL_SCANCODE_RIGHT)) {
-//        panda.x_velocity = 0;
-//    }
-//
-//    if (panda.grounded && blackboard.input_manager.key_just_pressed(SDL_SCANCODE_SPACE)) {
-//        transform.y -= 5;
-//        panda.y_velocity = -5;
-//        panda.grounded = false;
-//    }
-//>>>>>>> dev
-
-    // update the systems here
-     vec2 cam_size = blackboard.camera.size();
+    vec2 cam_size = blackboard.camera.size();
     vec2 cam_position = blackboard.camera.position();
-    generate_platforms(blackboard);
-    blackboard.camera.set_position(cam_position.x + 2, cam_position.y);
+    blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time, cam_position.y);
     blackboard.camera.compose();
+    generate_platforms(blackboard);
 
     auto &transform = registry_.get<Transform>(panda_entity);
     auto &panda = registry_.get<Panda>(panda_entity);
@@ -182,7 +124,7 @@ void TestScene::create_bread(Blackboard &blackboard) {
     registry_.assign<Bread>(enemy_entity, texture.width() * scale, texture.height() * scale);
     registry_.assign<CausesDamage>(enemy_entity, false, true, 1);
     registry_.assign<Health>(enemy_entity,1);
-    registry_.assign<Velocity>(enemy_entity,-0.5f,0.f);
+    registry_.assign<Velocity>(enemy_entity, -BREAD_SPEED, 0.f);
     registry_.assign<Collidable>(enemy_entity, texture.width() * scale, texture.height() * scale);
     registry_.assign<Interactable>(enemy_entity);
 }

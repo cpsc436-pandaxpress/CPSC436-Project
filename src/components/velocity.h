@@ -12,9 +12,11 @@
 struct Velocity {
     float x_velocity, y_velocity;
 
+    Velocity() : Velocity(0.f, 0.f) {}
+
     Velocity(float x_velocity, float y_velocity) :
-            x_velocity(0.f),
-            y_velocity(0.f){}
+            x_velocity(x_velocity),
+            y_velocity(y_velocity){}
 };
 
 #endif //PANDAEXPRESS_VELOCITY_H

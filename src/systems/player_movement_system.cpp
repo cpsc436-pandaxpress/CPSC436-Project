@@ -25,9 +25,9 @@ void playerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
          */
 
         if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_LEFT)) {
-            velocity.x_velocity = -2.f;
+            velocity.x_velocity = -PANDA_SPEED;
         } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RIGHT)) {
-            velocity.x_velocity = 2.f;
+            velocity.x_velocity = PANDA_SPEED;
         } else if (blackboard.input_manager.key_just_released(SDL_SCANCODE_LEFT) ||
                    blackboard.input_manager.key_just_released(SDL_SCANCODE_RIGHT)) {
             velocity.x_velocity = 0.f;
@@ -40,7 +40,7 @@ void playerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
         if (walkable.grounded && blackboard.input_manager.key_just_pressed(SDL_SCANCODE_SPACE)) {
 
             walkable.grounded = false;
-            velocity.y_velocity = -2.5f;
+            velocity.y_velocity = -PANDA_JUMP_SPEED;
 
         }
 

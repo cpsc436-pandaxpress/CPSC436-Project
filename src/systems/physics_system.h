@@ -13,7 +13,6 @@ public:
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;
 
 private:
-    const float GRAVITY = 0.002;
     void applyGravity(Blackboard& blackboard, entt::DefaultRegistry& registry);
     void applyVelocity(Blackboard& blackboard, entt::DefaultRegistry& registry);
 };

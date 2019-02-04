@@ -14,7 +14,8 @@ public:
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;
 
 private:
-
+    const float PANDA_SPEED = 400.f;
+    const float PANDA_JUMP_SPEED = 600.f;
 };
 
 
