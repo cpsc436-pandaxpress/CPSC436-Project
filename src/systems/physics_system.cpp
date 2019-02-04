@@ -1,7 +1,7 @@
 //
 // Created by cowan on 30/01/19.
 //
-#include "components/obeysGravity.h"
+#include "components/obeys_gravity.h"
 #include "components/collidable.h"
 #include "components/interactable.h"
 #include "components/velocity.h"

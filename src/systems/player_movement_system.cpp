@@ -10,9 +10,9 @@
 #include "components/transform.h"
 
 
-playerMovementSystem::playerMovementSystem() {}
+PlayerMovementSystem::PlayerMovementSystem() {}
 
-void playerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry) {
+void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry) {
     auto view = registry.view<Panda, Transform, Velocity, Interactable>();
     for (auto entity: view) {
         auto &panda = view.get<Panda>(entity);

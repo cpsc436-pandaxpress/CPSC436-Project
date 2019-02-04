@@ -8,9 +8,9 @@
 #include "system.h"
 #include "components/panda.h"
 
-class playerMovementSystem : public System {
+class PlayerMovementSystem : public System {
 public:
-    playerMovementSystem();
+    PlayerMovementSystem();
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;
 
 private:

@@ -21,7 +21,7 @@ private:
     SpriteRenderSystem sprite_render_system;
     std::vector<uint32_t> platforms;
     PhysicsSystem physics_system;
-    playerMovementSystem player_movement_system;
+    PlayerMovementSystem player_movement_system;
     CollisionSystem collision_system;
     void create_panda(Blackboard& blackboard);
     void create_platforms(Blackboard& blackboard);
