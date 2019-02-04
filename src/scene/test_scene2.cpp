@@ -17,12 +17,12 @@
 
 
 TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
-        Scene(scene_manager),
-        sprite_render_system(),
-        sprite_transform_system(),
-        physics_system(),
-        player_movement_system(),
-        collision_system()
+    Scene(scene_manager),
+    sprite_render_system(),
+    sprite_transform_system(),
+    physics_system(),
+    player_movement_system(),
+    collision_system()
 {
     init_scene(blackboard);
     gl_has_errors();
