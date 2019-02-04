@@ -124,7 +124,7 @@ void TestScene::create_bread(Blackboard &blackboard) {
     registry_.assign<Transform>(enemy_entity, 350., PLATFORM_START_Y - texture.height(), 0.,
                                 scale, scale);
     registry_.assign<Sprite>(enemy_entity, texture, shader);
-    registry_.assign<Bread>(enemy_entity, texture.width() * scale, texture.height() * scale);
+    registry_.assign<Bread>(enemy_entity);
     registry_.assign<CausesDamage>(enemy_entity, false, true, 1);
     registry_.assign<Health>(enemy_entity,1);
     registry_.assign<Velocity>(enemy_entity, -BREAD_SPEED, 0.f);
