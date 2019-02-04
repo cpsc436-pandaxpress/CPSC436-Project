@@ -6,7 +6,6 @@
 #include <components/panda.h>
 #include <components/platform.h>
 #include "test_scene.h"
-#include <random>
 #include "components/transform.h"
 
 TestScene::TestScene(Blackboard &blackboard, SceneManager &scene_manager) :
@@ -18,7 +17,6 @@ TestScene::TestScene(Blackboard &blackboard, SceneManager &scene_manager) :
 }
 
 void TestScene::initScene(Blackboard &blackboard) {
-    srand(0);
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
     last_placed_x = PLATFORM_START_X;
@@ -92,7 +90,7 @@ void TestScene::generate_platforms(Blackboard &blackboard) {
             blackboard.camera.position().x + blackboard.camera.size().x; // some distance off camera
     while (last_placed_x < max_x) {
         auto texture = blackboard.textureManager.get_texture(
-                (rand() % 2 == 0) ? "platform1" : "platform2");
+                (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "platform1" : "platform2");
         float scale = 50.0f / texture.width();
         if (platforms.size() > MAX_PLATFORMS) {//reuse
             auto platform = platforms.front();
