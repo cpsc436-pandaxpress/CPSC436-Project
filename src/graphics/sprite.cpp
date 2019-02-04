@@ -100,10 +100,6 @@ void Sprite::draw(const mat3& projection) {
     // unbind shader
     shader_.unbind();
 
-    if(gl_has_errors()) {
-        int i = 0;
-    }
-
 
 }
 

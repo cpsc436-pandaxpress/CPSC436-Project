@@ -5,11 +5,12 @@
 #include <components/bread.h>
 #include <components/panda.h>
 #include <components/collidable.h>
-#include <components/obeysGravity.h>
+#include <components/obeys_gravity.h>
 #include <components/health.h>
 #include <components/velocity.h>
 #include <components/interactable.h>
-#include <components/causesDamage.h>
+#include <components/platform.h>
+#include <components/causes_damage.h>
 #include "test_scene.h"
 #include <random>
 #include "components/transform.h"
@@ -45,14 +46,15 @@ void TestScene::update(Blackboard& blackboard) {
 
     auto &transform = registry_.get<Transform>(panda_entity);
     auto &panda = registry_.get<Panda>(panda_entity);
+    auto &panda_collidable = registry_.get<Collidable>(panda_entity);
     auto &enemy = registry_.get<Bread>(enemy_entity);
     auto &transform_enemy = registry_.get<Transform>(enemy_entity);
 
-    if (transform.x + panda.width < cam_position.x - cam_size.x / 2 ||
-        transform.y - panda.height > cam_position.y + cam_size.y / 2 || !panda.alive) {
+    if (transform.x + panda_collidable.width < cam_position.x - cam_size.x / 2 ||
+        transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || !panda.alive) {
         reset_scene(blackboard);
-    } else if (transform.x + panda.width / 2 > cam_position.x + cam_size.x / 2) {
-        transform.x = cam_position.x + cam_size.x / 2 - panda.width / 2;
+    } else if (transform.x + panda_collidable.width / 2 > cam_position.x + cam_size.x / 2) {
+        transform.x = cam_position.x + cam_size.x / 2 - panda_collidable.width / 2;
     }
 
     player_movement_system.update(blackboard, registry_);
@@ -75,7 +77,7 @@ void TestScene::create_panda(Blackboard &blackboard) {
     float scale = 0.15f;
     registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scale, scale);
     registry_.assign<Sprite>(panda_entity, texture, shader);
-    registry_.assign<Panda>(panda_entity, texture.width() * scale, texture.height() * scale);
+    registry_.assign<Panda>(panda_entity);
     registry_.assign<ObeysGravity>(panda_entity);
     registry_.assign<Health>(panda_entity,1);
     registry_.assign<Interactable>(panda_entity);
@@ -101,6 +103,7 @@ void TestScene::generate_platforms(Blackboard &blackboard) {
             platforms.push(platform);
         } else {
             auto platform = registry_.create();
+            registry_.assign<Platform>(platform);
             registry_.assign<Transform>(platform, last_placed_x, PLATFORM_START_Y, 0., scale,
                                         scale);
             registry_.assign<Sprite>(platform, texture, shader);
@@ -127,6 +130,7 @@ void TestScene::create_bread(Blackboard &blackboard) {
     registry_.assign<Velocity>(enemy_entity, -BREAD_SPEED, 0.f);
     registry_.assign<Collidable>(enemy_entity, texture.width() * scale, texture.height() * scale);
     registry_.assign<Interactable>(enemy_entity);
+    registry_.assign<ObeysGravity>(enemy_entity);
 }
 
 void TestScene::reset_scene(Blackboard &blackboard) {

@@ -7,6 +7,7 @@
 
 /***
  *  Objects assigned this component will be affected by gravity, acceleration is computed in physics_system
+ *  Overloaded constructor to allow for the creation of objects that fall at slower speeds than the panda
  */
 
 

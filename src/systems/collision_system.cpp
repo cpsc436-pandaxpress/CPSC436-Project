@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include "components/collidable.h"
+#include "components/platform.h"
 #include "components/velocity.h"
 #include "components/interactable.h"
 #include "collision_system.h"
@@ -23,21 +24,20 @@ CollisionSystem::CollisionSystem() {}
 void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry) {
 
     /*
-     * Checking Collisions between walkables (entities able to walk on platforms) and platforms
+     * Checking Collisions between interactables and platforms
+     * This should be refactored into its own function later as we will be making a few of these loops
      */
 
     auto interactable_view = registry.view<Interactable, Collidable, Transform, Velocity>();
 
-    auto platform_view = registry.view<Collidable, Transform>();
+    auto platform_view = registry.view<Collidable, Transform, Platform>();
 
     for (auto entity: interactable_view) {
         auto& interactable = interactable_view.get<Interactable>(entity);
         auto& transform1 = interactable_view.get<Transform>(entity);
         auto& velocity = interactable_view.get<Velocity>(entity);
         auto& collidable1 = interactable_view.get<Collidable>(entity);
-
         bool hitTheGround = false;
-        bool hitTheCeiling = false;
 
         for (auto pl_entity: platform_view) {
             if (registry.has<Panda>(pl_entity) || registry.has<Bread>(pl_entity))
@@ -50,8 +50,6 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
                 if(transform1.y < transform2.y) {
                     transform1.y = transform2.y - collidable1.height - collidable2.height;
                     hitTheGround = true;
-                }else{
-
                 }
             }
 
@@ -82,9 +80,6 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
                 registry.remove<Interactable>(enemy_entity);
                 break;
             }
-//
-//            bread_transform.x = bread_transform.x + bread.x_velocity;
-//            bread_transform.y = bread_transform.y + bread.y_velocity;
 
             if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, br_collidable, br_transform)) {
                 bread.alive = false;
@@ -103,12 +98,6 @@ bool checkCollision(Collidable collidable1, Transform transform1, Velocity veloc
                     transform1.y - collidable1.height <= transform2.y + collidable2.height &&
                     transform1.y + collidable1.height >= transform2.y - collidable2.height &&
                     velocity1.y_velocity > 0;
-    /*
-            pa_tr.x <= pl_tr.x + pl.width &&
-            pa_tr.x + pa.width >= pl_tr.x &&
-            pa_tr.y+pa.y_velocity <= pl_tr.y + pl.height &&
-            pa_tr.y+pa.y_velocity + pa.height >= pl_tr.y;
-    */
 }
 
 bool checkEnemyPandaCollisionFatal(Collidable pa_co, Transform pa_tr, Collidable br_co, Transform brd_tr) {

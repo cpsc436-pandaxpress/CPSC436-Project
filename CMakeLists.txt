@@ -37,7 +37,8 @@ set(SOURCE_FILES
         src/util/input_manager.cpp
         src/graphics/window.cpp
         src/graphics/texture.cpp
-        src/graphics/texture_manager.cpp src/graphics/shader.cpp src/graphics/shader_manager.cpp src/util/gl_utils.cpp src/graphics/sprite.cpp src/graphics/mesh.cpp src/graphics/camera.cpp src/systems/sprite_render_system.cpp src/systems/sprite_transform_system.cpp src/scene/test_scene.cpp src/util/constants.h src/systems/physics_system.cpp src/systems/physics_system.h src/systems/player_movement_system.cpp src/systems/player_movement_system.h src/components/collidable.h src/systems/collision_system.cpp src/systems/collision_system.h src/components/causesDamage.h src/components/health.h src/components/obeysGravity.h src/components/interactable.h src/components/velocity.h src/components/bread.h)
+        src/graphics/texture_manager.cpp src/graphics/shader.cpp src/graphics/shader_manager.cpp src/util/gl_utils.cpp src/graphics/sprite.cpp src/graphics/mesh.cpp src/graphics/camera.cpp src/systems/sprite_render_system.cpp src/systems/sprite_transform_system.cpp src/scene/test_scene.cpp src/util/constants.h src/systems/physics_system.cpp src/systems/physics_system.h src/systems/player_movement_system.cpp src/systems/player_movement_system.h src/components/collidable.h src/systems/collision_system.cpp src/systems/collision_system.h src/components/causes_damage.h src/components/health.h src/components/obeys_gravity.h src/components/interactable.h src/components/velocity.h src/components/bread.h src/components/platform.h)
+
 
 # Create executable target
 

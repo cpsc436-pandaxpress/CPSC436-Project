@@ -22,7 +22,7 @@ private:
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
     PhysicsSystem physics_system;
-    playerMovementSystem player_movement_system;
+    PlayerMovementSystem player_movement_system;
     CollisionSystem collision_system;
 
     float last_placed_x;
