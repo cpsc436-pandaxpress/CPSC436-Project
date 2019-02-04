@@ -12,21 +12,22 @@
 #include <components/platform.h>
 #include <components/causes_damage.h>
 #include "test_scene.h"
-#include <random>
 #include "components/transform.h"
 
 
 TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
-        Scene(scene_manager),
-        sprite_render_system(),
-        sprite_transform_system(),
-        physics_system(),
-        player_movement_system(),
-        collision_system()
+    Scene(scene_manager),
+    platforms(),
+    sprite_transform_system(),
+    sprite_render_system(),
+    physics_system(),
+    player_movement_system(),
+    collision_system()
 {
     init_scene(blackboard);
     gl_has_errors();
 }
+
 
 void TestScene::init_scene(Blackboard &blackboard) {
     srand(0);
@@ -93,7 +94,7 @@ void TestScene::generate_platforms(Blackboard &blackboard) {
             blackboard.camera.position().x + blackboard.camera.size().x; // some distance off camera
     while (last_placed_x < max_x) {
         auto texture = blackboard.textureManager.get_texture(
-                (rand() % 2 == 0) ? "platform1" : "platform2");
+                (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "platform1" : "platform2");
         float scale = 50.0f / texture.width();
         if (platforms.size() > MAX_PLATFORMS) {//reuse
             auto platform = platforms.front();
