@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
     window.initialize("Express Panda", 800, 600);
 
     Blackboard blackboard = {
-        Camera(800.f, 600.f, 0.f, 0.f),
+        Camera(1600, 1200, 0, 0),
         0,
         InputManager(),
         ShaderManager(),
@@ -43,16 +43,17 @@ int main(int argc, char** argv) {
     blackboard.input_manager.track(SDL_SCANCODE_RIGHT);
     blackboard.input_manager.track(SDL_SCANCODE_SPACE);
 
-    blackboard.textureManager.load_texture(textures_path("panda.png"), "panda");
     blackboard.shader_manager.load_shader(
-        shaders_path("sprite.vs.glsl"),
-        shaders_path("sprite.fs.glsl"),
-        "sprite"
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("sprite.fs.glsl"),
+            "sprite"
     );
 
+    blackboard.textureManager.load_texture(textures_path("panda.png"), "panda");
     blackboard.textureManager.load_texture(textures_path("grass_block_1.png"), "platform1");
     blackboard.textureManager.load_texture(textures_path("grass_block_2.png"), "platform2");
     blackboard.textureManager.load_texture(textures_path("bread.png"), "bread");
+
 
     // initialize scenes here
 
