@@ -12,13 +12,13 @@
 
 
 struct ObeysGravity {
-    float gravityConstant;
+    float gravityFactor;
 
     explicit ObeysGravity(float gravityConstant) :
-            gravityConstant(gravityConstant) {}
+            gravityFactor(gravityConstant) {}
 
     ObeysGravity() :
-            gravityConstant(500.f) {}
+            gravityFactor(1.f) {}
 };
 
 #endif //PANDAEXPRESS_OBEYSGRAVITY_H
