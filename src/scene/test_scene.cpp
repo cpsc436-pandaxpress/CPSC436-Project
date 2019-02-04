@@ -76,7 +76,7 @@ void TestScene::create_panda(Blackboard &blackboard) {
     auto texture = blackboard.textureManager.get_texture("panda");
     auto shader = blackboard.shader_manager.get_shader("sprite");
     float scale = 0.15f;
-    registry_.assign<Transform>(panda_entity, PANDA_START_X-10, PANDA_START_Y-200, 0., scale, scale);
+    registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scale, scale);
     registry_.assign<Sprite>(panda_entity, texture, shader);
     registry_.assign<Panda>(panda_entity);
     registry_.assign<ObeysGravity>(panda_entity);
@@ -122,7 +122,7 @@ void TestScene::create_bread(Blackboard &blackboard) {
     auto shader = blackboard.shader_manager.get_shader("sprite");
 
     float scale = 0.5;
-    registry_.assign<Transform>(enemy_entity, 350., PLATFORM_START_Y - texture.height()-200, 0.,
+    registry_.assign<Transform>(enemy_entity, 350., PANDA_START_Y - texture.height(), 0.,
                                 scale, scale);
     registry_.assign<Sprite>(enemy_entity, texture, shader);
     registry_.assign<Bread>(enemy_entity);
