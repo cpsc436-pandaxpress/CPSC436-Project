@@ -100,6 +100,7 @@ void Sprite::draw(const mat3& projection) {
     // unbind shader
     shader_.unbind();
 
+
 }
 
 vec2 Sprite::pos() {

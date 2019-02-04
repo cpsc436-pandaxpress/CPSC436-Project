@@ -5,18 +5,17 @@
 #ifndef PANDAEXPRESS_PHYSICS_H
 #define PANDAEXPRESS_PHYSICS_H
 
-struct Panda {
-    float width, height;
-    bool grounded, alive;
-    float x_velocity, y_velocity;
+/***
+ * The entity assigned the Panda component is able to be controlled by the player_movement_system
+ *
+ */
 
-    Panda(float width, float height) :
-        width(width),
-        height(height),
-        grounded(false),
-        alive(true),
-        x_velocity(0),
-        y_velocity(0) {}
+struct Panda {
+    bool alive;
+
+    Panda() :
+        alive(true)
+        {}
 };
 
 #endif //PANDAEXPRESS_PHYSICS_H
