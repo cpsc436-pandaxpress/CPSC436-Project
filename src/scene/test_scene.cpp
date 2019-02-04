@@ -2,6 +2,7 @@
 // Created by alex on 29/01/19.
 //
 
+#include <components/bread.h>
 #include <components/panda.h>
 #include <components/collidable.h>
 #include <components/obeysGravity.h>
@@ -10,9 +11,10 @@
 #include <components/interactable.h>
 #include <components/causesDamage.h>
 #include "test_scene.h"
-
+#include <random>
 #include "components/transform.h"
 
+//<<<<<<< HEAD
 
 TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
     Scene(scene_manager),
@@ -22,36 +24,114 @@ TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
     player_movement_system(),
     collision_system()
 {
-    create_panda(blackboard);
-    create_platforms(blackboard);
+    init_scene(blackboard);
     gl_has_errors();
+}
+
+void TestScene::init_scene(Blackboard &blackboard) {
+    srand(0);
+    blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
+    blackboard.camera.compose();
+    last_placed_x = PLATFORM_START_X;
+    create_panda(blackboard);
+    create_bread(blackboard);
 }
 
 void TestScene::update(Blackboard& blackboard) {
     // some sample input handling
 
+//=======
+//TestScene::TestScene(Blackboard &blackboard, SceneManager &scene_manager) :
+//        Scene(scene_manager),
+//        sprite_render_system(),
+//        sprite_transform_system(),
+//        physics_system() {
+//    init_scene(blackboard);
+//}
+//
+//void TestScene::init_scene(Blackboard &blackboard) {
+//    srand(0);
+//    blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
+//    blackboard.camera.compose();
+//    last_placed_x = PLATFORM_START_X;
+//    create_panda(blackboard);
+//    create_bread(blackboard);
+//}
+//
+//void TestScene::update(Blackboard &blackboard) {
+//    vec2 cam_size = blackboard.camera.size();
+//    vec2 cam_position = blackboard.camera.position();
+//    generate_platforms(blackboard);
+//    blackboard.camera.set_position(cam_position.x + 2, cam_position.y);
+//    blackboard.camera.compose();
+//
+//    auto &transform = registry_.get<Transform>(panda_entity);
+//    auto &panda = registry_.get<Panda>(panda_entity);
+//    auto &enemy = registry_.get<Bread>(enemy_entity);
+//    auto &transform_enemy = registry_.get<Transform>(enemy_entity);
+//
+//    if (transform.x + panda.width < cam_position.x - cam_size.x / 2 ||
+//        transform.y - panda.height > cam_position.y + cam_size.y / 2 || !panda.alive) {
+//        reset_scene(blackboard);
+//    } else if (transform.x + panda.width / 2 > cam_position.x + cam_size.x / 2) {
+//        transform.x = cam_position.x + cam_size.x / 2 - panda.width / 2;
+//    }
+//
+//
+//    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_LEFT)) {
+//        panda.x_velocity = -5;
+//    } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RIGHT)) {
+//        panda.x_velocity = 5;
+//    } else if (blackboard.input_manager.key_just_released(SDL_SCANCODE_LEFT) ||
+//               blackboard.input_manager.key_just_released(SDL_SCANCODE_RIGHT)) {
+//        panda.x_velocity = 0;
+//    }
+//
+//    if (panda.grounded && blackboard.input_manager.key_just_pressed(SDL_SCANCODE_SPACE)) {
+//        transform.y -= 5;
+//        panda.y_velocity = -5;
+//        panda.grounded = false;
+//    }
+//>>>>>>> dev
 
     // update the systems here
+     vec2 cam_size = blackboard.camera.size();
+    vec2 cam_position = blackboard.camera.position();
+    generate_platforms(blackboard);
+    blackboard.camera.set_position(cam_position.x + 2, cam_position.y);
+    blackboard.camera.compose();
+
+    auto &transform = registry_.get<Transform>(panda_entity);
+    auto &panda = registry_.get<Panda>(panda_entity);
+    auto &enemy = registry_.get<Bread>(enemy_entity);
+    auto &transform_enemy = registry_.get<Transform>(enemy_entity);
+
+    if (transform.x + panda.width < cam_position.x - cam_size.x / 2 ||
+        transform.y - panda.height > cam_position.y + cam_size.y / 2 || !panda.alive) {
+        reset_scene(blackboard);
+    } else if (transform.x + panda.width / 2 > cam_position.x + cam_size.x / 2) {
+        transform.x = cam_position.x + cam_size.x / 2 - panda.width / 2;
+    }
+
     player_movement_system.update(blackboard, registry_);
     collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
 }
 
-void TestScene::render(Blackboard& blackboard) {
+void TestScene::render(Blackboard &blackboard) {
     // update the rendering systems
     sprite_render_system.update(blackboard, registry_);
 
 }
 
-void TestScene::create_panda(Blackboard& blackboard) {
+void TestScene::create_panda(Blackboard &blackboard) {
     panda_entity = registry_.create();
 
     auto texture = blackboard.textureManager.get_texture("panda");
     auto shader = blackboard.shader_manager.get_shader("sprite");
-
-    float scale = 0.5;
-    registry_.assign<Transform>(panda_entity, 0., -100., 0., scale, scale);
+    float scale = 0.15f;
+    registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scale, scale);
     registry_.assign<Sprite>(panda_entity, texture, shader);
     registry_.assign<Panda>(panda_entity, texture.width() * scale, texture.height() * scale);
     registry_.assign<ObeysGravity>(panda_entity);
@@ -63,67 +143,57 @@ void TestScene::create_panda(Blackboard& blackboard) {
 
 }
 
-void TestScene::create_platforms(Blackboard& blackboard) {
-    auto texture = blackboard.textureManager.get_texture("platform");
-    auto texture2 = blackboard.textureManager.get_texture("platform2");
+void TestScene::generate_platforms(Blackboard &blackboard) {
     auto shader = blackboard.shader_manager.get_shader("sprite");
-    float scale = 100.f / texture.width();
+    float max_x =
+            blackboard.camera.position().x + blackboard.camera.size().x; // some distance off camera
+    while (last_placed_x < max_x) {
+        auto texture = blackboard.textureManager.get_texture(
+                (rand() % 2 == 0) ? "platform1" : "platform2");
+        float scale = 50.0f / texture.width();
+        if (platforms.size() > MAX_PLATFORMS) {//reuse
+            auto platform = platforms.front();
+            platforms.pop();
+            registry_.replace<Transform>(platform, last_placed_x, PLATFORM_START_Y, 0.f, scale,
+                                         scale);
+            platforms.push(platform);
+        } else {
+            auto platform = registry_.create();
+            registry_.assign<Transform>(platform, last_placed_x, PLATFORM_START_Y, 0., scale,
+                                        scale);
+            registry_.assign<Sprite>(platform, texture, shader);
+            registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale);
 
-    platform = registry_.create();
-    platform2 = registry_.create();
-    platform3 = registry_.create();
-    platform4 = registry_.create();
-    platform5 = registry_.create();
-    platform6 = registry_.create();
-
-    registry_.assign<Transform>(platform, -200., 0., 0., scale, scale);
-    registry_.assign<Sprite>(platform, texture, shader);
-    registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale);
-
-    registry_.assign<Transform>(platform2, -100., 100., 0., scale, scale);
-    registry_.assign<Sprite>(platform2, texture2, shader);
-    registry_.assign<Collidable>(platform2, texture.width() * scale, texture.height() * scale);
-
-    registry_.assign<Transform>(platform3, 0., 200., 0., scale, scale);
-    registry_.assign<Sprite>(platform3, texture2, shader);
-    registry_.assign<Collidable>(platform3, texture.width() * scale, texture.height() * scale);
-
-    registry_.assign<Transform>(platform4, 100., 300., 0., scale, scale);
-    registry_.assign<Sprite>(platform4, texture2, shader);
-    registry_.assign<Collidable>(platform4, texture.width() * scale, texture.height() * scale);
-
-    platform5 = registry_.create();
-    registry_.assign<Transform>(platform5, 200., 400., 0., scale, scale);
-    registry_.assign<Sprite>(platform5, texture2, shader);
-    registry_.assign<Collidable>(platform5, texture.width() * scale, texture.height() * scale);
-
-    /*
-     * Makes a platform that falls since it is assigned gravity
-     */
-    platform6 = registry_.create();
-    registry_.assign<Transform>(platform6, 300., -500., 0., scale, scale);
-    registry_.assign<Sprite>(platform6, texture2, shader);
-    registry_.assign<Collidable>(platform6, texture.width() * scale, texture.height() * scale);
-    registry_.assign<ObeysGravity>(platform6);
-    registry_.assign<Velocity>(platform6,0.f,0.f);
-
-    /*
-     * Makes a platform that falls but assigns it walkable so it will fall on top of the other platform
-     */
-    platform7 = registry_.create();
-    registry_.assign<Transform>(platform7, -400., -500., 0., scale, scale);
-    registry_.assign<Sprite>(platform7, texture2, shader);
-    registry_.assign<Collidable>(platform7, texture.width() * scale, texture.height() * scale);
-    registry_.assign<ObeysGravity>(platform7);
-    registry_.assign<Velocity>(platform7,0.f,0.f);
-    registry_.assign<Interactable>(platform7);
-
-    platform8 = registry_.create();
-    registry_.assign<Transform>(platform8, -400., 500., 0., scale, scale);
-    registry_.assign<Sprite>(platform8, texture2, shader);
-    registry_.assign<Collidable>(platform8, texture.width() * scale, texture.height() * scale);
-    registry_.assign<ObeysGravity>(platform8);
-
-
+            platforms.push(platform);
+        }
+        last_placed_x += texture.width();
+    }
 }
 
+void TestScene::create_bread(Blackboard &blackboard) {
+    enemy_entity = registry_.create();
+    auto texture = blackboard.textureManager.get_texture("bread");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+
+    float scale = 0.5;
+    registry_.assign<Transform>(enemy_entity, 350., PLATFORM_START_Y - texture.height(), 0.,
+                                scale, scale);
+    registry_.assign<Sprite>(enemy_entity, texture, shader);
+    registry_.assign<Bread>(enemy_entity, texture.width() * scale, texture.height() * scale);
+    registry_.assign<CausesDamage>(enemy_entity, false, true, 1);
+    registry_.assign<Health>(enemy_entity,1);
+    registry_.assign<Velocity>(enemy_entity,-0.5f,0.f);
+    registry_.assign<Collidable>(enemy_entity, texture.width() * scale, texture.height() * scale);
+    registry_.assign<Interactable>(enemy_entity);
+}
+
+void TestScene::reset_scene(Blackboard &blackboard) {
+    registry_.destroy(panda_entity);
+    registry_.destroy(enemy_entity);
+    while (!platforms.empty()) {
+        uint32_t platform = platforms.front();
+        registry_.destroy(platform);
+        platforms.pop();
+    }
+    init_scene(blackboard);
+}

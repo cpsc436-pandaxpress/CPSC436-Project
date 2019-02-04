@@ -7,30 +7,30 @@
 
 
 TexturedVertex Sprite::vertices[4] = {
-    TexturedVertex {
-        { -1, 1, -0.01f },
-        { 0.f, 1.f }
-    },
-    TexturedVertex {
-        { 1, 1, -0.01f },
-        { 1.f, 1.f }
-    },
-    TexturedVertex {
-        { 1, -1, -0.01f },
-        { 1.f, 0.f }
-    },
-    TexturedVertex {
-        { -1, -1, -0.01f },
-        { 0.f, 0.f }
-    }
+        TexturedVertex {
+                { -1, 1, -0.01f },
+                { 0.f, 1.f }
+        },
+        TexturedVertex {
+                { 1, 1, -0.01f },
+                { 1.f, 1.f }
+        },
+        TexturedVertex {
+                { 1, -1, -0.01f },
+                { 1.f, 0.f }
+        },
+        TexturedVertex {
+                { -1, -1, -0.01f },
+                { 0.f, 0.f }
+        }
 };
 
 uint16_t Sprite::indices[6] = { 0, 3, 1, 1, 3, 2 };
 
 Sprite::Sprite(Texture texture, Shader shader) :
-    mesh_(4, vertices, 6, indices),
-    shader_(shader),
-    texture_(texture)
+        mesh_(4, vertices, 6, indices),
+        shader_(shader),
+        texture_(texture)
 {
     position_ = { 0.f, 0.f};
     pixel_scale_ = {(float)texture.width(), (float)texture.height()};
@@ -40,23 +40,23 @@ Sprite::Sprite(Texture texture, Shader shader) :
 }
 
 Sprite::Sprite(const Sprite& other) :
-    mesh_(4, vertices, 6, indices),
-    shader_(other.shader_),
-    texture_(other.texture_),
-    position_(other.position_),
-    pixel_scale_(other.pixel_scale_),
-    scale_(other.scale_),
-    color_(other.color_),
-    rotation_(other.rotation_)
+        mesh_(4, vertices, 6, indices),
+        shader_(other.shader_),
+        texture_(other.texture_),
+        position_(other.position_),
+        pixel_scale_(other.pixel_scale_),
+        scale_(other.scale_),
+        color_(other.color_),
+        rotation_(other.rotation_)
 {}
 
 
 void Sprite::draw(const mat3& projection) {
     // transform
     mat3 transform = {
-        { 1.f, 0.f, 0.f },
-        { 0.f, 1.f, 0.f },
-        { 0.f, 0.f, 1.f }
+            { 1.f, 0.f, 0.f },
+            { 0.f, 1.f, 0.f },
+            { 0.f, 0.f, 1.f }
     };
 
     mul_in_place(transform, make_translate_mat3(position_.x, position_.y));

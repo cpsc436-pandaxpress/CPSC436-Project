@@ -7,11 +7,12 @@
 
 struct Panda {
     float width, height;
-
+    bool alive;
 
     Panda(float width, float height) :
         width(width),
-        height(height)
+        height(height),
+        alive(true)
         {}
 };
 

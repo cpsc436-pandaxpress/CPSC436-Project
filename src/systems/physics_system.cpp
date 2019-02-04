@@ -5,12 +5,12 @@
 #include "components/collidable.h"
 #include "components/interactable.h"
 #include "components/velocity.h"
+#include "components/bread.h"
 #include "physics_system.h"
 #include "components/panda.h"
 #include "components/transform.h"
 #include <iostream>
 using namespace std;
-
 
 PhysicsSystem::PhysicsSystem() {}
 
@@ -22,9 +22,6 @@ void PhysicsSystem::update(Blackboard& blackboard, entt::DefaultRegistry& regist
 }
 
 void PhysicsSystem::applyGravity(Blackboard& blackboard, entt::DefaultRegistry& registry){
-
-
-
     /***
      * Applying gravity to objects that can walk on platforms
      ***/
@@ -60,12 +57,6 @@ void PhysicsSystem::applyGravity(Blackboard& blackboard, entt::DefaultRegistry& 
         auto& gravity  = viewNonWalkable.get<ObeysGravity>(entity);
 
         velocity.y_velocity += gravity.gravityConstant;
-
-
-
-
-
-
     }
 
 }
@@ -82,6 +73,4 @@ void PhysicsSystem::applyVelocity(Blackboard& blackboard, entt::DefaultRegistry&
         transform.y += velocity.y_velocity;
 
     }
-
-
 }

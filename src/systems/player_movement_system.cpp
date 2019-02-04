@@ -40,7 +40,7 @@ void playerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
         if (walkable.grounded && blackboard.input_manager.key_just_pressed(SDL_SCANCODE_SPACE)) {
 
             walkable.grounded = false;
-            velocity.y_velocity = -2.f;
+            velocity.y_velocity = -2.5f;
 
         }
 
