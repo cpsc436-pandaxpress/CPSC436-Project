@@ -42,6 +42,7 @@ private:
 
     void create_panda(Blackboard& blackboard);
     void create_bread(Blackboard& blackboard);
+    void clean_bread(Blackboard& blackboard);
     void generate_platforms(Blackboard &blackboard);
     void reset_scene(Blackboard& blackboard);
     void init_scene(Blackboard &blackboard);
