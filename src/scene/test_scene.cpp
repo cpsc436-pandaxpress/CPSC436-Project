@@ -13,11 +13,15 @@
 #include <components/causes_damage.h>
 #include "test_scene.h"
 #include "components/transform.h"
+#include <stdlib.h>
+#include <time.h>
+
 
 
 TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
     Scene(scene_manager),
     platforms(),
+    enemies(),
     sprite_transform_system(),
     sprite_render_system(),
     physics_system(),
@@ -34,6 +38,7 @@ void TestScene::init_scene(Blackboard &blackboard) {
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
     last_placed_x = PLATFORM_START_X;
+    last_bread_x = BREAD_START_X;
     create_panda(blackboard);
     create_bread(blackboard);
 }
@@ -48,14 +53,16 @@ void TestScene::update(Blackboard& blackboard) {
     auto &transform = registry_.get<Transform>(panda_entity);
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &panda_collidable = registry_.get<Collidable>(panda_entity);
-    auto &enemy = registry_.get<Bread>(enemy_entity);
-    auto &transform_enemy = registry_.get<Transform>(enemy_entity);
 
     if (transform.x + panda_collidable.width < cam_position.x - cam_size.x / 2 ||
         transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || !panda.alive) {
         reset_scene(blackboard);
     } else if (transform.x + panda_collidable.width / 2 > cam_position.x + cam_size.x / 2) {
         transform.x = cam_position.x + cam_size.x / 2 - panda_collidable.width / 2;
+    }
+
+    if (cam_position.x + 500 >= last_bread_x) {
+        create_bread(blackboard);
     }
 
     player_movement_system.update(blackboard, registry_);
@@ -117,30 +124,38 @@ void TestScene::generate_platforms(Blackboard &blackboard) {
 }
 
 void TestScene::create_bread(Blackboard &blackboard) {
-    enemy_entity = registry_.create();
+    auto bread = registry_.create();
     auto texture = blackboard.textureManager.get_texture("bread");
     auto shader = blackboard.shader_manager.get_shader("sprite");
 
     float scale = 0.5;
-    registry_.assign<Transform>(enemy_entity, 350., PANDA_START_Y - texture.height(), 0.,
+
+    registry_.assign<Transform>(bread, last_bread_x, BREAD_START_Y - texture.height(), 0.,
                                 scale, scale);
-    registry_.assign<Sprite>(enemy_entity, texture, shader);
-    registry_.assign<Bread>(enemy_entity);
-    registry_.assign<CausesDamage>(enemy_entity, false, true, 1);
-    registry_.assign<Health>(enemy_entity,1);
-    registry_.assign<Velocity>(enemy_entity, -BREAD_SPEED, 0.f);
-    registry_.assign<Collidable>(enemy_entity, texture.width() * scale, texture.height() * scale);
-    registry_.assign<Interactable>(enemy_entity);
-    registry_.assign<ObeysGravity>(enemy_entity);
+    registry_.assign<Sprite>(bread, texture, shader);
+    registry_.assign<Bread>(bread);
+    registry_.assign<CausesDamage>(bread, false, true, 1);
+    registry_.assign<Health>(bread,1);
+    registry_.assign<Velocity>(bread, -BREAD_SPEED, 0.f);
+    registry_.assign<Collidable>(bread, texture.width() * scale, texture.height() * scale);
+    registry_.assign<Interactable>(bread);
+    registry_.assign<ObeysGravity>(bread);
+
+    int next_interval = rand() % 10 + 2;
+    last_bread_x = last_bread_x + (next_interval * 100);
 }
 
 void TestScene::reset_scene(Blackboard &blackboard) {
     registry_.destroy(panda_entity);
-    registry_.destroy(enemy_entity);
     while (!platforms.empty()) {
         uint32_t platform = platforms.front();
         registry_.destroy(platform);
         platforms.pop();
+    }
+    while (!enemies.empty()) {
+        uint32_t enemy = enemies.front();
+        registry_.destroy(enemy);
+        enemies.pop();
     }
     init_scene(blackboard);
 }
