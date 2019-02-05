@@ -138,10 +138,8 @@ endif()
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${GLEW_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS})
 
-target_link_libraries(${PROJECT_NAME} PUBLIC "/usr/local/lib/libGLEW.dylib" "/usr/local/lib/libSDL2.dylib" "/usr/local/lib/libSDL2_mixer.dylib" "-framework Foundation" "-framework Cocoa" "-framework CoreAudio"  "-framework AVFoundation"
-        "-framework CoreGraphics"
-        "-framework MediaPlayer"
-        "-framework QuartzCore")
+target_link_libraries(${PROJECT_NAME} PUBLIC ${GLEW_LIBRARIES} ${SDL2_LIBRARIES} ${SDL2MIXER_LIBRARIES})
+
 # Needed to add this
 if(IS_OS_LINUX)
     target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_DL_LIBS})
