@@ -37,7 +37,7 @@ private:
     const float PLATFORM_START_Y = 200.f;
     const float BREAD_START_X = 700.f;
     const float BREAD_START_Y = -600.f;
-    const float BREAD_SPEED = 50.f;
+    const float BREAD_SPEED = 75.f;
     const int MAX_PLATFORMS = 30;
 
     void create_panda(Blackboard& blackboard);

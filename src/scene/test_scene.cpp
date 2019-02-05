@@ -59,7 +59,7 @@ void TestScene::update(Blackboard& blackboard) {
         transform.x = cam_position.x + cam_size.x / 2 - panda_collidable.width / 2;
     }
 
-    if (cam_position.x + 500 >= last_bread_x) {
+    if (cam_position.x >= last_bread_x) {
         create_bread(blackboard);
         clean_bread(blackboard);
     }
@@ -129,7 +129,8 @@ void TestScene::create_bread(Blackboard &blackboard) {
 
     float scale = 0.5;
 
-    registry_.assign<Transform>(bread, last_bread_x, BREAD_START_Y - texture.height(), 0.,
+    int next_start_x = last_bread_x + (rand() % 12) * 50;
+    registry_.assign<Transform>(bread, next_start_x, BREAD_START_Y - texture.height(), 0.,
                                 scale, scale);
     registry_.assign<Sprite>(bread, texture, shader);
     registry_.assign<Bread>(bread);
@@ -141,7 +142,7 @@ void TestScene::create_bread(Blackboard &blackboard) {
     registry_.assign<ObeysGravity>(bread);
 
     int next_interval = rand() % 10 + 2;
-    last_bread_x = last_bread_x + (next_interval * 100);
+    last_bread_x = next_start_x + (next_interval * 100);
 }
 
 void TestScene::clean_bread(Blackboard &blackboard) {
