@@ -38,10 +38,8 @@ void TestScene::init_scene(Blackboard &blackboard) {
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
     last_placed_x = PLATFORM_START_X;
-
-    last_rock_x = blackboard.camera.size().x;
-
     last_placed_x_floating = PLATFORM_START_X;
+    last_rock_x = blackboard.camera.size().x;
     last_bread_x = BREAD_START_X;
 
     create_panda(blackboard);
@@ -235,6 +233,7 @@ void TestScene::reset_scene(Blackboard &blackboard) {
         uint32_t obstacle = obstacles.front();
         obstacles.pop();
         registry_.destroy(obstacle);
+    }
 
         while (!floating_platforms.empty()) {
             uint32_t floating_platform = floating_platforms.front();
@@ -249,5 +248,5 @@ void TestScene::reset_scene(Blackboard &blackboard) {
         }
         init_scene(blackboard);
 
-    }
+
 }
