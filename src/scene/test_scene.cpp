@@ -13,8 +13,6 @@
 #include <components/causes_damage.h>
 #include "test_scene.h"
 #include "components/transform.h"
-#include <stdlib.h>
-#include <time.h>
 
 
 
