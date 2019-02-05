@@ -16,9 +16,12 @@
 
 class TestScene : public Scene {
 private:
-    uint32_t panda_entity, enemy_entity;
-    std::queue<uint32_t> platforms; // platforms are in order of x
+
     std::queue<uint32_t> obstacles;
+    uint32_t panda_entity;
+    std::queue<uint32_t> platforms;// platforms are in order of x
+    std::queue<uint32_t> floating_platforms;
+    std::queue<uint32_t> enemies;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
     PhysicsSystem physics_system;
@@ -26,7 +29,10 @@ private:
     CollisionSystem collision_system;
 
     float last_placed_x;
+
     float last_rock_x;
+    float last_placed_x_floating;
+    float last_bread_x;
 
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;
@@ -34,16 +40,21 @@ private:
     const float PANDA_START_X = -10.f;
     const float PANDA_START_Y = -200.f;
     const float PLATFORM_START_X = -200.f;
-    const float PLATFORM_START_Y = 200.f;
+    const float PLATFORM_START_Y = 400.f;
+    const float FLOATING_PLATFORM_START_Y = 100.f;
+    const float BREAD_START_X = 700.f;
+    const float BREAD_START_Y = -600.f;
     const float BREAD_SPEED = 50.f;
     const int MAX_PLATFORMS = 30;
 
     void create_panda(Blackboard& blackboard);
     void create_bread(Blackboard& blackboard);
     void generate_obstacles(Blackboard& blackboard);
+    void clean_bread(Blackboard& blackboard);
     void generate_platforms(Blackboard &blackboard);
     void reset_scene(Blackboard& blackboard);
     void init_scene(Blackboard &blackboard);
+    void generate_floating_platforms(Blackboard &blackboard);
 
 public:
     TestScene(Blackboard& blackboard, SceneManager& scene_manager);
