@@ -63,7 +63,7 @@ void TestScene::update(Blackboard& blackboard) {
 
     if (cam_position.x + 500 >= last_bread_x) {
         create_bread(blackboard);
-        clean_bread(blackboard);
+        //clean_bread(blackboard);
     }
 
     player_movement_system.update(blackboard, registry_);
@@ -174,6 +174,7 @@ void TestScene::create_bread(Blackboard &blackboard) {
 
     int next_interval = rand() % 10 + 2;
     last_bread_x = last_bread_x + (next_interval * 100);
+    enemies.push(bread);
 }
 
 void TestScene::clean_bread(Blackboard &blackboard) {
@@ -199,6 +200,7 @@ void TestScene::reset_scene(Blackboard &blackboard) {
         registry_.destroy(floating_platform);
         floating_platforms.pop();
     }
+
     while (!enemies.empty()) {
         uint32_t enemy = enemies.front();
         registry_.destroy(enemy);
