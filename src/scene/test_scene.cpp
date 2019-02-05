@@ -23,7 +23,8 @@ TestScene::TestScene(Blackboard& blackboard, SceneManager& scene_manager) :
     sprite_render_system(),
     physics_system(),
     player_movement_system(),
-    collision_system()
+    collision_system(),
+    obstacles()
 {
     init_scene(blackboard);
     gl_has_errors();
@@ -35,9 +36,9 @@ void TestScene::init_scene(Blackboard &blackboard) {
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
     last_placed_x = PLATFORM_START_X;
+    last_rock_x = blackboard.camera.size().x;
     create_panda(blackboard);
     create_bread(blackboard);
-    generate_obstacles(blackboard);
 }
 
 void TestScene::update(Blackboard& blackboard) {
@@ -46,6 +47,8 @@ void TestScene::update(Blackboard& blackboard) {
     blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time, cam_position.y);
     blackboard.camera.compose();
     generate_platforms(blackboard);
+    generate_obstacles(blackboard);
+
 
     auto &transform = registry_.get<Transform>(panda_entity);
     auto &panda = registry_.get<Panda>(panda_entity);
@@ -137,32 +140,43 @@ void TestScene::create_bread(Blackboard &blackboard) {
 }
 
 void TestScene::generate_obstacles(Blackboard &blackboard) {
-    obstacle_entity = registry_.create();
-    auto texture = blackboard.textureManager.get_texture(
-            (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "rock1" : "rock2");
-    auto shader = blackboard.shader_manager.get_shader("sprite");
+    float max_x =
+            blackboard.camera.position().x + blackboard.camera.size().x;
+    while (last_rock_x < max_x) {
+        int texturenum = blackboard.randNumGenerator.nextInt(0, 9) % 3;
+        auto texture = blackboard.textureManager.get_texture("branch1");;
+        if(texturenum == 0){
+             texture = blackboard.textureManager.get_texture("branch2");
+        }
 
-    float scale = 0.13;
-    registry_.assign<Transform>(obstacle_entity, last_placed_x + blackboard.camera.size().x, PLATFORM_START_Y - 80.f, 0.,
-                                scale, scale);
-    registry_.assign<Sprite>(obstacle_entity, texture, shader);
-    registry_.assign<Obstacle>(obstacle_entity);
-//    registry_.assign<CausesDamage>(obstacle_entity, false, true, 1);
-//    registry_.assign<Health>(obstacle_entity,1);
-//    registry_.assign<Velocity>(obstacle_entity, -BREAD_SPEED, 0.f);
-    registry_.assign<Collidable>(obstacle_entity, texture.width() * scale, texture.height() * scale);
-    registry_.assign<Interactable>(obstacle_entity);
-    registry_.assign<ObeysGravity>(obstacle_entity);
+        auto shader = blackboard.shader_manager.get_shader("sprite");
+        float scale = 0.45;
+        auto obstacle_entity = registry_.create();
+        registry_.assign<Transform>(obstacle_entity, last_rock_x - 400.f,
+                                    PLATFORM_START_Y - 80.f, 0.,
+                                    scale, scale);
+        registry_.assign<Sprite>(obstacle_entity, texture, shader);
+        registry_.assign<Obstacle>(obstacle_entity);
+        registry_.assign<Collidable>(obstacle_entity, texture.width() * scale, texture.height() * scale);
+        registry_.assign<Interactable>(obstacle_entity);
+        registry_.assign<ObeysGravity>(obstacle_entity);
+        obstacles.push(obstacle_entity);
+        last_rock_x += 2*blackboard.camera.size().x;
+    }
 }
 
 void TestScene::reset_scene(Blackboard &blackboard) {
     registry_.destroy(panda_entity);
     registry_.destroy(enemy_entity);
-    registry_.destroy(obstacle_entity);
     while (!platforms.empty()) {
         uint32_t platform = platforms.front();
         registry_.destroy(platform);
         platforms.pop();
+    }
+    while (!obstacles.empty()) {
+        uint32_t obstacle = obstacles.front();
+        obstacles.pop();
+        registry_.destroy(obstacle);
     }
     init_scene(blackboard);
 }

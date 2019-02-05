@@ -55,7 +55,7 @@ set(SOURCE_FILES
         src/components/bread.h
         src/util/random.cpp
         src/util/random.h
-)
+        src/components/obstacle.h)
 
 # Create executable target
 

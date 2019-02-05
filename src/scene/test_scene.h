@@ -16,9 +16,9 @@
 
 class TestScene : public Scene {
 private:
-    uint32_t panda_entity, enemy_entity, obstacle_entity;
+    uint32_t panda_entity, enemy_entity;
     std::queue<uint32_t> platforms; // platforms are in order of x
-
+    std::queue<uint32_t> obstacles;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
     PhysicsSystem physics_system;
@@ -26,6 +26,7 @@ private:
     CollisionSystem collision_system;
 
     float last_placed_x;
+    float last_rock_x;
 
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;
