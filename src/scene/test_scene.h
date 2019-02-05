@@ -16,6 +16,8 @@
 
 class TestScene : public Scene {
 private:
+
+    std::queue<uint32_t> obstacles;
     uint32_t panda_entity;
     std::queue<uint32_t> platforms;// platforms are in order of x
     std::queue<uint32_t> floating_platforms;
@@ -27,6 +29,8 @@ private:
     CollisionSystem collision_system;
 
     float last_placed_x;
+
+    float last_rock_x;
     float last_placed_x_floating;
     float last_bread_x;
 
@@ -45,6 +49,7 @@ private:
 
     void create_panda(Blackboard& blackboard);
     void create_bread(Blackboard& blackboard);
+    void generate_obstacles(Blackboard& blackboard);
     void clean_bread(Blackboard& blackboard);
     void generate_platforms(Blackboard &blackboard);
     void reset_scene(Blackboard& blackboard);
