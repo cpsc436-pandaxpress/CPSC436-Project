@@ -217,7 +217,7 @@ void TestScene::generate_obstacles(Blackboard &blackboard) {
         registry_.assign<Interactable>(obstacle_entity);
         registry_.assign<ObeysGravity>(obstacle_entity);
         obstacles.push(obstacle_entity);
-        last_rock_x += 2*blackboard.camera.size().x;
+        last_rock_x += blackboard.camera.size().x;
     }
 }
 
