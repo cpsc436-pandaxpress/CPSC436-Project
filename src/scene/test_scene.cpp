@@ -36,6 +36,7 @@ void TestScene::init_scene(Blackboard &blackboard) {
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
     last_placed_x = PLATFORM_START_X;
+    last_placed_x_floating = PLATFORM_START_X;
     last_bread_x = BREAD_START_X;
     create_panda(blackboard);
     create_bread(blackboard);
@@ -47,6 +48,7 @@ void TestScene::update(Blackboard& blackboard) {
     blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time, cam_position.y);
     blackboard.camera.compose();
     generate_platforms(blackboard);
+    generate_floating_platforms(blackboard);
 
     auto &transform = registry_.get<Transform>(panda_entity);
     auto &panda = registry_.get<Panda>(panda_entity);
@@ -122,6 +124,36 @@ void TestScene::generate_platforms(Blackboard &blackboard) {
     }
 }
 
+void TestScene::generate_floating_platforms(Blackboard &blackboard) {
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    float max_x =
+            blackboard.camera.position().x + blackboard.camera.size().x; // some distance off camera
+    while (last_placed_x_floating < max_x) {
+        auto yOffset = rand()%400;
+        auto texture = blackboard.textureManager.get_texture("platform_center_grass");
+        float scale = 100.0f / texture.width();
+
+        if (floating_platforms.size() > MAX_PLATFORMS) {//reuse
+            auto floatingPlatform = floating_platforms.front();
+            floating_platforms.pop();
+            registry_.replace<Transform>(floatingPlatform, last_placed_x_floating, FLOATING_PLATFORM_START_Y-yOffset, 0.f, scale,
+                                         scale);
+            floating_platforms.push(floatingPlatform);
+        } else {
+
+            auto floating_platform = registry_.create();
+            registry_.assign<Platform>(floating_platform);
+            registry_.assign<Transform>(floating_platform, last_placed_x_floating, FLOATING_PLATFORM_START_Y-yOffset, 0., scale,
+                                        scale);
+            registry_.assign<Sprite>(floating_platform, texture, shader);
+            registry_.assign<Collidable>(floating_platform, texture.width() * scale, texture.height() * scale);
+
+            floating_platforms.push(floating_platform);
+        }
+        last_placed_x_floating += texture.width()*3;
+    }
+}
+
 void TestScene::create_bread(Blackboard &blackboard) {
     auto bread = registry_.create();
     auto texture = blackboard.textureManager.get_texture("bread");
@@ -161,6 +193,11 @@ void TestScene::reset_scene(Blackboard &blackboard) {
         uint32_t platform = platforms.front();
         registry_.destroy(platform);
         platforms.pop();
+    }
+    while (!floating_platforms.empty()) {
+        uint32_t floating_platform = floating_platforms.front();
+        registry_.destroy(floating_platform);
+        floating_platforms.pop();
     }
     while (!enemies.empty()) {
         uint32_t enemy = enemies.front();
