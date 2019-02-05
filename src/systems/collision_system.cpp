@@ -12,11 +12,13 @@
 #include "components/panda.h"
 #include "components/transform.h"
 #include "components/bread.h"
+#include "components/obstacle.h"
 using namespace std;
 
 bool checkCollision(Collidable collidable1, Transform transform1, Velocity velocity1, Collidable collidable2, Transform transform2);
 bool checkEnemyPandaCollisionFatal(Collidable pa_co, Transform pa_tr, Collidable br_co, Transform brd_tr);
 bool checkEnemyPandaCollisionSafe(Collidable pa_co, Transform pa_tr, Velocity pa_velocity, Collidable br_co, Transform br_tr);
+bool checkObstaclePandaCollision(Collidable pa_co, Transform pa_tr, Collidable ob_co, Transform ob_tr);
 
 CollisionSystem::CollisionSystem() {}
 
@@ -64,6 +66,7 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
     // TODO: generalize this to use the causesDamage component
     auto pandas_view = registry.view<Panda, Transform, Interactable, Collidable, Velocity>();
     auto bread_view = registry.view<Bread, Transform, Interactable, Collidable>();
+    auto obstacle_view = registry.view<Obstacle, Transform, Collidable>();
 
     for (auto panda_entity : pandas_view) {
         auto& panda = pandas_view.get<Panda>(panda_entity);
@@ -85,6 +88,16 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
                 bread.alive = false;
                 pa_velocity.y_velocity = -400.f;
             } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, br_collidable, br_transform)) {
+                panda.alive = false;
+            }
+        }
+
+        for (auto obstacle_entity : obstacle_view) {
+            auto& obstacle = obstacle_view.get<Obstacle>(obstacle_entity);
+            auto& ob_co = obstacle_view.get<Collidable>(obstacle_entity);
+            auto& ob_tr = obstacle_view.get<Transform>(obstacle_entity);
+
+            if (checkObstaclePandaCollision(pa_collidable, pa_transform, ob_co, ob_tr)) {
                 panda.alive = false;
             }
         }
@@ -117,4 +130,12 @@ bool checkEnemyPandaCollisionSafe(Collidable pa_co, Transform pa_tr, Velocity pa
             pa_tr.y + pa_co.height >= br_tr.y - br_co.height - 5 &&
             pa_tr.y + pa_co.height <= br_tr.y - br_co.height + 5&&
             pa_velocity.y_velocity > 0;
+}
+
+bool checkObstaclePandaCollision(Collidable pa_co, Transform pa_tr, Collidable ob_co, Transform ob_tr) {
+    return
+            pa_tr.x - pa_co.width <= ob_tr.x + ob_co.width &&
+            pa_tr.x + pa_co.width >= ob_tr.x - ob_co.width &&
+            pa_tr.y - pa_co.height <= ob_tr.y + ob_co.height &&
+            pa_tr.y + pa_co.height >= ob_tr.y - ob_co.height;
 }
