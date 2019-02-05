@@ -3,6 +3,7 @@
 //
 
 #include <components/bread.h>
+#include <components/obstacle.h>
 #include <components/panda.h>
 #include <components/collidable.h>
 #include <components/obeys_gravity.h>
@@ -36,6 +37,7 @@ void TestScene::init_scene(Blackboard &blackboard) {
     last_placed_x = PLATFORM_START_X;
     create_panda(blackboard);
     create_bread(blackboard);
+    generate_obstacles(blackboard);
 }
 
 void TestScene::update(Blackboard& blackboard) {
@@ -134,9 +136,29 @@ void TestScene::create_bread(Blackboard &blackboard) {
     registry_.assign<ObeysGravity>(enemy_entity);
 }
 
+void TestScene::generate_obstacles(Blackboard &blackboard) {
+    obstacle_entity = registry_.create();
+    auto texture = blackboard.textureManager.get_texture(
+            (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "rock1" : "rock2");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+
+    float scale = 0.13;
+    registry_.assign<Transform>(obstacle_entity, last_placed_x + blackboard.camera.size().x, PLATFORM_START_Y - 80.f, 0.,
+                                scale, scale);
+    registry_.assign<Sprite>(obstacle_entity, texture, shader);
+    registry_.assign<Obstacle>(obstacle_entity);
+//    registry_.assign<CausesDamage>(obstacle_entity, false, true, 1);
+//    registry_.assign<Health>(obstacle_entity,1);
+//    registry_.assign<Velocity>(obstacle_entity, -BREAD_SPEED, 0.f);
+    registry_.assign<Collidable>(obstacle_entity, texture.width() * scale, texture.height() * scale);
+    registry_.assign<Interactable>(obstacle_entity);
+    registry_.assign<ObeysGravity>(obstacle_entity);
+}
+
 void TestScene::reset_scene(Blackboard &blackboard) {
     registry_.destroy(panda_entity);
     registry_.destroy(enemy_entity);
+    registry_.destroy(obstacle_entity);
     while (!platforms.empty()) {
         uint32_t platform = platforms.front();
         registry_.destroy(platform);

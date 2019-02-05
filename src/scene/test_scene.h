@@ -16,7 +16,7 @@
 
 class TestScene : public Scene {
 private:
-    uint32_t panda_entity, enemy_entity;
+    uint32_t panda_entity, enemy_entity, obstacle_entity;
     std::queue<uint32_t> platforms; // platforms are in order of x
 
     SpriteTransformSystem sprite_transform_system;
@@ -39,6 +39,7 @@ private:
 
     void create_panda(Blackboard& blackboard);
     void create_bread(Blackboard& blackboard);
+    void generate_obstacles(Blackboard& blackboard);
     void generate_platforms(Blackboard &blackboard);
     void reset_scene(Blackboard& blackboard);
     void init_scene(Blackboard &blackboard);

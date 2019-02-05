@@ -55,6 +55,8 @@ int main(int argc, char** argv) {
     blackboard.textureManager.load_texture(textures_path("grass_block_1.png"), "platform1");
     blackboard.textureManager.load_texture(textures_path("grass_block_2.png"), "platform2");
     blackboard.textureManager.load_texture(textures_path("bread.png"), "bread");
+    blackboard.textureManager.load_texture(textures_path("rock1.png"), "rock1");
+    blackboard.textureManager.load_texture(textures_path("rock2.png"), "rock2");
 
 
     // initialize scenes here
