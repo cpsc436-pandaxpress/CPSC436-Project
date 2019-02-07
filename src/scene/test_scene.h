@@ -5,6 +5,7 @@
 #pragma once
 
 #include <queue>
+#include <systems/background_render_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -19,6 +20,7 @@ private:
 
     std::queue<uint32_t> obstacles;
     uint32_t panda_entity;
+    uint32_t bg_entity1, bg_entity2;
     std::queue<uint32_t> platforms;// platforms are in order of x
     std::queue<uint32_t> floating_platforms;
     std::queue<uint32_t> enemies;
@@ -27,6 +29,7 @@ private:
     PhysicsSystem physics_system;
     PlayerMovementSystem player_movement_system;
     CollisionSystem collision_system;
+    BackgroundRenderSystem background_render_system;
 
     float last_placed_x;
 
@@ -62,4 +65,8 @@ public:
     virtual void update(Blackboard& blackboard) override;
 
     virtual void render(Blackboard& blackboard) override;
+
+    void create_background(Blackboard &blackboard);
+
+    void update_background(Blackboard &blackboard);
 };

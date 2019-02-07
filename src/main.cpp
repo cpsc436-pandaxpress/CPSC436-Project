@@ -26,10 +26,10 @@ int main(int argc, char** argv) {
 
     auto window = Window();
 
-    window.initialize("Express Panda", 800, 600);
+    window.initialize("Express Panda", 800, 450);
 
     Blackboard blackboard = {
-        Camera(1600, 1200, 0, 0),
+        Camera(1600, 900, 0, 0),
         0,
         InputManager(),
         ShaderManager(),
@@ -61,6 +61,7 @@ int main(int argc, char** argv) {
     blackboard.textureManager.load_texture(textures_path("bread.png"), "bread");
     blackboard.textureManager.load_texture(textures_path("branchspiky.png"), "branch1");
     blackboard.textureManager.load_texture(textures_path("branchspiky2.png"), "branch2");
+    blackboard.textureManager.load_texture(textures_path("background_full.jpg"), "bg");
 
 
 
