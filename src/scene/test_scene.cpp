@@ -25,7 +25,9 @@ TestScene::TestScene(Blackboard &blackboard, SceneManager &scene_manager) :
         physics_system(),
         player_movement_system(),
         collision_system(),
-        obstacles() {
+        obstacles(),
+        background_render_system(),
+        background_transform_system() {
     init_scene(blackboard);
     gl_has_errors();
 }
@@ -51,7 +53,6 @@ void TestScene::update(Blackboard &blackboard) {
     blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time,
                                    cam_position.y);
     blackboard.camera.compose();
-    update_background(blackboard);
     generate_platforms(blackboard);
     generate_obstacles(blackboard);
     generate_floating_platforms(blackboard);
@@ -72,7 +73,7 @@ void TestScene::update(Blackboard &blackboard) {
         create_bread(blackboard);
         //clean_bread(blackboard);
     }
-
+    background_transform_system.update(blackboard, registry_);
     player_movement_system.update(blackboard, registry_);
     collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
@@ -229,8 +230,6 @@ void TestScene::generate_obstacles(Blackboard &blackboard) {
 
 void TestScene::reset_scene(Blackboard &blackboard) {
     registry_.destroy(panda_entity);
-    registry_.destroy(bg_entity1);
-    registry_.destroy(bg_entity2);
     while (!platforms.empty()) {
         uint32_t platform = platforms.front();
         registry_.destroy(platform);
@@ -251,37 +250,20 @@ void TestScene::reset_scene(Blackboard &blackboard) {
         registry_.destroy(enemy);
         enemies.pop();
     }
+    registry_.destroy(bg_entity);
     init_scene(blackboard);
 }
 
 void TestScene::create_background(Blackboard &blackboard) {
-    bg_entity1 = registry_.create();
-    bg_entity2 = registry_.create();
-
     auto texture = blackboard.textureManager.get_texture("bg");
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto windowSize = blackboard.window.size();
-    auto &bg1 = registry_.assign<Background>(bg_entity1, texture, shader);
-    bg1.set_pos(0.0f, 0.0f);
-    bg1.set_rotation_rad(0.0f);
-    bg1.set_scale(windowSize.x / texture.width(),
+
+    bg_entity = registry_.create();
+    auto &bg = registry_.assign<Background>(bg_entity, texture, shader);
+    bg.set_pos1(0.0f, 0.0f);
+    bg.set_pos2(blackboard.camera.size().x, 0.0f);
+    bg.set_rotation_rad(0.0f);
+    bg.set_scale(windowSize.x / texture.width(),
                  windowSize.y / texture.height());
-    auto &bg2 = registry_.assign<Background>(bg_entity2, texture, shader);
-    bg2.set_pos(blackboard.camera.size().x, 0.0f);
-    bg2.set_rotation_rad(0.0f);
-    bg2.set_scale(windowSize.x / texture.width(),
-                  windowSize.y / texture.height());
-}
-
-void TestScene::update_background(Blackboard &blackboard) {
-    Camera &camera = blackboard.camera;
-
-    auto &bg1 = registry_.get<Background>(bg_entity1);
-    if (bg1.pos().x < (camera.position().x - camera.size().x)) {
-        bg1.set_pos(bg1.pos().x + camera.size().x * 2, bg1.pos().y);
-    }
-    auto &bg2 = registry_.get<Background>(bg_entity2);
-    if (bg2.pos().x < (camera.position().x - camera.size().x)) {
-        bg2.set_pos(bg2.pos().x + camera.size().x * 2, bg2.pos().y);
-    }
 }

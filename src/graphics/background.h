@@ -5,19 +5,13 @@
 #include "shader.h"
 #include "shader_manager.h"
 #include "texture.h"
+#include "sprite.h"
 
 class Background : public Renderable {
 private:
-    Mesh mesh_;
     Shader shader_;
     Texture texture_;
-
-    vec2 position_, pixel_scale_, scale_;
-    vec3 color_;
-    float rotation_;
-
-    static TexturedVertex vertices[4];
-    static uint16_t indices[6];
+    Sprite sp1_, sp2_;
 
 public:
     Background(Texture texture, Shader shader);
@@ -26,11 +20,17 @@ public:
 
     void draw(const mat3 &projection);
 
-    vec2 pos();
+    vec2 pos1();
 
-    void set_pos(const vec2 &pos);
+    vec2 pos2();
 
-    void set_pos(float x, float y);
+    void set_pos1(const vec2 &pos);
+
+    void set_pos1(float x, float y);
+
+    void set_pos2(const vec2 &pos);
+
+    void set_pos2(float x, float y);
 
     vec2 scale();
 
@@ -41,12 +41,4 @@ public:
     float rotation_rad();
 
     void set_rotation_rad(float theta);
-
-    vec3 color();
-
-    void set_color(const vec3 &color);
-
-    void set_color(float r, float g, float b);
-
-
 };
