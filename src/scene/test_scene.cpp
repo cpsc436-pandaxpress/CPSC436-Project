@@ -34,7 +34,7 @@ TestScene::TestScene(Blackboard &blackboard, SceneManager &scene_manager) :
 
 
 void TestScene::init_scene(Blackboard &blackboard) {
-    srand(0);
+    blackboard.randNumGenerator.init(0);
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
     last_placed_x = PLATFORM_START_X;
@@ -138,7 +138,7 @@ void TestScene::generate_floating_platforms(Blackboard &blackboard) {
     float max_x =
             blackboard.camera.position().x + blackboard.camera.size().x; // some distance off camera
     while (last_placed_x_floating < max_x) {
-        auto yOffset = rand() % 400;
+        auto yOffset = blackboard.randNumGenerator.nextInt(0, 400);
         auto texture = blackboard.textureManager.get_texture("platform_center_grass");
         float scale = 100.0f / texture.width();
 
@@ -173,7 +173,7 @@ void TestScene::create_bread(Blackboard &blackboard) {
 
     float scale = 0.5;
 
-    int next_start_x = last_bread_x + (rand() % 12) * 50;
+    float next_start_x = last_bread_x + blackboard.randNumGenerator.nextInt(50, 62);
     registry_.assign<Transform>(bread, next_start_x, BREAD_START_Y - texture.height(), 0.,
                                 scale, scale);
     registry_.assign<Sprite>(bread, texture, shader);
@@ -185,7 +185,7 @@ void TestScene::create_bread(Blackboard &blackboard) {
     registry_.assign<Interactable>(bread);
     registry_.assign<ObeysGravity>(bread);
 
-    int next_interval = rand() % 10 + 2;
+    int next_interval = blackboard.randNumGenerator.nextInt(2, 12);
     last_bread_x = next_start_x + (next_interval * 100);
     enemies.push(bread);
 }
