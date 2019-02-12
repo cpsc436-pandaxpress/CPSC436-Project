@@ -34,6 +34,8 @@ bool Window::initialize(const char* title, uint32_t width, uint32_t height) {
     gl_context_ = SDL_GL_CreateContext(sdl_window_);
 
     glViewport(0, 0, width, height);
+    width_ = width;
+    height_ = height;
 
     SDL_GL_SetSwapInterval(-1); // -1 for Vsync
 
@@ -73,4 +75,8 @@ float Window::delta_time() {
 void Window::draw(Renderable* renderable, const mat3& projection) {
     // no need to do any setup
     renderable->draw(projection);
+}
+
+vec2 Window::size() {
+    return {(float) width_, (float) height_};
 }
