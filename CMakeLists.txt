@@ -55,7 +55,12 @@ set(SOURCE_FILES
         src/components/bread.h
         src/util/random.cpp
         src/util/random.h
-        src/components/obstacle.h)
+        src/components/obstacle.h
+        src/graphics/background.cpp
+        src/systems/background_render_system.cpp
+        src/systems/background_render_system.h
+        src/systems/background_transform_system.cpp
+        src/systems/background_transform_system.h)
 
 # Create executable target
 
