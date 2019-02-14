@@ -216,7 +216,7 @@ void TestScene::generate_obstacles(Blackboard &blackboard) {
         float scale = 0.9;
         auto obstacle_entity = registry_.create();
         registry_.assign<Transform>(obstacle_entity, last_rock_x - 400.f,
-                                    PLATFORM_START_Y - 80, 0.,
+                                    PLATFORM_START_Y - 80.f, 0.,
                                     scale, scale);
         registry_.assign<Sprite>(obstacle_entity, texture, shader);
         registry_.assign<Obstacle>(obstacle_entity);
