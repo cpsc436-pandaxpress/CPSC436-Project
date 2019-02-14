@@ -91,7 +91,7 @@ void TestScene::create_panda(Blackboard &blackboard) {
 
     auto texture = blackboard.textureManager.get_texture("panda");
     auto shader = blackboard.shader_manager.get_shader("sprite");
-    float scale = 0.15f;
+    float scale = 0.3f;
     registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scale, scale);
     registry_.assign<Sprite>(panda_entity, texture, shader);
     registry_.assign<Panda>(panda_entity);
@@ -111,7 +111,7 @@ void TestScene::generate_platforms(Blackboard &blackboard) {
     while (last_placed_x < max_x) {
         auto texture = blackboard.textureManager.get_texture(
                 (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "platform1" : "platform2");
-        float scale = 50.0f / texture.width();
+        float scale = 100.0f / texture.width();
         if (platforms.size() > MAX_PLATFORMS) {//reuse
             auto platform = platforms.front();
             platforms.pop();
@@ -129,7 +129,7 @@ void TestScene::generate_platforms(Blackboard &blackboard) {
 
             platforms.push(platform);
         }
-        last_placed_x += texture.width();
+        last_placed_x += texture.width() * scale;
     }
 }
 
@@ -140,7 +140,7 @@ void TestScene::generate_floating_platforms(Blackboard &blackboard) {
     while (last_placed_x_floating < max_x) {
         auto yOffset = blackboard.randNumGenerator.nextInt(0, 400);
         auto texture = blackboard.textureManager.get_texture("platform_center_grass");
-        float scale = 100.0f / texture.width();
+        float scale = 200.0f / texture.width();
 
         if (floating_platforms.size() > MAX_PLATFORMS) {//reuse
             auto floatingPlatform = floating_platforms.front();
@@ -171,9 +171,10 @@ void TestScene::create_bread(Blackboard &blackboard) {
     auto texture = blackboard.textureManager.get_texture("bread");
     auto shader = blackboard.shader_manager.get_shader("sprite");
 
-    float scale = 0.5;
+    float scale = 1;
 
-    float next_start_x = last_bread_x + blackboard.randNumGenerator.nextInt(50, 62);
+    // Spawn bread on right half of the screen
+    float next_start_x = last_bread_x + blackboard.randNumGenerator.nextInt(0, (int) blackboard.camera.size().x / 2);
     registry_.assign<Transform>(bread, next_start_x, BREAD_START_Y - texture.height(), 0.,
                                 scale, scale);
     registry_.assign<Sprite>(bread, texture, shader);
@@ -212,10 +213,10 @@ void TestScene::generate_obstacles(Blackboard &blackboard) {
         }
 
         auto shader = blackboard.shader_manager.get_shader("sprite");
-        float scale = 0.45;
+        float scale = 0.9;
         auto obstacle_entity = registry_.create();
         registry_.assign<Transform>(obstacle_entity, last_rock_x - 400.f,
-                                    PLATFORM_START_Y - 80.f, 0.,
+                                    PLATFORM_START_Y - 80, 0.,
                                     scale, scale);
         registry_.assign<Sprite>(obstacle_entity, texture, shader);
         registry_.assign<Obstacle>(obstacle_entity);
@@ -264,6 +265,6 @@ void TestScene::create_background(Blackboard &blackboard) {
     bg.set_pos1(0.0f, 0.0f);
     bg.set_pos2(blackboard.camera.size().x, 0.0f);
     bg.set_rotation_rad(0.0f);
-    bg.set_scale(windowSize.x / texture.width(),
-                 windowSize.y / texture.height());
+    bg.set_scale(blackboard.camera.size().x / texture.width(),
+                 blackboard.camera.size().y / texture.height());
 }
