@@ -18,9 +18,11 @@
 
 #include <SDL_mixer.h>
 #include <sstream>
+#include <scene/climbing_scene.h>
 
 
 static const SceneID TEST_SCENE_ID = 0;
+static const SceneID CLIMBING_SCENE_ID = 1;
 
 int main(int argc, char** argv) {
 
@@ -69,11 +71,13 @@ int main(int argc, char** argv) {
     // initialize scenes here
 
     TestScene test_scene(blackboard, scene_manager);
+    ClimbingScene climbing_scene(blackboard, scene_manager);
 
     scene_manager.add_scene(TEST_SCENE_ID, (Scene*)(&test_scene));
+    scene_manager.add_scene(CLIMBING_SCENE_ID, (Scene*)(&climbing_scene));
 
     // set the first scene
-    scene_manager.change_scene(TEST_SCENE_ID);
+    scene_manager.change_scene(CLIMBING_SCENE_ID);
 
     //set background music
     if (SDL_Init(SDL_INIT_AUDIO) < 0)

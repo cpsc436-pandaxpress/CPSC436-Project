@@ -60,7 +60,9 @@ set(SOURCE_FILES
         src/systems/background_render_system.cpp
         src/systems/background_render_system.h
         src/systems/background_transform_system.cpp
-        src/systems/background_transform_system.h)
+        src/systems/background_transform_system.h
+        src/scene/climbing_scene.cpp
+        src/scene/climbing_scene.h)
 
 # Create executable target
 
