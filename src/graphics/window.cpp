@@ -55,8 +55,7 @@ void Window::destroy() {
 }
 
 void Window::clear() {
-//    glClearColor(1, 0.5, 0.7, 1); // hot pink for visibility
-    glClearColor(0.73,0.86,0.58, 1); // green forest
+    glClearColor(18.f / 256, 135.f / 256, 126.f / 256, 1); // same colour as the top of the background
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
