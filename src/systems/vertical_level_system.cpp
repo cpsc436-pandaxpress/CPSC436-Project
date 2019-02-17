@@ -13,7 +13,7 @@ VerticalLevelSystem::VerticalLevelSystem(): LevelSystem() {
 
 void VerticalLevelSystem::load_next_chunk() {
     std::string level_path = levels_path("");
-    int levelN = rng_.nextInt(0, 0);
+    int levelN = rng_.nextInt(0, 2);
     std::string levelFile = level_path + "vlevel_" + std::to_string(levelN) + ".csv";
     CSVReader reader(levelFile);
     std::vector<std::vector<int>> dataList = reader.getData();
@@ -28,13 +28,11 @@ void VerticalLevelSystem::load_next_chunk() {
     }
 }
 
-// y should range from (-400, 400)
-
 void VerticalLevelSystem::generate_next_chunk(Blackboard &blackboard,
                                                 entt::DefaultRegistry &registry) {
     while (!chunks_.empty()) {
         std::vector<int> col = chunks_.front();
-        float x = -400.0f;
+        float x = COL_X_OFFSET;
         for (int c:col) {
             generateEntity(c, x, last_row_placed_, blackboard, registry);
             x += CELL_WIDTH;
