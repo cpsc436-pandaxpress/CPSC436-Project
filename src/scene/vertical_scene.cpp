@@ -8,9 +8,9 @@
 #include <components/causes_damage.h>
 #include <components/velocity.h>
 #include <components/platform.h>
-#include "climbing_scene.h"
+#include "vertical_scene.h"
 
-ClimbingScene::ClimbingScene(Blackboard &blackboard, SceneManager &scene_manager) :
+VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager) :
         Scene(scene_manager),
         platforms(),
         sprite_transform_system(),
@@ -23,12 +23,10 @@ ClimbingScene::ClimbingScene(Blackboard &blackboard, SceneManager &scene_manager
 }
 
 
-void ClimbingScene::init_scene(Blackboard &blackboard) {
+void VerticalScene::init_scene(Blackboard &blackboard) {
     blackboard.randNumGenerator.init(0);
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
-    last_placed_x = PLATFORM_START_X;
-    last_placed_x_floating = PLATFORM_START_X;
 
     for (int i = 0; i < 10; i++) {
         auto platform = registry_.create();
@@ -47,7 +45,7 @@ void ClimbingScene::init_scene(Blackboard &blackboard) {
     create_panda(blackboard);
 }
 
-void ClimbingScene::create_panda(Blackboard &blackboard) {
+void VerticalScene::create_panda(Blackboard &blackboard) {
     panda_entity = registry_.create();
 
     auto texture = blackboard.textureManager.get_texture("panda");
@@ -64,7 +62,7 @@ void ClimbingScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Collidable>(panda_entity, texture.width() * scale, texture.height() * scale);
 }
 
-void ClimbingScene::update(Blackboard &blackboard) {
+void VerticalScene::update(Blackboard &blackboard) {
     vec2 cam_size = blackboard.camera.size();
     vec2 cam_position = blackboard.camera.position();
     blackboard.camera.set_position(cam_position.x,
@@ -88,16 +86,12 @@ void ClimbingScene::update(Blackboard &blackboard) {
     sprite_transform_system.update(blackboard, registry_);
 }
 
-void ClimbingScene::render(Blackboard &blackboard) {
+void VerticalScene::render(Blackboard &blackboard) {
     // update the rendering systems
     sprite_render_system.update(blackboard, registry_);
 }
 
-void ClimbingScene::generate_platforms(Blackboard &blackboard) {
-
-}
-
-void ClimbingScene::reset_scene(Blackboard &blackboard) {
+void VerticalScene::reset_scene(Blackboard &blackboard) {
     registry_.destroy(panda_entity);
     init_scene(blackboard);
 }

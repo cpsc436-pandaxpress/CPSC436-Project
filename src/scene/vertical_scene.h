@@ -2,8 +2,8 @@
 // Created by cowan on 14/02/19.
 //
 
-#ifndef PANDAEXPRESS_CLIMBING_SCENE_H
-#define PANDAEXPRESS_CLIMBING_SCENE_H
+#ifndef PANDAEXPRESS_VERTICAL_SCENE_H
+#define PANDAEXPRESS_VERTICAL_SCENE_H
 
 #include <systems/sprite_render_system.h>
 #include <systems/physics_system.h>
@@ -13,7 +13,7 @@
 #include <systems/player_movement_system.h>
 #include <systems/collision_system.h>
 
-class ClimbingScene : public Scene {
+class VerticalScene : public Scene {
 private:
 
     uint32_t panda_entity;
@@ -37,11 +37,11 @@ private:
     void init_scene(Blackboard &blackboard);
 
 public:
-    ClimbingScene(Blackboard& blackboard, SceneManager& scene_manager);
+    VerticalScene(Blackboard& blackboard, SceneManager& scene_manager);
 
     virtual void update(Blackboard& blackboard) override;
 
     virtual void render(Blackboard& blackboard) override;
 };
 
-#endif //PANDAEXPRESS_CLIMBING_SCENE_H
+#endif //PANDAEXPRESS_VERTICAL_SCENE_H
