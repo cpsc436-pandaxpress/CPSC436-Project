@@ -12,7 +12,7 @@
 
 VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager) :
         Scene(scene_manager),
-        platforms(),
+        level_system(),
         sprite_transform_system(),
         sprite_render_system(),
         physics_system(),
@@ -27,20 +27,6 @@ void VerticalScene::init_scene(Blackboard &blackboard) {
     blackboard.randNumGenerator.init(0);
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
-
-    for (int i = 0; i < 10; i++) {
-        auto platform = registry_.create();
-
-        auto texture = blackboard.textureManager.get_texture("platform1");
-        auto shader = blackboard.shader_manager.get_shader("sprite");
-        float scale = 100.0f / texture.width();
-        registry_.assign<Transform>(platform, PLATFORM_START_X, PLATFORM_START_Y - texture.height() * scale * 3 * i , 0., scale, scale);
-        registry_.assign<Sprite>(platform, texture, shader);
-        registry_.assign<Platform>(platform);
-        registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale);
-
-        platforms.push(platform);
-    }
 
     create_panda(blackboard);
 }
@@ -80,6 +66,7 @@ void VerticalScene::update(Blackboard &blackboard) {
         transform.x = cam_position.x + cam_size.x / 2 - panda_collidable.width / 2;
     }
 
+    level_system.update(blackboard, registry_);
     player_movement_system.update(blackboard, registry_);
     collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);

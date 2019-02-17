@@ -21,7 +21,7 @@ protected:
     std::queue<std::vector<int>> chunks_;
     std::queue<uint32_t> platform_entities_;
     std::queue<uint32_t> available_entities_;
-    float last_col_placed_;
+    float last_row_placed_;
 
     virtual void load_next_chunk() = 0;
 

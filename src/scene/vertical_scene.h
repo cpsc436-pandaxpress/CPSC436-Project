@@ -12,17 +12,18 @@
 #include <queue>
 #include <systems/player_movement_system.h>
 #include <systems/collision_system.h>
+#include <systems/vertical_level_system.h>
 
 class VerticalScene : public Scene {
 private:
 
     uint32_t panda_entity;
-    std::queue<uint32_t> platforms;// platforms are in order of x
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
     PhysicsSystem physics_system;
     PlayerMovementSystem player_movement_system;
     CollisionSystem collision_system;
+    VerticalLevelSystem level_system;
 
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;
