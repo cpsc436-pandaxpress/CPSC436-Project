@@ -13,7 +13,7 @@ VerticalLevelSystem::VerticalLevelSystem(): LevelSystem() {
 
 void VerticalLevelSystem::load_next_chunk() {
     std::string level_path = levels_path("");
-    int levelN = rng_.nextInt(0, 2);
+    int levelN = rng_.nextInt(0, 4);
     std::string levelFile = level_path + "vlevel_" + std::to_string(levelN) + ".csv";
     CSVReader reader(levelFile);
     std::vector<std::vector<int>> dataList = reader.getData();
