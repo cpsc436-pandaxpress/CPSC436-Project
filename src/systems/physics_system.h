@@ -9,7 +9,7 @@
 
 class PhysicsSystem : public System {
 private:
-    static constexpr float GRAVITY = 600.f;
+    static constexpr float GRAVITY = 1500.f;
 public:
 
     PhysicsSystem();

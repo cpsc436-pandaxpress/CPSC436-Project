@@ -30,7 +30,7 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
         }
 
         if (holding_jump && time_since_jump < 0.6f) {
-            gravity.gravityFactor = 0.3f;
+            gravity.gravityFactor = 0.1f;
         }
         else {
             gravity.gravityFactor = 1.5f;
