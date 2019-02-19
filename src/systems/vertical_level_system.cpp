@@ -57,7 +57,6 @@ void VerticalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &
             blackboard.camera.position().y - blackboard.camera.size().y; // some distance off camera
     if (last_row_placed_ > min_x) {
         load_next_chunk();
-        std::cout << "Loading next chunk.\n";
     }
 //    destroy_off_screen(registry, min_x); // fixme Do not uncomment, not working right now
     generate_next_chunk(blackboard, registry);
