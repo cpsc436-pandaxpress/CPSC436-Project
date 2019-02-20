@@ -1,18 +1,20 @@
 #include "background.h"
 #include "../util/gl_utils.h"
 
-Background::Background(Texture texture, Shader shader) :
+Background::Background(Texture texture, Shader shader, int z) :
         shader_(shader),
         texture_(texture),
         sp1_(Sprite(texture, shader)),
-        sp2_(Sprite(texture, shader)) {
+        sp2_(Sprite(texture, shader)),
+        z(z) {
 }
 
 Background::Background(const Background &other) :
         shader_(other.shader_),
         texture_(other.texture_),
         sp1_(other.sp1_),
-        sp2_(other.sp2_) {}
+        sp2_(other.sp2_),
+        z(other.z) {}
 
 
 void Background::draw(const mat3 &projection) {
@@ -65,4 +67,8 @@ float Background::rotation_rad() {
 void Background::set_rotation_rad(float theta) {
     sp1_.set_rotation_rad(theta);
     sp2_.set_rotation_rad(theta);
+}
+
+int Background::z_pos(){
+    return z;
 }

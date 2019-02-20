@@ -21,7 +21,7 @@ private:
 
     std::queue<uint32_t> obstacles;
     uint32_t panda_entity;
-    uint32_t bg_entity;
+    std::vector<uint32_t> bg_entities;
     std::queue<uint32_t> platforms;// platforms are in order of x
     std::queue<uint32_t> floating_platforms;
     std::queue<uint32_t> enemies;
