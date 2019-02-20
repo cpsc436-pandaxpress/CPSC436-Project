@@ -41,8 +41,9 @@ private:
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);
-    void reset_scene(Blackboard& blackboard, entt::DefaultRegistry &registry);
+    void reset_scene(Blackboard& blackboard);
     void init_scene(Blackboard &blackboard);
+    void update_panda(Blackboard& blackboard);
 
 public:
     HorizontalScene(Blackboard &blackboard,
