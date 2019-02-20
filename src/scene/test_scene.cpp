@@ -15,6 +15,7 @@
 #include <graphics/background.h>
 #include "test_scene.h"
 #include "components/transform.h"
+#include <algorithm>
 
 TestScene::TestScene(Blackboard &blackboard, SceneManager &scene_manager) :
         Scene(scene_manager),
@@ -48,15 +49,38 @@ void TestScene::init_scene(Blackboard &blackboard) {
 }
 
 void TestScene::update(Blackboard &blackboard) {
-    vec2 cam_size = blackboard.camera.size();
-    vec2 cam_position = blackboard.camera.position();
-    blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time,
-                                   cam_position.y);
-    blackboard.camera.compose();
     generate_platforms(blackboard);
     generate_obstacles(blackboard);
     generate_floating_platforms(blackboard);
 
+    update_camera(blackboard);
+    update_panda(blackboard);
+
+    if (blackboard.camera.position().x >= last_bread_x) {
+        create_bread(blackboard);
+    }
+
+    background_transform_system.update(blackboard, registry_);
+    player_movement_system.update(blackboard, registry_);
+    collision_system.update(blackboard, registry_);
+    physics_system.update(blackboard, registry_);
+    sprite_transform_system.update(blackboard, registry_);
+}
+
+void TestScene::update_camera(Blackboard &blackboard) {
+    vec2 cam_position = blackboard.camera.position();
+
+    auto &panda_transform = registry_.get<Transform>(panda_entity);
+    float y_offset = std::min(0.f, panda_transform.y + MAX_CAMERA_Y_DIFF);
+
+    blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time,
+                                   y_offset);
+    blackboard.camera.compose();
+}
+
+void TestScene::update_panda(Blackboard &blackboard) {
+    vec2 cam_position = blackboard.camera.position();
+    vec2 cam_size = blackboard.camera.size();
 
     auto &transform = registry_.get<Transform>(panda_entity);
     auto &panda = registry_.get<Panda>(panda_entity);
@@ -68,16 +92,6 @@ void TestScene::update(Blackboard &blackboard) {
     } else if (transform.x + panda_collidable.width / 2 > cam_position.x + cam_size.x / 2) {
         transform.x = cam_position.x + cam_size.x / 2 - panda_collidable.width / 2;
     }
-
-    if (cam_position.x >= last_bread_x) {
-        create_bread(blackboard);
-        //clean_bread(blackboard);
-    }
-    background_transform_system.update(blackboard, registry_);
-    player_movement_system.update(blackboard, registry_);
-    collision_system.update(blackboard, registry_);
-    physics_system.update(blackboard, registry_);
-    sprite_transform_system.update(blackboard, registry_);
 }
 
 void TestScene::render(Blackboard &blackboard) {
@@ -190,17 +204,6 @@ void TestScene::create_bread(Blackboard &blackboard) {
     int next_interval = blackboard.randNumGenerator.nextInt(2, 12);
     last_bread_x = next_start_x + (next_interval * 100);
     enemies.push(bread);
-}
-
-void TestScene::clean_bread(Blackboard &blackboard) {
-    while (!enemies.empty()) {
-        uint32_t enemy = enemies.front();
-        auto &transform = registry_.get<Transform>(enemy);
-        if (transform.x < -700 || transform.y > 500) {
-            registry_.destroy(enemy);
-            enemies.pop();
-        }
-    }
 }
 
 void TestScene::generate_obstacles(Blackboard &blackboard) {
