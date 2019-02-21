@@ -30,6 +30,9 @@ void HorizontalScene::update(Blackboard &blackboard) {
     blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time,
                                    cam_position.y);
     blackboard.camera.compose();
+
+    update_panda(blackboard);
+
     level_system.update(blackboard, registry_);
     background_transform_system.update(blackboard, registry_);
     player_movement_system.update(blackboard, registry_);
@@ -38,13 +41,30 @@ void HorizontalScene::update(Blackboard &blackboard) {
     sprite_transform_system.update(blackboard, registry_);
 }
 
+void HorizontalScene::update_panda(Blackboard &blackboard) {
+    vec2 cam_position = blackboard.camera.position();
+    vec2 cam_size = blackboard.camera.size();
+
+    auto &transform = registry_.get<Transform>(panda_entity);
+    auto &panda = registry_.get<Panda>(panda_entity);
+    auto &panda_collidable = registry_.get<Collidable>(panda_entity);
+
+    if (transform.x + panda_collidable.width < cam_position.x - cam_size.x / 2 ||
+        transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || !panda.alive) {
+        reset_scene(blackboard);
+    } else if (transform.x + panda_collidable.width / 2 > cam_position.x + cam_size.x / 2) {
+        transform.x = cam_position.x + cam_size.x / 2 - panda_collidable.width / 2;
+    }
+}
+
 void HorizontalScene::render(Blackboard &blackboard) {
     background_render_system.update(blackboard, registry_); // render background first
     sprite_render_system.update(blackboard, registry_);
 }
 
-void HorizontalScene::reset_scene(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    level_system.destroy_entities(registry);
+void HorizontalScene::reset_scene(Blackboard &blackboard) {
+    level_system.destroy_entities(registry_);
+    registry_.destroy(panda_entity);
     init_scene(blackboard);
 }
 
@@ -86,3 +106,5 @@ void HorizontalScene::create_background(Blackboard &blackboard) {
     bg.set_scale(blackboard.camera.size().x / texture.width(),
                  blackboard.camera.size().y / texture.height());
 }
+
+
