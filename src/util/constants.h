@@ -6,8 +6,10 @@
 #define PANDAEXPRESS_CONSTANTS_H
 
 #include "project_path.hpp"
-#define data_path PROJECT_SOURCE_DIR "./data"
+#define data_path PROJECT_SOURCE_DIR "data"
 #define shaders_path(name) data_path "/shaders/" name
 #define textures_path(name) data_path "/textures/" name
+#define audio_path(name) data_path "/audio/" name
+#define levels_path(name) data_path "/levels/" name
 
 #endif //PANDAEXPRESS_CONSTANTS_H

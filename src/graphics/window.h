@@ -15,6 +15,7 @@ private:
     SDL_Window* sdl_window_;
     SDL_GLContext gl_context_;
     uint64_t last_time_, recent_time_;
+    uint32_t width_, height_;
     float delta_time_ = 0;
 
 public:
@@ -37,6 +38,8 @@ public:
     // returns the time elapsed between the last 2 display() calls, in seconds
     float delta_time();
 
+    // returns the size of the window
+    vec2 size();
 
     void draw(Renderable* renderable, const mat3& projection) override;
 

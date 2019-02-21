@@ -8,19 +8,19 @@
 
 TexturedVertex Sprite::vertices[4] = {
         TexturedVertex {
-                { -1, 1, -0.01f },
+                { -0.5f, 0.5f, -0.01f },
                 { 0.f, 1.f }
         },
         TexturedVertex {
-                { 1, 1, -0.01f },
+                { 0.5f, 0.5f, -0.01f },
                 { 1.f, 1.f }
         },
         TexturedVertex {
-                { 1, -1, -0.01f },
+                { 0.5f, -0.5f, -0.01f },
                 { 1.f, 0.f }
         },
         TexturedVertex {
-                { -1, -1, -0.01f },
+                { -0.5f, -0.5f, -0.01f },
                 { 0.f, 0.f }
         }
 };

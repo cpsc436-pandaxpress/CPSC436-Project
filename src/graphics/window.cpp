@@ -34,6 +34,8 @@ bool Window::initialize(const char* title, uint32_t width, uint32_t height) {
     gl_context_ = SDL_GL_CreateContext(sdl_window_);
 
     glViewport(0, 0, width, height);
+    width_ = width;
+    height_ = height;
 
     SDL_GL_SetSwapInterval(-1); // -1 for Vsync
 
@@ -53,8 +55,7 @@ void Window::destroy() {
 }
 
 void Window::clear() {
-//    glClearColor(1, 0.5, 0.7, 1); // hot pink for visibility
-    glClearColor(0.73,0.86,0.58, 1); // green forest
+    glClearColor(19.f / 256.f, 136.f / 256.f, 126.f / 256.f, 1); // same colour as the top of the background
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
@@ -73,4 +74,8 @@ float Window::delta_time() {
 void Window::draw(Renderable* renderable, const mat3& projection) {
     // no need to do any setup
     renderable->draw(projection);
+}
+
+vec2 Window::size() {
+    return {(float) width_, (float) height_};
 }

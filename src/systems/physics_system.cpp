@@ -35,7 +35,7 @@ void PhysicsSystem::applyGravity(Blackboard& blackboard, entt::DefaultRegistry& 
         auto& velocity = view.get<Velocity>(entity);
         auto& gravity  = view.get<ObeysGravity>(entity);
         if (! walkable.grounded) {
-            velocity.y_velocity += gravity.gravityConstant * blackboard.delta_time;
+            velocity.y_velocity += gravity.gravityFactor * blackboard.delta_time;
         } else{
             velocity.y_velocity=0.f;
         }
@@ -52,7 +52,7 @@ void PhysicsSystem::applyGravity(Blackboard& blackboard, entt::DefaultRegistry& 
         auto& velocity = viewNonWalkable.get<Velocity>(entity);
         auto& gravity  = viewNonWalkable.get<ObeysGravity>(entity);
 
-        velocity.y_velocity += gravity.gravityConstant * blackboard.delta_time;
+        velocity.y_velocity += gravity.gravityFactor * GRAVITY * blackboard.delta_time;
     }
 
 }

@@ -55,7 +55,23 @@ set(SOURCE_FILES
         src/components/bread.h
         src/util/random.cpp
         src/util/random.h
-        src/scene/main_menu_scene.h src/scene/main_menu_scene.cpp)
+        src/scene/main_menu_scene.h
+        src/scene/main_menu_scene.cpp
+        src/components/obstacle.h
+        src/graphics/background.cpp
+        src/systems/background_render_system.cpp
+        src/systems/background_render_system.h
+        src/systems/background_transform_system.cpp
+        src/systems/background_transform_system.h
+        src/util/csv_reader.cpp
+        src/util/csv_reader.h
+        src/systems/level_system.cpp
+        src/systems/level_system.h
+        src/scene/horizontal_scene.cpp
+        src/scene/horizontal_scene.h
+        src/systems/horizontal_level_system.h
+        src/systems/horizontal_level_system.cpp
+)
 
 # Create executable target
 
@@ -138,7 +154,20 @@ endif()
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${GLEW_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS})
 
-target_link_libraries(${PROJECT_NAME} PUBLIC ${GLEW_LIBRARIES} ${SDL2_LIBRARIES} ${SDL2MIXER_LIBRARIES})
+if($ENV{USER} STREQUAL "Avery")
+    target_link_libraries(${PROJECT_NAME} PUBLIC "/usr/local/lib/libGLEW.dylib"
+            "/usr/local/lib/libSDL2.dylib"
+            "/usr/local/lib/libSDL2_mixer.dylib"
+            "-framework Foundation"
+            "-framework Cocoa"
+            "-framework CoreAudio"
+            "-framework AVFoundation"
+            "-framework CoreGraphics"
+            "-framework MediaPlayer"
+            "-framework QuartzCore")
+else()
+    target_link_libraries(${PROJECT_NAME} PUBLIC ${GLEW_LIBRARIES} ${SDL2_LIBRARIES} ${SDL2MIXER_LIBRARIES})
+endif()
 
 # Needed to add this
 if(IS_OS_LINUX)
