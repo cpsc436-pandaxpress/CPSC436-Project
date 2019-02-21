@@ -29,7 +29,7 @@ private:
     const float PANDA_START_Y = -200.f;
     const float MAX_CAMERA_Y_DIFF = 200.f;
 
-    uint32_t bg_entity;
+    std::vector<uint32_t> bg_entities;
     uint32_t panda_entity;
     HorizontalLevelSystem level_system;
     SpriteTransformSystem sprite_transform_system;

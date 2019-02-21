@@ -72,6 +72,10 @@ void HorizontalScene::render(Blackboard &blackboard) {
 void HorizontalScene::reset_scene(Blackboard &blackboard) {
     level_system.destroy_entities(registry_);
     registry_.destroy(panda_entity);
+    for (uint32_t e: bg_entities) {
+        registry_.destroy(e);
+    }
+    bg_entities.clear();
     init_scene(blackboard);
 }
 
@@ -102,16 +106,27 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
 }
 
 void HorizontalScene::create_background(Blackboard &blackboard) {
-    auto texture = blackboard.textureManager.get_texture("bg");
+    std::vector<Texture> textures;
+    textures.reserve(4);
+    // This order matters for rendering
+    textures.push_back(blackboard.textureManager.get_texture("bg_top"));
+    textures.push_back(blackboard.textureManager.get_texture("bg_front"));
+    textures.push_back(blackboard.textureManager.get_texture("bg_middle"));
+    textures.push_back(blackboard.textureManager.get_texture("bg_back"));
+    // end order
     auto shader = blackboard.shader_manager.get_shader("sprite");
-
-    bg_entity = registry_.create();
-    auto &bg = registry_.assign<Background>(bg_entity, texture, shader);
-    bg.set_pos1(0.0f, 0.0f);
-    bg.set_pos2(blackboard.camera.size().x, 0.0f);
-    bg.set_rotation_rad(0.0f);
-    bg.set_scale(blackboard.camera.size().x / texture.width(),
-                 blackboard.camera.size().y / texture.height());
+    int i = 0;
+    for (Texture t: textures) {
+        auto bg_entity = registry_.create();
+        auto &bg = registry_.assign<Background>(bg_entity, t, shader, i);
+        bg.set_pos1(0.0f, 0.0f);
+        bg.set_pos2(blackboard.camera.size().x, 0.0f);
+        bg.set_rotation_rad(0.0f);
+        bg.set_scale(blackboard.camera.size().x / t.width(),
+                     blackboard.camera.size().y / t.height());
+        bg_entities.push_back(bg_entity);
+        i++;
+    }
 }
 
 

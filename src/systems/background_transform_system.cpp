@@ -14,8 +14,11 @@ void BackgroundTransformSystem::update(Blackboard &blackboard, entt::DefaultRegi
     Camera &camera = blackboard.camera;
     for (auto entity: viewBg) {
         //get the background
-        auto& background = viewBg.get(entity);
+        auto &background = viewBg.get(entity);
         // move the background
+        float displacement = background.z_pos() * LAYER_SPEED * blackboard.delta_time;
+        background.set_pos1(background.pos1().x + displacement, background.pos1().y);
+        background.set_pos2(background.pos2().x + displacement, background.pos2().y);
         if (background.pos1().x < (camera.position().x - camera.size().x)) {
             background.set_pos1(background.pos1().x + camera.size().x * 2, background.pos1().y);
         }
