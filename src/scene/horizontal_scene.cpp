@@ -26,11 +26,7 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
 }
 
 void HorizontalScene::update(Blackboard &blackboard) {
-    vec2 cam_position = blackboard.camera.position();
-    blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time,
-                                   cam_position.y);
-    blackboard.camera.compose();
-
+    update_camera(blackboard);
     update_panda(blackboard);
 
     level_system.update(blackboard, registry_);
@@ -55,6 +51,17 @@ void HorizontalScene::update_panda(Blackboard &blackboard) {
     } else if (transform.x + panda_collidable.width / 2 > cam_position.x + cam_size.x / 2) {
         transform.x = cam_position.x + cam_size.x / 2 - panda_collidable.width / 2;
     }
+}
+
+void HorizontalScene::update_camera(Blackboard &blackboard) {
+    vec2 cam_position = blackboard.camera.position();
+
+    auto &panda_transform = registry_.get<Transform>(panda_entity);
+    float y_offset = std::min(0.f, panda_transform.y + MAX_CAMERA_Y_DIFF);
+
+    blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time,
+                                   y_offset);
+    blackboard.camera.compose();
 }
 
 void HorizontalScene::render(Blackboard &blackboard) {
