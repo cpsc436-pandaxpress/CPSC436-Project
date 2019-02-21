@@ -18,6 +18,9 @@
 
 #include <SDL_mixer.h>
 #include <sstream>
+#include <util/csv_reader.h>
+#include <iostream>
+#include <scene/horizontal_scene.h>
 
 
 static const SceneID TEST_SCENE_ID = 0;
@@ -68,7 +71,7 @@ int main(int argc, char** argv) {
 
     // initialize scenes here
 
-    TestScene test_scene(blackboard, scene_manager);
+    HorizontalScene test_scene(blackboard, scene_manager);
 
     scene_manager.add_scene(TEST_SCENE_ID, (Scene*)(&test_scene));
 
