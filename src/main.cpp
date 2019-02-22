@@ -12,18 +12,19 @@
 #include "graphics/sprite.h"
 #include "graphics/window.h"
 #include "scene/scene_manager.h"
-#include "scene/test_scene.h"
 #include "util/blackboard.h"
 #include "util/random.h"
 
 #include <SDL_mixer.h>
 #include <sstream>
+#include <scene/vertical_scene.h>
 #include <util/csv_reader.h>
 #include <iostream>
 #include <scene/horizontal_scene.h>
 
 
-static const SceneID TEST_SCENE_ID = 0;
+static const SceneID HORIZONTAL_SCENE_ID = 0;
+static const SceneID VERTICAL_SCENE_ID = 1;
 
 int main(int argc, char** argv) {
 
@@ -76,13 +77,14 @@ int main(int argc, char** argv) {
 
 
     // initialize scenes here
+    HorizontalScene horizontal_scene(blackboard, scene_manager);
+    VerticalScene vertical_scene(blackboard, scene_manager);
 
-    HorizontalScene test_scene(blackboard, scene_manager);
-
-    scene_manager.add_scene(TEST_SCENE_ID, (Scene*)(&test_scene));
+    scene_manager.add_scene(HORIZONTAL_SCENE_ID, (Scene*)(&horizontal_scene));
+    scene_manager.add_scene(VERTICAL_SCENE_ID, (Scene*)(&vertical_scene));
 
     // set the first scene
-    scene_manager.change_scene(TEST_SCENE_ID);
+    scene_manager.change_scene(HORIZONTAL_SCENE_ID);
 
     //set background music
     if (SDL_Init(SDL_INIT_AUDIO) < 0)
