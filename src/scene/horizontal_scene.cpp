@@ -8,6 +8,7 @@
 #include <components/interactable.h>
 #include <components/causes_damage.h>
 #include <components/velocity.h>
+#include <components/tutorial.h>
 #include "horizontal_scene.h"
 
 HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_manager) :
@@ -29,6 +30,18 @@ void HorizontalScene::update(Blackboard &blackboard) {
     update_camera(blackboard);
     update_panda(blackboard);
 
+    auto &tutorial_trans = registry_.get<Transform>(tutorial2_entity);
+    auto texture2 =  blackboard.textureManager.get_texture("tutorial_bread");
+
+    if (time_elapsed <= tutorial_length){
+        update_tutorial(blackboard);
+    }
+    if (tutorial_trans.x + 100.f < blackboard.camera.position().x - blackboard.camera.size().x / 2.0 ){
+        float scaleY = 0.25;
+        float scaleX = 0.25;
+        auto &tutorial_trans = registry_.replace<Transform>(tutorial_entity, -1500.f, -200.f, 0.f, scaleX, scaleY);
+        auto &tutorial2_trans = registry_.replace<Transform>(tutorial2_entity, -1500.f,  -200.f, 0.f, scaleX, scaleY);
+    }
     level_system.update(blackboard, registry_);
     background_transform_system.update(blackboard, registry_);
     player_movement_system.update(blackboard, registry_);
@@ -64,6 +77,26 @@ void HorizontalScene::update_camera(Blackboard &blackboard) {
     blackboard.camera.compose();
 }
 
+void HorizontalScene::update_tutorial(Blackboard &blackboard) {
+    vec2 cam_position = blackboard.camera.position();
+    float scaleY = 0.25;
+    float scaleX = 0.25;
+    auto texture =  blackboard.textureManager.get_texture("tutorial_bread");
+
+    if(time_elapsed >= tutorial_length){
+        auto &tutorial_vel = registry_.replace<Velocity>(tutorial_entity, 0.f, 0.f);
+        auto &tutorial_vel2 = registry_.replace<Velocity>(tutorial2_entity, 0.f, 0.f);//
+        time_elapsed += tutorial_length;
+    } else{
+        float x = cam_position.x + CAMERA_SPEED * blackboard.delta_time;
+        auto &tutorial_trans = registry_.replace<Transform>(tutorial_entity, x, -200.f, 0.f, scaleX, scaleY);
+        auto &tutorial2_trans = registry_.replace<Transform>(tutorial2_entity, x + 0.5f*texture.width(),  -200.f, 0.f, scaleX, scaleY);
+
+        time_elapsed += 1;
+
+    }
+
+}
 void HorizontalScene::render(Blackboard &blackboard) {
     background_render_system.update(blackboard, registry_); // render background first
     sprite_render_system.update(blackboard, registry_);
@@ -85,6 +118,9 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
     blackboard.camera.compose();
     create_background(blackboard);
     create_panda(blackboard);
+    if (!tutorial_entity && (time_elapsed < tutorial_length)) {
+        create_tutorial(blackboard);
+    }
 }
 
 void HorizontalScene::create_panda(Blackboard &blackboard) {
@@ -128,5 +164,33 @@ void HorizontalScene::create_background(Blackboard &blackboard) {
         i++;
     }
 }
+void HorizontalScene::create_tutorial(Blackboard &blackboard) {
+    tutorial_entity = registry_.create();
+    tutorial2_entity = registry_.create();
+    printf("%s, \n", "create_tutorial");
+
+    auto texture =  blackboard.textureManager.get_texture("tutorial");
+    auto texture2 =  blackboard.textureManager.get_texture("tutorial_bread");
+
+    vec2 cam_position = blackboard.camera.position();
+
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+
+    float scaleY = 0.25;
+    float scaleX = 0.25;
+    registry_.assign<Sprite>(tutorial_entity, texture, shader);
+    registry_.assign<Tutorial>(tutorial_entity);
+    registry_.assign<Transform>(tutorial_entity, cam_position.x, -200.f, 0., scaleX, scaleY);
+    registry_.assign<Velocity>(tutorial_entity, CAMERA_SPEED, 0.f);
+
+    registry_.assign<Sprite>(tutorial2_entity, texture2, shader);
+    registry_.assign<Tutorial>(tutorial2_entity);
+    registry_.assign<Transform>(tutorial2_entity, cam_position.x + 0.5*texture2.width(), -200.f, 0., scaleX, scaleY);
+    registry_.assign<Velocity>(tutorial2_entity, CAMERA_SPEED, 0.f);
+
+}
+
+
+
 
 
