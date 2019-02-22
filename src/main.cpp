@@ -89,7 +89,6 @@ int main(int argc, char** argv) {
     main_menu.add_item(blackboard, "config_text",  MAIN_MENU_SCENE_ID);
     scene_manager.add_scene(MAIN_MENU_SCENE_ID, (Scene*)(&main_menu));
 
-
     HorizontalScene test_scene(blackboard, scene_manager);
 
     scene_manager.add_scene(PLAY_SCENE_ID, (Scene*)(&test_scene));
@@ -113,7 +112,7 @@ int main(int argc, char** argv) {
     m_background_music = Mix_LoadMUS(audio_path("PE2.ogg"));
 
 
-    Mix_PlayMusic(m_background_music, -1);
+    //Mix_PlayMusic(m_background_music, -1);
 
     bool quit = false;
     while (!quit) {

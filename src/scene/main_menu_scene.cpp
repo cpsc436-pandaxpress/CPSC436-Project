@@ -4,7 +4,7 @@
 
 #include "main_menu_scene.h"
 
-static const int BUTTON_WIDTH = 160;
+static const int BUTTON_WIDTH = 320;
 static const int BUTTON_HEIGHT = 100;
 static const int BUTTON_PADDING = 40;
 
@@ -26,9 +26,8 @@ MainMenuScene::MainMenuScene(Blackboard& blackboard, SceneManager& scene_manager
 void MainMenuScene::update(Blackboard& blackboard) {
     //set splash alignment
     auto cam_size = blackboard.camera.size();
-    //splash_sprite_.set_size((int)cam_size.x, (int)cam_size.y);
-    //splash_sprite_.set_size(800, 600);
-    //splash_sprite_.set_pos(cam_size.x / 2, cam_size.y / 2);
+    auto cam_pos = blackboard.camera.position();
+    splash_sprite_.set_size((int)cam_size.x, (int)cam_size.y);
     splash_sprite_.set_pos(0, 0);
 
     //set button alignment
@@ -42,17 +41,23 @@ void MainMenuScene::update(Blackboard& blackboard) {
         selected_button_ = 0;
     }
 
-    if (blackboard.input_manager.key_pressed(SDL_SCANCODE_UP)) {
-        selected_button_ --;
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_UP)) {
+        if (selected_button_ == 0) {
+            selected_button_ = count - 1;
+        }
+        else {
+            selected_button_--;
+        }
     }
-    if (blackboard.input_manager.key_pressed(SDL_SCANCODE_DOWN)) {
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_DOWN)) {
         selected_button_ ++;
+        selected_button_ %= count;
     }
-    selected_button_ %= count;
 
 
-    int top_center_y = (int)(cam_size.y * 3 / 4) - (count * BUTTON_HEIGHT + (count-1) * BUTTON_PADDING) / 2;
-    int center_x = (int)(cam_size.x / 2);
+
+    int top_center_y = 0; //(int)(cam_size.y * 3 / 4) - (count * BUTTON_HEIGHT + (count-1) * BUTTON_PADDING) / 2;
+    int center_x =  0; //(int)(cam_size.x / 2);
 
     for (auto i = 0; i < count; i++) {
         if (i == selected_button_) {
@@ -65,11 +70,13 @@ void MainMenuScene::update(Blackboard& blackboard) {
         }
 
         button_sprites_[i].set_size(BUTTON_WIDTH, BUTTON_HEIGHT);
+        button_bg_sprites_[i].set_size(BUTTON_WIDTH, BUTTON_HEIGHT);
         auto vertical_offset = (BUTTON_HEIGHT + BUTTON_PADDING) * i;
         button_sprites_[i].set_pos(center_x, top_center_y + vertical_offset);
+        button_bg_sprites_[i].set_pos(center_x, top_center_y + vertical_offset);
     }
 
-    if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RETURN)) {
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN)) {
         change_scene(button_targets_[selected_button_]);
     }
 
@@ -84,7 +91,7 @@ void MainMenuScene::render(Blackboard& blackboard) {
     splash_sprite_.draw(projection);
 
     for (auto i = 0; i < button_sprites_.size(); i++) {
-        button_bg_sprites_[i].draw(projection);
+        //button_bg_sprites_[i].draw(projection);
         button_sprites_[i].draw(projection);
     }
 }
