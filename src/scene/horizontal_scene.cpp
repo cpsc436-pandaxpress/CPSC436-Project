@@ -145,7 +145,6 @@ void HorizontalScene::create_background(Blackboard &blackboard) {
 void HorizontalScene::create_tutorial(Blackboard &blackboard) {
     tutorial_entity = registry_.create();
     tutorial2_entity = registry_.create();
-    printf("%s, \n", "create_tutorial");
 
     auto texture =  blackboard.textureManager.get_texture("tutorial");
     auto texture2 =  blackboard.textureManager.get_texture("tutorial_bread");
