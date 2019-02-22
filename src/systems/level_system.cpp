@@ -103,7 +103,7 @@ void LevelSystem::generateProjectile(float x, float y, Blackboard &blackboard, e
     registry.assign<Spit>(projectile);
     registry.assign<CausesDamage>(projectile, false, true, 1);
     registry.assign<Health>(projectile,1);
-    registry.assign<Velocity>(projectile, -100.f, 10.f);
+    registry.assign<Velocity>(projectile, PROJECTILE_SPEED_X, PROJECTILE_SPEED_Y);
     registry.assign<Interactable>(projectile);
     registry.assign<Collidable>(projectile, texture.width() * scale,
                                 texture.height() * scale);

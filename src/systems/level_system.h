@@ -31,6 +31,8 @@ protected:
     std::queue<uint32_t> available_entities_;
     float last_col_placed_;
     const float BREAD_SPEED = 50.f;
+    const float PROJECTILE_SPEED_X = -250.f;
+    const float PROJECTILE_SPEED_Y = 10.f;
 
     virtual void load_next_chunk() = 0;
 

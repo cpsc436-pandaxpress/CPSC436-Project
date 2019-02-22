@@ -14,7 +14,7 @@ HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem() {
 
 void HorizontalLevelSystem::load_next_chunk() {
     std::string level_path = levels_path("");
-    int levelN = rng_.nextInt(0, 2);
+    int levelN = rng_.nextInt(0, 8);
     std::string levelFile = level_path + "level_" + std::to_string(levelN) + ".csv";
     CSVReader reader(levelFile);
     std::vector<std::vector<int>> dataList = reader.getData();
