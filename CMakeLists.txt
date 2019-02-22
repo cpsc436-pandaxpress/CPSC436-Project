@@ -69,7 +69,7 @@ set(SOURCE_FILES
         src/scene/horizontal_scene.h
         src/systems/horizontal_level_system.h
         src/systems/horizontal_level_system.cpp
-)
+        src/components/ghost.h)
 
 # Create executable target
 

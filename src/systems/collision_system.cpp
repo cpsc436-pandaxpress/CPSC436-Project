@@ -12,6 +12,7 @@
 #include "components/panda.h"
 #include "components/transform.h"
 #include "components/bread.h"
+#include "components/ghost.h"
 #include "components/obstacle.h"
 using namespace std;
 
@@ -66,6 +67,7 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
     // TODO: generalize this to use the causesDamage component
     auto pandas_view = registry.view<Panda, Transform, Interactable, Collidable, Velocity>();
     auto bread_view = registry.view<Bread, Transform, Interactable, Collidable>();
+    auto ghost_view = registry.view<Ghost, Transform, Interactable, Collidable>();
     auto obstacle_view = registry.view<Obstacle, Transform, Collidable>();
 
     for (auto panda_entity : pandas_view) {
@@ -88,6 +90,18 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
                 bread.alive = false;
                 pa_velocity.y_velocity = -400.f;
             } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, br_collidable, br_transform)) {
+                panda.alive = false;
+            }
+        }
+
+        for (auto enemy_entity : ghost_view) {
+            auto& ghost = ghost_view.get<Ghost>(enemy_entity);
+            auto& gh_collidable = ghost_view.get<Collidable>(enemy_entity);
+            auto& gh_transform = ghost_view.get<Transform>(enemy_entity);
+
+            if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, gh_collidable, gh_transform)) {
+                panda.alive = false;
+            } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, gh_collidable, gh_transform)) {
                 panda.alive = false;
             }
         }
