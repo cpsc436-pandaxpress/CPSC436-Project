@@ -112,7 +112,7 @@ int main(int argc, char** argv) {
     m_background_music = Mix_LoadMUS(audio_path("PE2.ogg"));
 
 
-    //Mix_PlayMusic(m_background_music, -1);
+    Mix_PlayMusic(m_background_music, -1);
 
     bool quit = false;
     while (!quit) {

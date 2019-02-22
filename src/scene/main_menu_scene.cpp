@@ -26,7 +26,6 @@ MainMenuScene::MainMenuScene(Blackboard& blackboard, SceneManager& scene_manager
 void MainMenuScene::update(Blackboard& blackboard) {
     //set splash alignment
     auto cam_size = blackboard.camera.size();
-    auto cam_pos = blackboard.camera.position();
     splash_sprite_.set_size((int)cam_size.x, (int)cam_size.y);
     splash_sprite_.set_pos(0, 0);
 
