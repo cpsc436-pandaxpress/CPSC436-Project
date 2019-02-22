@@ -27,6 +27,7 @@ private:
     const float CAMERA_SPEED = 150.f;
     const float PANDA_START_X = -10.f;
     const float PANDA_START_Y = -200.f;
+    const float MAX_CAMERA_Y_DIFF = 200.f;
 
     std::vector<uint32_t> bg_entities;
     uint32_t panda_entity;
@@ -44,6 +45,7 @@ private:
     void reset_scene(Blackboard& blackboard);
     void init_scene(Blackboard &blackboard);
     void update_panda(Blackboard& blackboard);
+    void update_camera(Blackboard& blackboard);
 
 public:
     HorizontalScene(Blackboard &blackboard,
