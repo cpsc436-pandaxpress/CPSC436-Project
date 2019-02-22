@@ -30,6 +30,24 @@ void LevelSystem::generateEntity(int value, float x, float y,
             platform_entities_.push(platform);
         }
             break;
+        case 3: {
+            auto texture = blackboard.textureManager.get_texture("bread");
+            auto shader = blackboard.shader_manager.get_shader("sprite");
+            auto scale = static_cast<float>(CELL_WIDTH / texture.width()/2);
+            auto bread = createEntity(registry);
+            registry.assign<Transform>(bread, x, y + 25, 0., scale,
+                                       scale);
+            registry.assign<Sprite>(bread, texture, shader);
+            registry.assign<Bread>(bread);
+            registry.assign<CausesDamage>(bread, false, true, 1);
+            registry.assign<Health>(bread,1);
+            registry.assign<Velocity>(bread, -BREAD_SPEED, 0.f);
+            registry.assign<Interactable>(bread);
+            //registry.assign<ObeysGravity>(bread);
+            platform_entities_.push(bread);
+        }
+
+            break;
         default:
             break;
     }

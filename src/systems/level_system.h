@@ -11,6 +11,12 @@
 #include <components/transform.h>
 #include <components/collidable.h>
 #include <components/platform.h>
+#include <components/bread.h>
+#include <components/causes_damage.h>
+#include <components/health.h>
+#include <components/velocity.h>
+#include <components/interactable.h>
+#include <components/obeys_gravity.h>
 #include "util/random.h"
 #include "system.h"
 #include <queue>
@@ -22,6 +28,7 @@ protected:
     std::queue<uint32_t> platform_entities_;
     std::queue<uint32_t> available_entities_;
     float last_col_placed_;
+    const float BREAD_SPEED = 50.f;
 
     virtual void load_next_chunk() = 0;
 
