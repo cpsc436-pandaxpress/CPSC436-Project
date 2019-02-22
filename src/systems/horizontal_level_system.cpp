@@ -36,10 +36,10 @@ void HorizontalLevelSystem::generate_next_chunk(Blackboard &blackboard,
         std::vector<int> col = chunks_.front();
         float y = -400.0f;
         for (int c:col) {
-            generateEntity(c, last_row_placed_, y, blackboard, registry);
+            generateEntity(c, last_col_placed_, y, blackboard, registry);
             y += CELL_HEIGHT;
         }
-        last_row_placed_ += CELL_WIDTH;
+        last_col_placed_ += CELL_WIDTH;
         chunks_.pop();
     }
 }
@@ -58,7 +58,7 @@ void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry
             blackboard.camera.position().x + blackboard.camera.size().x; // some distance off camera
     float min_x =
             blackboard.camera.position().x - blackboard.camera.size().x; // some distance off camera
-    if (last_row_placed_ < max_x) {
+    if (last_col_placed_ < max_x) {
         load_next_chunk();
     }
 //    destroy_off_screen(registry, min_x); // fixme Do not uncomment, not working right now

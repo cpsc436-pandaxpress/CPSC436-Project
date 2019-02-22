@@ -4,9 +4,8 @@
 
 #ifndef PANDAEXPRESS_LEVEL_MANAGER_H
 #define PANDAEXPRESS_LEVEL_MANAGER_H
-#define CELL_WIDTH 100.0
+#define CELL_WIDTH 100.0  // Should these be macros and not constants?
 #define CELL_HEIGHT 100.0
-#define FIRST_CELL_COL -200
 
 #include <components/transform.h>
 #include <components/collidable.h>
@@ -21,7 +20,6 @@ protected:
     std::queue<std::vector<int>> chunks_;
     std::queue<uint32_t> platform_entities_;
     std::queue<uint32_t> available_entities_;
-    float last_row_placed_;
 
     virtual void load_next_chunk() = 0;
 

@@ -19,6 +19,7 @@ private:
     const float FIRST_ROW_Y = 300.f;
     const float COL_X_OFFSET = -750.f;
 
+    float last_row_placed_;
 public:
 
     VerticalLevelSystem();
