@@ -30,9 +30,8 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
 void HorizontalScene::update(Blackboard &blackboard) {
     update_camera(blackboard);
     update_panda(blackboard);
-
-    auto &tutorial_trans = registry_.get<Transform>(tutorial2_entity);
     update_tutorial(blackboard);
+
     level_system.update(blackboard, registry_);
     background_transform_system.update(blackboard, registry_);
     player_movement_system.update(blackboard, registry_);
