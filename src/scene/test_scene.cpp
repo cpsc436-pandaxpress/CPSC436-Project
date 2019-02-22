@@ -188,7 +188,8 @@ void TestScene::create_bread(Blackboard &blackboard) {
     float scale = 1;
 
     // Spawn bread on right half of the screen
-    float next_start_x = last_bread_x + blackboard.randNumGenerator.nextInt(0, (int) blackboard.camera.size().x / 2);
+    float next_start_x = last_bread_x
+            + blackboard.randNumGenerator.nextInt(0, (int) blackboard.camera.size().x / 2);
     registry_.assign<Transform>(bread, next_start_x, BREAD_START_Y - texture.height(), 0.,
                                 scale, scale);
     registry_.assign<Sprite>(bread, texture, shader);
@@ -254,20 +255,33 @@ void TestScene::reset_scene(Blackboard &blackboard) {
         registry_.destroy(enemy);
         enemies.pop();
     }
-    registry_.destroy(bg_entity);
+    for (uint32_t e: bg_entities) {
+        registry_.destroy(e);
+    }
+    bg_entities.clear();
     init_scene(blackboard);
 }
 
 void TestScene::create_background(Blackboard &blackboard) {
-    auto texture = blackboard.textureManager.get_texture("bg");
+    std::vector<Texture> textures;
+    textures.reserve(4);
+    // This order matters for rendering
+    textures.push_back(blackboard.textureManager.get_texture("bg_top"));
+    textures.push_back(blackboard.textureManager.get_texture("bg_front"));
+    textures.push_back(blackboard.textureManager.get_texture("bg_middle"));
+    textures.push_back(blackboard.textureManager.get_texture("bg_back"));
+    // end order
     auto shader = blackboard.shader_manager.get_shader("sprite");
-    auto windowSize = blackboard.window.size();
-
-    bg_entity = registry_.create();
-    auto &bg = registry_.assign<Background>(bg_entity, texture, shader);
-    bg.set_pos1(0.0f, 0.0f);
-    bg.set_pos2(blackboard.camera.size().x, 0.0f);
-    bg.set_rotation_rad(0.0f);
-    bg.set_scale(blackboard.camera.size().x / texture.width(),
-                 blackboard.camera.size().y / texture.height());
+    int i = 0;
+    for (Texture t: textures) {
+        auto bg_entity = registry_.create();
+        auto &bg = registry_.assign<Background>(bg_entity, t, shader, i);
+        bg.set_pos1(0.0f, 0.0f);
+        bg.set_pos2(blackboard.camera.size().x, 0.0f);
+        bg.set_rotation_rad(0.0f);
+        bg.set_scale(blackboard.camera.size().x / t.width(),
+                     blackboard.camera.size().y / t.height());
+        bg_entities.push_back(bg_entity);
+        i++;
+    }
 }
