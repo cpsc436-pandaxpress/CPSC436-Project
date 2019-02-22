@@ -35,7 +35,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto scale = static_cast<float>(CELL_WIDTH / texture.width()/2);
             auto bread = createEntity(registry);
-            registry.assign<Transform>(bread, x, y + 25, 0., scale,
+            registry.assign<Transform>(bread, x, y, 0., scale,
                                        scale);
             registry.assign<Sprite>(bread, texture, shader);
             registry.assign<Bread>(bread);
@@ -45,7 +45,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Interactable>(bread);
             registry.assign<Collidable>(bread, texture.width() * scale,
                                         texture.height() * scale);
-            //registry.assign<ObeysGravity>(bread);
+            registry.assign<ObeysGravity>(bread);
             platform_entities_.push(bread);
         }
             break;
