@@ -43,10 +43,11 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Health>(bread,1);
             registry.assign<Velocity>(bread, -BREAD_SPEED, 0.f);
             registry.assign<Interactable>(bread);
+            registry.assign<Collidable>(bread, texture.width() * scale,
+                                        texture.height() * scale);
             //registry.assign<ObeysGravity>(bread);
             platform_entities_.push(bread);
         }
-
             break;
         default:
             break;
