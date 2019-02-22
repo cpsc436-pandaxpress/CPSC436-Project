@@ -12,9 +12,10 @@ private:
     Shader shader_;
     Texture texture_;
     Sprite sp1_, sp2_;
+    int z;
 
 public:
-    Background(Texture texture, Shader shader);
+    Background(Texture texture, Shader shader, int z);
 
     Background(const Background &other);
 
@@ -41,4 +42,6 @@ public:
     float rotation_rad();
 
     void set_rotation_rad(float theta);
+
+    int z_pos();
 };

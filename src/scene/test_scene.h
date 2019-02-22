@@ -21,7 +21,7 @@ private:
 
     std::queue<uint32_t> obstacles;
     uint32_t panda_entity;
-    uint32_t bg_entity;
+    std::vector<uint32_t> bg_entities;
     std::queue<uint32_t> platforms;// platforms are in order of x
     std::queue<uint32_t> floating_platforms;
     std::queue<uint32_t> enemies;
@@ -51,6 +51,8 @@ private:
     const float BREAD_START_Y = -600.f;
     const float BREAD_SPEED = 75.f;
     const int MAX_PLATFORMS = 30;
+    const float MAX_CAMERA_Y_DIFF = 200.f;
+
 
     void create_panda(Blackboard& blackboard);
     void create_bread(Blackboard& blackboard);
@@ -60,6 +62,8 @@ private:
     void reset_scene(Blackboard& blackboard);
     void init_scene(Blackboard &blackboard);
     void generate_floating_platforms(Blackboard &blackboard);
+    void update_camera(Blackboard& blackboard);
+    void update_panda(Blackboard& blackboard);
 
 public:
     TestScene(Blackboard& blackboard, SceneManager& scene_manager);

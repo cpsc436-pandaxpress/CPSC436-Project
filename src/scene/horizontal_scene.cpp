@@ -26,10 +26,9 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
 }
 
 void HorizontalScene::update(Blackboard &blackboard) {
-    vec2 cam_position = blackboard.camera.position();
-    blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time,
-                                   cam_position.y);
-    blackboard.camera.compose();
+    update_camera(blackboard);
+    update_panda(blackboard);
+
     level_system.update(blackboard, registry_);
     background_transform_system.update(blackboard, registry_);
     player_movement_system.update(blackboard, registry_);
@@ -38,13 +37,45 @@ void HorizontalScene::update(Blackboard &blackboard) {
     sprite_transform_system.update(blackboard, registry_);
 }
 
+void HorizontalScene::update_panda(Blackboard &blackboard) {
+    vec2 cam_position = blackboard.camera.position();
+    vec2 cam_size = blackboard.camera.size();
+
+    auto &transform = registry_.get<Transform>(panda_entity);
+    auto &panda = registry_.get<Panda>(panda_entity);
+    auto &panda_collidable = registry_.get<Collidable>(panda_entity);
+
+    if (transform.x + panda_collidable.width < cam_position.x - cam_size.x / 2 ||
+        transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || !panda.alive) {
+        reset_scene(blackboard);
+    } else if (transform.x + panda_collidable.width / 2 > cam_position.x + cam_size.x / 2) {
+        transform.x = cam_position.x + cam_size.x / 2 - panda_collidable.width / 2;
+    }
+}
+
+void HorizontalScene::update_camera(Blackboard &blackboard) {
+    vec2 cam_position = blackboard.camera.position();
+
+    auto &panda_transform = registry_.get<Transform>(panda_entity);
+    float y_offset = std::min(0.f, panda_transform.y + MAX_CAMERA_Y_DIFF);
+
+    blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time,
+                                   y_offset);
+    blackboard.camera.compose();
+}
+
 void HorizontalScene::render(Blackboard &blackboard) {
     background_render_system.update(blackboard, registry_); // render background first
     sprite_render_system.update(blackboard, registry_);
 }
 
-void HorizontalScene::reset_scene(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    level_system.destroy_entities(registry);
+void HorizontalScene::reset_scene(Blackboard &blackboard) {
+    level_system.destroy_entities(registry_);
+    registry_.destroy(panda_entity);
+    for (uint32_t e: bg_entities) {
+        registry_.destroy(e);
+    }
+    bg_entities.clear();
     init_scene(blackboard);
 }
 
@@ -75,14 +106,27 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
 }
 
 void HorizontalScene::create_background(Blackboard &blackboard) {
-    auto texture = blackboard.textureManager.get_texture("bg");
+    std::vector<Texture> textures;
+    textures.reserve(4);
+    // This order matters for rendering
+    textures.push_back(blackboard.textureManager.get_texture("bg_top"));
+    textures.push_back(blackboard.textureManager.get_texture("bg_front"));
+    textures.push_back(blackboard.textureManager.get_texture("bg_middle"));
+    textures.push_back(blackboard.textureManager.get_texture("bg_back"));
+    // end order
     auto shader = blackboard.shader_manager.get_shader("sprite");
-
-    bg_entity = registry_.create();
-    auto &bg = registry_.assign<Background>(bg_entity, texture, shader);
-    bg.set_pos1(0.0f, 0.0f);
-    bg.set_pos2(blackboard.camera.size().x, 0.0f);
-    bg.set_rotation_rad(0.0f);
-    bg.set_scale(blackboard.camera.size().x / texture.width(),
-                 blackboard.camera.size().y / texture.height());
+    int i = 0;
+    for (Texture t: textures) {
+        auto bg_entity = registry_.create();
+        auto &bg = registry_.assign<Background>(bg_entity, t, shader, i);
+        bg.set_pos1(0.0f, 0.0f);
+        bg.set_pos2(blackboard.camera.size().x, 0.0f);
+        bg.set_rotation_rad(0.0f);
+        bg.set_scale(blackboard.camera.size().x / t.width(),
+                     blackboard.camera.size().y / t.height());
+        bg_entities.push_back(bg_entity);
+        i++;
+    }
 }
+
+

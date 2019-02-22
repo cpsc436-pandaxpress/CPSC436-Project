@@ -65,7 +65,10 @@ int main(int argc, char** argv) {
     blackboard.textureManager.load_texture(textures_path("bread.png"), "bread");
     blackboard.textureManager.load_texture(textures_path("branchspiky.png"), "branch1");
     blackboard.textureManager.load_texture(textures_path("branchspiky2.png"), "branch2");
-    blackboard.textureManager.load_texture(textures_path("background_full.jpg"), "bg");
+    blackboard.textureManager.load_texture(textures_path("bg_back.png"), "bg_back");
+    blackboard.textureManager.load_texture(textures_path("bg_front.png"), "bg_front");
+    blackboard.textureManager.load_texture(textures_path("bg_middle.png"), "bg_middle");
+    blackboard.textureManager.load_texture(textures_path("bg_top.png"), "bg_top");
 
 
 
