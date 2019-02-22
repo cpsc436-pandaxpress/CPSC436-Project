@@ -12,6 +12,8 @@
 #include "components/panda.h"
 #include "components/transform.h"
 #include "components/bread.h"
+#include "components/llama.h"
+#include "components/spit.h"
 #include "components/obstacle.h"
 using namespace std;
 
@@ -66,6 +68,8 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
     // TODO: generalize this to use the causesDamage component
     auto pandas_view = registry.view<Panda, Transform, Interactable, Collidable, Velocity>();
     auto bread_view = registry.view<Bread, Transform, Interactable, Collidable>();
+    auto llama_view = registry.view<Llama, Transform, Interactable, Collidable>();
+    auto projectile_view = registry.view<Spit, Transform, Interactable, Collidable>();
     auto obstacle_view = registry.view<Obstacle, Transform, Collidable>();
 
     for (auto panda_entity : pandas_view) {
@@ -86,8 +90,36 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
 
             if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, br_collidable, br_transform)) {
                 bread.alive = false;
-                pa_velocity.y_velocity = -400.f;
             } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, br_collidable, br_transform)) {
+                panda.alive = false;
+            }
+        }
+
+        for (auto enemy_entity : llama_view) {
+            auto& llama = llama_view.get<Llama>(enemy_entity);
+            auto& br_collidable = llama_view.get<Collidable>(enemy_entity);
+            auto& br_transform = llama_view.get<Transform>(enemy_entity);
+
+            if (!llama.alive) {
+                registry.remove<Interactable>(enemy_entity);
+                break;
+            }
+
+            if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, br_collidable, br_transform)) {
+                llama.alive = false;
+            } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, br_collidable, br_transform)) {
+                panda.alive = false;
+            }
+        }
+
+        for (auto enemy_entity : projectile_view) {
+            auto& projectile = projectile_view.get<Spit>(enemy_entity);
+            auto& proj_collidable = projectile_view.get<Collidable>(enemy_entity);
+            auto& proj_transform = projectile_view.get<Transform>(enemy_entity);
+
+            if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, proj_collidable, proj_transform)) {
+                panda.alive = false;
+            } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, proj_collidable, proj_transform)) {
                 panda.alive = false;
             }
         }

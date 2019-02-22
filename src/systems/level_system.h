@@ -12,6 +12,8 @@
 #include <components/collidable.h>
 #include <components/platform.h>
 #include <components/bread.h>
+#include <components/llama.h>
+#include <components/spit.h>
 #include <components/causes_damage.h>
 #include <components/health.h>
 #include <components/velocity.h>
@@ -50,6 +52,8 @@ public:
     virtual void destroy_entities(entt::DefaultRegistry &registry) = 0;
 
     virtual void destroy_off_screen(entt::DefaultRegistry &registry, float x) = 0;
+
+    void generateProjectile(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
 
 };
 
