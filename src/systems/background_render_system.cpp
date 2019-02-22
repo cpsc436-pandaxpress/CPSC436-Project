@@ -14,7 +14,7 @@ void BackgroundRenderSystem::update(Blackboard &blackboard, entt::DefaultRegistr
     Camera &camera = blackboard.camera;
     for (auto entity: viewBg) {
         //get the sprite
-        auto& background = viewBg.get(entity);
+        auto &background = viewBg.get(entity);
 
         //draw to the window
         blackboard.window.draw((Renderable*)(&background), blackboard.camera.get_projection());
