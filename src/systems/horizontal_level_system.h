@@ -17,6 +17,7 @@ class HorizontalLevelSystem : public LevelSystem {
 
     const float FIRST_COL_X = -200;
     const int PROJECTILE_SPACING = 500;
+    float last_col_placed_;
 
 public:
 
