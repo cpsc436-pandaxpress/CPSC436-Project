@@ -67,7 +67,7 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
     // TODO: generalize this to use the causesDamage component
     auto pandas_view = registry.view<Panda, Transform, Interactable, Collidable, Velocity>();
     auto bread_view = registry.view<Bread, Transform, Interactable, Collidable>();
-    auto ghost_view = registry.view<Ghost, Transform, Interactable, Collidable>();
+    auto ghost_view = registry.view<Ghost, Transform, Collidable>();
     auto obstacle_view = registry.view<Obstacle, Transform, Collidable>();
 
     for (auto panda_entity : pandas_view) {
