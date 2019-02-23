@@ -14,7 +14,7 @@ HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem() {
 
 void HorizontalLevelSystem::load_next_chunk() {
     std::string level_path = levels_path("");
-    int levelN = rng_.nextInt(0, 2);
+    int levelN = rng_.nextInt(0, 8);
     std::string levelFile = level_path + "level_" + std::to_string(levelN) + ".csv";
     CSVReader reader(levelFile);
     std::vector<std::vector<int>> dataList = reader.getData();
@@ -63,6 +63,7 @@ void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry
     }
 //    destroy_off_screen(registry, min_x); // fixme Do not uncomment, not working right now
     generate_next_chunk(blackboard, registry);
+    update_projectiles(blackboard, registry);
 }
 
 void HorizontalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float x) {
@@ -78,5 +79,25 @@ void HorizontalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, 
         const uint32_t e = rQueue.front();
         makeAvailable(e, registry);
         rQueue.pop();
+    }
+}
+
+void HorizontalLevelSystem::update_projectiles(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+    auto llama_view = registry.view<Llama, Transform>();
+    for (auto llama_entity : llama_view) {
+        auto& llama = llama_view.get<Llama>(llama_entity);
+        auto& la_transform = llama_view.get<Transform>(llama_entity);
+        if (!llama.alive)
+            break;
+
+        if (la_transform.y > 500)
+            llama.alive = false;
+
+        if(llama.spit_time == 0) {
+            generateProjectile(la_transform.x, la_transform.y, blackboard, registry);
+            llama.spit_time = PROJECTILE_SPACING;
+        } else {
+            llama.spit_time--;
+        }
     }
 }

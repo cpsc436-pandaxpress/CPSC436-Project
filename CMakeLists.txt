@@ -70,6 +70,7 @@ set(SOURCE_FILES
         src/scene/horizontal_scene.h
         src/systems/horizontal_level_system.h
         src/systems/horizontal_level_system.cpp
+        src/components/llama.h src/components/spit.h
         src/components/tutorial.h
         src/systems/vertical_level_system.cpp
         src/systems/vertical_level_system.h)
