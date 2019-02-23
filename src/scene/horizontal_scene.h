@@ -27,9 +27,12 @@ private:
     const float CAMERA_SPEED = 150.f;
     const float PANDA_START_X = -10.f;
     const float PANDA_START_Y = -200.f;
+    const float MAX_CAMERA_Y_DIFF = 200.f;
 
     std::vector<uint32_t> bg_entities;
     uint32_t panda_entity;
+    uint32_t tutorial_entity;
+    uint32_t tutorial2_entity;
     HorizontalLevelSystem level_system;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
@@ -41,13 +44,16 @@ private:
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);
+    void create_tutorial(Blackboard& blackboard);
     void reset_scene(Blackboard& blackboard);
     void init_scene(Blackboard &blackboard);
     void update_panda(Blackboard& blackboard);
+    void update_tutorial(Blackboard& blackboard);
+    void update_camera(Blackboard& blackboard);
 
 public:
     HorizontalScene(Blackboard &blackboard,
-                   SceneManager &scene_manager);
+                    SceneManager &scene_manager);
 
     virtual void update(Blackboard& blackboard) override;
 
@@ -57,3 +63,4 @@ public:
 
 
 #endif //PANDAEXPRESS_TEST_SCENE_2_H
+

@@ -48,7 +48,6 @@ set(SOURCE_FILES
         src/systems/collision_system.cpp
         src/systems/sprite_render_system.cpp
         src/systems/sprite_transform_system.cpp
-        src/scene/test_scene.cpp
         src/util/constants.h
         src/systems/physics_system.cpp
         src/systems/physics_system.h
@@ -61,6 +60,8 @@ set(SOURCE_FILES
         src/systems/background_render_system.h
         src/systems/background_transform_system.cpp
         src/systems/background_transform_system.h
+        src/scene/vertical_scene.cpp
+        src/scene/vertical_scene.h
         src/util/csv_reader.cpp
         src/util/csv_reader.h
         src/systems/level_system.cpp
@@ -69,7 +70,9 @@ set(SOURCE_FILES
         src/scene/horizontal_scene.h
         src/systems/horizontal_level_system.h
         src/systems/horizontal_level_system.cpp
-)
+        src/components/tutorial.h
+        src/systems/vertical_level_system.cpp
+        src/systems/vertical_level_system.h)
 
 # Create executable target
 

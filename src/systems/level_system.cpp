@@ -5,7 +5,6 @@
 #include "level_system.h"
 
 LevelSystem::LevelSystem() : rng_(Random(4)),
-                             last_col_placed_(FIRST_CELL_COL),
                              platform_entities_(),
                              chunks_(),
                              available_entities_() {
