@@ -15,7 +15,7 @@ public:
 
 private:
     const float PANDA_SPEED = 600.f;
-    const float PANDA_JUMP_SPEED = 600.f;
+    const float PANDA_JUMP_SPEED = 1100.f;
 
     float time_since_jump = 0.f;
     bool holding_jump = false;

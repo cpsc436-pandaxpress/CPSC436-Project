@@ -14,6 +14,7 @@ class HorizontalLevelSystem : public LevelSystem {
     void generate_next_chunk(Blackboard &blackboard, entt::DefaultRegistry &registry);
 
     const float FIRST_COL_X = -200;
+    float last_col_placed_;
 
 public:
 

@@ -8,7 +8,8 @@
 struct Ghost {
 
     int waittime;
+    bool onScreen;
 
-    Ghost() : waittime(100) {}
+    Ghost() : waittime(100), onScreen(false) {}
 };
 #endif //PANDAEXPRESS_GHOST_H
