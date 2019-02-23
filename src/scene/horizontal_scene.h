@@ -24,7 +24,6 @@ class HorizontalScene: public Scene {
 private:
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;
-    const float CAMERA_SPEED = 150.f;
     const float PANDA_START_X = -10.f;
     const float PANDA_START_Y = -200.f;
     const float MAX_CAMERA_Y_DIFF = 200.f;
@@ -58,6 +57,9 @@ public:
     virtual void update(Blackboard& blackboard) override;
 
     virtual void render(Blackboard& blackboard) override;
+
+    static constexpr float CAMERA_SPEED = 400.f;
+
 
 };
 

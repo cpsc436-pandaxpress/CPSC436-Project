@@ -10,6 +10,7 @@
 #include <components/velocity.h>
 #include <components/tutorial.h>
 #include "horizontal_scene.h"
+#include "util/constants.h"
 
 HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_manager) :
         Scene(scene_manager),
@@ -19,7 +20,7 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         background_transform_system(),
         background_render_system(),
         physics_system(),
-        player_movement_system(),
+        player_movement_system(PlayerMovementSystem(HORIZONTAL_SCENE_ID)),
         collision_system()
 {
     init_scene(blackboard);

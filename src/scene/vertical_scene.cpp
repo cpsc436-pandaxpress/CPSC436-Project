@@ -9,6 +9,7 @@
 #include <components/velocity.h>
 #include <components/platform.h>
 #include "vertical_scene.h"
+#include "util/constants.h"
 
 VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager) :
         Scene(scene_manager),
@@ -16,7 +17,7 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         sprite_transform_system(),
         sprite_render_system(),
         physics_system(),
-        player_movement_system(),
+        player_movement_system(PlayerMovementSystem(VERTICAL_SCENE_ID)),
         collision_system() {
     init_scene(blackboard);
     gl_has_errors();
