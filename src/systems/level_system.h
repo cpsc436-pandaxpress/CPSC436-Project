@@ -28,6 +28,8 @@ protected:
     Random rng_;
     std::queue<std::vector<int>> chunks_;
     std::queue<uint32_t> platform_entities_;
+    std::queue<uint32_t> enemy_entities_;
+    std::queue<uint32_t> projectile_entities_;
     std::queue<uint32_t> available_entities_;
     float last_col_placed_;
     const float BREAD_SPEED = 50.f;

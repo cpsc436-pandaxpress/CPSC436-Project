@@ -46,7 +46,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Collidable>(bread, texture.width() * scale,
                                         texture.height() * scale);
             registry.assign<ObeysGravity>(bread);
-            platform_entities_.push(bread);
+            enemy_entities_.push(bread);
         }
             break;
         case 5: {
@@ -65,7 +65,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Collidable>(llama, texture.width() * scale,
                                         texture.height() * scale);
             registry.assign<ObeysGravity>(llama);
-            platform_entities_.push(llama);
+            enemy_entities_.push(llama);
         }
             break;
         default:
@@ -107,5 +107,5 @@ void LevelSystem::generateProjectile(float x, float y, Blackboard &blackboard, e
     registry.assign<Interactable>(projectile);
     registry.assign<Collidable>(projectile, texture.width() * scale,
                                 texture.height() * scale);
-    platform_entities_.push(projectile);
+    projectile_entities_.push(projectile);
 }

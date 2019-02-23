@@ -63,7 +63,26 @@ void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry
     }
 //    destroy_off_screen(registry, min_x); // fixme Do not uncomment, not working right now
     generate_next_chunk(blackboard, registry);
+    update_projectiles(blackboard, registry);
+}
 
+void HorizontalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float x) {
+    auto view = registry.view<Platform, Transform>();
+    std::queue<uint32_t> rQueue;
+    for (u_int32_t entity: view) {
+        auto &transform = view.get<Transform>(entity);
+        if (transform.x < x) {
+            rQueue.push(entity);
+        }
+    }
+    while (!rQueue.empty()) {
+        const uint32_t e = rQueue.front();
+        makeAvailable(e, registry);
+        rQueue.pop();
+    }
+}
+
+void HorizontalLevelSystem::update_projectiles(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     auto llama_view = registry.view<Llama, Transform>();
     for (auto llama_entity : llama_view) {
         auto& llama = llama_view.get<Llama>(llama_entity);
@@ -80,21 +99,5 @@ void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry
         } else {
             llama.spit_time--;
         }
-    }
-}
-
-void HorizontalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float x) {
-    auto view = registry.view<Platform, Transform>();
-    std::queue<uint32_t> rQueue;
-    for (u_int32_t entity: view) {
-        auto &transform = view.get<Transform>(entity);
-        if (transform.x < x) {
-            rQueue.push(entity);
-        }
-    }
-    while (!rQueue.empty()) {
-        const uint32_t e = rQueue.front();
-        makeAvailable(e, registry);
-        rQueue.pop();
     }
 }
