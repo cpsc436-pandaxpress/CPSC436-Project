@@ -14,6 +14,7 @@
 #include <components/causes_damage.h>
 #include <components/health.h>
 #include <components/velocity.h>
+#include <components/obstacle.h>
 #include <components/interactable.h>
 #include <components/obeys_gravity.h>
 #include "util/random.h"
