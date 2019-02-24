@@ -47,6 +47,21 @@ void LevelSystem::generateEntity(int value, float x, float y,
             enemy_entities_.push(bread);
         }
             break;
+        case 4: {
+            auto texture = blackboard.textureManager.get_texture(
+                    (rng_.nextInt(0, 100) % 2 == 0) ? "dirt" : "dirt2");
+            auto shader = blackboard.shader_manager.get_shader("sprite");
+            auto scale = static_cast<float>(CELL_WIDTH / texture.width());
+            auto platform = createEntity(registry);
+            registry.assign<Platform>(platform);
+            registry.assign<Transform>(platform, x, y, 0., scale,
+                                       scale);
+            registry.assign<Sprite>(platform, texture, shader);
+            registry.assign<Collidable>(platform, texture.width() * scale,
+                                        texture.height() * scale);
+            platform_entities_.push(platform);
+        }
+            break;
         case 5: {
             auto texture = blackboard.textureManager.get_texture("llama");
             auto shader = blackboard.shader_manager.get_shader("sprite");
@@ -65,34 +80,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<ObeysGravity>(llama);
             enemy_entities_.push(llama);
         }
-        case 4: {
-            auto texture = blackboard.textureManager.get_texture(
-                    (rng_.nextInt(0, 100) % 2 == 0) ? "dirt" : "dirt2");
-            auto shader = blackboard.shader_manager.get_shader("sprite");
-            auto scale = static_cast<float>(CELL_WIDTH / texture.width());
-            auto platform = createEntity(registry);
-            registry.assign<Platform>(platform);
-            registry.assign<Transform>(platform, x, y, 0., scale,
-                                       scale);
-            registry.assign<Sprite>(platform, texture, shader);
-            registry.assign<Collidable>(platform, texture.width() * scale,
-                                        texture.height() * scale);
-            platform_entities_.push(platform);
-        }
-        case 5: {
-            auto texture = blackboard.textureManager.get_texture("stalagmite");
-            auto shader = blackboard.shader_manager.get_shader("sprite");
-            auto scale = static_cast<float>(CELL_WIDTH / texture.width());
-            auto stalagmite = createEntity(registry);
-            registry.assign<Obstacle>(stalagmite);
-            registry.assign<Transform>(stalagmite, x, y, 0., scale,
-                                       scale);
-            registry.assign<Sprite>(stalagmite, texture, shader);
-            registry.assign<Collidable>(stalagmite, texture.width() * scale,
-                                        texture.height() * scale);
-
-            platform_entities_.push(stalagmite);
-        }
+            break;
         case 6: {
             auto texture = blackboard.textureManager.get_texture("stalagmite2");
             auto shader = blackboard.shader_manager.get_shader("sprite");
@@ -105,6 +93,22 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Collidable>(stalagmite2, texture.width() * scale,
                                         texture.height() * scale);
             platform_entities_.push(stalagmite2);
+        }
+            break;
+        case 7: {
+            auto texture = blackboard.textureManager.get_texture("stalagmite");
+            auto shader = blackboard.shader_manager.get_shader("sprite");
+            auto scale = static_cast<float>(CELL_WIDTH / texture.width());
+            auto stalagmite = createEntity(registry);
+            registry.assign<Obstacle>(stalagmite);
+            registry.assign<CausesDamage>(stalagmite, false, true, 1);
+            registry.assign<Transform>(stalagmite, x, y, 0., scale,
+                                       scale);
+            registry.assign<Sprite>(stalagmite, texture, shader);
+            registry.assign<Collidable>(stalagmite, texture.width() * scale,
+                                        texture.height() * scale);
+
+            platform_entities_.push(stalagmite);
         }
             break;
         default:
