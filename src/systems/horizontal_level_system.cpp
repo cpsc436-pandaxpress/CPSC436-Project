@@ -50,6 +50,16 @@ void HorizontalLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
         registry.destroy(platform);
         platform_entities_.pop();
     }
+    while (!enemy_entities_.empty()) {
+        uint32_t platform = enemy_entities_.front();
+        registry.destroy(platform);
+        enemy_entities_.pop();
+    }
+    while (!projectile_entities_.empty()) {
+        uint32_t platform = projectile_entities_.front();
+        registry.destroy(platform);
+        projectile_entities_.pop();
+    }
     last_col_placed_ = FIRST_COL_X;
 }
 
