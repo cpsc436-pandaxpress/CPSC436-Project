@@ -5,6 +5,7 @@
 #include "ghost_movement_system.h"
 #include "physics_system.h"
 #include "components/ghost.h"
+#include "components/panda.h"
 #include "components/velocity.h"
 #include "components/interactable.h"
 #include "components/transform.h"
@@ -33,7 +34,15 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
         // Waiting state
         else if (ghost.onScreen && ghost.waiting){
             if (ghost.waittime < 0){
+                auto pandas_view = registry.view<Panda, Transform>();
+                for (auto panda_entity : pandas_view) {
+                    auto &pa_transform = pandas_view.get<Transform>(panda_entity);
+                    ghost.aim_x = pa_transform.x;
+                    ghost.aim_y = pa_transform.y;
+                }
                 ghost.waiting = false;
+                ghost.start_x = gh_transform.x;
+                ghost.start_y = gh_transform.y;
             }
             else {
                 gh_velocity.x_velocity = 150;
@@ -62,8 +71,23 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
         }
         // Curve to swoop at player
         else if (ghost.onScreen && !ghost.waiting){
-            gh_velocity.x_velocity = -100;
-            gh_velocity.y_velocity = 100;
+            if (ghost.swoopTime <= 1){
+                float t = ghost.swoopTime;
+                float x=(2*t*t*t-3*t*t+1)*ghost.start_x+(-2*t*t*t+3*t*t)*ghost.aim_x+
+                  (t*t*t-2*t*t+t)*ghost.start_tangent+(t*t*t-t*t)*ghost.aim_tangent;
+                float y=(2*t*t*t-3*t*t+1)*ghost.start_y+(-2*t*t*t+3*t*t)*ghost.aim_y+
+                  (t*t*t-2*t*t+1)*ghost.start_tangent+(t*t*t-t*t)*ghost.aim_tangent;
+                gh_transform.x = x;
+                gh_transform.y = y;
+                ghost.swoopTime = ghost.swoopTime + blackboard.delta_time/2;
+                printf("x: %f\n", x);
+                printf("y: %f\n", y);
+                printf("swoopTime: %f\n", ghost.swoopTime);
+            }
+            else {
+                gh_velocity.x_velocity = -150;
+                gh_velocity.y_velocity = 30;
+            }
         }
     }
 }
