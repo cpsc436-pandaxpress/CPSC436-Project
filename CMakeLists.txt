@@ -71,6 +71,7 @@ set(SOURCE_FILES
         src/systems/horizontal_level_system.h
         src/systems/horizontal_level_system.cpp
         src/components/ghost.h
+        src/components/llama.h src/components/spit.h
         src/components/tutorial.h
         src/systems/vertical_level_system.cpp
         src/systems/vertical_level_system.h src/systems/ghost_movement_system.cpp src/systems/ghost_movement_system.cpp src/systems/ghost_movement_system.h)

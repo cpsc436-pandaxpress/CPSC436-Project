@@ -14,19 +14,20 @@
 GhostMovementSystem::GhostMovementSystem() {}
 
 void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry) {
-    auto ghost_view = registry.view<Ghost, Transform, Velocity>();
+    vec2 cam_position = blackboard.camera.position();
+    vec2 cam_size = blackboard.camera.size();
+
+    auto ghost_view = registry.view<Ghost, Transform, Velocity, Collidable>();
     for (auto enemy_entity : ghost_view) {
         auto& ghost = ghost_view.get<Ghost>(enemy_entity);
         auto& gh_transform = ghost_view.get<Transform>(enemy_entity);
         auto& gh_velocity = ghost_view.get<Velocity>(enemy_entity);
+        auto& gh_collidable = ghost_view.get<Collidable>(enemy_entity);
         // Off screen time - would be better to do with coordinates but I was struggling with it
         if (!ghost.onScreen) {
-            if (ghost.offScreenTime < 0){
+            if (gh_transform.x + gh_collidable.width / 2 < cam_position.x + cam_size.x / 2) {
                 ghost.onScreen = true;
-                ghost.waiting = true;
             }
-            else
-                ghost.offScreenTime--;
         }
         // Waiting state
         else if (ghost.onScreen && ghost.waiting){
