@@ -60,6 +60,7 @@ void VerticalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &
     }
 //    destroy_off_screen(registry, min_x); // fixme Do not uncomment, not working right now
     generate_next_chunk(blackboard, registry);
+    update_projectiles(blackboard, registry);
 }
 
 void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float x) {
@@ -75,5 +76,22 @@ void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, fl
         const uint32_t e = rQueue.front();
         makeAvailable(e, registry);
         rQueue.pop();
+    }
+}
+
+void VerticalLevelSystem::update_projectiles(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+    auto llama_view = registry.view<Llama, Transform>();
+    for (auto llama_entity : llama_view) {
+        auto& llama = llama_view.get<Llama>(llama_entity);
+        auto& la_transform = llama_view.get<Transform>(llama_entity);
+        if (!llama.alive)
+            break;
+
+        if(llama.spit_time <= 0) {
+            generateProjectile(la_transform.x, la_transform.y, blackboard, registry);
+            llama.spit_time = PROJECTILE_SPACING;
+        } else {
+            llama.spit_time -= blackboard.delta_time;
+        }
     }
 }

@@ -16,7 +16,7 @@ class HorizontalLevelSystem : public LevelSystem {
     void update_projectiles(Blackboard &blackboard, entt::DefaultRegistry &registry);
 
     const float FIRST_COL_X = -200;
-    const int PROJECTILE_SPACING = 500;
+    const float PROJECTILE_SPACING = 3.f;
     float last_col_placed_;
 
 public:

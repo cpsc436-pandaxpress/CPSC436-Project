@@ -14,7 +14,7 @@ HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem() {
 
 void HorizontalLevelSystem::load_next_chunk() {
     std::string level_path = levels_path("");
-    int levelN = rng_.nextInt(0, 8);
+    int levelN = rng_.nextInt(8, 8);
     std::string levelFile = level_path + "level_" + std::to_string(levelN) + ".csv";
     CSVReader reader(levelFile);
     std::vector<std::vector<int>> dataList = reader.getData();
@@ -93,11 +93,11 @@ void HorizontalLevelSystem::update_projectiles(Blackboard &blackboard, entt::Def
         if (la_transform.y > 500)
             llama.alive = false;
 
-        if(llama.spit_time == 0) {
+        if(llama.spit_time <= 0) {
             generateProjectile(la_transform.x, la_transform.y, blackboard, registry);
             llama.spit_time = PROJECTILE_SPACING;
         } else {
-            llama.spit_time--;
+            llama.spit_time-= blackboard.delta_time;
         }
     }
 }
