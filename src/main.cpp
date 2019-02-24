@@ -75,8 +75,7 @@ int main(int argc, char** argv) {
     blackboard.textureManager.load_texture(textures_path("tutorial2.png"), "tutorial_bread");
     blackboard.textureManager.load_texture(textures_path("stalagmite.png"), "stalagmite");
     blackboard.textureManager.load_texture(textures_path("stalagmite2.png"), "stalagmite2");
-    blackboard.textureManager.load_texture(textures_path("dirt_block.png"), "dirt");
-    blackboard.textureManager.load_texture(textures_path("dirt_block2.png"), "dirt2");
+
 
 
 
