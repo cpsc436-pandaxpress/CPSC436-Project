@@ -73,6 +73,7 @@ int main(int argc, char** argv) {
     blackboard.textureManager.load_texture(textures_path("bg_top.png"), "bg_top");
     blackboard.textureManager.load_texture(textures_path("tutorial.png"), "tutorial");
     blackboard.textureManager.load_texture(textures_path("tutorial2.png"), "tutorial_bread");
+    blackboard.textureManager.load_texture(textures_path("jacko.png"), "jacko");
 
 
 

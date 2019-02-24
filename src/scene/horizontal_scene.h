@@ -19,6 +19,7 @@
 #include "../systems/physics_system.h"
 #include "../systems/player_movement_system.h"
 #include "../systems/collision_system.h"
+#include "../systems/chase_system.h"
 
 class HorizontalScene: public Scene {
 private:
@@ -31,6 +32,7 @@ private:
 
     std::vector<uint32_t> bg_entities;
     uint32_t panda_entity;
+    uint32_t jacko_entity;
     uint32_t tutorial_entity;
     uint32_t tutorial2_entity;
     HorizontalLevelSystem level_system;
@@ -41,9 +43,11 @@ private:
     PhysicsSystem physics_system;
     PlayerMovementSystem player_movement_system;
     CollisionSystem collision_system;
+    ChaseSystem chase_system;
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);
+    void create_jacko(Blackboard& blackboard, uint32_t panda);
     void create_tutorial(Blackboard& blackboard);
     void reset_scene(Blackboard& blackboard);
     void init_scene(Blackboard &blackboard);

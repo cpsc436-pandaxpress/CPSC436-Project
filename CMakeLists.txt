@@ -73,7 +73,7 @@ set(SOURCE_FILES
         src/components/llama.h src/components/spit.h
         src/components/tutorial.h
         src/systems/vertical_level_system.cpp
-        src/systems/vertical_level_system.h)
+        src/systems/vertical_level_system.h src/systems/a_star_system.cpp src/systems/a_star_system.h src/components/chases.h src/systems/chase_system.cpp src/systems/chase_system.h)
 
 # Create executable target
 

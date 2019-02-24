@@ -8,6 +8,8 @@
 #include <components/interactable.h>
 #include <components/causes_damage.h>
 #include <components/velocity.h>
+#include <components/jacko.h>
+#include <components/chases.h>
 #include <components/tutorial.h>
 #include "horizontal_scene.h"
 
@@ -20,7 +22,8 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         background_render_system(),
         physics_system(),
         player_movement_system(),
-        collision_system()
+        collision_system(),
+        chase_system()
 {
     init_scene(blackboard);
     create_tutorial(blackboard);
@@ -33,10 +36,11 @@ void HorizontalScene::update(Blackboard &blackboard) {
     update_tutorial(blackboard);
 
     level_system.update(blackboard, registry_);
-    background_transform_system.update(blackboard, registry_);
+    chase_system.update(blackboard, registry_);
     player_movement_system.update(blackboard, registry_);
     collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
+
     sprite_transform_system.update(blackboard, registry_);
 }
 
@@ -62,8 +66,7 @@ void HorizontalScene::update_camera(Blackboard &blackboard) {
     auto &panda_transform = registry_.get<Transform>(panda_entity);
     float y_offset = std::min(0.f, panda_transform.y + MAX_CAMERA_Y_DIFF);
 
-    blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time,
-                                   y_offset);
+
     blackboard.camera.compose();
 }
 
@@ -99,11 +102,11 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
     blackboard.camera.compose();
     create_background(blackboard);
     create_panda(blackboard);
+    create_jacko(blackboard, panda_entity);
 }
 
 void HorizontalScene::create_panda(Blackboard &blackboard) {
     panda_entity = registry_.create();
-
     auto texture = blackboard.textureManager.get_texture("panda");
     auto shader = blackboard.shader_manager.get_shader("sprite");
     float scaleY = 100.0 / texture.height();
@@ -117,6 +120,24 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
     registry_.assign<CausesDamage>(panda_entity, false, true, 1);
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
+}
+
+void HorizontalScene::create_jacko(Blackboard &blackboard, uint32_t panda) {
+    jacko_entity = registry_.create();
+
+    auto texture = blackboard.textureManager.get_texture("bread");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    float scaleY = 200.0 / texture.height();
+    float scaleX = 200.0 / texture.width();
+    registry_.assign<Transform>(jacko_entity, PANDA_START_X-100, PANDA_START_Y-100, 0., scaleX, scaleY);
+    registry_.assign<Sprite>(jacko_entity, texture, shader);
+    registry_.assign<Jacko>(jacko_entity);
+    registry_.assign<Chases>(jacko_entity, panda);
+    registry_.assign<Health>(jacko_entity, 1);
+    registry_.assign<Interactable>(jacko_entity);
+    registry_.assign<CausesDamage>(jacko_entity, false, true, 1);
+    registry_.assign<Velocity>(jacko_entity, 0.f, 0.f);
+    registry_.assign<Collidable>(jacko_entity, texture.width() * scaleX, texture.height() * scaleY);
 }
 
 void HorizontalScene::create_background(Blackboard &blackboard) {
