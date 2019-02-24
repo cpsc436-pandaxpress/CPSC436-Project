@@ -27,6 +27,7 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
         if (!ghost.onScreen) {
             if (gh_transform.x + gh_collidable.width / 2 < cam_position.x + cam_size.x / 2) {
                 ghost.onScreen = true;
+                ghost.waiting = true;
             }
         }
         // Waiting state
@@ -36,7 +37,7 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
             }
             else {
                 gh_velocity.x_velocity = 150;
-                if (ghost.waittime % 10 == 0) {
+                if (int(llround(floor(ghost.waittime))) % 2 == 0) {
                     if (ghost.waiting_high && ghost.waiting_left) {
                         gh_transform.x = gh_transform.x + 3;
                         ghost.waiting_left = false;
@@ -55,7 +56,8 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
                         ghost.waiting_low = false;
                     }
                 }
-                ghost.waittime--;
+                ghost.waittime = ghost.waittime - blackboard.delta_time*4;
+                printf("waittime: %f\n", ghost.waittime);
             }
         }
         // Curve to swoop at player
