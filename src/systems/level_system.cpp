@@ -62,7 +62,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Velocity>(ghost, -0.f, 0.f);
             registry.assign<Collidable>(ghost, texture.width() * scale,
                                         texture.height() * scale);
-            platform_entities_.push(ghost);
+            enemy_entities_.push(ghost);
         }
             break;
         case 5: {

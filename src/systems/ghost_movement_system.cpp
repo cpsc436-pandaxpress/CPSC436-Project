@@ -24,8 +24,10 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
         auto& gh_transform = ghost_view.get<Transform>(enemy_entity);
         auto& gh_velocity = ghost_view.get<Velocity>(enemy_entity);
         auto& gh_collidable = ghost_view.get<Collidable>(enemy_entity);
-        // Off screen time - would be better to do with coordinates but I was struggling with it
-        if (!ghost.onScreen) {
+
+        if (ghost.done)
+            break;
+        else if (!ghost.onScreen) {
             if (gh_transform.x + gh_collidable.width / 2 < cam_position.x + cam_size.x / 2) {
                 ghost.onScreen = true;
                 ghost.waiting = true;
@@ -34,6 +36,9 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
         // Waiting state
         else if (ghost.onScreen && ghost.waiting){
             if (ghost.waittime < 0){
+                ghost.waiting = false;
+
+                // Set swoop curve values based on current ghost and panda positions
                 auto pandas_view = registry.view<Panda, Transform>();
                 for (auto panda_entity : pandas_view) {
                     auto &pa_transform = pandas_view.get<Transform>(panda_entity);
@@ -42,7 +47,6 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
                     ghost.aim_tangent.x = abs(pa_transform.x) * -2.5;
                     ghost.aim_tangent.y = abs(pa_transform.y) * 4;
                 }
-                ghost.waiting = false;
                 ghost.start_pt.x = gh_transform.x;
                 ghost.start_pt.y = gh_transform.y;
             }
@@ -68,7 +72,6 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
                     }
                 }
                 ghost.waittime = ghost.waittime - blackboard.delta_time*4;
-                printf("waittime: %f\n", ghost.waittime);
             }
         }
         // Curve to swoop at player
@@ -86,6 +89,7 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
             else {
                 gh_velocity.x_velocity = -500;
                 gh_velocity.y_velocity = 100;
+                ghost.done = true;
             }
         }
     }
