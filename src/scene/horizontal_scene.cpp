@@ -20,7 +20,7 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         background_transform_system(),
         background_render_system(),
         physics_system(),
-        player_movement_system(PlayerMovementSystem(HORIZONTAL_SCENE_ID)),
+        player_movement_system(HORIZONTAL_SCENE_ID),
         collision_system()
 {
     init_scene(blackboard);
