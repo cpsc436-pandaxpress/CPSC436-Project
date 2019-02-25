@@ -16,7 +16,7 @@ struct Chases {
 
     explicit Chases(uint32_t target) :
             target(target),
-            chase_speed(60.f)
+            chase_speed(120.f)
     {}
 };
 #endif //PANDAEXPRESS_CHASES_H

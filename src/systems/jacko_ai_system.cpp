@@ -114,7 +114,7 @@ public:
                     for(auto panda_entity: panda_view){
                         chase.target=panda_entity;
                     }
-                    chase.chase_speed=140;
+                    chase.chase_speed=180;
                 }
             }
         }
