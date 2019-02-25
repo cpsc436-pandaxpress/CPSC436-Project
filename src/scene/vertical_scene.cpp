@@ -27,7 +27,7 @@ void VerticalScene::init_scene(Blackboard &blackboard) {
     blackboard.randNumGenerator.init(0);
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
-
+    level_system.init();
     create_panda(blackboard);
 }
 

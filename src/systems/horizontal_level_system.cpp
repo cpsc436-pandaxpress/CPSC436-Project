@@ -9,6 +9,11 @@
 #include "horizontal_level_system.h"
 
 HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem() {
+    init();
+}
+
+void HorizontalLevelSystem::init(){
+    LevelSystem::init();
     last_col_placed_ = FIRST_COL_X;
 }
 
@@ -55,7 +60,6 @@ void HorizontalLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
         registry.destroy(obstacle);
         obstacle_entities_.pop();
     }
-    last_col_placed_ = FIRST_COL_X;
 }
 
 void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {

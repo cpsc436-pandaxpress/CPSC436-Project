@@ -24,6 +24,8 @@ public:
 
     VerticalLevelSystem();
 
+    void init();
+
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry);
 
     void destroy_entities(entt::DefaultRegistry &registry);

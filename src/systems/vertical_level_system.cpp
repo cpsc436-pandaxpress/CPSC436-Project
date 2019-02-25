@@ -7,7 +7,12 @@
 #include "vertical_level_system.h"
 #include <iostream>
 
-VerticalLevelSystem::VerticalLevelSystem(): LevelSystem() {
+VerticalLevelSystem::VerticalLevelSystem() : LevelSystem() {
+
+}
+
+void VerticalLevelSystem::init() {
+    LevelSystem::init();
     last_row_placed_ = FIRST_ROW_Y;
 }
 
@@ -29,7 +34,7 @@ void VerticalLevelSystem::load_next_chunk() {
 }
 
 void VerticalLevelSystem::generate_next_chunk(Blackboard &blackboard,
-                                                entt::DefaultRegistry &registry) {
+                                              entt::DefaultRegistry &registry) {
     while (!chunks_.empty()) {
         std::vector<int> col = chunks_.front();
         float x = COL_X_OFFSET;
