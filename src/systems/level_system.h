@@ -31,6 +31,8 @@ protected:
     std::queue<uint32_t> enemy_entities_;
     std::queue<uint32_t> projectile_entities_;
     std::queue<uint32_t> available_entities_;
+    std::queue<uint32_t> obstacle_entities_;
+
     const float BREAD_SPEED = 50.f;
     const float PROJECTILE_SPEED_X = -300.f;
     const float PROJECTILE_SPEED_Y = 10.f;

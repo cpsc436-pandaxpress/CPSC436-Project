@@ -7,7 +7,8 @@
 LevelSystem::LevelSystem() : rng_(Random(4)),
                              platform_entities_(),
                              chunks_(),
-                             available_entities_() {
+                             available_entities_(),
+                             obstacle_entities_() {
 
 }
 
@@ -71,13 +72,13 @@ void LevelSystem::generateEntity(int value, float x, float y,
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto scale = static_cast<float>(CELL_WIDTH / texture.width());
             auto stalagmite2 = createEntity(registry);
-            registry.assign<Platform>(stalagmite2);
+            registry.assign<Obstacle>(stalagmite2);
             registry.assign<Transform>(stalagmite2, x, y, 0., scale,
                                        scale);
             registry.assign<Sprite>(stalagmite2, texture, shader);
             registry.assign<Collidable>(stalagmite2, texture.width() * scale,
                                         texture.height() * scale);
-            platform_entities_.push(stalagmite2);
+            obstacle_entities_.push(stalagmite2);
         }
             break;
         case 7: {
@@ -93,7 +94,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Collidable>(stalagmite, texture.width() * scale,
                                         texture.height() * scale);
 
-            platform_entities_.push(stalagmite);
+            obstacle_entities_.push(stalagmite);
         }
             break;
         default:
