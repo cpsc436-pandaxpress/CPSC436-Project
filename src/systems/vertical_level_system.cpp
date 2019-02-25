@@ -48,15 +48,15 @@ void VerticalLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
         registry.destroy(platform);
         platform_entities_.pop();
     }
-    while (!enemy.empty()) {
-        uint32_t platform = enemy.front();
-        registry.destroy(platform);
-        enemy.pop();
+    while (!enemy_entities_.empty()) {
+        uint32_t enemy = enemy_entities_.front();
+        registry.destroy(enemy);
+        enemy_entities_.pop();
     }
-    while (!projectile.empty()) {
-        uint32_t platform = projectile.front();
-        registry.destroy(platform);
-        projectile.pop();
+    while (!projectile_entities_.empty()) {
+        uint32_t projectile = projectile_entities_.front();
+        registry.destroy(projectile);
+        projectile_entities_.pop();
     }
 }
 

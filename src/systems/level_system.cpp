@@ -26,7 +26,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Sprite>(platform, texture, shader);
             registry.assign<Collidable>(platform, texture.width() * scale,
                                         texture.height() * scale);
-            enemy.push(platform);
+            platform_entities_.push(platform);
         }
             break;
         case 3: {
@@ -45,7 +45,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Collidable>(bread, texture.width() * scale,
                                         texture.height() * scale);
             registry.assign<ObeysGravity>(bread);
-            enemy.push(bread);
+            enemy_entities_.push(bread);
         }
             break;
         case 5: {
@@ -64,7 +64,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Collidable>(llama, texture.width() * scale,
                                         texture.height() * scale);
             registry.assign<ObeysGravity>(llama);
-            enemy.push(llama);
+            enemy_entities_.push(llama);
         }
             break;
         default:
@@ -95,16 +95,16 @@ void LevelSystem::generateProjectile(float x, float y, Blackboard &blackboard, e
     auto texture = blackboard.textureManager.get_texture("spit");
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto scale = static_cast<float>(CELL_WIDTH / texture.width()/ 5);
-    auto new_projectile = createEntity(registry);
-    registry.assign<Transform>(new_projectile, x, y - 30, 0., scale,
+    auto projectile = createEntity(registry);
+    registry.assign<Transform>(projectile, x, y - 30, 0., scale,
                                scale);
-    registry.assign<Sprite>(new_projectile, texture, shader);
-    registry.assign<Spit>(new_projectile);
-    registry.assign<CausesDamage>(new_projectile, false, true, 1);
-    registry.assign<Health>(new_projectile,1);
-    registry.assign<Velocity>(new_projectile, PROJECTILE_SPEED_X, PROJECTILE_SPEED_Y);
-    registry.assign<Interactable>(new_projectile);
-    registry.assign<Collidable>(new_projectile, texture.width() * scale,
+    registry.assign<Sprite>(projectile, texture, shader);
+    registry.assign<Spit>(projectile);
+    registry.assign<CausesDamage>(projectile, false, true, 1);
+    registry.assign<Health>(projectile,1);
+    registry.assign<Velocity>(projectile, PROJECTILE_SPEED_X, PROJECTILE_SPEED_Y);
+    registry.assign<Interactable>(projectile);
+    registry.assign<Collidable>(projectile, texture.width() * scale,
                                 texture.height() * scale);
-    projectile.push(new_projectile);
+    projectile_entities_.push(projectile);
 }
