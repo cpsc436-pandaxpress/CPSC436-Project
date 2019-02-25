@@ -43,37 +43,31 @@ void VerticalLevelSystem::generate_next_chunk(Blackboard &blackboard,
 }
 
 void VerticalLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
-    while (!platform_entities_.empty()) {
-        uint32_t platform = platform_entities_.front();
-        registry.destroy(platform);
-        platform_entities_.pop();
-    }
+    registry.destroy<Platform>();
+    registry.destroy<Llama>();
+    registry.destroy<Spit>();
+    registry.destroy<Bread>();
+    last_row_placed_ = FIRST_ROW_Y;
 }
 
 void VerticalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    float max_x =
+    float max_y =
             blackboard.camera.position().y + blackboard.camera.size().y; // some distance off camera
-    float min_x =
+    float min_y =
             blackboard.camera.position().y - blackboard.camera.size().y; // some distance off camera
-    if (last_row_placed_ > min_x) {
+    if (last_row_placed_ > min_y) {
         load_next_chunk();
     }
-//    destroy_off_screen(registry, min_x); // fixme Do not uncomment, not working right now
+    destroy_off_screen(registry, max_y);
     generate_next_chunk(blackboard, registry);
 }
 
-void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float x) {
+void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float y) {
     auto view = registry.view<Platform, Transform>();
-    std::queue<uint32_t> rQueue;
-    for (u_int32_t entity: view) {
+    for (uint32_t entity: view) {
         auto &transform = view.get<Transform>(entity);
-        if (transform.x < x) {
-            rQueue.push(entity);
+        if (transform.y > y) {
+            registry.destroy(entity);
         }
-    }
-    while (!rQueue.empty()) {
-        const uint32_t e = rQueue.front();
-        makeAvailable(e, registry);
-        rQueue.pop();
     }
 }

@@ -45,11 +45,10 @@ void HorizontalLevelSystem::generate_next_chunk(Blackboard &blackboard,
 }
 
 void HorizontalLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
-    while (!platform_entities_.empty()) {
-        uint32_t platform = platform_entities_.front();
-        registry.destroy(platform);
-        platform_entities_.pop();
-    }
+    registry.destroy<Platform>();
+    registry.destroy<Llama>();
+    registry.destroy<Spit>();
+    registry.destroy<Bread>();
     last_col_placed_ = FIRST_COL_X;
 }
 
@@ -61,24 +60,18 @@ void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry
     if (last_col_placed_ < max_x) {
         load_next_chunk();
     }
-//    destroy_off_screen(registry, min_x); // fixme Do not uncomment, not working right now
+    destroy_off_screen(registry, min_x);
     generate_next_chunk(blackboard, registry);
     update_projectiles(blackboard, registry);
 }
 
 void HorizontalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float x) {
     auto view = registry.view<Platform, Transform>();
-    std::queue<uint32_t> rQueue;
-    for (u_int32_t entity: view) {
+    for (uint32_t entity: view) {
         auto &transform = view.get<Transform>(entity);
         if (transform.x < x) {
-            rQueue.push(entity);
+            registry.destroy(entity);
         }
-    }
-    while (!rQueue.empty()) {
-        const uint32_t e = rQueue.front();
-        makeAvailable(e, registry);
-        rQueue.pop();
     }
 }
 
