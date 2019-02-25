@@ -11,11 +11,13 @@
 #include <components/collidable.h>
 #include <components/platform.h>
 #include <components/bread.h>
+#include <components/ghost.h>
 #include <components/llama.h>
 #include <components/spit.h>
 #include <components/causes_damage.h>
 #include <components/health.h>
 #include <components/velocity.h>
+#include <components/obstacle.h>
 #include <components/interactable.h>
 #include <components/obeys_gravity.h>
 #include "util/random.h"
@@ -30,6 +32,8 @@ protected:
     std::queue<uint32_t> enemy_entities_;
     std::queue<uint32_t> projectile_entities_;
     std::queue<uint32_t> available_entities_;
+    std::queue<uint32_t> obstacle_entities_;
+
     const float BREAD_SPEED = 50.f;
     const float PROJECTILE_SPEED_X = -300.f;
     const float PROJECTILE_SPEED_Y = 10.f;

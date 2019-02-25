@@ -60,6 +60,11 @@ void HorizontalLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
         registry.destroy(projectile);
         projectile_entities_.pop();
     }
+    while (!obstacle_entities_.empty()) {
+        uint32_t obstacle = obstacle_entities_.front();
+        registry.destroy(obstacle);
+        obstacle_entities_.pop();
+    }
     last_col_placed_ = FIRST_COL_X;
 }
 
