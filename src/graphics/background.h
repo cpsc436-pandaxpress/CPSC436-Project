@@ -15,7 +15,7 @@ private:
     int z;
 
 public:
-    Background(Texture texture, Shader shader, int z);
+    Background(Texture texture, Shader shader, Mesh mesh, int z);
 
     Background(const Background &other);
 

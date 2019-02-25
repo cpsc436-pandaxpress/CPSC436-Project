@@ -27,5 +27,5 @@ public:
     void bind();
 
     // unbind the currently bound texture
-    static void unbind();
+    void unbind();
 };

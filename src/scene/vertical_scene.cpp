@@ -34,11 +34,12 @@ void VerticalScene::init_scene(Blackboard &blackboard) {
 void VerticalScene::create_panda(Blackboard &blackboard) {
     panda_entity = registry_.create();
 
-    auto texture = blackboard.textureManager.get_texture("panda");
+    auto texture = blackboard.texture_manager.get_texture("panda");
     auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
     float scale = 0.3f;
     registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scale, scale);
-    registry_.assign<Sprite>(panda_entity, texture, shader);
+    registry_.assign<Sprite>(panda_entity, texture, shader, mesh);
     registry_.assign<Panda>(panda_entity);
     registry_.assign<ObeysGravity>(panda_entity);
     registry_.assign<Health>(panda_entity, 1);
