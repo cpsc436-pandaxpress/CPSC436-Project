@@ -19,6 +19,7 @@
 #include "../systems/physics_system.h"
 #include "../systems/player_movement_system.h"
 #include "../systems/collision_system.h"
+#include "../systems/ghost_movement_system.h"
 
 class HorizontalScene: public Scene {
 private:
@@ -40,6 +41,7 @@ private:
     PhysicsSystem physics_system;
     PlayerMovementSystem player_movement_system;
     CollisionSystem collision_system;
+    GhostMovementSystem ghost_movement_system;
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);
