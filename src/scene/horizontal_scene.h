@@ -27,7 +27,7 @@ private:
     const float CAMERA_START_Y = 0.f;
     const float PANDA_START_X = -10.f;
     const float PANDA_START_Y = -200.f;
-    const float MAX_CAMERA_Y_DIFF = 200.f;
+    const float MAX_CAMERA_Y_DIFF = 100.f;
 
     std::vector<uint32_t> bg_entities;
     uint32_t panda_entity;
