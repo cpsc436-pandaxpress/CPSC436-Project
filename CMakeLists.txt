@@ -74,7 +74,9 @@ set(SOURCE_FILES
         src/components/llama.h src/components/spit.h
         src/components/tutorial.h
         src/systems/vertical_level_system.cpp
-        src/systems/vertical_level_system.h src/systems/ghost_movement_system.cpp src/systems/ghost_movement_system.cpp src/systems/ghost_movement_system.h)
+        src/systems/vertical_level_system.h
+        src/systems/ghost_movement_system.cpp
+        src/systems/ghost_movement_system.h)
 
 # Create executable target
 
