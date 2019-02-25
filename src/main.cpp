@@ -23,7 +23,7 @@
 #include <scene/boss_scene.h>
 
 
-static const SceneID HORIZONTAL_SCENE_ID = 0;
+static const SceneID BOSS_SCENE_ID = 0;
 static const SceneID VERTICAL_SCENE_ID = 1;
 
 int main(int argc, char** argv) {
@@ -80,14 +80,14 @@ int main(int argc, char** argv) {
 
 
     // initialize scenes here
-    BossScene horizontal_scene(blackboard, scene_manager);
+    BossScene boss_scene(blackboard, scene_manager);
     VerticalScene vertical_scene(blackboard, scene_manager);
 
-    scene_manager.add_scene(HORIZONTAL_SCENE_ID, (Scene*)(&horizontal_scene));
+    scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene));
     scene_manager.add_scene(VERTICAL_SCENE_ID, (Scene*)(&vertical_scene));
 
     // set the first scene
-    scene_manager.change_scene(HORIZONTAL_SCENE_ID);
+    scene_manager.change_scene(BOSS_SCENE_ID);
 
     //set background music
     if (SDL_Init(SDL_INIT_AUDIO) < 0)
