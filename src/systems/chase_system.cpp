@@ -34,15 +34,15 @@ void ChaseSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
         auto chasedPosition = registry.get<Transform>(chases.target);
 
         if (chasedPosition.x < transform.x) {
-            velocity.x_velocity = -40;
+            velocity.x_velocity = -chases.chase_speed;
         } else if (chasedPosition.x > transform.x) {
-            velocity.x_velocity = 40;
+            velocity.x_velocity = chases.chase_speed;
         }
 
         if (chasedPosition.y < transform.y) {
-            velocity.y_velocity = -40;
+            velocity.y_velocity = -chases.chase_speed;
         } else if (chasedPosition.y > transform.y) {
-            velocity.y_velocity = 40;
+            velocity.y_velocity = chases.chase_speed;
         }
 
     }

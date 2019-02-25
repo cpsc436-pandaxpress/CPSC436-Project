@@ -11,6 +11,7 @@
 class SelectorNode : public CompositeNode {
 public:
     virtual bool run() override;
+    SelectorNode();
 };
 
 #endif //PANDAEXPRESS_SELECTOR_NODE_H

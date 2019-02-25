@@ -82,15 +82,18 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
 
     for (auto food_entity : food_view) {
         auto& food = food_view.get<Food>(food_entity);
-        auto& fd_collidable = pandas_view.get<Collidable>(food_entity);
-        auto& fd_transform = pandas_view.get<Transform>(food_entity);
+        auto& fd_collidable = food_view.get<Collidable>(food_entity);
+        auto& fd_transform = food_view.get<Transform>(food_entity);
 
         for (auto health_entity : health_view) {
             auto& health = health_view.get<Health>(health_entity);
-            auto& pa_collidable = pandas_view.get<Collidable>(health_entity);
-            auto& pa_transform = pandas_view.get<Transform>(health_entity);
+            auto& pa_collidable = health_view.get<Collidable>(health_entity);
+            auto& pa_transform = health_view.get<Transform>(health_entity);
 
             if(food.eaten){
+                if(registry.has<Interactable>(food_entity)) {
+                    registry.remove<Interactable>(food_entity);
+                } //Should later make this just destroy the food but right now it's destroying everything
                 break;
             }
 

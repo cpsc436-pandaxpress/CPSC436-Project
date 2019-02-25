@@ -54,9 +54,7 @@ int main(int argc, char** argv) {
 
     blackboard.shader_manager.load_shader(
             shaders_path("sprite.vs.glsl"),
-            shaders_path("sprite.fs.glsl"),
-            "sprite"
-    );
+            shaders_path("sprite.fs.glsl"),"sprite");
 
     blackboard.textureManager.load_texture(textures_path("panda.png"), "panda");
     blackboard.textureManager.load_texture(textures_path("grass_block_1.png"), "platform1");
@@ -74,6 +72,8 @@ int main(int argc, char** argv) {
     blackboard.textureManager.load_texture(textures_path("tutorial.png"), "tutorial");
     blackboard.textureManager.load_texture(textures_path("tutorial2.png"), "tutorial_bread");
     blackboard.textureManager.load_texture(textures_path("jacko.png"), "jacko");
+    blackboard.textureManager.load_texture(textures_path("graveyard.png"), "graveyard");
+    blackboard.textureManager.load_texture(textures_path("burger.png"), "burger");
 
 
 
@@ -102,7 +102,7 @@ int main(int argc, char** argv) {
 
     }
     Mix_Music* m_background_music;
-    m_background_music = Mix_LoadMUS(audio_path("PE2.ogg"));
+    m_background_music = Mix_LoadMUS(audio_path("graveyard.ogg"));
 
 
     Mix_PlayMusic(m_background_music, -1);

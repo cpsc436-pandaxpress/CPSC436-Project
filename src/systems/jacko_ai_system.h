@@ -7,12 +7,21 @@
 
 #include "system.h"
 #include "util/selector_node.h"
+#include "components/jacko.h"
+#include "components/chases.h"
+#include "components/panda.h"
+#include "components/food.h"
+#include "components/health.h"
 
 class JackoAISystem: public System {
     private:
         SelectorNode *root;
+
     public:
+    JackoAISystem(Blackboard& blackboard, entt::DefaultRegistry& registry);
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;
+    int getPandaHealth(Blackboard& blackboard, entt::DefaultRegistry& registry);
+    int getJackoHealth(Blackboard& blackboard, entt::DefaultRegistry& registry);
 };
 
 

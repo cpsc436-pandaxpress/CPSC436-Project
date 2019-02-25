@@ -3,8 +3,9 @@
 //
 #include "selector_node.h"
 
+SelectorNode::SelectorNode(){}
 
-virtual bool SelectorNode::run() override {
+ bool SelectorNode::run()  {
     for (Node* child : getChildren()) {  // The generic Selector implementation
         if (child->run() == true)  // If one child succeeds, the entire operation run() succeeds.  Failure only results if all children fail.
             return true;

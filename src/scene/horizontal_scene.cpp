@@ -3,6 +3,7 @@
 //
 
 #include <graphics/background.h>
+#include <components/food.h>
 #include <components/obeys_gravity.h>
 #include <components/health.h>
 #include <components/interactable.h>
@@ -23,24 +24,25 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         physics_system(),
         player_movement_system(),
         collision_system(),
-        chase_system()
+        chase_system(),
+        jacko_ai_system(blackboard, registry_)
 {
     init_scene(blackboard);
-    create_tutorial(blackboard);
+
     gl_has_errors();
 }
 
 void HorizontalScene::update(Blackboard &blackboard) {
     update_camera(blackboard);
     update_panda(blackboard);
-    update_tutorial(blackboard);
 
-    level_system.update(blackboard, registry_);
+
+    //level_system.update(blackboard, registry_);
     chase_system.update(blackboard, registry_);
     player_movement_system.update(blackboard, registry_);
     collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
-
+    jacko_ai_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
 }
 
@@ -70,16 +72,6 @@ void HorizontalScene::update_camera(Blackboard &blackboard) {
     blackboard.camera.compose();
 }
 
-void HorizontalScene::update_tutorial(Blackboard &blackboard) {
-    float scaleY = 0.25;
-    float scaleX = 0.25;
-    auto &tutorial_trans = registry_.get<Transform>(tutorial2_entity);
-
-    if (tutorial_trans.x + 100.f < blackboard.camera.position().x - blackboard.camera.size().x / 2.0 ){
-        auto &tutorial_trans = registry_.replace<Transform>(tutorial_entity, -1500.f, -200.f, 0.f, scaleX, scaleY);
-        auto &tutorial2_trans = registry_.replace<Transform>(tutorial2_entity, -1500.f,  -200.f, 0.f, scaleX, scaleY);
-    }
-}
 
 void HorizontalScene::render(Blackboard &blackboard) {
     background_render_system.update(blackboard, registry_); // render background first
@@ -90,6 +82,7 @@ void HorizontalScene::reset_scene(Blackboard &blackboard) {
     level_system.destroy_entities(registry_);
     registry_.destroy(panda_entity);
     registry_.destroy(jacko_entity);
+    registry_.destroy(burger_entity);
     for (uint32_t e: bg_entities) {
         registry_.destroy(e);
     }
@@ -103,7 +96,10 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
     blackboard.camera.compose();
     create_background(blackboard);
     create_panda(blackboard);
-    create_jacko(blackboard, panda_entity);
+    create_food(blackboard);
+    create_jacko(blackboard, burger_entity);
+
+    create_platforms(blackboard);
 }
 
 void HorizontalScene::create_panda(Blackboard &blackboard) {
@@ -123,7 +119,7 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
 }
 
-void HorizontalScene::create_jacko(Blackboard &blackboard, uint32_t panda) {
+void HorizontalScene::create_jacko(Blackboard &blackboard, uint32_t target) {
     jacko_entity = registry_.create();
 
     auto texture = blackboard.textureManager.get_texture("jacko");
@@ -133,7 +129,7 @@ void HorizontalScene::create_jacko(Blackboard &blackboard, uint32_t panda) {
     registry_.assign<Transform>(jacko_entity, -300, -300, 0., scaleX, scaleY);
     registry_.assign<Sprite>(jacko_entity, texture, shader);
     registry_.assign<Jacko>(jacko_entity);
-    registry_.assign<Chases>(jacko_entity, panda);
+    registry_.assign<Chases>(jacko_entity, target);
 
     registry_.assign<Health>(jacko_entity, 3);
     registry_.assign<Interactable>(jacko_entity);
@@ -142,16 +138,34 @@ void HorizontalScene::create_jacko(Blackboard &blackboard, uint32_t panda) {
     registry_.assign<Collidable>(jacko_entity, texture.width() * scaleX, texture.height() * scaleY);
 }
 
+void HorizontalScene::create_food(Blackboard &blackboard) {
+    burger_entity = registry_.create();
+
+    auto texture = blackboard.textureManager.get_texture("burger");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    float scaleY = 50.0 / texture.height();
+    float scaleX = 50.0 / texture.width();
+    registry_.assign<Transform>(burger_entity, 300, 100, 0., scaleX, scaleY);
+    registry_.assign<Sprite>(burger_entity, texture, shader);
+    registry_.assign<Food>(burger_entity);
+    registry_.assign<Interactable>(burger_entity);
+    registry_.assign<ObeysGravity>(burger_entity);
+    registry_.assign<Velocity>(burger_entity);
+    registry_.assign<Collidable>(burger_entity, texture.width() * scaleX, texture.height() * scaleY);
+
+}
+
 void HorizontalScene::create_background(Blackboard &blackboard) {
     std::vector<Texture> textures;
-    textures.reserve(4);
+    textures.reserve(1);
     // This order matters for rendering
-    textures.push_back(blackboard.textureManager.get_texture("bg_top"));
-    textures.push_back(blackboard.textureManager.get_texture("bg_front"));
-    textures.push_back(blackboard.textureManager.get_texture("bg_middle"));
-    textures.push_back(blackboard.textureManager.get_texture("bg_back"));
+    textures.push_back(blackboard.textureManager.get_texture("graveyard"));
+    //textures.push_back(blackboard.textureManager.get_texture("bg_front"));
+    //textures.push_back(blackboard.textureManager.get_texture("bg_middle"));
+    //textures.push_back(blackboard.textureManager.get_texture("bg_back"));
     // end order
     auto shader = blackboard.shader_manager.get_shader("sprite");
+
     int i = 0;
     for (Texture t: textures) {
         auto bg_entity = registry_.create();
@@ -164,25 +178,44 @@ void HorizontalScene::create_background(Blackboard &blackboard) {
         bg_entities.push_back(bg_entity);
         i++;
     }
-}
-void HorizontalScene::create_tutorial(Blackboard &blackboard) {
-    tutorial_entity = registry_.create();
-    tutorial2_entity = registry_.create();
 
-    auto texture =  blackboard.textureManager.get_texture("tutorial");
-    auto texture2 =  blackboard.textureManager.get_texture("tutorial_bread");
+}
+
+
+void HorizontalScene::create_platforms(Blackboard &blackboard){
 
     auto shader = blackboard.shader_manager.get_shader("sprite");
+        auto texture = blackboard.textureManager.get_texture("platform1");
+        float scale = 100.0f / texture.width();
+        for(int i=-6; i<7; i++){
 
-    float scaleY = 0.25;
-    float scaleX = 0.25;
-    registry_.assign<Sprite>(tutorial_entity, texture, shader);
-    registry_.assign<Tutorial>(tutorial_entity);
-    registry_.assign<Transform>(tutorial_entity, 400.f, -200.f, 0., scaleX, scaleY);
 
-    registry_.assign<Sprite>(tutorial2_entity, texture2, shader);
-    registry_.assign<Tutorial>(tutorial2_entity);
-    registry_.assign<Transform>(tutorial2_entity, 900.f, -200.f, 0., scaleX, scaleY);
+        auto platform = registry_.create();
+        registry_.assign<Platform>(platform);
+        registry_.assign<Transform>(platform, i*100, 300, 0., scale,scale);
+        registry_.assign<Sprite>(platform, texture, shader);
+        registry_.assign<Collidable>(platform, texture.width() * scale,texture.height() * scale);
+        }
+
+    for(int i=-5; i<0; i+=2){
+
+
+        auto platform = registry_.create();
+        registry_.assign<Platform>(platform);
+        registry_.assign<Transform>(platform, 600, i*100, 0., scale,scale);
+        registry_.assign<Sprite>(platform, texture, shader);
+        registry_.assign<Collidable>(platform, texture.width() * scale,texture.height() * scale);
+    }
+
+    for(int i=-5; i<0; i+=2){
+
+
+        auto platform = registry_.create();
+        registry_.assign<Platform>(platform);
+        registry_.assign<Transform>(platform, -600, i*100, 0., scale,scale);
+        registry_.assign<Sprite>(platform, texture, shader);
+        registry_.assign<Collidable>(platform, texture.width() * scale,texture.height() * scale);
+    }
 
 }
 
