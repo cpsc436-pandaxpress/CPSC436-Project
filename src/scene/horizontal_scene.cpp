@@ -89,6 +89,7 @@ void HorizontalScene::render(Blackboard &blackboard) {
 void HorizontalScene::reset_scene(Blackboard &blackboard) {
     level_system.destroy_entities(registry_);
     registry_.destroy(panda_entity);
+    registry_.destroy(jacko_entity);
     for (uint32_t e: bg_entities) {
         registry_.destroy(e);
     }
@@ -125,15 +126,16 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
 void HorizontalScene::create_jacko(Blackboard &blackboard, uint32_t panda) {
     jacko_entity = registry_.create();
 
-    auto texture = blackboard.textureManager.get_texture("bread");
+    auto texture = blackboard.textureManager.get_texture("jacko");
     auto shader = blackboard.shader_manager.get_shader("sprite");
     float scaleY = 200.0 / texture.height();
     float scaleX = 200.0 / texture.width();
-    registry_.assign<Transform>(jacko_entity, PANDA_START_X-100, PANDA_START_Y-100, 0., scaleX, scaleY);
+    registry_.assign<Transform>(jacko_entity, -300, -300, 0., scaleX, scaleY);
     registry_.assign<Sprite>(jacko_entity, texture, shader);
     registry_.assign<Jacko>(jacko_entity);
     registry_.assign<Chases>(jacko_entity, panda);
-    registry_.assign<Health>(jacko_entity, 1);
+
+    registry_.assign<Health>(jacko_entity, 3);
     registry_.assign<Interactable>(jacko_entity);
     registry_.assign<CausesDamage>(jacko_entity, false, true, 1);
     registry_.assign<Velocity>(jacko_entity, 0.f, 0.f);

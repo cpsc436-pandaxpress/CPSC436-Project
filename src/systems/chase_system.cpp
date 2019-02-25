@@ -31,22 +31,19 @@ void ChaseSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
         auto &chases = chaser_view.get<Chases>(entity);
 
 
-        //    auto chasedPosition = registry.get<Transform>(chases.target);
+        auto chasedPosition = registry.get<Transform>(chases.target);
 
-
-        for (auto entity: panda_view) {
-            auto &pandaTransform = panda_view.get<Transform>(entity);
-            if (pandaTransform.x < transform.x) {
-                velocity.x_velocity = -20;
-            } else if (pandaTransform.x > transform.x) {
-                velocity.x_velocity = 20;
-            }
-
-            if (pandaTransform.y < transform.y) {
-                velocity.y_velocity = -20;
-            } else if (pandaTransform.y > transform.y) {
-                velocity.y_velocity = 20;
-            }
+        if (chasedPosition.x < transform.x) {
+            velocity.x_velocity = -40;
+        } else if (chasedPosition.x > transform.x) {
+            velocity.x_velocity = 40;
         }
+
+        if (chasedPosition.y < transform.y) {
+            velocity.y_velocity = -40;
+        } else if (chasedPosition.y > transform.y) {
+            velocity.y_velocity = 40;
+        }
+
     }
 }
