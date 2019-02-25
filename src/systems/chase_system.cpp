@@ -22,28 +22,42 @@ ChaseSystem::ChaseSystem() {}
 
 
 void ChaseSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry) {
-    auto chaser_view = registry.view<Chases, Transform, Velocity>();
+    auto chaser_view = registry.view<Chases, Transform, Velocity, Interactable>();
     auto panda_view = registry.view<Panda, Transform, Velocity>();
 
     for (auto entity: chaser_view) {
         auto &transform = chaser_view.get<Transform>(entity);
         auto &velocity = chaser_view.get<Velocity>(entity);
         auto &chases = chaser_view.get<Chases>(entity);
+        auto &interactable = chaser_view.get<Interactable>(entity);
 
 
         auto chasedPosition = registry.get<Transform>(chases.target);
 
-        if (chasedPosition.x < transform.x) {
-            velocity.x_velocity = -chases.chase_speed;
-        } else if (chasedPosition.x > transform.x) {
-            velocity.x_velocity = chases.chase_speed;
+        if(!chases.stomping){
+            if (chasedPosition.x < transform.x) {
+                velocity.x_velocity = -chases.chase_speed;
+            } else if (chasedPosition.x > transform.x) {
+                velocity.x_velocity = chases.chase_speed;
+            }
+
+            if (chasedPosition.y < transform.y) {
+                velocity.y_velocity = -chases.chase_speed;
+            } else if (chasedPosition.y > transform.y) {
+                velocity.y_velocity = chases.chase_speed;
+            }
+
+        } else{
+            if(!interactable.grounded){
+                velocity.y_velocity+=3;
+                velocity.x_velocity=0;
+            }else{
+                chases.stomping=false;
+            }
+
+
         }
 
-        if (chasedPosition.y < transform.y) {
-            velocity.y_velocity = -chases.chase_speed;
-        } else if (chasedPosition.y > transform.y) {
-            velocity.y_velocity = chases.chase_speed;
-        }
 
     }
 }

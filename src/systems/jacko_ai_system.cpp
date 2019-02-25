@@ -88,6 +88,36 @@ public:
     }
 };
 
+class StompPanda: public Node{
+private:
+    Blackboard& blackboard;
+    entt::DefaultRegistry& registry;
+public:
+    StompPanda(Blackboard& blackboard, entt::DefaultRegistry& registry) :
+            blackboard(blackboard),
+            registry(registry){}
+    virtual bool run() override {
+        auto jacko_view = registry.view<Jacko, Transform, Velocity, Interactable, Chases>();
+        for (auto jacko_entity: jacko_view) {
+            auto &ja_transform = jacko_view.get<Transform>(jacko_entity);
+            auto &ja_velocity = jacko_view.get<Velocity>(jacko_entity);
+            auto &ja_chases = jacko_view.get<Chases>(jacko_entity);
+            auto &ja_interactable = jacko_view.get<Interactable>(jacko_entity);
+
+            auto panda_view = registry.view<Panda, Transform>();
+            for(auto panda_entity:panda_view){
+                auto &pa_transform = panda_view.get<Transform>(panda_entity);
+                if(pa_transform.x > ja_transform.x && pa_transform.x < ja_transform.x+100 && pa_transform.y > ja_transform.y){
+                    ja_chases.stomping=true;
+                }
+            }
+
+        }
+
+        return false;
+    }
+};
+
 /***
  * This node makes Jacko try to get food when his health is low,
  * if there is no food left he will speed up to try to kill the panda
@@ -136,6 +166,7 @@ JackoAISystem::JackoAISystem(Blackboard& blackboard, entt::DefaultRegistry& regi
     checkHealth = new CheckHealth(getJackoHealth(blackboard,registry));
     ChasePanda* chasePanda = new ChasePanda(blackboard, registry);
     ChaseFood* chaseFood = new ChaseFood(blackboard, registry);
+    StompPanda* stompPanda = new StompPanda(blackboard, registry);
 
 
 
@@ -145,6 +176,7 @@ JackoAISystem::JackoAISystem(Blackboard& blackboard, entt::DefaultRegistry& regi
     firstSelector->addChild(checkPandaDeath);
     firstSelector->addChild(checkHealth);
     firstSelector->addChild(chasePanda);
+    firstSelector->addChild(stompPanda);
 
     checkHealth->addChild(chaseFood);
 

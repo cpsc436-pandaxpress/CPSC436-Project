@@ -13,10 +13,12 @@
 struct Chases {
     uint32_t target;
     float chase_speed;
+    bool stomping;
 
     explicit Chases(uint32_t target) :
             target(target),
-            chase_speed(120.f)
+            chase_speed(120.f),
+            stomping(false)
     {}
 };
 #endif //PANDAEXPRESS_CHASES_H

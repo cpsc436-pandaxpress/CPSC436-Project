@@ -11,6 +11,9 @@
 #include "components/chases.h"
 #include "components/panda.h"
 #include "components/food.h"
+#include "components/transform.h"
+#include "components/velocity.h"
+#include "components/interactable.h"
 #include "components/health.h"
 
 class JackoAISystem: public System {
