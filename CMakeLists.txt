@@ -66,8 +66,8 @@ set(SOURCE_FILES
         src/util/csv_reader.h
         src/systems/level_system.cpp
         src/systems/level_system.h
-        src/scene/horizontal_scene.cpp
-        src/scene/horizontal_scene.h
+        src/scene/boss_scene.cpp
+        src/scene/boss_scene.h
         src/systems/horizontal_level_system.h
         src/systems/horizontal_level_system.cpp
         src/components/llama.h src/components/spit.h

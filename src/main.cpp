@@ -20,7 +20,7 @@
 #include <scene/vertical_scene.h>
 #include <util/csv_reader.h>
 #include <iostream>
-#include <scene/horizontal_scene.h>
+#include <scene/boss_scene.h>
 
 
 static const SceneID HORIZONTAL_SCENE_ID = 0;
@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
 
 
     // initialize scenes here
-    HorizontalScene horizontal_scene(blackboard, scene_manager);
+    BossScene horizontal_scene(blackboard, scene_manager);
     VerticalScene vertical_scene(blackboard, scene_manager);
 
     scene_manager.add_scene(HORIZONTAL_SCENE_ID, (Scene*)(&horizontal_scene));
