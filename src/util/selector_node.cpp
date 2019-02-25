@@ -3,12 +3,24 @@
 //
 #include "selector_node.h"
 
+
 SelectorNode::SelectorNode(){}
 
+/***
+ * If any of the children return true the whole node returns true
+ * Idea for implementation from http://www.cplusplus.com/forum/general/141582/
+ */
  bool SelectorNode::run()  {
-    for (Node* child : getChildren()) {  // The generic Selector implementation
-        if (child->run() == true)  // If one child succeeds, the entire operation run() succeeds.  Failure only results if all children fail.
+    for (Node* child : getChildren()) {
+        if (child->run())
             return true;
     }
-    return false;  // All children failed so the entire run() operation fails.
+    return false;
+}
+
+std::vector<Node*> SelectorNode::getChildren(){
+    return children;
+}
+void SelectorNode::addChild (Node* child){
+    children.push_back(child);
 }

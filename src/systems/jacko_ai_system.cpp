@@ -6,8 +6,16 @@
 #include <iostream>
 using namespace std;
 
+/***
+ * Creating classes for each node of the behaviour tree
+ */
 
 
+
+/***
+ * Checks whether Jacko has more than one health point left
+ * run() returns false if healthpoints are more than one or if childnodes all return false
+ */
 class CheckHealth: public SelectorNode{
 private:
     int health;
@@ -31,6 +39,11 @@ public:
     }
 };
 
+/***
+ * Check if the panda is dead, right now it just resets
+ * but in the future we may want the boss to laugh at the
+ * player when they lose
+ */
 class CheckPandaDeath: public Node{
 private:
     int health;
@@ -45,6 +58,11 @@ public:
         return (health<1);
     }
 };
+
+/***
+ * This node makes sure that Jacko starts chasing the Panda again if he's not
+ * looking for food and always returns false
+ */
 
 class ChasePanda: public Node{
 private:
@@ -70,6 +88,10 @@ public:
     }
 };
 
+/***
+ * This node makes Jacko try to get food when his health is low,
+ * if there is no food left he will speed up to try to kill the panda
+ */
 class ChaseFood: public Node{
 private:
     Blackboard& blackboard;
@@ -87,16 +109,22 @@ public:
             for(auto food_entity:food_view){
                 if(!registry.get<Food>(food_entity).eaten){
                     chase.target=food_entity;
+                }else{
+                    auto panda_view = registry.view<Panda>();
+                    for(auto panda_entity: panda_view){
+                        chase.target=panda_entity;
+                    }
+                    chase.chase_speed=140;
                 }
-
             }
-
         }
-
         return true;
     }
 };
 
+/***
+ * Making these nodes global variables so they can be accessed from the update function
+ */
 CheckHealth* checkHealth;
 CheckPandaDeath* checkPandaDeath;
 
@@ -111,7 +139,7 @@ JackoAISystem::JackoAISystem(Blackboard& blackboard, entt::DefaultRegistry& regi
 
 
 
-    // Build the tree
+    // Building the behaviour tree
     root->addChild(firstSelector);
 
     firstSelector->addChild(checkPandaDeath);

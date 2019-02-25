@@ -73,7 +73,7 @@ set(SOURCE_FILES
         src/components/llama.h src/components/spit.h
         src/components/tutorial.h
         src/systems/vertical_level_system.cpp
-        src/systems/vertical_level_system.h src/systems/a_star_system.cpp src/systems/a_star_system.h src/components/chases.h src/systems/chase_system.cpp src/systems/chase_system.h src/util/behaviour_tree.cpp src/util/behaviour_tree.h src/util/node.cpp src/util/node.h src/util/composite_node.h src/util/composite_node.cpp src/util/selector_node.h src/util/selector_node.cpp src/systems/jacko_ai_system.cpp src/systems/jacko_ai_system.h)
+        src/systems/vertical_level_system.h src/components/chases.h src/systems/chase_system.cpp src/systems/chase_system.h src/util/node.cpp src/util/node.h src/util/selector_node.h src/util/selector_node.cpp src/systems/jacko_ai_system.cpp src/systems/jacko_ai_system.h)
 
 # Create executable target
 

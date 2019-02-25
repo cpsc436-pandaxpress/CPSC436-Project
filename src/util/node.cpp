@@ -3,3 +3,7 @@
 //
 
 #include "node.h"
+
+bool Node::run(){
+    return false;
+}

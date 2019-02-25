@@ -5,13 +5,20 @@
 #ifndef PANDAEXPRESS_SELECTOR_NODE_H
 #define PANDAEXPRESS_SELECTOR_NODE_H
 
-#include "composite_node.h"
+#include "node.h"
 #include "vector"
 
-class SelectorNode : public CompositeNode {
+
+class SelectorNode : public Node {
+private:
+    std::vector<Node*> children;
 public:
     virtual bool run() override;
+    std::vector<Node*> getChildren();
+    void addChild (Node* child);
     SelectorNode();
 };
+
+
 
 #endif //PANDAEXPRESS_SELECTOR_NODE_H

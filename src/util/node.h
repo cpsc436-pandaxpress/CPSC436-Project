@@ -5,11 +5,14 @@
 #ifndef PANDAEXPRESS_NODE_H
 #define PANDAEXPRESS_NODE_H
 
+/***
+ *   Basically an interface for the nodes of the behaviour tree
+ */
 
 
-class Node {  // This class represents each node in the behaviour tree.
+class Node {
     public:
-        virtual bool run() = 0;
+        virtual bool run();
 
 };
 
