@@ -48,6 +48,23 @@ void LevelSystem::generateEntity(int value, float x, float y,
             enemy_entities_.push(bread);
         }
             break;
+        case 4: {
+            auto texture = blackboard.textureManager.get_texture("ghost");
+            auto shader = blackboard.shader_manager.get_shader("sprite");
+            auto scale = static_cast<float>(CELL_WIDTH / texture.width());
+            auto ghost = createEntity(registry);
+            registry.assign<Transform>(ghost, x, y, 0., scale,
+                                       scale);
+            registry.assign<Sprite>(ghost, texture, shader);
+            registry.assign<Ghost>(ghost);
+            registry.assign<CausesDamage>(ghost, false, true, 1);
+            registry.assign<Health>(ghost,1);
+            registry.assign<Velocity>(ghost, -0.f, 0.f);
+            registry.assign<Collidable>(ghost, texture.width() * scale,
+                                        texture.height() * scale);
+            enemy_entities_.push(ghost);
+        }
+            break;
         case 5: {
             auto texture = blackboard.textureManager.get_texture("llama");
             auto shader = blackboard.shader_manager.get_shader("sprite");

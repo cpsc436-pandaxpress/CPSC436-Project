@@ -11,6 +11,7 @@
 #include <components/collidable.h>
 #include <components/platform.h>
 #include <components/bread.h>
+#include <components/ghost.h>
 #include <components/llama.h>
 #include <components/spit.h>
 #include <components/causes_damage.h>
