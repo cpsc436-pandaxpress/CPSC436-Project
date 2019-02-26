@@ -20,7 +20,7 @@ Mesh::Mesh(size_t vertex_count, TexturedVertex *vertices, size_t index_count, ui
 }
 
 Mesh::~Mesh() {
-    // Commented out as a temporary fix for destroying single entities
+    // fixme Commented out as a temporary fix for destroying single entities
     // glDeleteBuffers(1, &vbo_);
     // glDeleteBuffers(1, &ibo_);
     // glDeleteBuffers(1, &vao_);

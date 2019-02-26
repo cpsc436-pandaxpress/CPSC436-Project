@@ -6,19 +6,18 @@
 #include <util/csv_reader.h>
 #include <components/transform.h>
 #include <components/collidable.h>
-#include <iostream>
-#include "horizontal_level_system.h"
+#include "boss_level_system.h"
 
-HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem() {
+BossLevelSystem::BossLevelSystem(): LevelSystem() {
     init();
 }
 
-void HorizontalLevelSystem::init(){
+void BossLevelSystem::init(){
     LevelSystem::init();
     last_col_generated_ = last_col_loaded_ = FIRST_COL_X;
 }
 
-void HorizontalLevelSystem::load_next_chunk() {
+void BossLevelSystem::load_next_chunk() {
     std::string level_path = levels_path("");
     int levelN = rng_.nextInt(0, 8);
     std::string levelFile = level_path + "level_" + std::to_string(levelN) + ".csv";
@@ -37,7 +36,7 @@ void HorizontalLevelSystem::load_next_chunk() {
 
 // y should range from (-400, 400)
 
-void HorizontalLevelSystem::generate_next_chunk(Blackboard &blackboard,
+void BossLevelSystem::generate_next_chunk(Blackboard &blackboard,
                                                 entt::DefaultRegistry &registry) {
     float off_screen = blackboard.camera.position().x + blackboard.camera.size().x;
     while (last_col_generated_ < off_screen && !chunks_.empty()) { // second condn is safety check
@@ -52,21 +51,34 @@ void HorizontalLevelSystem::generate_next_chunk(Blackboard &blackboard,
     }
 }
 
-void HorizontalLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
-    registry.destroy<Platform>();
-    registry.destroy<Llama>();
-    registry.destroy<Spit>();
-    registry.destroy<Bread>();
-    registry.destroy<Ghost>();
-    registry.destroy<Obstacle>();
-
+void BossLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
+    while (!platform_entities_.empty()) {
+        uint32_t platform = platform_entities_.front();
+        registry.destroy(platform);
+        platform_entities_.pop();
+    }
+    while (!enemy_entities_.empty()) {
+        uint32_t enemy = enemy_entities_.front();
+        registry.destroy(enemy);
+        enemy_entities_.pop();
+    }
+    while (!projectile_entities_.empty()) {
+        uint32_t projectile = projectile_entities_.front();
+        registry.destroy(projectile);
+        projectile_entities_.pop();
+    }
+    while (!obstacle_entities_.empty()) {
+        uint32_t obstacle = obstacle_entities_.front();
+        registry.destroy(obstacle);
+        obstacle_entities_.pop();
+    }
     while (!chunks_.empty()) {
         chunks_.front().clear();
         chunks_.pop();
     }
 }
 
-void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+void BossLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     float max_x =
             blackboard.camera.position().x + blackboard.camera.size().x; // some distance off camera
     float min_x =
@@ -74,62 +86,28 @@ void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry
     while (last_col_loaded_ < max_x) {
         load_next_chunk();
     }
-    destroy_off_screen(registry, min_x);
+//    destroy_off_screen(registry, min_x); // fixme Do not uncomment, not working right now
     generate_next_chunk(blackboard, registry);
     update_projectiles(blackboard, registry);
 }
 
-void HorizontalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float x) {
-    auto platforms = registry.view<Platform, Transform>();
-    for (uint32_t entity: platforms) {
-        auto &transform = platforms.get<Transform>(entity);
+void BossLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float x) {
+    auto view = registry.view<Platform, Transform>();
+    std::queue<uint32_t> rQueue;
+    for (u_int32_t entity: view) {
+        auto &transform = view.get<Transform>(entity);
         if (transform.x < x) {
-            registry.destroy(entity);
+            rQueue.push(entity);
         }
     }
-
-    auto llamas = registry.view<Llama, Transform>();
-    for (uint32_t entity: llamas) {
-        auto &transform = llamas.get<Transform>(entity);
-        if (transform.x < x) {
-            registry.destroy(entity);
-        }
-    }
-
-    auto spits = registry.view<Spit, Transform>();
-    for (uint32_t entity: spits) {
-        auto &transform = spits.get<Transform>(entity);
-        if (transform.x < x) {
-            registry.destroy(entity);
-        }
-    }
-
-    auto breads = registry.view<Bread, Transform>();
-    for (uint32_t entity: breads) {
-        auto &transform = breads.get<Transform>(entity);
-        if (transform.x < x) {
-            registry.destroy(entity);
-        }
-    }
-
-    auto ghosts = registry.view<Ghost, Transform>();
-    for (uint32_t entity: ghosts) {
-        auto &transform = ghosts.get<Transform>(entity);
-        if (transform.x < x) {
-            registry.destroy(entity);
-        }
-    }
-
-    auto obstacles = registry.view<Obstacle, Transform>();
-    for (uint32_t entity: obstacles) {
-        auto &transform = obstacles.get<Transform>(entity);
-        if (transform.x < x) {
-            registry.destroy(entity);
-        }
+    while (!rQueue.empty()) {
+        const uint32_t e = rQueue.front();
+        makeAvailable(e, registry);
+        rQueue.pop();
     }
 }
 
-void HorizontalLevelSystem::update_projectiles(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+void BossLevelSystem::update_projectiles(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     vec2 cam_position = blackboard.camera.position();
     vec2 cam_size = blackboard.camera.size();
 
@@ -144,11 +122,11 @@ void HorizontalLevelSystem::update_projectiles(Blackboard &blackboard, entt::Def
         if (la_transform.y > 500)
             llama.alive = false;
 
-        if(llama.spit_time <= 0) {
+        if(llama.spit_time == 0) {
             generateProjectile(la_transform.x, la_transform.y, blackboard, registry);
             llama.spit_time = PROJECTILE_SPACING;
         } else {
-            llama.spit_time -= blackboard.delta_time;
+            llama.spit_time--;
         }
     }
 }
