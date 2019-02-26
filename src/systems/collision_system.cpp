@@ -108,48 +108,48 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
             } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, gh_collidable, gh_transform)) {
                 panda.alive = false;
             }
+        }
 
-            for (auto enemy_entity : llama_view) {
-                auto &llama = llama_view.get<Llama>(enemy_entity);
-                auto &br_collidable = llama_view.get<Collidable>(enemy_entity);
-                auto &br_transform = llama_view.get<Transform>(enemy_entity);
+        for (auto enemy_entity : llama_view) {
+            auto &llama = llama_view.get<Llama>(enemy_entity);
+            auto &br_collidable = llama_view.get<Collidable>(enemy_entity);
+            auto &br_transform = llama_view.get<Transform>(enemy_entity);
 
-                if (!llama.alive) {
-                    registry.remove<Interactable>(enemy_entity);
-                    break;
-                }
-
-                if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, br_collidable,
-                                                 br_transform)) {
-                    llama.alive = false;
-                    pa_velocity.y_velocity = -400.f;
-                } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, br_collidable, br_transform)) {
-                    panda.alive = false;
-                }
+            if (!llama.alive) {
+                registry.remove<Interactable>(enemy_entity);
+                break;
             }
 
-            for (auto enemy_entity : projectile_view) {
-                auto &projectile = projectile_view.get<Spit>(enemy_entity);
-                auto &proj_collidable = projectile_view.get<Collidable>(enemy_entity);
-                auto &proj_transform = projectile_view.get<Transform>(enemy_entity);
-
-                if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, proj_collidable,
-                                                 proj_transform)) {
-                    panda.alive = false;
-                } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, proj_collidable,
-                                                         proj_transform)) {
-                    panda.alive = false;
-                }
+            if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, br_collidable,
+                                             br_transform)) {
+                llama.alive = false;
+                pa_velocity.y_velocity = -400.f;
+            } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, br_collidable, br_transform)) {
+                panda.alive = false;
             }
+        }
 
-            for (auto obstacle_entity : obstacle_view) {
-                auto &obstacle = obstacle_view.get<Obstacle>(obstacle_entity);
-                auto &ob_co = obstacle_view.get<Collidable>(obstacle_entity);
-                auto &ob_tr = obstacle_view.get<Transform>(obstacle_entity);
+        for (auto enemy_entity : projectile_view) {
+            auto &projectile = projectile_view.get<Spit>(enemy_entity);
+            auto &proj_collidable = projectile_view.get<Collidable>(enemy_entity);
+            auto &proj_transform = projectile_view.get<Transform>(enemy_entity);
 
-                if (checkObstaclePandaCollision(pa_collidable, pa_transform, ob_co, ob_tr)) {
-                    panda.alive = false;
-                }
+            if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, proj_collidable,
+                                             proj_transform)) {
+                panda.alive = false;
+            } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, proj_collidable,
+                                                     proj_transform)) {
+                panda.alive = false;
+            }
+        }
+
+        for (auto obstacle_entity : obstacle_view) {
+            auto &obstacle = obstacle_view.get<Obstacle>(obstacle_entity);
+            auto &ob_co = obstacle_view.get<Collidable>(obstacle_entity);
+            auto &ob_tr = obstacle_view.get<Transform>(obstacle_entity);
+
+            if (checkObstaclePandaCollision(pa_collidable, pa_transform, ob_co, ob_tr)) {
+                panda.alive = false;
             }
         }
     }
@@ -162,7 +162,7 @@ bool checkCollision(Collidable collidable1, Transform transform1, Velocity veloc
                     transform1.x + collidable1.width / 2 >= transform2.x - collidable2.width / 2 &&
                     transform1.y - collidable1.height / 2 <= transform2.y + collidable2.height / 2 &&
                     transform1.y + collidable1.height / 2 >= transform2.y - collidable2.height / 2 &&
-                    velocity1.y_velocity > 0;
+                    velocity1.y_velocity >= 0;
 }
 
 bool checkEnemyPandaCollisionFatal(Collidable pa_co, Transform pa_tr, Collidable br_co, Transform brd_tr) {
