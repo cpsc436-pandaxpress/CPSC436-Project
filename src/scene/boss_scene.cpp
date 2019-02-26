@@ -37,7 +37,7 @@ void BossScene::update(Blackboard &blackboard) {
     update_panda(blackboard);
 
 
-    //level_system.update(blackboard, registry_);
+
     chase_system.update(blackboard, registry_);
     player_movement_system.update(blackboard, registry_);
     collision_system.update(blackboard, registry_);
@@ -82,7 +82,7 @@ void BossScene::reset_scene(Blackboard &blackboard) {
     level_system.destroy_entities(registry_);
     registry_.destroy(panda_entity);
     registry_.destroy(jacko_entity);
-    registry_.destroy(burger_entity);
+    registry_.destroy<Food>();
     for (uint32_t e: bg_entities) {
         registry_.destroy(e);
     }

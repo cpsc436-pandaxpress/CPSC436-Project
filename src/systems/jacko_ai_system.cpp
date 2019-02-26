@@ -136,15 +136,16 @@ public:
             auto &chase = jacko_view.get<Chases>(jacko_entity);
 
             auto food_view = registry.view<Food>();
+            if (food_view.empty()){
+                auto panda_view = registry.view<Panda>();
+                for(auto panda_entity: panda_view){
+                    chase.target=panda_entity;
+                }
+                chase.chase_speed=180;
+            }
             for(auto food_entity:food_view){
                 if(!registry.get<Food>(food_entity).eaten){
                     chase.target=food_entity;
-                }else{
-                    auto panda_view = registry.view<Panda>();
-                    for(auto panda_entity: panda_view){
-                        chase.target=panda_entity;
-                    }
-                    chase.chase_speed=180;
                 }
             }
         }

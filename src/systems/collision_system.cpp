@@ -91,9 +91,12 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
             auto& pa_transform = health_view.get<Transform>(health_entity);
 
             if(food.eaten){
+                registry.destroy(food_entity);
+                /*
                 if(registry.has<Interactable>(food_entity)) {
                     registry.remove<Interactable>(food_entity);
                 } //Should later make this just destroy the food but right now it's destroying everything
+                 */
                 break;
             }
 
