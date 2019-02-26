@@ -31,8 +31,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto scale = static_cast<float>(CELL_WIDTH / texture.width()/2);
             auto bread = registry.create();
-            registry.assign<Transform>(bread, x, y, 0., scale,
-                                       scale);
+            registry.assign<Transform>(bread, x, y, 0., scale, scale);
             registry.assign<Sprite>(bread, texture, shader);
             registry.assign<Bread>(bread);
             registry.assign<CausesDamage>(bread, false, true, 1);
@@ -42,6 +41,22 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Collidable>(bread, texture.width() * scale,
                                         texture.height() * scale);
             registry.assign<ObeysGravity>(bread);
+        }
+            break;
+        case 4: {
+            auto texture = blackboard.textureManager.get_texture("ghost");
+            auto shader = blackboard.shader_manager.get_shader("sprite");
+            auto scale = static_cast<float>(CELL_WIDTH / texture.width());
+            auto ghost = registry.create();
+            registry.assign<Transform>(ghost, x, y, 0., scale,
+                                       scale);
+            registry.assign<Sprite>(ghost, texture, shader);
+            registry.assign<Ghost>(ghost);
+            registry.assign<CausesDamage>(ghost, false, true, 1);
+            registry.assign<Health>(ghost,1);
+            registry.assign<Velocity>(ghost, -0.f, 0.f);
+            registry.assign<Collidable>(ghost, texture.width() * scale,
+                                        texture.height() * scale);
         }
             break;
         case 5: {
@@ -60,6 +75,34 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Collidable>(llama, texture.width() * scale,
                                         texture.height() * scale);
             registry.assign<ObeysGravity>(llama);
+        }
+            break;
+        case 6: {
+            auto texture = blackboard.textureManager.get_texture("stalagmite2");
+            auto shader = blackboard.shader_manager.get_shader("sprite");
+            auto scale = static_cast<float>(CELL_WIDTH / texture.width());
+            auto stalagmite2 = registry.create();
+            registry.assign<Obstacle>(stalagmite2);
+            registry.assign<Transform>(stalagmite2, x, y, 0., scale,
+                                       scale);
+            registry.assign<Sprite>(stalagmite2, texture, shader);
+            registry.assign<Collidable>(stalagmite2, texture.width() * scale,
+                                        texture.height() * scale);
+        }
+            break;
+        case 7: {
+            auto texture = blackboard.textureManager.get_texture("stalagmite");
+            auto shader = blackboard.shader_manager.get_shader("sprite");
+            auto scale = static_cast<float>(CELL_WIDTH / texture.width());
+            auto stalagmite = registry.create();
+            registry.assign<Obstacle>(stalagmite);
+            registry.assign<CausesDamage>(stalagmite, false, true, 1);
+            registry.assign<Transform>(stalagmite, x, y, 0., scale,
+                                       scale);
+            registry.assign<Sprite>(stalagmite, texture, shader);
+            registry.assign<Collidable>(stalagmite, texture.width() * scale,
+                                        texture.height() * scale);
+
         }
             break;
         default:

@@ -50,6 +50,8 @@ void HorizontalLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
     registry.destroy<Llama>();
     registry.destroy<Spit>();
     registry.destroy<Bread>();
+    registry.destroy<Ghost>();
+    registry.destroy<Obstacle>();
     last_col_placed_ = FIRST_COL_X;
 }
 
@@ -57,7 +59,7 @@ void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry
     float max_x =
             blackboard.camera.position().x + blackboard.camera.size().x; // some distance off camera
     float min_x =
-            blackboard.camera.position().x - blackboard.camera.size().x / 2 + 100; // some distance off camera
+            blackboard.camera.position().x - blackboard.camera.size().x; // some distance off camera
     if (last_col_placed_ < max_x) {
         load_next_chunk();
     }
@@ -96,7 +98,22 @@ void HorizontalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, 
         auto &transform = breads.get<Transform>(entity);
         if (transform.x < x) {
             registry.destroy(entity);
-            std::cout << "destroyed bread\n";
+        }
+    }
+
+    auto ghosts = registry.view<Ghost, Transform>();
+    for (uint32_t entity: ghosts) {
+        auto &transform = ghosts.get<Transform>(entity);
+        if (transform.x < x) {
+            registry.destroy(entity);
+        }
+    }
+
+    auto obstacles = registry.view<Obstacle, Transform>();
+    for (uint32_t entity: obstacles) {
+        auto &transform = obstacles.get<Transform>(entity);
+        if (transform.x < x) {
+            registry.destroy(entity);
         }
     }
 }

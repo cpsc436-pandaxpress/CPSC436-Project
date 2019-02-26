@@ -47,6 +47,8 @@ void VerticalLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
     registry.destroy<Llama>();
     registry.destroy<Spit>();
     registry.destroy<Bread>();
+    registry.destroy<Ghost>();
+    registry.destroy<Obstacle>();
     last_row_placed_ = FIRST_ROW_Y;
 }
 
@@ -63,10 +65,26 @@ void VerticalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &
 }
 
 void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float y) {
-    auto view = registry.view<Platform, Transform>();
-    for (uint32_t entity: view) {
-        auto &transform = view.get<Transform>(entity);
-        if (transform.y > y) {
+    auto platforms = registry.view<Platform, Transform>();
+    for (uint32_t entity: platforms) {
+        auto &transform = platforms.get<Transform>(entity);
+        if (transform.x < y) {
+            registry.destroy(entity);
+        }
+    }
+
+    auto llamas = registry.view<Llama, Transform>();
+    for (uint32_t entity: llamas) {
+        auto &transform = llamas.get<Transform>(entity);
+        if (transform.x < y) {
+            registry.destroy(entity);
+        }
+    }
+
+    auto spits = registry.view<Spit, Transform>();
+    for (uint32_t entity: spits) {
+        auto &transform = spits.get<Transform>(entity);
+        if (transform.x < y) {
             registry.destroy(entity);
         }
     }
