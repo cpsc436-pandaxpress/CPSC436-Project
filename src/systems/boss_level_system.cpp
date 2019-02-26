@@ -52,26 +52,7 @@ void BossLevelSystem::generate_next_chunk(Blackboard &blackboard,
 }
 
 void BossLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
-    while (!platform_entities_.empty()) {
-        uint32_t platform = platform_entities_.front();
-        registry.destroy(platform);
-        platform_entities_.pop();
-    }
-    while (!enemy_entities_.empty()) {
-        uint32_t enemy = enemy_entities_.front();
-        registry.destroy(enemy);
-        enemy_entities_.pop();
-    }
-    while (!projectile_entities_.empty()) {
-        uint32_t projectile = projectile_entities_.front();
-        registry.destroy(projectile);
-        projectile_entities_.pop();
-    }
-    while (!obstacle_entities_.empty()) {
-        uint32_t obstacle = obstacle_entities_.front();
-        registry.destroy(obstacle);
-        obstacle_entities_.pop();
-    }
+
     while (!chunks_.empty()) {
         chunks_.front().clear();
         chunks_.pop();
@@ -102,7 +83,7 @@ void BossLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float 
     }
     while (!rQueue.empty()) {
         const uint32_t e = rQueue.front();
-        makeAvailable(e, registry);
+
         rQueue.pop();
     }
 }
