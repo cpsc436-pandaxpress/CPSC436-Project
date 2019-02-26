@@ -5,15 +5,20 @@
 
 #include <iostream>
 #include "components/collidable.h"
+#include "components/jacko.h"
+#include "components/health.h"
 #include "components/platform.h"
+#include "components/food.h"
 #include "components/velocity.h"
 #include "components/interactable.h"
+#include "components/obeys_gravity.h"
 #include "collision_system.h"
 #include "components/panda.h"
 #include "components/transform.h"
 #include "components/bread.h"
 #include "components/ghost.h"
 #include "components/llama.h"
+#include "components/chases.h"
 #include "components/spit.h"
 #include "components/obstacle.h"
 using namespace std;
@@ -69,10 +74,43 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
     // TODO: generalize this to use the causesDamage component
     auto pandas_view = registry.view<Panda, Transform, Interactable, Collidable, Velocity>();
     auto bread_view = registry.view<Bread, Transform, Interactable, Collidable>();
+
+    auto jacko_view = registry.view<Jacko, Transform, Interactable, Collidable, Health, Chases>();
+
     auto ghost_view = registry.view<Ghost, Transform, Collidable>();
+
     auto llama_view = registry.view<Llama, Transform, Interactable, Collidable>();
     auto projectile_view = registry.view<Spit, Transform, Interactable, Collidable>();
     auto obstacle_view = registry.view<Obstacle, Transform, Collidable>();
+    auto food_view = registry.view<Food, Transform, Collidable>();
+    auto health_view = registry.view<Transform, Collidable, Health>();
+
+    for (auto food_entity : food_view) {
+        auto& food = food_view.get<Food>(food_entity);
+        auto& fd_collidable = food_view.get<Collidable>(food_entity);
+        auto& fd_transform = food_view.get<Transform>(food_entity);
+
+        for (auto health_entity : health_view) {
+            auto& health = health_view.get<Health>(health_entity);
+            auto& pa_collidable = health_view.get<Collidable>(health_entity);
+            auto& pa_transform = health_view.get<Transform>(health_entity);
+
+            if(food.eaten){
+                registry.destroy(food_entity);
+                /*
+                if(registry.has<Interactable>(food_entity)) {
+                    registry.remove<Interactable>(food_entity);
+                } //Should later make this just destroy the food but right now it's destroying everything
+                 */
+                break;
+            }
+
+            if(checkObstaclePandaCollision(pa_collidable, pa_transform, fd_collidable, fd_transform)){
+                health.healthPoints++;
+                food.eaten=true;
+            }
+        }
+    }
 
     for (auto panda_entity : pandas_view) {
         auto &panda = pandas_view.get<Panda>(panda_entity);
@@ -98,6 +136,37 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
             }
         }
 
+
+        for (auto enemy_entity : jacko_view) {
+            auto& jacko = jacko_view.get<Jacko>(enemy_entity);
+            auto& ja_collidable = jacko_view.get<Collidable>(enemy_entity);
+            auto& ja_transform = jacko_view.get<Transform>(enemy_entity);
+            auto& ja_health = jacko_view.get<Health>(enemy_entity);
+            auto& ja_chases = jacko_view.get<Chases>(enemy_entity);
+
+            if (!jacko.alive) {
+                registry.remove<Interactable>(enemy_entity);
+                registry.remove<Chases>(enemy_entity);
+                registry.assign<ObeysGravity>(enemy_entity);
+                break;
+            }
+
+            if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, ja_collidable, ja_transform)) {
+                pa_velocity.y_velocity = -900.f;
+                ja_health.healthPoints--;
+                if(jacko.alive){
+                    ja_chases.evading=true;
+                }
+
+
+                if(ja_health.healthPoints<1){
+                    jacko.alive=false;
+                }
+
+            } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, ja_collidable, ja_transform)) {
+                panda.alive = false;
+            }
+        }
         for (auto enemy_entity : ghost_view) {
             auto &ghost = ghost_view.get<Ghost>(enemy_entity);
             auto &gh_collidable = ghost_view.get<Collidable>(enemy_entity);
@@ -106,9 +175,11 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
             if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, gh_collidable, gh_transform)) {
                 panda.alive = false;
             } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, gh_collidable, gh_transform)) {
+
                 panda.alive = false;
             }
         }
+
 
         for (auto enemy_entity : llama_view) {
             auto &llama = llama_view.get<Llama>(enemy_entity);
