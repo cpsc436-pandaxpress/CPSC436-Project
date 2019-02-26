@@ -64,11 +64,11 @@ void VerticalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &
     generate_next_chunk(blackboard, registry);
 }
 
-void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float y) {
+void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float max_y) {
     auto platforms = registry.view<Platform, Transform>();
     for (uint32_t entity: platforms) {
         auto &transform = platforms.get<Transform>(entity);
-        if (transform.x < y) {
+        if (transform.y > max_y) {
             registry.destroy(entity);
         }
     }
@@ -76,7 +76,7 @@ void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, fl
     auto llamas = registry.view<Llama, Transform>();
     for (uint32_t entity: llamas) {
         auto &transform = llamas.get<Transform>(entity);
-        if (transform.x < y) {
+        if (transform.y > max_y) {
             registry.destroy(entity);
         }
     }
@@ -84,7 +84,7 @@ void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, fl
     auto spits = registry.view<Spit, Transform>();
     for (uint32_t entity: spits) {
         auto &transform = spits.get<Transform>(entity);
-        if (transform.x < y) {
+        if (transform.y > max_y) {
             registry.destroy(entity);
         }
     }

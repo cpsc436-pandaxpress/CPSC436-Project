@@ -16,7 +16,7 @@ private:
 
     void generate_next_chunk(Blackboard &blackboard, entt::DefaultRegistry &registry);
 
-    void destroy_off_screen(entt::DefaultRegistry &registry, float y);
+    void destroy_off_screen(entt::DefaultRegistry &registry, float max_y);
 
     const float FIRST_ROW_Y = 300.f;
     const float COL_X_OFFSET = -750.f;
