@@ -5,7 +5,9 @@
 #pragma once
 
 #include <unordered_map>
-
+#include <SDL.h>
+#include <SDL_mixer.h>
+#include <sstream>
 #include "scene.h"
 #include "../util/blackboard.h"
 
@@ -13,12 +15,12 @@
 class SceneManager {
 private:
     std::unordered_map<SceneID, Scene*> scenes_;
-    SceneID current_scene_;
+
     bool current_scene_set_ = false;
 
 public:
     SceneManager();
-
+    SceneID current_scene_;
     // adds scene to scenes_ with key of id
     // DOES NOT manage memory of provided scene, should be done elsewhere
     // fails and returns false if another scene exists with the given ID

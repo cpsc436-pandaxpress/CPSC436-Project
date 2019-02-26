@@ -1,7 +1,6 @@
 //
 // Created by alex on 24/01/19.
 //
-
 #include "mesh.h"
 
 Mesh::Mesh(GLuint vao, GLuint vbo, GLuint ibo) :

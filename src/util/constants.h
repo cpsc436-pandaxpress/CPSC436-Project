@@ -13,7 +13,9 @@
 #define audio_path(name) data_path "/audio/" name
 #define levels_path(name) data_path "/levels/" name
 
-static const SceneID HORIZONTAL_SCENE_ID = 0;
-static const SceneID VERTICAL_SCENE_ID = 1;
+static const SceneID MAIN_MENU_SCENE_ID   = 0;
+static const SceneID HORIZONTAL_SCENE_ID  = 1;
+static const SceneID VERTICAL_SCENE_ID    = 2;
+static const SceneID BOSS_SCENE_ID    = 3;
 
 #endif //PANDAEXPRESS_CONSTANTS_H

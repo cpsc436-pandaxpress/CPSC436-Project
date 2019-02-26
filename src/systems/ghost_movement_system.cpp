@@ -45,8 +45,8 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
                     auto &pa_transform = pandas_view.get<Transform>(panda_entity);
                     ghost.aim_pt.x = pa_transform.x;
                     ghost.aim_pt.y = pa_transform.y;
-                    ghost.aim_tangent.x = abs(pa_transform.x) * -2.5;
-                    ghost.aim_tangent.y = abs(pa_transform.y) * 4;
+                    ghost.aim_tangent.x = abs(pa_transform.x - cam_position.x + cam_size.x) * -2.5;
+                    ghost.aim_tangent.y = pa_transform.y * 4;
                 }
                 ghost.start_pt.x = gh_transform.x;
                 ghost.start_pt.y = gh_transform.y;

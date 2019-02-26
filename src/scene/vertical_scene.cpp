@@ -82,5 +82,6 @@ void VerticalScene::render(Blackboard &blackboard) {
 
 void VerticalScene::reset_scene(Blackboard &blackboard) {
     registry_.destroy(panda_entity);
+    level_system.destroy_entities(registry_);
     init_scene(blackboard);
 }

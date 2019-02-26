@@ -47,6 +47,9 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
             case VERTICAL_SCENE_ID:
                 update_vertical_scene(blackboard, velocity);
                 break;
+            case BOSS_SCENE_ID:
+                update_boss_scene(blackboard, velocity);
+                break;
             default:
                 fprintf(stderr, "Invalid scene ID: %d\n", scene_id);
         }
@@ -78,6 +81,16 @@ void PlayerMovementSystem::update_horizontal_scene(Blackboard &blackboard, Veloc
 }
 
 void PlayerMovementSystem::update_vertical_scene(Blackboard &blackboard, Velocity &velocity) {
+    if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
+        velocity.x_velocity = -PANDA_SPEED;
+    } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
+        velocity.x_velocity = PANDA_SPEED;
+    } else {
+        velocity.x_velocity = 0;
+    }
+}
+
+void PlayerMovementSystem::update_boss_scene(Blackboard &blackboard, Velocity &velocity) {
     if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
         velocity.x_velocity = -PANDA_SPEED;
     } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
