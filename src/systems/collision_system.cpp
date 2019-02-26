@@ -162,7 +162,7 @@ bool checkCollision(Collidable collidable1, Transform transform1, Velocity veloc
                     transform1.x + collidable1.width / 2 >= transform2.x - collidable2.width / 2 &&
                     transform1.y - collidable1.height / 2 <= transform2.y + collidable2.height / 2 &&
                     transform1.y + collidable1.height / 2 >= transform2.y - collidable2.height / 2 &&
-                    velocity1.y_velocity > 0;
+                    velocity1.y_velocity >= 0;
 }
 
 bool checkEnemyPandaCollisionFatal(Collidable pa_co, Transform pa_tr, Collidable br_co, Transform brd_tr) {
