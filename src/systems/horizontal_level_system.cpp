@@ -6,6 +6,7 @@
 #include <util/csv_reader.h>
 #include <components/transform.h>
 #include <components/collidable.h>
+#include <iostream>
 #include "horizontal_level_system.h"
 
 HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem() {
@@ -56,7 +57,7 @@ void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry
     float max_x =
             blackboard.camera.position().x + blackboard.camera.size().x; // some distance off camera
     float min_x =
-            blackboard.camera.position().x - blackboard.camera.size().x; // some distance off camera
+            blackboard.camera.position().x - blackboard.camera.size().x / 2 + 100; // some distance off camera
     if (last_col_placed_ < max_x) {
         load_next_chunk();
     }
@@ -66,11 +67,36 @@ void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry
 }
 
 void HorizontalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float x) {
-    auto view = registry.view<Platform, Transform>();
-    for (uint32_t entity: view) {
-        auto &transform = view.get<Transform>(entity);
+    auto platforms = registry.view<Platform, Transform>();
+    for (uint32_t entity: platforms) {
+        auto &transform = platforms.get<Transform>(entity);
         if (transform.x < x) {
             registry.destroy(entity);
+        }
+    }
+
+    auto llamas = registry.view<Llama, Transform>();
+    for (uint32_t entity: llamas) {
+        auto &transform = llamas.get<Transform>(entity);
+        if (transform.x < x) {
+            registry.destroy(entity);
+        }
+    }
+
+    auto spits = registry.view<Spit, Transform>();
+    for (uint32_t entity: spits) {
+        auto &transform = spits.get<Transform>(entity);
+        if (transform.x < x) {
+            registry.destroy(entity);
+        }
+    }
+
+    auto breads = registry.view<Bread, Transform>();
+    for (uint32_t entity: breads) {
+        auto &transform = breads.get<Transform>(entity);
+        if (transform.x < x) {
+            registry.destroy(entity);
+            std::cout << "destroyed bread\n";
         }
     }
 }
