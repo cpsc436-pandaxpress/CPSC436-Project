@@ -76,6 +76,7 @@ void MainMenuScene::update(Blackboard& blackboard) {
     }
 
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN)) {
+        blackboard.camera.set_position(0, 0);
         change_scene(button_targets_[selected_button_]);
     }
 
