@@ -18,7 +18,7 @@ void VerticalLevelSystem::init() {
 
 void VerticalLevelSystem::load_next_chunk() {
     std::string level_path = levels_path("");
-    int levelN = rng_.nextInt(0, 4);
+    int levelN = rng_.nextInt(0, 6);
     std::string levelFile = level_path + "vlevel_" + std::to_string(levelN) + ".csv";
     CSVReader reader(levelFile);
     std::vector<std::vector<int>> dataList = reader.getData();
@@ -50,21 +50,11 @@ void VerticalLevelSystem::generate_next_chunk(Blackboard &blackboard,
 }
 
 void VerticalLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
-    while (!platform_entities_.empty()) {
-        uint32_t platform = platform_entities_.front();
-        registry.destroy(platform);
-        platform_entities_.pop();
-    }
-    while (!enemy_entities_.empty()) {
-        uint32_t enemy = enemy_entities_.front();
-        registry.destroy(enemy);
-        enemy_entities_.pop();
-    }
-    while (!projectile_entities_.empty()) {
-        uint32_t projectile = projectile_entities_.front();
-        registry.destroy(projectile);
-        projectile_entities_.pop();
-    }
+    registry.destroy<Platform>();
+    registry.destroy<Llama>();
+    registry.destroy<Spit>();
+    registry.destroy<Bread>();
+
     while (!chunks_.empty()) {
         chunks_.front().clear();
         chunks_.pop();
@@ -72,29 +62,57 @@ void VerticalLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
 }
 
 void VerticalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    float max_x =
+    float max_y =
             blackboard.camera.position().y + blackboard.camera.size().y; // some distance off camera
-    float min_x =
+    float min_y =
             blackboard.camera.position().y - blackboard.camera.size().y; // some distance off camera
-    while (last_row_loaded_ > min_x) {
+    while (last_row_loaded_ > min_y) {
         load_next_chunk();
     }
-//    destroy_off_screen(registry, min_x); // fixme Do not uncomment, not working right now
+    destroy_off_screen(registry, max_y);
     generate_next_chunk(blackboard, registry);
+    update_projectiles(blackboard, registry);
 }
 
-void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float x) {
-    auto view = registry.view<Platform, Transform>();
-    std::queue<uint32_t> rQueue;
-    for (u_int32_t entity: view) {
-        auto &transform = view.get<Transform>(entity);
-        if (transform.x < x) {
-            rQueue.push(entity);
+void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float max_y) {
+    auto platforms = registry.view<Platform, Transform>();
+    for (uint32_t entity: platforms) {
+        auto &transform = platforms.get<Transform>(entity);
+        if (transform.y > max_y) {
+            registry.destroy(entity);
         }
     }
-    while (!rQueue.empty()) {
-        const uint32_t e = rQueue.front();
-        makeAvailable(e, registry);
-        rQueue.pop();
+
+    auto llamas = registry.view<Llama, Transform>();
+    for (uint32_t entity: llamas) {
+        auto &transform = llamas.get<Transform>(entity);
+        if (transform.y > max_y) {
+            registry.destroy(entity);
+        }
+    }
+
+    auto spits = registry.view<Spit, Transform>();
+    for (uint32_t entity: spits) {
+        auto &transform = spits.get<Transform>(entity);
+        if (transform.y > max_y) {
+            registry.destroy(entity);
+        }
+    }
+}
+
+void VerticalLevelSystem::update_projectiles(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+    auto llama_view = registry.view<Llama, Transform>();
+    for (auto llama_entity : llama_view) {
+        auto& llama = llama_view.get<Llama>(llama_entity);
+        auto& la_transform = llama_view.get<Transform>(llama_entity);
+        if (!llama.alive)
+            break;
+
+        if(llama.spit_time <= 0) {
+            generateProjectile(la_transform.x, la_transform.y, blackboard, registry);
+            llama.spit_time = PROJECTILE_SPACING;
+        } else {
+            llama.spit_time -= blackboard.delta_time;
+        }
     }
 }
