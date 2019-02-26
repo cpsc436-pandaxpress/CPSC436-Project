@@ -59,11 +59,12 @@ void VerticalScene::update(Blackboard &blackboard) {
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &panda_collidable = registry_.get<Collidable>(panda_entity);
 
-    if (transform.x + panda_collidable.width < cam_position.x - cam_size.x / 2 ||
-        transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || !panda.alive) {
+    if (transform.y - panda_collidable.height / 2 > cam_position.y + cam_size.y / 2 || !panda.alive) {
         reset_scene(blackboard);
     } else if (transform.x + panda_collidable.width / 2 > cam_position.x + cam_size.x / 2) {
         transform.x = cam_position.x + cam_size.x / 2 - panda_collidable.width / 2;
+    } else if (transform.x - panda_collidable.width / 2 < cam_position.x - cam_size.x / 2) {
+        transform.x = cam_position.x - cam_size.x / 2 + panda_collidable.width / 2;
     }
 
     level_system.update(blackboard, registry_);
