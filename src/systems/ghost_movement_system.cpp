@@ -11,6 +11,7 @@
 #include "components/transform.h"
 #include "components/obeys_gravity.h"
 #include "components/collidable.h"
+#include "scene/horizontal_scene.h"
 
 GhostMovementSystem::GhostMovementSystem() {}
 
@@ -51,7 +52,7 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
                 ghost.start_pt.y = gh_transform.y;
             }
             else {
-                gh_velocity.x_velocity = 150;
+                gh_velocity.x_velocity = HorizontalScene::CAMERA_SPEED;
                 if (int(llround(floor(ghost.waittime))) % 2 == 0) {
                     if (ghost.waiting_high && ghost.waiting_left) {
                         gh_transform.x = gh_transform.x + 3;

@@ -23,9 +23,6 @@
 #include <scene/horizontal_scene.h>
 
 
-static const SceneID HORIZONTAL_SCENE_ID = 0;
-static const SceneID VERTICAL_SCENE_ID = 1;
-
 int main(int argc, char** argv) {
 
     auto window = Window();
