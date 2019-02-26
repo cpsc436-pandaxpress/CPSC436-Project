@@ -13,7 +13,6 @@ HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem() {
 }
 
 void HorizontalLevelSystem::init(){
-    printf("::init()\n");
     LevelSystem::init();
     last_col_generated_ = last_col_loaded_ = FIRST_COL_X;
 }
@@ -33,7 +32,6 @@ void HorizontalLevelSystem::load_next_chunk() {
         last_col_loaded_ += CELL_WIDTH;
         chunks_.push(col);
     }
-    printf("loading level_%d\n", levelN);
 }
 
 // y should range from (-400, 400)
