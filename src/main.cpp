@@ -13,20 +13,15 @@
 #include "graphics/window.h"
 #include "scene/scene_manager.h"
 #include "scene/main_menu_scene.h"
-#include "scene/test_scene.h"
 #include "util/blackboard.h"
 #include "util/random.h"
 
 #include <SDL_mixer.h>
 #include <sstream>
+#include <scene/vertical_scene.h>
 #include <util/csv_reader.h>
 #include <iostream>
 #include <scene/horizontal_scene.h>
-
-
-static const SceneID MAIN_MENU_SCENE_ID   = 0;
-static const SceneID PLAY_SCENE_ID        = 1;
-static const SceneID CONFIG_SCENE_ID      = 2;
 
 int main(int argc, char** argv) {
 
@@ -71,29 +66,37 @@ int main(int argc, char** argv) {
     blackboard.textureManager.load_texture(textures_path("config_text.png"), "config_text");
     blackboard.textureManager.load_texture(textures_path("pixel.png"), "pixel");
     blackboard.textureManager.load_texture(textures_path("gross_splash.png"), "splash");
+    blackboard.textureManager.load_texture(textures_path("ghost.png"), "ghost");
+    blackboard.textureManager.load_texture(textures_path("llama.png"), "llama");
+    blackboard.textureManager.load_texture(textures_path("spit.png"), "spit");
     blackboard.textureManager.load_texture(textures_path("branchspiky.png"), "branch1");
     blackboard.textureManager.load_texture(textures_path("branchspiky2.png"), "branch2");
     blackboard.textureManager.load_texture(textures_path("bg_back.png"), "bg_back");
     blackboard.textureManager.load_texture(textures_path("bg_front.png"), "bg_front");
     blackboard.textureManager.load_texture(textures_path("bg_middle.png"), "bg_middle");
     blackboard.textureManager.load_texture(textures_path("bg_top.png"), "bg_top");
+    blackboard.textureManager.load_texture(textures_path("tutorial.png"), "tutorial");
+    blackboard.textureManager.load_texture(textures_path("tutorial2.png"), "tutorial_bread");
+    blackboard.textureManager.load_texture(textures_path("stalagmite.png"), "stalagmite");
+    blackboard.textureManager.load_texture(textures_path("stalagmite2.png"), "stalagmite2");
 
 
 
     // initialize scenes here
     MainMenuScene main_menu(blackboard, scene_manager);
-    main_menu.add_item(blackboard, "play_text", PLAY_SCENE_ID);
+    main_menu.add_item(blackboard, "play_text", HORIZONTAL_SCENE_ID);
 
     //TODO: implement level select and config scenes
-    main_menu.add_item(blackboard, "levels_text", MAIN_MENU_SCENE_ID);
+    main_menu.add_item(blackboard, "levels_text", VERTICAL_SCENE_ID);
     main_menu.add_item(blackboard, "config_text",  MAIN_MENU_SCENE_ID);
     scene_manager.add_scene(MAIN_MENU_SCENE_ID, (Scene*)(&main_menu));
 
-    HorizontalScene test_scene(blackboard, scene_manager);
+    HorizontalScene horizontal_scene(blackboard, scene_manager);
+    VerticalScene vertical_scene(blackboard, scene_manager);
 
-    scene_manager.add_scene(PLAY_SCENE_ID, (Scene*)(&test_scene));
+    scene_manager.add_scene(HORIZONTAL_SCENE_ID, (Scene*)(&horizontal_scene));
+    scene_manager.add_scene(VERTICAL_SCENE_ID, (Scene*)(&vertical_scene));
 
-    // set the first scene
     scene_manager.change_scene(MAIN_MENU_SCENE_ID);
 
     //set background music

@@ -9,9 +9,12 @@
 #include "components/interactable.h"
 #include "components/transform.h"
 #include "components/obeys_gravity.h"
+#include "util/constants.h"
+#include "scene/horizontal_scene.h"
 
 
-PlayerMovementSystem::PlayerMovementSystem() {}
+PlayerMovementSystem::PlayerMovementSystem(SceneID scene_id) :
+    scene_id(scene_id) {}
 
 void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry) {
     auto view = registry.view<Panda, Transform, Velocity, Interactable, ObeysGravity>();
@@ -30,25 +33,23 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
         }
 
         if (holding_jump && time_since_jump < 0.6f) {
-            gravity.gravityFactor = 0.3f;
+            gravity.gravityFactor = 0.5f;
         }
         else {
             gravity.gravityFactor = 1.5f;
         }
 
 
-
-        /*
-         * Walking Left and Right
-         */
-        float vx = 0;
-        if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
-            vx -= PANDA_SPEED;
-        } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
-            vx += PANDA_SPEED;
+        switch (scene_id) {
+            case HORIZONTAL_SCENE_ID:
+                update_horizontal_scene(blackboard, velocity);
+                break;
+            case VERTICAL_SCENE_ID:
+                update_vertical_scene(blackboard, velocity);
+                break;
+            default:
+                fprintf(stderr, "Invalid scene ID: %d\n", scene_id);
         }
-
-        velocity.x_velocity = vx;
 
         /*
          * Jumping
@@ -62,5 +63,26 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
         }
 
 
+    }
+}
+
+void PlayerMovementSystem::update_horizontal_scene(Blackboard &blackboard, Velocity &velocity) {
+    float vx = HorizontalScene::CAMERA_SPEED;
+    if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
+        vx -= PANDA_OFFSET_SPEED * 1.5;
+    } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
+        vx += PANDA_OFFSET_SPEED;
+    }
+
+    velocity.x_velocity = vx;
+}
+
+void PlayerMovementSystem::update_vertical_scene(Blackboard &blackboard, Velocity &velocity) {
+    if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
+        velocity.x_velocity = -PANDA_SPEED;
+    } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
+        velocity.x_velocity = PANDA_SPEED;
+    } else {
+        velocity.x_velocity = 0;
     }
 }
