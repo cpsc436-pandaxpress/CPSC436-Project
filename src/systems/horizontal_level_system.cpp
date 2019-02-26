@@ -108,11 +108,11 @@ void HorizontalLevelSystem::update_projectiles(Blackboard &blackboard, entt::Def
         if (la_transform.y > 500)
             llama.alive = false;
 
-        if(llama.spit_time == 0) {
+        if(llama.spit_time <= 0) {
             generateProjectile(la_transform.x, la_transform.y, blackboard, registry);
             llama.spit_time = PROJECTILE_SPACING;
         } else {
-            llama.spit_time--;
+            llama.spit_time -= blackboard.delta_time;
         }
     }
 }
