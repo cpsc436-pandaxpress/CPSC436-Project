@@ -19,10 +19,12 @@ private:
     const float FIRST_ROW_Y = 300.f;
     const float COL_X_OFFSET = -750.f;
 
-    float last_row_placed_;
+    float last_row_generated_, last_row_loaded_;
 public:
 
     VerticalLevelSystem();
+
+    void init();
 
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry);
 
