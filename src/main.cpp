@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
     scene_manager.add_scene(VERTICAL_SCENE_ID, (Scene*)(&vertical_scene));
 
     // set the first scene
-    scene_manager.change_scene(HORIZONTAL_SCENE_ID);
+    scene_manager.change_scene(VERTICAL_SCENE_ID);
 
     //set background music
     if (SDL_Init(SDL_INIT_AUDIO) < 0)

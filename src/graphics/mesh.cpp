@@ -20,9 +20,9 @@ Mesh::Mesh(size_t vertex_count, TexturedVertex *vertices, size_t index_count, ui
 }
 
 Mesh::~Mesh() {
-    glDeleteBuffers(1, &vbo_);
-    glDeleteBuffers(1, &ibo_);
-    glDeleteBuffers(1, &vao_);
+    // glDeleteBuffers(1, &vbo_);
+    // glDeleteBuffers(1, &ibo_);
+    // glDeleteBuffers(1, &vao_);
 }
 
 void Mesh::bind() {

@@ -6,6 +6,7 @@
 #include <util/csv_reader.h>
 #include <components/transform.h>
 #include <components/collidable.h>
+#include <iostream>
 #include "horizontal_level_system.h"
 
 HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem() {
@@ -45,26 +46,12 @@ void HorizontalLevelSystem::generate_next_chunk(Blackboard &blackboard,
 }
 
 void HorizontalLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
-    while (!platform_entities_.empty()) {
-        uint32_t platform = platform_entities_.front();
-        registry.destroy(platform);
-        platform_entities_.pop();
-    }
-    while (!enemy_entities_.empty()) {
-        uint32_t enemy = enemy_entities_.front();
-        registry.destroy(enemy);
-        enemy_entities_.pop();
-    }
-    while (!projectile_entities_.empty()) {
-        uint32_t projectile = projectile_entities_.front();
-        registry.destroy(projectile);
-        projectile_entities_.pop();
-    }
-    while (!obstacle_entities_.empty()) {
-        uint32_t obstacle = obstacle_entities_.front();
-        registry.destroy(obstacle);
-        obstacle_entities_.pop();
-    }
+    registry.destroy<Platform>();
+    registry.destroy<Llama>();
+    registry.destroy<Spit>();
+    registry.destroy<Bread>();
+    registry.destroy<Ghost>();
+    registry.destroy<Obstacle>();
     last_col_placed_ = FIRST_COL_X;
 }
 
@@ -76,24 +63,58 @@ void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry
     if (last_col_placed_ < max_x) {
         load_next_chunk();
     }
-//    destroy_off_screen(registry, min_x); // fixme Do not uncomment, not working right now
+    destroy_off_screen(registry, min_x);
     generate_next_chunk(blackboard, registry);
     update_projectiles(blackboard, registry);
 }
 
 void HorizontalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float x) {
-    auto view = registry.view<Platform, Transform>();
-    std::queue<uint32_t> rQueue;
-    for (u_int32_t entity: view) {
-        auto &transform = view.get<Transform>(entity);
+    auto platforms = registry.view<Platform, Transform>();
+    for (uint32_t entity: platforms) {
+        auto &transform = platforms.get<Transform>(entity);
         if (transform.x < x) {
-            rQueue.push(entity);
+            registry.destroy(entity);
         }
     }
-    while (!rQueue.empty()) {
-        const uint32_t e = rQueue.front();
-        makeAvailable(e, registry);
-        rQueue.pop();
+
+    auto llamas = registry.view<Llama, Transform>();
+    for (uint32_t entity: llamas) {
+        auto &transform = llamas.get<Transform>(entity);
+        if (transform.x < x) {
+            registry.destroy(entity);
+        }
+    }
+
+    auto spits = registry.view<Spit, Transform>();
+    for (uint32_t entity: spits) {
+        auto &transform = spits.get<Transform>(entity);
+        if (transform.x < x) {
+            registry.destroy(entity);
+        }
+    }
+
+    auto breads = registry.view<Bread, Transform>();
+    for (uint32_t entity: breads) {
+        auto &transform = breads.get<Transform>(entity);
+        if (transform.x < x) {
+            registry.destroy(entity);
+        }
+    }
+
+    auto ghosts = registry.view<Ghost, Transform>();
+    for (uint32_t entity: ghosts) {
+        auto &transform = ghosts.get<Transform>(entity);
+        if (transform.x < x) {
+            registry.destroy(entity);
+        }
+    }
+
+    auto obstacles = registry.view<Obstacle, Transform>();
+    for (uint32_t entity: obstacles) {
+        auto &transform = obstacles.get<Transform>(entity);
+        if (transform.x < x) {
+            registry.destroy(entity);
+        }
     }
 }
 
