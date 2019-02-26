@@ -120,23 +120,6 @@ int main(int argc, char** argv) {
     scene_manager.change_scene(MAIN_MENU_SCENE_ID);
 
 
-    //set background music
-    if (SDL_Init(SDL_INIT_AUDIO) < 0)
-    {
-        fprintf(stderr, "Failed to initialize SDL Audio");
-
-    }
-
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) == -1)
-    {
-        fprintf(stderr, "Failed to open audio device");
-
-    }
-    Mix_Music* m_background_music;
-    m_background_music = Mix_LoadMUS(audio_path("graveyard.ogg"));
-
-
-    Mix_PlayMusic(m_background_music, -1);
 
     bool quit = false;
     while (!quit) {
