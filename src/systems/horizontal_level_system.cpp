@@ -108,11 +108,15 @@ void HorizontalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, 
 }
 
 void HorizontalLevelSystem::update_projectiles(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    auto llama_view = registry.view<Llama, Transform>();
+    vec2 cam_position = blackboard.camera.position();
+    vec2 cam_size = blackboard.camera.size();
+
+    auto llama_view = registry.view<Llama, Transform, Collidable>();
     for (auto llama_entity : llama_view) {
         auto& llama = llama_view.get<Llama>(llama_entity);
         auto& la_transform = llama_view.get<Transform>(llama_entity);
-        if (!llama.alive)
+        auto& la_collidable = llama_view.get<Collidable>(llama_entity);
+        if (!llama.alive || (la_transform.x + la_collidable.width / 2 > cam_position.x + cam_size.x / 2))
             break;
 
         if (la_transform.y > 500)
