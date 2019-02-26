@@ -21,7 +21,7 @@ void InputManager::update() {
     for (auto& entry : key_states_) {
 
         if (keystate[entry.first]) {
-            if (entry.second == JUST_PRESSED) {
+            if (entry.second == JUST_PRESSED || entry.second == PRESSED) {
                 entry.second = PRESSED;
             }
             else {

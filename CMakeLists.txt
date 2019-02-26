@@ -54,6 +54,8 @@ set(SOURCE_FILES
         src/components/bread.h
         src/util/random.cpp
         src/util/random.h
+        src/scene/main_menu_scene.h
+        src/scene/main_menu_scene.cpp
         src/components/obstacle.h
         src/graphics/background.cpp
         src/systems/background_render_system.cpp
