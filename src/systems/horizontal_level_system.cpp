@@ -13,8 +13,9 @@ HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem() {
 }
 
 void HorizontalLevelSystem::init(){
+    printf("::init()\n");
     LevelSystem::init();
-    last_col_placed_ = FIRST_COL_X;
+    last_col_generated_ = last_col_loaded_ = FIRST_COL_X;
 }
 
 void HorizontalLevelSystem::load_next_chunk() {
@@ -29,22 +30,25 @@ void HorizontalLevelSystem::load_next_chunk() {
         for (int j = 0; j < 9; j++) {
             col.push_back(dataList[j][i]);
         }
+        last_col_loaded_ += CELL_WIDTH;
         chunks_.push(col);
     }
+    printf("loading level_%d\n", levelN);
 }
 
 // y should range from (-400, 400)
 
 void HorizontalLevelSystem::generate_next_chunk(Blackboard &blackboard,
                                                 entt::DefaultRegistry &registry) {
-    while (!chunks_.empty()) {
+    float off_screen = blackboard.camera.position().x + blackboard.camera.size().x;
+    while (last_col_generated_ < off_screen && !chunks_.empty()) { // second condn is safety check
         std::vector<int> col = chunks_.front();
         float y = -400.0f;
         for (int c:col) {
-            generateEntity(c, last_col_placed_, y, blackboard, registry);
+            generateEntity(c, last_col_generated_, y, blackboard, registry);
             y += CELL_HEIGHT;
         }
-        last_col_placed_ += CELL_WIDTH;
+        last_col_generated_ += CELL_WIDTH;
         chunks_.pop();
     }
 }
@@ -70,6 +74,10 @@ void HorizontalLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
         registry.destroy(obstacle);
         obstacle_entities_.pop();
     }
+    while (!chunks_.empty()) {
+        chunks_.front().clear();
+        chunks_.pop();
+    }
 }
 
 void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
@@ -77,7 +85,7 @@ void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry
             blackboard.camera.position().x + blackboard.camera.size().x; // some distance off camera
     float min_x =
             blackboard.camera.position().x - blackboard.camera.size().x; // some distance off camera
-    if (last_col_placed_ < max_x) {
+    while (last_col_loaded_ < max_x) {
         load_next_chunk();
     }
 //    destroy_off_screen(registry, min_x); // fixme Do not uncomment, not working right now
