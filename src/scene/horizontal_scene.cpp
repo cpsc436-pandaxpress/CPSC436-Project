@@ -21,7 +21,9 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         physics_system(),
         player_movement_system(),
         collision_system(),
-        ghost_movement_system()
+        ghost_movement_system(),
+        player_animation_system()
+
 {
     init_scene(blackboard);
     create_tutorial(blackboard);
@@ -40,6 +42,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
     physics_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
     ghost_movement_system.update(blackboard, registry_);
+    player_animation_system.update(blackboard, registry_);
 }
 
 void HorizontalScene::update_panda(Blackboard &blackboard) {
@@ -106,12 +109,13 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
 void HorizontalScene::create_panda(Blackboard &blackboard) {
     panda_entity = registry_.create();
 
-    auto texture = blackboard.texture_manager.get_texture("panda");
+    auto texture = blackboard.texture_manager.get_texture("panda_sprites");
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
     auto sprite = Sprite(texture, shader, mesh);
-    sprite.set_uvs(1, 1, 0, 0);
+    sprite.set_uvs(0, 0, 0.32, 0.25);
+
 
     float scaleY = 100.0 / texture.height();
     float scaleX = 100.0 / texture.width();

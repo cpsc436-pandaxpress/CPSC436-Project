@@ -76,7 +76,7 @@ set(SOURCE_FILES
         src/systems/vertical_level_system.cpp
         src/systems/vertical_level_system.h
         src/systems/ghost_movement_system.cpp
-        src/systems/ghost_movement_system.h src/graphics/mesh_manager.cpp)
+        src/systems/ghost_movement_system.h src/graphics/mesh_manager.cpp src/systems/player_animation_system.cpp src/systems/player_animation_system.h)
 
 # Create executable target
 
