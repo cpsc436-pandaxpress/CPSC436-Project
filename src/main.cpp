@@ -12,9 +12,10 @@
 #include "graphics/sprite.h"
 #include "graphics/window.h"
 #include "scene/scene_manager.h"
+#include "scene/main_menu_scene.h"
 #include "util/blackboard.h"
 #include "util/random.h"
-
+#include <scene/horizontal_scene.h>
 #include <SDL_mixer.h>
 #include <sstream>
 #include <scene/vertical_scene.h>
@@ -23,8 +24,10 @@
 #include <scene/boss_scene.h>
 
 
-static const SceneID BOSS_SCENE_ID = 0;
-static const SceneID VERTICAL_SCENE_ID = 1;
+
+
+
+
 
 int main(int argc, char** argv) {
 
@@ -51,6 +54,7 @@ int main(int argc, char** argv) {
     blackboard.input_manager.track(SDL_SCANCODE_LEFT);
     blackboard.input_manager.track(SDL_SCANCODE_RIGHT);
     blackboard.input_manager.track(SDL_SCANCODE_SPACE);
+    blackboard.input_manager.track(SDL_SCANCODE_RETURN);
 
     blackboard.shader_manager.load_shader(
             shaders_path("sprite.vs.glsl"),
@@ -61,6 +65,12 @@ int main(int argc, char** argv) {
     blackboard.textureManager.load_texture(textures_path("platform_center_grass.png"), "platform_center_grass");
     blackboard.textureManager.load_texture(textures_path("grass_block_2.png"), "platform2");
     blackboard.textureManager.load_texture(textures_path("bread.png"), "bread");
+    blackboard.textureManager.load_texture(textures_path("play_text.png"), "play_text");
+    blackboard.textureManager.load_texture(textures_path("levels_text.png"), "levels_text");
+    blackboard.textureManager.load_texture(textures_path("config_text.png"), "config_text");
+    blackboard.textureManager.load_texture(textures_path("pixel.png"), "pixel");
+    blackboard.textureManager.load_texture(textures_path("gross_splash.png"), "splash");
+    blackboard.textureManager.load_texture(textures_path("ghost.png"), "ghost");
     blackboard.textureManager.load_texture(textures_path("llama.png"), "llama");
     blackboard.textureManager.load_texture(textures_path("spit.png"), "spit");
     blackboard.textureManager.load_texture(textures_path("branchspiky.png"), "branch1");
@@ -71,23 +81,44 @@ int main(int argc, char** argv) {
     blackboard.textureManager.load_texture(textures_path("bg_top.png"), "bg_top");
     blackboard.textureManager.load_texture(textures_path("tutorial.png"), "tutorial");
     blackboard.textureManager.load_texture(textures_path("tutorial2.png"), "tutorial_bread");
+
     blackboard.textureManager.load_texture(textures_path("jacko.png"), "jacko");
     blackboard.textureManager.load_texture(textures_path("graveyard.png"), "graveyard");
     blackboard.textureManager.load_texture(textures_path("burger.png"), "burger");
 
+    blackboard.textureManager.load_texture(textures_path("stalagmite.png"), "stalagmite");
+    blackboard.textureManager.load_texture(textures_path("stalagmite2.png"), "stalagmite2");
 
 
 
 
     // initialize scenes here
+    MainMenuScene main_menu(blackboard, scene_manager);
+    main_menu.add_item(blackboard, "play_text", HORIZONTAL_SCENE_ID);
+
+    //TODO: implement level select and config scenes
+    main_menu.add_item(blackboard, "levels_text", VERTICAL_SCENE_ID);
+    main_menu.add_item(blackboard, "config_text",  BOSS_SCENE_ID);
+    scene_manager.add_scene(MAIN_MENU_SCENE_ID, (Scene*)(&main_menu));
+
+
+    // initialize scenes here
+
+
+    HorizontalScene horizontal_scene(blackboard, scene_manager);
+
     BossScene boss_scene(blackboard, scene_manager);
+
     VerticalScene vertical_scene(blackboard, scene_manager);
 
     scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene));
     scene_manager.add_scene(VERTICAL_SCENE_ID, (Scene*)(&vertical_scene));
+    scene_manager.add_scene(HORIZONTAL_SCENE_ID, (Scene*)(&horizontal_scene));
 
     // set the first scene
-    scene_manager.change_scene(BOSS_SCENE_ID);
+
+    scene_manager.change_scene(MAIN_MENU_SCENE_ID);
+
 
     //set background music
     if (SDL_Init(SDL_INIT_AUDIO) < 0)

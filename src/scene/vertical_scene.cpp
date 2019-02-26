@@ -9,6 +9,7 @@
 #include <components/velocity.h>
 #include <components/platform.h>
 #include "vertical_scene.h"
+#include "util/constants.h"
 
 VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager) :
         Scene(scene_manager),
@@ -16,7 +17,7 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         sprite_transform_system(),
         sprite_render_system(),
         physics_system(),
-        player_movement_system(),
+        player_movement_system(VERTICAL_SCENE_ID),
         collision_system() {
     init_scene(blackboard);
     gl_has_errors();
@@ -27,8 +28,8 @@ void VerticalScene::init_scene(Blackboard &blackboard) {
     blackboard.randNumGenerator.init(0);
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
-
     create_panda(blackboard);
+    level_system.init();
 }
 
 void VerticalScene::create_panda(Blackboard &blackboard) {
@@ -36,8 +37,10 @@ void VerticalScene::create_panda(Blackboard &blackboard) {
 
     auto texture = blackboard.textureManager.get_texture("panda");
     auto shader = blackboard.shader_manager.get_shader("sprite");
-    float scale = 0.3f;
-    registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scale, scale);
+    float scaleY = 100.0 / texture.height();
+    float scaleX = 75.0 / texture.width();
+
+    registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scaleX, scaleY);
     registry_.assign<Sprite>(panda_entity, texture, shader);
     registry_.assign<Panda>(panda_entity);
     registry_.assign<ObeysGravity>(panda_entity);
@@ -45,7 +48,7 @@ void VerticalScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Interactable>(panda_entity);
     registry_.assign<CausesDamage>(panda_entity, false, true, 1);
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
-    registry_.assign<Collidable>(panda_entity, texture.width() * scale, texture.height() * scale);
+    registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
 }
 
 void VerticalScene::update(Blackboard &blackboard) {
@@ -80,5 +83,6 @@ void VerticalScene::render(Blackboard &blackboard) {
 
 void VerticalScene::reset_scene(Blackboard &blackboard) {
     registry_.destroy(panda_entity);
+    level_system.destroy_entities(registry_);
     init_scene(blackboard);
 }

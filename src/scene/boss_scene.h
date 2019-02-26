@@ -2,13 +2,13 @@
 // Created by Prayansh Srivastava on 2019-02-12.
 //
 
-#ifndef PANDAEXPRESS_TEST_SCENE_2_H
-#define PANDAEXPRESS_TEST_SCENE_2_H
+#ifndef PANDAEXPRESS_BOSS_SCENE_H
+#define PANDAEXPRESS_BOSS_SCENE_H
 
 
 #include "scene.h"
 #include <queue>
-#include <systems/horizontal_level_system.h>
+#include <systems/boss_level_system.h>
 #include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
 #include "scene.h"
@@ -37,7 +37,7 @@ private:
     uint32_t burger_entity;
     uint32_t tutorial_entity;
     uint32_t tutorial2_entity;
-    HorizontalLevelSystem level_system;
+    BossLevelSystem level_system;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
     BackgroundRenderSystem background_render_system;
@@ -70,5 +70,5 @@ public:
 };
 
 
-#endif //PANDAEXPRESS_TEST_SCENE_2_H
+#endif //PANDAEXPRESS_BOSS_SCENE_H
 

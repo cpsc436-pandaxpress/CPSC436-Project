@@ -13,6 +13,7 @@
 #include <components/chases.h>
 #include <components/tutorial.h>
 #include "boss_scene.h"
+#include "util/constants.h"
 
 BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         Scene(scene_manager),
@@ -22,7 +23,7 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         background_transform_system(),
         background_render_system(),
         physics_system(),
-        player_movement_system(),
+        player_movement_system(BOSS_SCENE_ID),
         collision_system(),
         chase_system(),
         jacko_ai_system(blackboard, registry_)

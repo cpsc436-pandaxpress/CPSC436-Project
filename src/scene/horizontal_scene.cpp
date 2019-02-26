@@ -10,6 +10,7 @@
 #include <components/velocity.h>
 #include <components/tutorial.h>
 #include "horizontal_scene.h"
+#include "util/constants.h"
 
 HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_manager) :
         Scene(scene_manager),
@@ -19,8 +20,9 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         background_transform_system(),
         background_render_system(),
         physics_system(),
-        player_movement_system(),
-        collision_system()
+        player_movement_system(HORIZONTAL_SCENE_ID),
+        collision_system(),
+        ghost_movement_system()
 {
     init_scene(blackboard);
     create_tutorial(blackboard);
@@ -38,6 +40,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
     collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
+    ghost_movement_system.update(blackboard, registry_);
 }
 
 void HorizontalScene::update_panda(Blackboard &blackboard) {
@@ -99,6 +102,7 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
     blackboard.camera.compose();
     create_background(blackboard);
     create_panda(blackboard);
+    level_system.init();
 }
 
 void HorizontalScene::create_panda(Blackboard &blackboard) {
@@ -107,7 +111,7 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
     auto texture = blackboard.textureManager.get_texture("panda");
     auto shader = blackboard.shader_manager.get_shader("sprite");
     float scaleY = 100.0 / texture.height();
-    float scaleX = 100.0 / texture.width();
+    float scaleX = 75.0 / texture.width();
     registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scaleX, scaleY);
     registry_.assign<Sprite>(panda_entity, texture, shader);
     registry_.assign<Panda>(panda_entity);

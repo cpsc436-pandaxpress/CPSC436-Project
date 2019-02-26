@@ -6,18 +6,18 @@
 #include <util/csv_reader.h>
 #include <components/transform.h>
 #include <components/collidable.h>
-#include "horizontal_level_system.h"
+#include "boss_level_system.h"
 
-HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem() {
+BossLevelSystem::BossLevelSystem(): LevelSystem() {
     init();
 }
 
-void HorizontalLevelSystem::init(){
+void BossLevelSystem::init(){
     LevelSystem::init();
     last_col_generated_ = last_col_loaded_ = FIRST_COL_X;
 }
 
-void HorizontalLevelSystem::load_next_chunk() {
+void BossLevelSystem::load_next_chunk() {
     std::string level_path = levels_path("");
     int levelN = rng_.nextInt(0, 8);
     std::string levelFile = level_path + "level_" + std::to_string(levelN) + ".csv";
@@ -36,7 +36,7 @@ void HorizontalLevelSystem::load_next_chunk() {
 
 // y should range from (-400, 400)
 
-void HorizontalLevelSystem::generate_next_chunk(Blackboard &blackboard,
+void BossLevelSystem::generate_next_chunk(Blackboard &blackboard,
                                                 entt::DefaultRegistry &registry) {
     float off_screen = blackboard.camera.position().x + blackboard.camera.size().x;
     while (last_col_generated_ < off_screen && !chunks_.empty()) { // second condn is safety check
@@ -51,7 +51,7 @@ void HorizontalLevelSystem::generate_next_chunk(Blackboard &blackboard,
     }
 }
 
-void HorizontalLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
+void BossLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
     while (!platform_entities_.empty()) {
         uint32_t platform = platform_entities_.front();
         registry.destroy(platform);
@@ -78,7 +78,7 @@ void HorizontalLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
     }
 }
 
-void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+void BossLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     float max_x =
             blackboard.camera.position().x + blackboard.camera.size().x; // some distance off camera
     float min_x =
@@ -91,7 +91,7 @@ void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry
     update_projectiles(blackboard, registry);
 }
 
-void HorizontalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float x) {
+void BossLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float x) {
     auto view = registry.view<Platform, Transform>();
     std::queue<uint32_t> rQueue;
     for (u_int32_t entity: view) {
@@ -107,7 +107,7 @@ void HorizontalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, 
     }
 }
 
-void HorizontalLevelSystem::update_projectiles(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+void BossLevelSystem::update_projectiles(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     vec2 cam_position = blackboard.camera.position();
     vec2 cam_size = blackboard.camera.size();
 

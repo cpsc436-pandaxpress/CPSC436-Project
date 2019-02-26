@@ -3,12 +3,12 @@
 //
 #include "level_system.h"
 
-#ifndef PANDAEXPRESS_HORIZONTAL_LEVEL_SYSTEM_H
-#define PANDAEXPRESS_HORIZONTAL_LEVEL_SYSTEM_H
+#ifndef PANDAEXPRESS_BOSS_LEVEL_SYSTEM_H
+#define PANDAEXPRESS_BOSS_LEVEL_SYSTEM_H
 
-#endif //PANDAEXPRESS_HORIZONTAL_LEVEL_SYSTEM_H
+#endif //PANDAEXPRESS_BOSS_LEVEL_SYSTEM_H
 
-class HorizontalLevelSystem : public LevelSystem {
+class BossLevelSystem : public LevelSystem {
     void load_next_chunk();
 
     void generate_next_chunk(Blackboard &blackboard, entt::DefaultRegistry &registry);
@@ -21,7 +21,7 @@ class HorizontalLevelSystem : public LevelSystem {
 
 public:
 
-    HorizontalLevelSystem();
+    BossLevelSystem();
 
     void init();
 
