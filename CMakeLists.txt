@@ -76,7 +76,7 @@ set(SOURCE_FILES
         src/systems/vertical_level_system.cpp
         src/systems/vertical_level_system.h
         src/systems/ghost_movement_system.cpp
-        src/systems/ghost_movement_system.h)
+        src/systems/ghost_movement_system.h src/util/entity_pairs.h)
 
 # Create executable target
 

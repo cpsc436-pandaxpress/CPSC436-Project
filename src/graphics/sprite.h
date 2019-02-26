@@ -36,6 +36,7 @@ public:
     vec2 scale();
     void set_scale(const vec2& scale);
     void set_scale(float x_scale, float y_scale);
+    void set_size(uint32_t width, uint32_t height);
 
     float rotation_rad();
     void set_rotation_rad(float theta);

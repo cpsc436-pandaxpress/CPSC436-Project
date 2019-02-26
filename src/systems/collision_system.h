@@ -9,10 +9,12 @@
 #include "components/transform.h"
 #include "components/collidable.h"
 
+
 class CollisionSystem : public System {
 public:
     CollisionSystem();
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;
+
 };
 
 #endif //PANDAEXPRESS_COLLISION_SYSTEM_H

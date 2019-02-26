@@ -127,6 +127,14 @@ void Sprite::set_scale(float x_scale, float y_scale) {
     scale_ = { x_scale, y_scale };
 }
 
+void Sprite::set_size(uint32_t width, uint32_t height) {
+    set_scale(
+        (float)(width) / texture_.width(),
+        (float)(height) / texture_.height()
+    );
+}
+
+
 float Sprite::rotation_rad() {
     return rotation_;
 }

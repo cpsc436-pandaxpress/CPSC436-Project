@@ -30,7 +30,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             platform_entities_.push(platform);
         }
             break;
-        case 3: {
+        case 3: {break;
             auto texture = blackboard.textureManager.get_texture("bread");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto scale = static_cast<float>(CELL_WIDTH / texture.width()/2);
@@ -48,7 +48,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             enemy_entities_.push(bread);
         }
             break;
-        case 4: {
+        case 4: {break;
             auto texture = blackboard.textureManager.get_texture("ghost");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto scale = static_cast<float>(CELL_WIDTH / texture.width());
@@ -65,7 +65,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             enemy_entities_.push(ghost);
         }
             break;
-        case 5: {
+        case 5: {break;
             auto texture = blackboard.textureManager.get_texture("llama");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto scale = static_cast<float>(CELL_HEIGHT / texture.height());
@@ -84,7 +84,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             enemy_entities_.push(llama);
         }
             break;
-        case 6: {
+        case 6: {break;
             auto texture = blackboard.textureManager.get_texture("stalagmite2");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto scale = static_cast<float>(CELL_WIDTH / texture.width());
@@ -98,7 +98,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             obstacle_entities_.push(stalagmite2);
         }
             break;
-        case 7: {
+        case 7: {break;
             auto texture = blackboard.textureManager.get_texture("stalagmite");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto scale = static_cast<float>(CELL_WIDTH / texture.width());
