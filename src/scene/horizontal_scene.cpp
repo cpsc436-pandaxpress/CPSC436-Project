@@ -23,7 +23,7 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         player_movement_system(HORIZONTAL_SCENE_ID),
         collision_system(),
         ghost_movement_system(),
-        player_animation_system()
+        player_animation_system(HORIZONTAL_SCENE_ID)
 
 {
     init_scene(blackboard);
@@ -116,11 +116,10 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
     auto sprite = Sprite(texture, shader, mesh);
-    sprite.set_uvs(0, 0, 0.32, 0.25);
 
 
     float scaleY = 100.0 / texture.height();
-    float scaleX = 75.0 / texture.width();
+    float scaleX = 100.0 / texture.width();
     registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scaleX, scaleY);
     registry_.assign<Sprite>(panda_entity, sprite);
     registry_.assign<Panda>(panda_entity);
