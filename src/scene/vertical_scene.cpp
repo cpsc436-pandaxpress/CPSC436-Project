@@ -37,8 +37,10 @@ void VerticalScene::create_panda(Blackboard &blackboard) {
 
     auto texture = blackboard.textureManager.get_texture("panda");
     auto shader = blackboard.shader_manager.get_shader("sprite");
-    float scale = 0.3f;
-    registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scale, scale);
+    float scaleY = 100.0 / texture.height();
+    float scaleX = 75.0 / texture.width();
+
+    registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scaleX, scaleY);
     registry_.assign<Sprite>(panda_entity, texture, shader);
     registry_.assign<Panda>(panda_entity);
     registry_.assign<ObeysGravity>(panda_entity);
@@ -46,7 +48,7 @@ void VerticalScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Interactable>(panda_entity);
     registry_.assign<CausesDamage>(panda_entity, false, true, 1);
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
-    registry_.assign<Collidable>(panda_entity, texture.width() * scale, texture.height() * scale);
+    registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
 }
 
 void VerticalScene::update(Blackboard &blackboard) {

@@ -69,7 +69,7 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
 void PlayerMovementSystem::update_horizontal_scene(Blackboard &blackboard, Velocity &velocity) {
     float vx = HorizontalScene::CAMERA_SPEED;
     if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
-        vx -= PANDA_OFFSET_SPEED;
+        vx -= PANDA_OFFSET_SPEED * 1.5;
     } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
         vx += PANDA_OFFSET_SPEED;
     }

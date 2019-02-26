@@ -110,7 +110,7 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
     auto texture = blackboard.textureManager.get_texture("panda");
     auto shader = blackboard.shader_manager.get_shader("sprite");
     float scaleY = 100.0 / texture.height();
-    float scaleX = 100.0 / texture.width();
+    float scaleX = 75.0 / texture.width();
     registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scaleX, scaleY);
     registry_.assign<Sprite>(panda_entity, texture, shader);
     registry_.assign<Panda>(panda_entity);
