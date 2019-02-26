@@ -23,8 +23,10 @@
 #include <scene/boss_scene.h>
 
 
-static const SceneID BOSS_SCENE_ID = 0;
+
+static const SceneID HORIZONTAL_SCENE_ID = 0;
 static const SceneID VERTICAL_SCENE_ID = 1;
+static const SceneID BOSS_SCENE_ID = 2;
 
 int main(int argc, char** argv) {
 
@@ -61,6 +63,7 @@ int main(int argc, char** argv) {
     blackboard.textureManager.load_texture(textures_path("platform_center_grass.png"), "platform_center_grass");
     blackboard.textureManager.load_texture(textures_path("grass_block_2.png"), "platform2");
     blackboard.textureManager.load_texture(textures_path("bread.png"), "bread");
+    blackboard.textureManager.load_texture(textures_path("ghost.png"), "ghost");
     blackboard.textureManager.load_texture(textures_path("llama.png"), "llama");
     blackboard.textureManager.load_texture(textures_path("spit.png"), "spit");
     blackboard.textureManager.load_texture(textures_path("branchspiky.png"), "branch1");
@@ -71,21 +74,29 @@ int main(int argc, char** argv) {
     blackboard.textureManager.load_texture(textures_path("bg_top.png"), "bg_top");
     blackboard.textureManager.load_texture(textures_path("tutorial.png"), "tutorial");
     blackboard.textureManager.load_texture(textures_path("tutorial2.png"), "tutorial_bread");
+
     blackboard.textureManager.load_texture(textures_path("jacko.png"), "jacko");
     blackboard.textureManager.load_texture(textures_path("graveyard.png"), "graveyard");
     blackboard.textureManager.load_texture(textures_path("burger.png"), "burger");
+
+    blackboard.textureManager.load_texture(textures_path("stalagmite.png"), "stalagmite");
+    blackboard.textureManager.load_texture(textures_path("stalagmite2.png"), "stalagmite2");
+
+
 
 
 
 
 
     // initialize scenes here
-    BossScene boss_scene(blackboard, scene_manager);
+
+    HorizontalScene horizontal_scene(blackboard, scene_manager);
     VerticalScene vertical_scene(blackboard, scene_manager);
-
-    scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene));
+    BossScene boss_scene(blackboard, scene_manager);
+    
     scene_manager.add_scene(VERTICAL_SCENE_ID, (Scene*)(&vertical_scene));
-
+    scene_manager.add_scene(VERTICAL_SCENE_ID, (Scene*)(&vertical_scene));
+    scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene));
     // set the first scene
     scene_manager.change_scene(BOSS_SCENE_ID);
 
@@ -102,7 +113,8 @@ int main(int argc, char** argv) {
 
     }
     Mix_Music* m_background_music;
-    m_background_music = Mix_LoadMUS(audio_path("graveyard.ogg"));
+    m_background_music = Mix_LoadMUS(audio_path("PE2.ogg"));
+    //m_background_music = Mix_LoadMUS(audio_path("graveyard.ogg"));
 
 
     Mix_PlayMusic(m_background_music, -1);
