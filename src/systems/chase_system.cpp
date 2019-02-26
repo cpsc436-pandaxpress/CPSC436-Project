@@ -10,6 +10,7 @@
 #include "components/interactable.h"
 #include "collision_system.h"
 #include "components/panda.h"
+#include "components/jacko.h"
 #include "components/chases.h"
 #include "components/transform.h"
 #include "components/bread.h"
@@ -22,10 +23,11 @@ ChaseSystem::ChaseSystem() {}
 
 
 void ChaseSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry) {
-    auto chaser_view = registry.view<Chases, Transform, Velocity, Interactable>();
+    auto chaser_view = registry.view<Jacko, Chases, Transform, Velocity, Interactable>();
     auto panda_view = registry.view<Panda, Transform, Velocity>();
 
     for (auto entity: chaser_view) {
+        auto &jacko = chaser_view.get<Jacko>(entity);
         auto &transform = chaser_view.get<Transform>(entity);
         auto &velocity = chaser_view.get<Velocity>(entity);
         auto &chases = chaser_view.get<Chases>(entity);
@@ -34,7 +36,31 @@ void ChaseSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
 
         auto chasedPosition = registry.get<Transform>(chases.target);
 
-        if(!chases.stomping){
+        if(chases.evading){
+            if(abs(transform.x-chasedPosition.x) > 400){
+
+                    chases.evading=false;
+            }
+        }
+
+        if(chases.evading&&jacko.alive){
+            if (chasedPosition.x < transform.x) {
+                velocity.x_velocity = chases.chase_speed*5;
+            } else if (chasedPosition.x > transform.x) {
+                velocity.x_velocity = -chases.chase_speed*5;
+            }
+            if(abs(transform.x-chasedPosition.x) < 200){
+                if (chasedPosition.y < transform.y) {
+                    velocity.y_velocity = chases.chase_speed*4;
+                } else if (chasedPosition.y > transform.y) {
+                    velocity.y_velocity = -chases.chase_speed*4;
+                }
+            }else{
+                velocity.y_velocity = -chases.chase_speed*6;
+            }
+
+        }
+        else if(!chases.stomping){
             if (chasedPosition.x < transform.x) {
                 velocity.x_velocity = -chases.chase_speed;
             } else if (chasedPosition.x > transform.x) {
@@ -47,7 +73,8 @@ void ChaseSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
                 velocity.y_velocity = chases.chase_speed;
             }
 
-        } else{
+        }
+        else{
             if(!interactable.grounded){
                 velocity.y_velocity+=3;
                 velocity.x_velocity=0;

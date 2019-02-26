@@ -73,7 +73,7 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
     // TODO: generalize this to use the causesDamage component
     auto pandas_view = registry.view<Panda, Transform, Interactable, Collidable, Velocity>();
     auto bread_view = registry.view<Bread, Transform, Interactable, Collidable>();
-    auto jacko_view = registry.view<Jacko, Transform, Interactable, Collidable, Health>();
+    auto jacko_view = registry.view<Jacko, Transform, Interactable, Collidable, Health, Chases>();
     auto llama_view = registry.view<Llama, Transform, Interactable, Collidable>();
     auto projectile_view = registry.view<Spit, Transform, Interactable, Collidable>();
     auto obstacle_view = registry.view<Obstacle, Transform, Collidable>();
@@ -133,9 +133,10 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
 
         for (auto enemy_entity : jacko_view) {
             auto& jacko = jacko_view.get<Jacko>(enemy_entity);
-            auto& br_collidable = jacko_view.get<Collidable>(enemy_entity);
-            auto& br_transform = jacko_view.get<Transform>(enemy_entity);
-            auto& br_health = jacko_view.get<Health>(enemy_entity);
+            auto& ja_collidable = jacko_view.get<Collidable>(enemy_entity);
+            auto& ja_transform = jacko_view.get<Transform>(enemy_entity);
+            auto& ja_health = jacko_view.get<Health>(enemy_entity);
+            auto& ja_chases = jacko_view.get<Chases>(enemy_entity);
 
             if (!jacko.alive) {
                 registry.remove<Interactable>(enemy_entity);
@@ -144,14 +145,19 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
                 break;
             }
 
-            if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, br_collidable, br_transform)) {
+            if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, ja_collidable, ja_transform)) {
                 pa_velocity.y_velocity = -900.f;
-                br_health.healthPoints--;
-                if(br_health.healthPoints<1){
+                ja_health.healthPoints--;
+                if(jacko.alive){
+                    ja_chases.evading=true;
+                }
+
+
+                if(ja_health.healthPoints<1){
                     jacko.alive=false;
                 }
 
-            } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, br_collidable, br_transform)) {
+            } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, ja_collidable, ja_transform)) {
                 panda.alive = false;
             }
         }

@@ -54,11 +54,8 @@ void BossScene::update_panda(Blackboard &blackboard) {
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &panda_collidable = registry_.get<Collidable>(panda_entity);
 
-    if (transform.x + panda_collidable.width < cam_position.x - cam_size.x / 2 ||
-        transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || !panda.alive) {
+    if (transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || !panda.alive) {
         reset_scene(blackboard);
-    } else if (transform.x + panda_collidable.width / 2 > cam_position.x + cam_size.x / 2) {
-        transform.x = cam_position.x + cam_size.x / 2 - panda_collidable.width / 2;
     }
 }
 
@@ -130,8 +127,7 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
     registry_.assign<Sprite>(jacko_entity, texture, shader);
     registry_.assign<Jacko>(jacko_entity);
     registry_.assign<Chases>(jacko_entity, target);
-
-    registry_.assign<Health>(jacko_entity, 3);
+    registry_.assign<Health>(jacko_entity, 10);
     registry_.assign<Interactable>(jacko_entity);
     registry_.assign<CausesDamage>(jacko_entity, false, true, 1);
     registry_.assign<Velocity>(jacko_entity, 0.f, 0.f);

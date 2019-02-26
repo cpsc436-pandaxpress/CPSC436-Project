@@ -7,8 +7,11 @@
 
 struct Jacko {
     bool alive;
+    bool evading;
+    int invincibility_timer;
 
-    Jacko() : alive(true) {}
+    Jacko() : alive(true),
+    invincibility_timer(0){}
 };
 
 #endif //PANDAEXPRESS_BREAD_H

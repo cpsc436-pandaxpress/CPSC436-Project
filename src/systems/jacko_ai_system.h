@@ -9,6 +9,7 @@
 #include "util/selector_node.h"
 #include "components/jacko.h"
 #include "components/chases.h"
+#include "components/evades.h"
 #include "components/panda.h"
 #include "components/food.h"
 #include "components/transform.h"
@@ -25,6 +26,7 @@ class JackoAISystem: public System {
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;
     int getPandaHealth(Blackboard& blackboard, entt::DefaultRegistry& registry);
     int getJackoHealth(Blackboard& blackboard, entt::DefaultRegistry& registry);
+    void evasion(Blackboard& blackboard, entt::DefaultRegistry& registry);
 };
 
 
