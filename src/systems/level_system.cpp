@@ -6,6 +6,11 @@
 
 LevelSystem::LevelSystem() : rng_(Random(4)),
                              chunks_() {
+    init();
+}
+
+void LevelSystem::init() {
+    rng_.init(SEED);
 }
 
 void LevelSystem::generateEntity(int value, float x, float y,
@@ -13,7 +18,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
     switch (value) {
         case 1: {
             auto texture = blackboard.textureManager.get_texture(
-                    (rng_.nextInt(0, 100) % 2 == 0) ? "platform1" : "platform2");
+                    (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "platform1" : "platform2");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto scale = static_cast<float>(CELL_WIDTH / texture.width());
             auto platform = registry.create();

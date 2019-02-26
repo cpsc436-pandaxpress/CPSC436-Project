@@ -32,6 +32,7 @@ protected:
     const float BREAD_SPEED = 50.f;
     const float PROJECTILE_SPEED_X = -300.f;
     const float PROJECTILE_SPEED_Y = 10.f;
+    const int SEED = 48;
 
     virtual void load_next_chunk() = 0;
 
@@ -44,12 +45,13 @@ public:
 
     LevelSystem();
 
+    void init();
+
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override = 0;
 
     virtual void destroy_entities(entt::DefaultRegistry &registry) = 0;
 
     void generateProjectile(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
-
 };
 
 

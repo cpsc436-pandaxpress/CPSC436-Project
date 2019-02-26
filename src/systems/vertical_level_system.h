@@ -22,10 +22,12 @@ private:
     const float COL_X_OFFSET = -750.f;
     const float PROJECTILE_SPACING = 3.f;
 
-    float last_row_placed_;
+    float last_row_generated_, last_row_loaded_;
 public:
 
     VerticalLevelSystem();
+
+    void init();
 
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry);
 

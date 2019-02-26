@@ -23,9 +23,6 @@
 #include <scene/horizontal_scene.h>
 
 
-static const SceneID HORIZONTAL_SCENE_ID = 0;
-static const SceneID VERTICAL_SCENE_ID = 1;
-
 int main(int argc, char** argv) {
 
     auto window = Window();
@@ -90,7 +87,7 @@ int main(int argc, char** argv) {
     scene_manager.add_scene(VERTICAL_SCENE_ID, (Scene*)(&vertical_scene));
 
     // set the first scene
-    scene_manager.change_scene(VERTICAL_SCENE_ID);
+    scene_manager.change_scene(HORIZONTAL_SCENE_ID);
 
     //set background music
     if (SDL_Init(SDL_INIT_AUDIO) < 0)
