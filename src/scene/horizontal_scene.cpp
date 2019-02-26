@@ -99,9 +99,9 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
     blackboard.randNumGenerator.init(0);
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
-    level_system.init();
     create_background(blackboard);
     create_panda(blackboard);
+    level_system.init();
 }
 
 void HorizontalScene::create_panda(Blackboard &blackboard) {
