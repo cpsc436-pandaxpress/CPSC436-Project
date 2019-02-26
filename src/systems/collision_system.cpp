@@ -25,7 +25,7 @@ using namespace std;
 
 bool checkCollision(Collidable collidable1, Transform transform1, Velocity velocity1, Collidable collidable2, Transform transform2);
 bool checkEnemyPandaCollisionFatal(Collidable pa_co, Transform pa_tr, Collidable br_co, Transform brd_tr);
-bool checkEnemyPandaCollisionSafe(Collidable pa_co, Transform pa_tr, Velocity pa_velocity, Collidable br_co, Transform br_tr);
+bool checkEnemyPandaCollisionSafe(Collidable pa_co, Transform pa_tr, Velocity pa_velocity, Collidable br_co, Transform br_tr, float delta_time);
 bool checkObstaclePandaCollision(Collidable pa_co, Transform pa_tr, Collidable ob_co, Transform ob_tr);
 
 CollisionSystem::CollisionSystem() {}
@@ -128,8 +128,9 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
                 break;
             }
 
-            if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, br_collidable, br_transform)) {
+            if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, br_collidable, br_transform, blackboard.delta_time)) {
                 bread.alive = false;
+                pa_transform.y = br_transform.y - br_collidable.height / 2 - pa_collidable.height / 2;
                 pa_velocity.y_velocity = -400.f;
             } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, br_collidable, br_transform)) {
                 panda.alive = false;
@@ -151,7 +152,7 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
                 break;
             }
 
-            if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, ja_collidable, ja_transform)) {
+            if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, ja_collidable, ja_transform, blackboard.delta_time)) {
                 pa_velocity.y_velocity = -900.f;
                 ja_health.healthPoints--;
                 if(jacko.alive){
@@ -172,7 +173,7 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
             auto &gh_collidable = ghost_view.get<Collidable>(enemy_entity);
             auto &gh_transform = ghost_view.get<Transform>(enemy_entity);
 
-            if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, gh_collidable, gh_transform)) {
+            if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, gh_collidable, gh_transform, blackboard.delta_time)) {
                 panda.alive = false;
             } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, gh_collidable, gh_transform)) {
 
@@ -192,7 +193,7 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
             }
 
             if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, br_collidable,
-                                             br_transform)) {
+                                             br_transform, blackboard.delta_time)) {
                 llama.alive = false;
                 pa_velocity.y_velocity = -400.f;
             } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, br_collidable, br_transform)) {
@@ -206,7 +207,7 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
             auto &proj_transform = projectile_view.get<Transform>(enemy_entity);
 
             if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, proj_collidable,
-                                             proj_transform)) {
+                                             proj_transform, blackboard.delta_time)) {
                 panda.alive = false;
             } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, proj_collidable,
                                                      proj_transform)) {
@@ -245,11 +246,12 @@ bool checkEnemyPandaCollisionFatal(Collidable pa_co, Transform pa_tr, Collidable
 }
 
 // Check if panda jumps on enemy
-bool checkEnemyPandaCollisionSafe(Collidable pa_co, Transform pa_tr, Velocity pa_velocity, Collidable br_co, Transform br_tr) {
+bool checkEnemyPandaCollisionSafe(Collidable pa_co, Transform pa_tr, Velocity pa_velocity,
+        Collidable br_co, Transform br_tr, float delta_time) {
     return
             pa_tr.x - pa_co.width / 2 <= br_tr.x + br_co.width / 2 &&
             pa_tr.x + pa_co.width / 2 >= br_tr.x - br_co.width / 2 &&
-            pa_tr.y + pa_co.height / 2 >= br_tr.y - br_co.height / 2 - 5 &&
+            pa_tr.y + pa_co.height / 2 + pa_velocity.y_velocity * delta_time >= br_tr.y - br_co.height / 2 - 5 &&
             pa_tr.y + pa_co.height / 2 <= br_tr.y - br_co.height / 2 + 5&&
             pa_velocity.y_velocity > 0;
 }
