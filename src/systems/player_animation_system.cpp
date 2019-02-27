@@ -61,11 +61,11 @@ void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Inte
         row = 2;
         animate(frames, row, sprite);
         if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)){
-            frameRate = 2.f;
+            frameRate = 3.f;
         } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)){
-            frameRate = 0.8f;
-        } else {
             frameRate = 1.f;
+        } else {
+            frameRate = 2.f;
         }
     }
 
@@ -135,7 +135,7 @@ void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, I
 
 void PlayerAnimationSystem::animate(int frames, int row, Sprite &sprite){
     int index = ((int) animationTime % frames);
-    vec2 uv1 = {index*pandawidth + 0.006f, pandaheight*row - 0.012f};
-    vec2 uv2 = {(index+1)*pandawidth + 0.006f, pandaheight*(1+row) - 0.012f};
+    vec2 uv1 = {index*pandawidth + 0.006f, pandaheight*row};
+    vec2 uv2 = {(index+1)*pandawidth + 0.006f, pandaheight*(1+row) - 0.03f};
     sprite.set_uvs(uv1, uv2);
 }
