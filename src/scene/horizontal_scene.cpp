@@ -114,7 +114,6 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
     auto texture = blackboard.texture_manager.get_texture("panda_sprites");
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-
     auto sprite = Sprite(texture, shader, mesh);
 
 

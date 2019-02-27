@@ -11,6 +11,7 @@
 #include "scene.h"
 #include <queue>
 #include <systems/player_movement_system.h>
+#include <systems/player_animation_system.h>
 #include <systems/collision_system.h>
 #include <systems/vertical_level_system.h>
 
@@ -24,6 +25,8 @@ private:
     PlayerMovementSystem player_movement_system;
     CollisionSystem collision_system;
     VerticalLevelSystem level_system;
+    PlayerAnimationSystem player_animation_system;
+
 
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;

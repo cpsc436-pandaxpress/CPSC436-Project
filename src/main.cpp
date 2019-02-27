@@ -62,6 +62,7 @@ int main(int argc, char** argv) {
             shaders_path("sprite.fs.glsl"),"sprite");
 
     blackboard.texture_manager.load_texture(textures_path("panda.png"), "panda");
+    blackboard.texture_manager.load_texture(textures_path("panda_sprite_sheet.png"), "panda_sprites");
     blackboard.texture_manager.load_texture(textures_path("grass_block_1.png"), "platform1");
     blackboard.texture_manager.load_texture(textures_path("platform_center_grass.png"), "platform_center_grass");
     blackboard.texture_manager.load_texture(textures_path("grass_block_2.png"), "platform2");
@@ -74,8 +75,6 @@ int main(int argc, char** argv) {
     blackboard.texture_manager.load_texture(textures_path("ghost.png"), "ghost");
     blackboard.texture_manager.load_texture(textures_path("llama.png"), "llama");
     blackboard.texture_manager.load_texture(textures_path("spit.png"), "spit");
-    blackboard.texture_manager.load_texture(textures_path("branchspiky.png"), "branch1");
-    blackboard.texture_manager.load_texture(textures_path("branchspiky2.png"), "branch2");
     blackboard.texture_manager.load_texture(textures_path("bg_back.png"), "bg_back");
     blackboard.texture_manager.load_texture(textures_path("bg_front.png"), "bg_front");
     blackboard.texture_manager.load_texture(textures_path("bg_middle.png"), "bg_middle");
@@ -118,7 +117,7 @@ int main(int argc, char** argv) {
 
     // set the first scene
 
-    scene_manager.change_scene(MAIN_MENU_SCENE_ID);
+    scene_manager.change_scene(BOSS_SCENE_ID);
 
 
 

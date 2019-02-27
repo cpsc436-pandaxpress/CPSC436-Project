@@ -21,6 +21,8 @@
 #include "../systems/collision_system.h"
 #include "../systems/jacko_ai_system.h"
 #include "../systems/chase_system.h"
+#include "../systems/player_animation_system.h"
+
 
 class BossScene: public Scene {
 private:
@@ -47,6 +49,8 @@ private:
     CollisionSystem collision_system;
     ChaseSystem chase_system;
     JackoAISystem jacko_ai_system;
+    PlayerAnimationSystem player_animation_system;
+
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);
