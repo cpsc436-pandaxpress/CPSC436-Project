@@ -78,11 +78,23 @@ set(SOURCE_FILES
         src/components/llama.h src/components/spit.h
         src/components/tutorial.h
         src/systems/vertical_level_system.cpp
-        src/systems/vertical_level_system.h src/components/chases.h src/systems/chase_system.cpp src/systems/chase_system.h src/util/node.cpp src/util/node.h src/util/selector_node.h src/util/selector_node.cpp src/systems/jacko_ai_system.cpp src/systems/jacko_ai_system.h src/components/evades.h
+        src/systems/vertical_level_system.h
+        src/components/chases.h
+        src/systems/chase_system.cpp
+        src/systems/chase_system.h
+        src/util/node.cpp src/util/node.h
+        src/util/selector_node.h
+        src/util/selector_node.cpp
+        src/systems/jacko_ai_system.cpp
+        src/systems/jacko_ai_system.h
+        src/components/evades.h
         src/systems/boss_level_system.h
         src/systems/boss_level_system.cpp
         src/systems/ghost_movement_system.cpp
-        src/systems/ghost_movement_system.h src/graphics/mesh_manager.cpp src/systems/player_animation_system.cpp src/systems/player_animation_system.h)
+        src/systems/ghost_movement_system.h
+        src/graphics/mesh_manager.cpp
+        src/systems/player_animation_system.cpp
+        src/systems/player_animation_system.h)
 
 
 # Create executable target

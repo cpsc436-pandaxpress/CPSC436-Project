@@ -38,7 +38,7 @@ void PlayerAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry
 }
 
 void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Interactable &walkable, Sprite &sprite) {
-    float frameRate = 0.1f;
+    float frameRate = 8.f;
     int frames, row;
     /*
      * Walking
@@ -48,9 +48,9 @@ void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Inte
         row = 0;
         animate(frames, row, sprite);
         if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)){
-            frameRate = 0.15f;
+            frameRate = 10.f;
         } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)){
-            frameRate = 0.08f;
+            frameRate = 6.f;
         }
     }
     /*
@@ -61,19 +61,21 @@ void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Inte
         row = 2;
         animate(frames, row, sprite);
         if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)){
-            frameRate = 0.05f;
+            frameRate = 2.f;
         } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)){
-            frameRate = 0.01f;
+            frameRate = 0.8f;
         } else {
-            frameRate = 0.03f;
+            frameRate = 1.f;
         }
     }
 
-    animationTime += frameRate;
+    animationTime += frameRate*blackboard.delta_time;
+//    animationTime += frameRate;
+
 }
 
 void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, Interactable &walkable, Sprite &sprite) {
-    float frameRate = 0.13f;
+    float frameRate = 8.f;
     int frames, row;
     bool idle = true;
 
@@ -116,7 +118,7 @@ void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, I
      */
 
     if (!walkable.grounded) {
-        frameRate = 0.04f;
+        frameRate = 1.f;
         if (direction_left) {
             frames = 2;
             row = 3;
@@ -127,13 +129,13 @@ void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, I
             animate(frames, row, sprite);
         }
     }
-    animationTime += frameRate;
+    animationTime += frameRate*blackboard.delta_time;
 
 }
 
 void PlayerAnimationSystem::animate(int frames, int row, Sprite &sprite){
     int index = ((int) animationTime % frames);
-    vec2 uv1 = {index*pandawidth + 0.007f, pandaheight*row};
-    vec2 uv2 = {(index+1)*pandawidth + 0.007f, pandaheight*(1+row)};
+    vec2 uv1 = {index*pandawidth + 0.006f, pandaheight*row - 0.012f};
+    vec2 uv2 = {(index+1)*pandawidth + 0.006f, pandaheight*(1+row) - 0.012f};
     sprite.set_uvs(uv1, uv2);
 }

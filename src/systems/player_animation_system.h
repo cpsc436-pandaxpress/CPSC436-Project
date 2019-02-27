@@ -24,7 +24,7 @@ public:
 
 private:
     float pandawidth = 0.125;
-    float pandaheight = 0.25;
+    float pandaheight = 0.2475;
     SceneID scene_id;
 
 

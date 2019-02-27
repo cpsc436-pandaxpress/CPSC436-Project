@@ -107,7 +107,7 @@ void BossScene::create_panda(Blackboard &blackboard) {
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
     float scaleY = 100.0 / texture.height();
-    float scaleX = 100.0 / texture.width();
+    float scaleX = 75.0 / texture.width();
     registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scaleX, scaleY);
     registry_.assign<Sprite>(panda_entity, texture, shader, mesh);
     registry_.assign<Panda>(panda_entity);
