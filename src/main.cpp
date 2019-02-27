@@ -117,7 +117,7 @@ int main(int argc, char** argv) {
 
     // set the first scene
 
-    scene_manager.change_scene(BOSS_SCENE_ID);
+    scene_manager.change_scene(MAIN_MENU_SCENE_ID);
 
 
 
