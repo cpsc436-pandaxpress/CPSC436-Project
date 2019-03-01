@@ -70,7 +70,6 @@ void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Inte
     }
 
     animationTime += frameRate*blackboard.delta_time;
-//    animationTime += frameRate;
 
 }
 
