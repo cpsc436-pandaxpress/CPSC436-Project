@@ -52,6 +52,8 @@ void VerticalScene::create_panda(Blackboard &blackboard) {
 }
 
 void VerticalScene::update(Blackboard &blackboard) {
+    timer_system.update(blackboard, registry_);
+
     vec2 cam_size = blackboard.camera.size();
     vec2 cam_position = blackboard.camera.position();
     blackboard.camera.set_position(cam_position.x,

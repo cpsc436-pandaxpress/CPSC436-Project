@@ -14,12 +14,14 @@ struct Watch {
 
 class Timer {
 public:
+    Timer();
     bool is_done(std::string label);
-    void add_timer(std::string label, float time);
+    void save_watch(std::string label, float time);
     void update(float delta_time);
+    void reset_watch(std::string label);
 
 private:
-    float currTime;
+    float curr_time;
     std::unordered_map<std::string, Watch> watches;
 };
 

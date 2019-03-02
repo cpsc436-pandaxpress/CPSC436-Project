@@ -6,6 +6,7 @@
 #include <util/constants.h>
 #include "vertical_level_system.h"
 #include <iostream>
+#include <components/timer.h>
 
 VerticalLevelSystem::VerticalLevelSystem() : LevelSystem() {
 
@@ -101,18 +102,17 @@ void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, fl
 }
 
 void VerticalLevelSystem::update_projectiles(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    auto llama_view = registry.view<Llama, Transform>();
+    auto llama_view = registry.view<Llama, Transform, Timer>();
     for (auto llama_entity : llama_view) {
         auto& llama = llama_view.get<Llama>(llama_entity);
         auto& la_transform = llama_view.get<Transform>(llama_entity);
+        auto& la_timer  = llama_view.get<Timer>(llama_entity);
         if (!llama.alive)
             break;
 
-        if(llama.spit_time <= 0) {
+        if(la_timer.is_done("spit")) {
             generateProjectile(la_transform.x, la_transform.y, blackboard, registry);
-            llama.spit_time = PROJECTILE_SPACING;
-        } else {
-            llama.spit_time -= blackboard.delta_time;
+            la_timer.reset_watch("spit");
         }
     }
 }

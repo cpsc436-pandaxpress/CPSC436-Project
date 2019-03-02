@@ -94,7 +94,9 @@ set(SOURCE_FILES
         src/systems/ghost_movement_system.cpp
         src/systems/ghost_movement_system.h
         src/components/timer.cpp
-        src/components/timer.h)
+        src/components/timer.h
+        src/systems/timer_system.cpp
+        src/systems/timer_system.h)
 
 
 # Create executable target
