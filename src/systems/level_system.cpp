@@ -81,7 +81,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
                                         texture.height() * scale);
             registry.assign<ObeysGravity>(llama);
             auto& timer = registry.assign<Timer>(llama);
-            timer.save_watch("spit", 3.f);
+            timer.save_watch(SPIT_TIMER_LABEL, 3.f);
         }
             break;
         case 6: {

@@ -110,9 +110,9 @@ void VerticalLevelSystem::update_projectiles(Blackboard &blackboard, entt::Defau
         if (!llama.alive)
             break;
 
-        if(la_timer.is_done("spit")) {
+        if(la_timer.is_done(SPIT_TIMER_LABEL)) {
             generateProjectile(la_transform.x, la_transform.y, blackboard, registry);
-            la_timer.reset_watch("spit");
+            la_timer.reset_watch(SPIT_TIMER_LABEL);
         }
     }
 }

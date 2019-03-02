@@ -52,8 +52,6 @@ void VerticalScene::create_panda(Blackboard &blackboard) {
 }
 
 void VerticalScene::update(Blackboard &blackboard) {
-    timer_system.update(blackboard, registry_);
-
     vec2 cam_size = blackboard.camera.size();
     vec2 cam_position = blackboard.camera.position();
     blackboard.camera.set_position(cam_position.x,
@@ -77,6 +75,7 @@ void VerticalScene::update(Blackboard &blackboard) {
     collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
+    timer_system.update(blackboard, registry_);
 }
 
 void VerticalScene::render(Blackboard &blackboard) {

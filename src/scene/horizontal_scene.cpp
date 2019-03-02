@@ -41,6 +41,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
     physics_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
     ghost_movement_system.update(blackboard, registry_);
+    timer_system.update(blackboard, registry_);
 }
 
 void HorizontalScene::update_panda(Blackboard &blackboard) {
