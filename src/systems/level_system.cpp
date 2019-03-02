@@ -3,7 +3,6 @@
 //
 
 #include <components/timer.h>
-#include <iostream>
 #include "level_system.h"
 
 LevelSystem::LevelSystem() : rng_(Random(4)),

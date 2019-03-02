@@ -2,7 +2,6 @@
 // Created by cowan on 01/03/19.
 //
 
-#include <iostream>
 #include "timer.h"
 
 using namespace std;
