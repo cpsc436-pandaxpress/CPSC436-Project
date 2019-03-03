@@ -18,7 +18,6 @@ class HorizontalLevelSystem : public LevelSystem {
     void destroy_off_screen(entt::DefaultRegistry &registry, float x);
 
     const float FIRST_COL_X = -200;
-    const float PROJECTILE_SPACING = 3.f;
     float last_col_generated_, last_col_loaded_;
 
 public:

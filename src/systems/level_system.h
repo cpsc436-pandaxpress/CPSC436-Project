@@ -33,6 +33,7 @@ protected:
     const float PROJECTILE_SPEED_X = -300.f;
     const float PROJECTILE_SPEED_Y = 10.f;
     const int SEED = 48;
+    const std::string SPIT_TIMER_LABEL = "spit";
 
     virtual void load_next_chunk() = 0;
 

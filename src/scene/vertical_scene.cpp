@@ -75,6 +75,7 @@ void VerticalScene::update(Blackboard &blackboard) {
     collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
+    timer_system.update(blackboard, registry_);
 }
 
 void VerticalScene::render(Blackboard &blackboard) {
