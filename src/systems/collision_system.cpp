@@ -133,7 +133,7 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
 
             if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, br_collidable, br_transform)) {
                 bread.alive = false;
-                pa_velocity.y_velocity = PANDA_REGULAR_BOUNCE_Y.f;
+                pa_velocity.y_velocity = PANDA_REGULAR_BOUNCE_Y;
             } else if (checkEnemyPandaCollisionDamages(pa_collidable, pa_transform, br_collidable, br_transform)) {
                 handlePandaDamage(blackboard, registry);
             }
