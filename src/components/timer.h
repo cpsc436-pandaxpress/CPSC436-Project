@@ -6,6 +6,7 @@
 #define PANDAEXPRESS_TIMER_H
 
 #include <unordered_map>
+#include <string>
 
 struct Watch {
     float time;
