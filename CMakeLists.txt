@@ -93,6 +93,9 @@ set(SOURCE_FILES
         src/systems/boss_level_system.cpp
         src/systems/ghost_movement_system.cpp
         src/systems/ghost_movement_system.h
+        src/graphics/mesh_manager.cpp
+        src/systems/player_animation_system.cpp
+        src/systems/player_animation_system.h
         src/components/timer.cpp
         src/components/timer.h
         src/systems/timer_system.cpp

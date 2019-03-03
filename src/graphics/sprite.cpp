@@ -27,26 +27,30 @@ TexturedVertex Sprite::vertices[4] = {
 
 uint16_t Sprite::indices[6] = { 0, 3, 1, 1, 3, 2 };
 
-Sprite::Sprite(Texture texture, Shader shader) :
-        mesh_(4, vertices, 6, indices),
+Sprite::Sprite(Texture texture, Shader shader, Mesh mesh) :
+        mesh_(mesh),
         shader_(shader),
         texture_(texture)
 {
     position_ = { 0.f, 0.f};
     pixel_scale_ = {(float)texture.width(), (float)texture.height()};
     scale_ = {1.f, 1.f};
+    uv1_ = {0, 0};
+    uv2_ = {1, 1};
     color_ = {1.f, 1.f, 1.f};
     rotation_ = 0.f;
 }
 
 Sprite::Sprite(const Sprite& other) :
-        mesh_(4, vertices, 6, indices),
+        mesh_(other.mesh_),
         shader_(other.shader_),
         texture_(other.texture_),
         position_(other.position_),
         pixel_scale_(other.pixel_scale_),
         scale_(other.scale_),
         color_(other.color_),
+        uv1_(other.uv1_),
+        uv2_(other.uv2_),
         rotation_(other.rotation_)
 {}
 
@@ -83,6 +87,9 @@ void Sprite::draw(const mat3& projection) {
     shader_.set_uniform_mat3("transform", transform);
     shader_.set_uniform_vec3("fcolor", color_);
     shader_.set_uniform_mat3("projection", projection);
+
+    shader_.set_uniform_vec2("uv1", uv1_);
+    shader_.set_uniform_vec2("uv2", uv2_);
 
     // bind texture
     glActiveTexture(GL_TEXTURE0);
@@ -152,4 +159,30 @@ void Sprite::set_color(const vec3& color) {
 
 void Sprite::set_color(float r, float g, float b) {
     color_ = { r, g, b };
+}
+
+vec2 Sprite::uv1() {
+    return uv1_;
+}
+
+vec2 Sprite::uv2() {
+    return uv2_;
+}
+
+void Sprite::set_uvs(float u1, float v1, float u2, float v2) {
+    uv1_ = {u1, v1};
+    uv2_ = {u2, v2};
+}
+
+void Sprite::set_uvs(const vec2& uv1, const vec2& uv2) {
+    uv1_ = uv1;
+    uv2_ = uv2;
+}
+
+void Sprite::set_texture_rect(uint32_t left, uint32_t top, uint32_t width, uint32_t height) {
+    float u1 = (float)left / texture_.width();
+    float v1 = (float)top / texture_.height();
+    float u2 = (float)(left + width) / texture_.width();
+    float v2 = (float)(top + height) / texture_.height();
+    set_uvs(u1, v1, u2, v2);
 }
