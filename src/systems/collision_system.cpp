@@ -24,6 +24,13 @@
 #include "components/obstacle.h"
 using namespace std;
 
+
+const float PANDA_DAMAGED_BOUNCE_X= 400.f;
+const float PANDA_DAMAGED_BOUNCE_Y= -1000.f;
+const float PANDA_REGULAR_BOUNCE_Y= -400.f;
+const float PANDA_JACKO_BOUNCE_Y= -900.f;
+
+
 bool checkCollision(Collidable collidable1, Transform transform1, Velocity velocity1, Collidable collidable2, Transform transform2);
 bool checkEnemyPandaCollisionDamages(Collidable pa_co, Transform pa_tr, Collidable br_co, Transform brd_tr);
 bool checkEnemyPandaCollisionSafe(Collidable pa_co, Transform pa_tr, Velocity pa_velocity, Collidable br_co, Transform br_tr);
@@ -126,7 +133,7 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
 
             if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, br_collidable, br_transform)) {
                 bread.alive = false;
-                pa_velocity.y_velocity = -400.f;
+                pa_velocity.y_velocity = PANDA_REGULAR_BOUNCE_Y.f;
             } else if (checkEnemyPandaCollisionDamages(pa_collidable, pa_transform, br_collidable, br_transform)) {
                 handlePandaDamage(blackboard, registry);
             }
@@ -148,7 +155,7 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
             }
 
             if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, ja_collidable, ja_transform)) {
-                pa_velocity.y_velocity = -900.f;
+                pa_velocity.y_velocity = PANDA_REGULAR_BOUNCE_Y;
                 ja_health.healthPoints--;
                 if(jacko.alive){
                     ja_chases.evading=true;
@@ -189,7 +196,7 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
             if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, br_collidable,
                                              br_transform)) {
                 llama.alive = false;
-                pa_velocity.y_velocity = -400.f;
+                pa_velocity.y_velocity = PANDA_REGULAR_BOUNCE_Y;
             } else if (checkEnemyPandaCollisionDamages(pa_collidable, pa_transform, br_collidable, br_transform)) {
                 handlePandaDamage(blackboard, registry);
             }
@@ -277,12 +284,12 @@ void handlePandaDamage(Blackboard &blackboard, entt::DefaultRegistry& registry){
                 panda.alive = false;
             }
             if (panda.facingRight) {
-                pa_velocity.x_velocity = -400.f;
+                pa_velocity.x_velocity = -PANDA_DAMAGED_BOUNCE_X;
             } else {
-                pa_velocity.x_velocity = 400.f;
+                pa_velocity.x_velocity = PANDA_DAMAGED_BOUNCE_X;
             }
 
-            pa_velocity.y_velocity = -1000.f;
+            pa_velocity.y_velocity = PANDA_DAMAGED_BOUNCE_Y;
         }
     }
 
