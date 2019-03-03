@@ -58,7 +58,7 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
          * Jumping
          */
 
-        if (walkable.grounded && blackboard.input_manager.key_just_pressed(SDL_SCANCODE_SPACE)) {
+        if (walkable.grounded && blackboard.input_manager.key_pressed(SDL_SCANCODE_SPACE)) {
             walkable.grounded = false;
             velocity.y_velocity = -PANDA_JUMP_SPEED;
             time_since_jump = 0.f;

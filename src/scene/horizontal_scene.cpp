@@ -30,6 +30,13 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
 }
 
 void HorizontalScene::update(Blackboard &blackboard) {
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
+        blackboard.camera.set_position(0, 0);
+        reset_scene(blackboard);
+        change_scene(MAIN_MENU_SCENE_ID);
+        return;
+    }
+
     update_camera(blackboard);
     update_panda(blackboard);
     update_tutorial(blackboard);
