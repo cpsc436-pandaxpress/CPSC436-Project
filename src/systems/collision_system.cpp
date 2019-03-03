@@ -222,6 +222,7 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
             auto &ob_tr = obstacle_view.get<Transform>(obstacle_entity);
 
             if (checkObstaclePandaCollision(pa_collidable, pa_transform, ob_co, ob_tr)) {
+                panda.invincible=false;
                 handlePandaDamage(blackboard, registry);
             }
         }
