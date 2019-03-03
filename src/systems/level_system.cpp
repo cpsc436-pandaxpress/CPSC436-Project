@@ -2,6 +2,8 @@
 // Created by Prayansh Srivastava on 2019-02-11.
 //
 
+#include <components/timer.h>
+#include <components/enemy.h>
 #include "level_system.h"
 
 LevelSystem::LevelSystem() : rng_(Random(4)),
@@ -38,6 +40,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Transform>(bread, x, y, 0., scale, scale);
             registry.assign<Sprite>(bread, texture, shader);
             registry.assign<Bread>(bread);
+            registry.assign<Enemy>(bread);
             registry.assign<CausesDamage>(bread, false, true, 1);
             registry.assign<Health>(bread,1);
             registry.assign<Velocity>(bread, -BREAD_SPEED, 0.f);
@@ -56,6 +59,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
                                        scale);
             registry.assign<Sprite>(ghost, texture, shader);
             registry.assign<Ghost>(ghost);
+            registry.assign<Enemy>(ghost);
             registry.assign<CausesDamage>(ghost, false, true, 1);
             registry.assign<Health>(ghost,1);
             registry.assign<Velocity>(ghost, -0.f, 0.f);
@@ -72,6 +76,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
                                        scale);
             registry.assign<Sprite>(llama, texture, shader);
             registry.assign<Llama>(llama);
+            registry.assign<Enemy>(llama);
             registry.assign<CausesDamage>(llama, false, true, 1);
             registry.assign<Health>(llama,1);
             registry.assign<Velocity>(llama, 0.f, 0.f);
@@ -79,6 +84,8 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Collidable>(llama, texture.width() * scale,
                                         texture.height() * scale);
             registry.assign<ObeysGravity>(llama);
+            auto& timer = registry.assign<Timer>(llama);
+            timer.save_watch(SPIT_TIMER_LABEL, 3.f);
         }
             break;
         case 6: {

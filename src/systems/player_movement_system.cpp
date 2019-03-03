@@ -22,10 +22,10 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
         auto &panda = view.get<Panda>(entity);
         auto &transform = view.get<Transform>(entity);
         auto &velocity = view.get<Velocity>(entity);
-        auto &walkable = view.get<Interactable>(entity);
+        auto &interactable = view.get<Interactable>(entity);
         auto &gravity = view.get<ObeysGravity>(entity);
 
-        if(!walkable.grounded) {
+        if(!interactable.grounded) {
             if(holding_jump && blackboard.input_manager.key_released(SDL_SCANCODE_SPACE)) {
                 holding_jump = false;
             }
@@ -39,27 +39,37 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
             gravity.gravityFactor = 1.5f;
         }
 
+        if(panda.damaged){
+            if(interactable.grounded){
+                panda.damaged=false;
+                panda.invincible=false;
+            }
+        }
 
-        switch (scene_id) {
-            case HORIZONTAL_SCENE_ID:
-                update_horizontal_scene(blackboard, velocity);
-                break;
-            case VERTICAL_SCENE_ID:
-                update_vertical_scene(blackboard, velocity);
-                break;
-            case BOSS_SCENE_ID:
-                update_boss_scene(blackboard, velocity);
-                break;
-            default:
-                fprintf(stderr, "Invalid scene ID: %d\n", scene_id);
+        if(!panda.damaged) { // Player can't control direction until he hits the ground if damaged
+            switch (scene_id) {
+                case HORIZONTAL_SCENE_ID:
+
+                    update_horizontal_scene(blackboard, velocity);
+
+                    break;
+                case VERTICAL_SCENE_ID:
+                    update_vertical_scene(blackboard, velocity);
+                    break;
+                case BOSS_SCENE_ID:
+                    update_boss_scene(blackboard, velocity);
+                    break;
+                default:
+                    fprintf(stderr, "Invalid scene ID: %d\n", scene_id);
+            }
         }
 
         /*
          * Jumping
          */
 
-        if (walkable.grounded && blackboard.input_manager.key_pressed(SDL_SCANCODE_SPACE)) {
-            walkable.grounded = false;
+        if (interactable.grounded && blackboard.input_manager.key_pressed(SDL_SCANCODE_SPACE)) {
+            interactable.grounded = false;
             velocity.y_velocity = -PANDA_JUMP_SPEED;
             time_since_jump = 0.f;
             holding_jump = true;
@@ -76,8 +86,7 @@ void PlayerMovementSystem::update_horizontal_scene(Blackboard &blackboard, Veloc
     } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
         vx += PANDA_OFFSET_SPEED;
     }
-
-    velocity.x_velocity = vx;
+        velocity.x_velocity = vx;
 }
 
 void PlayerMovementSystem::update_vertical_scene(Blackboard &blackboard, Velocity &velocity) {

@@ -7,6 +7,7 @@
 #include "components/collidable.h"
 #include "components/jacko.h"
 #include "components/health.h"
+#include "components/enemy.h"
 #include "components/platform.h"
 #include "components/food.h"
 #include "components/velocity.h"
@@ -24,9 +25,10 @@
 using namespace std;
 
 bool checkCollision(Collidable collidable1, Transform transform1, Velocity velocity1, Collidable collidable2, Transform transform2);
-bool checkEnemyPandaCollisionFatal(Collidable pa_co, Transform pa_tr, Collidable br_co, Transform brd_tr);
+bool checkEnemyPandaCollisionDamages(Collidable pa_co, Transform pa_tr, Collidable br_co, Transform brd_tr);
 bool checkEnemyPandaCollisionSafe(Collidable pa_co, Transform pa_tr, Velocity pa_velocity, Collidable br_co, Transform br_tr);
 bool checkObstaclePandaCollision(Collidable pa_co, Transform pa_tr, Collidable ob_co, Transform ob_tr);
+void handlePandaDamage(Blackboard &blackboard, entt::DefaultRegistry& registry);
 
 CollisionSystem::CollisionSystem() {}
 
@@ -39,7 +41,6 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
      */
 
     auto interactable_view = registry.view<Interactable, Collidable, Transform, Velocity>();
-
     auto platform_view = registry.view<Collidable, Transform, Platform>();
 
     for (auto entity: interactable_view) {
@@ -71,19 +72,17 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
         }
     }
 
-    // TODO: generalize this to use the causesDamage component
-    auto pandas_view = registry.view<Panda, Transform, Interactable, Collidable, Velocity>();
+
+    auto pandas_view = registry.view<Panda, Transform, Interactable, Collidable, Velocity, Health>();
     auto bread_view = registry.view<Bread, Transform, Interactable, Collidable>();
-
     auto jacko_view = registry.view<Jacko, Transform, Interactable, Collidable, Health, Chases>();
-
     auto ghost_view = registry.view<Ghost, Transform, Collidable>();
-
     auto llama_view = registry.view<Llama, Transform, Interactable, Collidable>();
     auto projectile_view = registry.view<Spit, Transform, Interactable, Collidable>();
     auto obstacle_view = registry.view<Obstacle, Transform, Collidable>();
     auto food_view = registry.view<Food, Transform, Collidable>();
     auto health_view = registry.view<Transform, Collidable, Health>();
+
 
     for (auto food_entity : food_view) {
         auto& food = food_view.get<Food>(food_entity);
@@ -97,11 +96,6 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
 
             if(food.eaten){
                 registry.destroy(food_entity);
-                /*
-                if(registry.has<Interactable>(food_entity)) {
-                    registry.remove<Interactable>(food_entity);
-                } //Should later make this just destroy the food but right now it's destroying everything
-                 */
                 break;
             }
 
@@ -117,6 +111,8 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
         auto &pa_collidable = pandas_view.get<Collidable>(panda_entity);
         auto &pa_transform = pandas_view.get<Transform>(panda_entity);
         auto &pa_velocity = pandas_view.get<Velocity>(panda_entity);
+        auto &pa_interactable = pandas_view.get<Interactable>(panda_entity);
+        auto &pa_health = pandas_view.get<Health>(panda_entity);
 
         for (auto enemy_entity : bread_view) {
             auto &bread = bread_view.get<Bread>(enemy_entity);
@@ -131,8 +127,8 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
             if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, br_collidable, br_transform)) {
                 bread.alive = false;
                 pa_velocity.y_velocity = -400.f;
-            } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, br_collidable, br_transform)) {
-                panda.alive = false;
+            } else if (checkEnemyPandaCollisionDamages(pa_collidable, pa_transform, br_collidable, br_transform)) {
+                handlePandaDamage(blackboard, registry);
             }
         }
 
@@ -163,8 +159,8 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
                     jacko.alive=false;
                 }
 
-            } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, ja_collidable, ja_transform)) {
-                panda.alive = false;
+            } else if (checkEnemyPandaCollisionDamages(pa_collidable, pa_transform, ja_collidable, ja_transform)) {
+                handlePandaDamage(blackboard, registry);
             }
         }
         for (auto enemy_entity : ghost_view) {
@@ -173,10 +169,9 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
             auto &gh_transform = ghost_view.get<Transform>(enemy_entity);
 
             if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, gh_collidable, gh_transform)) {
-                panda.alive = false;
-            } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, gh_collidable, gh_transform)) {
-
-                panda.alive = false;
+                handlePandaDamage(blackboard, registry);
+            } else if (checkEnemyPandaCollisionDamages(pa_collidable, pa_transform, gh_collidable, gh_transform)) {
+                handlePandaDamage(blackboard, registry);
             }
         }
 
@@ -195,8 +190,8 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
                                              br_transform)) {
                 llama.alive = false;
                 pa_velocity.y_velocity = -400.f;
-            } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, br_collidable, br_transform)) {
-                panda.alive = false;
+            } else if (checkEnemyPandaCollisionDamages(pa_collidable, pa_transform, br_collidable, br_transform)) {
+                handlePandaDamage(blackboard, registry);
             }
         }
 
@@ -207,10 +202,10 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
 
             if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, proj_collidable,
                                              proj_transform)) {
-                panda.alive = false;
-            } else if (checkEnemyPandaCollisionFatal(pa_collidable, pa_transform, proj_collidable,
-                                                     proj_transform)) {
-                panda.alive = false;
+                handlePandaDamage(blackboard, registry);
+            } else if (checkEnemyPandaCollisionDamages(pa_collidable, pa_transform, proj_collidable,
+                                                       proj_transform)) {
+                handlePandaDamage(blackboard, registry);
             }
         }
 
@@ -220,7 +215,7 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
             auto &ob_tr = obstacle_view.get<Transform>(obstacle_entity);
 
             if (checkObstaclePandaCollision(pa_collidable, pa_transform, ob_co, ob_tr)) {
-                panda.alive = false;
+                handlePandaDamage(blackboard, registry);
             }
         }
     }
@@ -236,7 +231,7 @@ bool checkCollision(Collidable collidable1, Transform transform1, Velocity veloc
                     velocity1.y_velocity >= 0;
 }
 
-bool checkEnemyPandaCollisionFatal(Collidable pa_co, Transform pa_tr, Collidable br_co, Transform brd_tr) {
+bool checkEnemyPandaCollisionDamages(Collidable pa_co, Transform pa_tr, Collidable br_co, Transform brd_tr) {
     return
             pa_tr.x - pa_co.width / 2 <= brd_tr.x + br_co.width / 2 &&
             pa_tr.x + pa_co.width / 2 >= brd_tr.x - br_co.width / 2 &&
@@ -260,4 +255,35 @@ bool checkObstaclePandaCollision(Collidable pa_co, Transform pa_tr, Collidable o
             pa_tr.x + pa_co.width / 2 >= ob_tr.x - ob_co.width / 2 &&
             pa_tr.y - pa_co.height / 2 <= ob_tr.y + ob_co.height / 2 &&
             pa_tr.y + pa_co.height / 2 >= ob_tr.y - ob_co.height / 2;
+}
+
+void handlePandaDamage(Blackboard &blackboard, entt::DefaultRegistry& registry){
+    auto pandas_view = registry.view<Panda, Transform, Interactable, Collidable, Velocity, Health>();
+
+    for (auto panda_entity : pandas_view) {
+        auto &panda = pandas_view.get<Panda>(panda_entity);
+        auto &pa_collidable = pandas_view.get<Collidable>(panda_entity);
+        auto &pa_transform = pandas_view.get<Transform>(panda_entity);
+        auto &pa_velocity = pandas_view.get<Velocity>(panda_entity);
+        auto &pa_interactable = pandas_view.get<Interactable>(panda_entity);
+        auto &pa_health = pandas_view.get<Health>(panda_entity);
+
+        pa_interactable.grounded = false;
+        if (!panda.invincible) {
+            panda.damaged = true;
+            panda.invincible = true;
+            pa_health.healthPoints--;
+            if (pa_health.healthPoints < 1) {
+                panda.alive = false;
+            }
+            if (panda.facingRight) {
+                pa_velocity.x_velocity = -400.f;
+            } else {
+                pa_velocity.x_velocity = 400.f;
+            }
+
+            pa_velocity.y_velocity = -1000.f;
+        }
+    }
+
 }

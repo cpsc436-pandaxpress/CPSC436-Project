@@ -9,6 +9,7 @@
 #include <components/interactable.h>
 #include <components/causes_damage.h>
 #include <components/velocity.h>
+#include <components/enemy.h>
 #include <components/jacko.h>
 #include <components/chases.h>
 #include <components/tutorial.h>
@@ -115,7 +116,7 @@ void BossScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Sprite>(panda_entity, texture, shader);
     registry_.assign<Panda>(panda_entity);
     registry_.assign<ObeysGravity>(panda_entity);
-    registry_.assign<Health>(panda_entity, 1);
+    registry_.assign<Health>(panda_entity, 3);
     registry_.assign<Interactable>(panda_entity);
     registry_.assign<CausesDamage>(panda_entity, false, true, 1);
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
@@ -132,6 +133,7 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
     registry_.assign<Transform>(jacko_entity, -300, -300, 0., scaleX, scaleY);
     registry_.assign<Sprite>(jacko_entity, texture, shader);
     registry_.assign<Jacko>(jacko_entity);
+    registry_.assign<Enemy>(jacko_entity);
     registry_.assign<Chases>(jacko_entity, target);
     registry_.assign<Health>(jacko_entity, 10);
     registry_.assign<Interactable>(jacko_entity);

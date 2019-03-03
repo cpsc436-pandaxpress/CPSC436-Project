@@ -7,9 +7,8 @@
 
 struct Llama {
     bool alive;
-    float spit_time;
 
-    Llama() : alive(true), spit_time(3.f) {}
+    Llama() : alive(true) {}
 };
 
 #endif //PANDAEXPRESS_LLAMA_H

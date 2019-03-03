@@ -52,6 +52,7 @@ set(SOURCE_FILES
         src/systems/physics_system.cpp
         src/systems/physics_system.h
         src/components/bread.h
+        src/components/enemy.h
         src/util/random.cpp
         src/util/random.h
         src/scene/main_menu_scene.h
@@ -78,11 +79,25 @@ set(SOURCE_FILES
         src/components/llama.h src/components/spit.h
         src/components/tutorial.h
         src/systems/vertical_level_system.cpp
-        src/systems/vertical_level_system.h src/components/chases.h src/systems/chase_system.cpp src/systems/chase_system.h src/util/node.cpp src/util/node.h src/util/selector_node.h src/util/selector_node.cpp src/systems/jacko_ai_system.cpp src/systems/jacko_ai_system.h src/components/evades.h
+        src/systems/vertical_level_system.h
+        src/components/chases.h
+        src/systems/chase_system.cpp
+        src/systems/chase_system.h
+        src/util/node.cpp
+        src/util/node.h
+        src/util/selector_node.h
+        src/util/selector_node.cpp
+        src/systems/jacko_ai_system.cpp
+        src/systems/jacko_ai_system.h
+        src/components/evades.h
         src/systems/boss_level_system.h
         src/systems/boss_level_system.cpp
         src/systems/ghost_movement_system.cpp
-        src/systems/ghost_movement_system.h)
+        src/systems/ghost_movement_system.h
+        src/components/timer.cpp
+        src/components/timer.h
+        src/systems/timer_system.cpp
+        src/systems/timer_system.h)
 
 
 # Create executable target

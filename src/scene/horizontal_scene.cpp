@@ -48,6 +48,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
     physics_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
     ghost_movement_system.update(blackboard, registry_);
+    timer_system.update(blackboard, registry_);
 }
 
 void HorizontalScene::update_panda(Blackboard &blackboard) {
@@ -123,7 +124,7 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Sprite>(panda_entity, texture, shader);
     registry_.assign<Panda>(panda_entity);
     registry_.assign<ObeysGravity>(panda_entity);
-    registry_.assign<Health>(panda_entity, 1);
+    registry_.assign<Health>(panda_entity, 3);
     registry_.assign<Interactable>(panda_entity);
     registry_.assign<CausesDamage>(panda_entity, false, true, 1);
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
