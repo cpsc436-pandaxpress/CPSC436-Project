@@ -55,6 +55,7 @@ int main(int argc, char** argv) {
     blackboard.input_manager.track(SDL_SCANCODE_RIGHT);
     blackboard.input_manager.track(SDL_SCANCODE_SPACE);
     blackboard.input_manager.track(SDL_SCANCODE_RETURN);
+    blackboard.input_manager.track(SDL_SCANCODE_ESCAPE);
 
     blackboard.shader_manager.load_shader(
             shaders_path("sprite.vs.glsl"),
