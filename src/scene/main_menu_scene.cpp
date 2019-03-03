@@ -56,8 +56,8 @@ void MainMenuScene::update(Blackboard& blackboard) {
 
 
 
-    int top_center_y = 0; //(int)(cam_size.y * 3 / 4) - (count * BUTTON_HEIGHT + (count-1) * BUTTON_PADDING) / 2;
-    int center_x =  0; //(int)(cam_size.x / 2);
+    int top_center_y = 0;
+    int center_x =  0;
 
     for (auto i = 0; i < count; i++) {
         if (i == selected_button_) {
@@ -77,22 +77,17 @@ void MainMenuScene::update(Blackboard& blackboard) {
     }
 
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN)) {
-        blackboard.camera.set_position(0, 0);
         change_scene(button_targets_[selected_button_]);
     }
 
 }
 
 void MainMenuScene::render(Blackboard& blackboard) {
-    auto cam_size = blackboard.camera.size();
-    blackboard.camera.set_position(cam_size.x / 2, cam_size.y / 2);
-
     auto& projection = blackboard.camera.get_projection();
 
     splash_sprite_.draw(projection);
 
     for (auto i = 0; i < button_sprites_.size(); i++) {
-        //button_bg_sprites_[i].draw(projection);
         button_sprites_[i].draw(projection);
     }
 }

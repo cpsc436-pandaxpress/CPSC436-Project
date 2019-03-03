@@ -54,6 +54,13 @@ void VerticalScene::create_panda(Blackboard &blackboard) {
 }
 
 void VerticalScene::update(Blackboard &blackboard) {
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
+        blackboard.camera.set_position(0, 0);
+        reset_scene(blackboard);
+        change_scene(MAIN_MENU_SCENE_ID);
+        return;
+    }
+
     vec2 cam_size = blackboard.camera.size();
     vec2 cam_position = blackboard.camera.position();
     blackboard.camera.set_position(cam_position.x,
@@ -78,7 +85,7 @@ void VerticalScene::update(Blackboard &blackboard) {
     physics_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
-
+    timer_system.update(blackboard, registry_);
 }
 
 void VerticalScene::render(Blackboard &blackboard) {

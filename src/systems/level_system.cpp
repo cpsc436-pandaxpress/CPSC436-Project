@@ -2,6 +2,7 @@
 // Created by Prayansh Srivastava on 2019-02-11.
 //
 
+#include <components/timer.h>
 #include "level_system.h"
 
 LevelSystem::LevelSystem() : rng_(Random(4)),
@@ -83,6 +84,8 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Collidable>(llama, texture.width() * scale,
                                         texture.height() * scale);
             registry.assign<ObeysGravity>(llama);
+            auto& timer = registry.assign<Timer>(llama);
+            timer.save_watch(SPIT_TIMER_LABEL, 3.f);
         }
             break;
         case 6: {

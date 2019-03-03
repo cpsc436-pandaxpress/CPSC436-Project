@@ -82,7 +82,8 @@ set(SOURCE_FILES
         src/components/chases.h
         src/systems/chase_system.cpp
         src/systems/chase_system.h
-        src/util/node.cpp src/util/node.h
+        src/util/node.cpp
+        src/util/node.h
         src/util/selector_node.h
         src/util/selector_node.cpp
         src/systems/jacko_ai_system.cpp
@@ -94,7 +95,11 @@ set(SOURCE_FILES
         src/systems/ghost_movement_system.h
         src/graphics/mesh_manager.cpp
         src/systems/player_animation_system.cpp
-        src/systems/player_animation_system.h)
+        src/systems/player_animation_system.h
+        src/components/timer.cpp
+        src/components/timer.h
+        src/systems/timer_system.cpp
+        src/systems/timer_system.h)
 
 
 # Create executable target

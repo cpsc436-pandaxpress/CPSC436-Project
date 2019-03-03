@@ -11,6 +11,7 @@
 #include <systems/horizontal_level_system.h>
 #include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
+#include <systems/timer_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -45,7 +46,7 @@ private:
     CollisionSystem collision_system;
     GhostMovementSystem ghost_movement_system;
     PlayerAnimationSystem player_animation_system;
-
+    TimerSystem timer_system;
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);

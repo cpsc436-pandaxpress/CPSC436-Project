@@ -32,6 +32,13 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
 }
 
 void HorizontalScene::update(Blackboard &blackboard) {
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
+        blackboard.camera.set_position(0, 0);
+        reset_scene(blackboard);
+        change_scene(MAIN_MENU_SCENE_ID);
+        return;
+    }
+
     update_camera(blackboard);
     update_panda(blackboard);
     update_tutorial(blackboard);
@@ -44,6 +51,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
     sprite_transform_system.update(blackboard, registry_);
     ghost_movement_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
+    timer_system.update(blackboard, registry_);
 }
 
 void HorizontalScene::update_panda(Blackboard &blackboard) {

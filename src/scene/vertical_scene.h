@@ -14,6 +14,7 @@
 #include <systems/player_animation_system.h>
 #include <systems/collision_system.h>
 #include <systems/vertical_level_system.h>
+#include <systems/timer_system.h>
 
 class VerticalScene : public Scene {
 private:
@@ -26,7 +27,7 @@ private:
     CollisionSystem collision_system;
     VerticalLevelSystem level_system;
     PlayerAnimationSystem player_animation_system;
-
+    TimerSystem timer_system;
 
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;
