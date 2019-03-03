@@ -76,7 +76,7 @@ void ChaseSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
         }
         else{
             if(!interactable.grounded){
-                velocity.y_velocity+=3;
+                velocity.y_velocity+=1500*blackboard.delta_time;
                 velocity.x_velocity=0;
             }else{
                 chases.stomping=false;
