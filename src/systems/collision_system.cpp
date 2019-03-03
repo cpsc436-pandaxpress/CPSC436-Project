@@ -155,7 +155,7 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
             }
 
             if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, ja_collidable, ja_transform)) {
-                pa_velocity.y_velocity = PANDA_REGULAR_BOUNCE_Y;
+                pa_velocity.y_velocity = PANDA_JACKO_BOUNCE_Y;
                 ja_health.healthPoints--;
                 if(jacko.alive){
                     ja_chases.evading=true;
