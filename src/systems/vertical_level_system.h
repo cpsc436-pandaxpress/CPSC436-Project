@@ -8,6 +8,7 @@
 
 #include <util/blackboard.h>
 #include <entt/entity/registry.hpp>
+#include <components/timer.h>
 #include "level_system.h"
 
 class VerticalLevelSystem : public LevelSystem {
@@ -20,8 +21,15 @@ private:
 
     const float FIRST_ROW_Y = 300.f;
     const float COL_X_OFFSET = -750.f;
+    const int MAX_DIFFICULTY = 10;
+    const float LEVEL_UP_INTERVAL = 5;
+    const std::string LEVEL_UP_LABEL = "level_up";
 
     float last_row_generated_, last_row_loaded_;
+    int difficulty;
+
+    Timer difficulty_timer;
+
 public:
 
     VerticalLevelSystem();
