@@ -7,6 +7,7 @@
 #include "vertical_level_system.h"
 #include <iostream>
 #include <components/timer.h>
+#include <algorithm>
 
 VerticalLevelSystem::VerticalLevelSystem() : LevelSystem() {
 
@@ -15,13 +16,13 @@ VerticalLevelSystem::VerticalLevelSystem() : LevelSystem() {
 void VerticalLevelSystem::init() {
     LevelSystem::init();
     last_row_generated_ = last_row_loaded_ = FIRST_ROW_Y;
-    difficulty = 0;
+    difficulty = MIN_DIFFICULTY;
     difficulty_timer.save_watch(LEVEL_UP_LABEL, LEVEL_UP_INTERVAL);
 }
 
 void VerticalLevelSystem::load_next_chunk() {
     std::string level_path = levels_path("");
-    int levelN = rng_.nextInt(0, difficulty);
+    int levelN = rng_.nextInt(std::max(0, difficulty - 5), difficulty);
     std::string levelFile = level_path + "vlevel_" + std::to_string(levelN) + ".csv";
     CSVReader reader(levelFile);
     std::vector<std::vector<int>> dataList = reader.getData();
