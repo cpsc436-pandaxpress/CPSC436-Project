@@ -92,6 +92,8 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
 
         auto no_collisions = false;
 
+        // check for collisions and adjust velocity
+        // until no more collisions
         while (!no_collisions) {
             auto collisions = std::vector<CollisionEntry>();
 
@@ -129,7 +131,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                 );
             }
 
-            //TODO: sort collisions by first-occurring
+            //sort collisions by first-occurring
             auto sorted_collisions = std::vector<CollisionEntry>();
 
             for (auto entry : collisions) {
@@ -168,7 +170,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                     dv.x_velocity = dv.x_velocity * entry.time + dot_product * entry.normal.y;
                     dv.y_velocity = dv.y_velocity * entry.time + dot_product * entry.normal.x;
 
-
+                    // stop at first blocking collision
                     break;
 
 //                    entry.d_velocity.x = entry.time * entry.d_velocity.x + dot_product * entry.normal.y ;
@@ -180,22 +182,47 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
 
                     // check for causes_damage
                     if ( registry.has<CausesDamage>(entry.entity)
-                        && registry.has<Health>(d_entity)
+                        && registry.has<Panda>(d_entity)
                     ) {
                         auto& cd = registry.get<CausesDamage>(entry.entity);
                         auto& health = registry.get<Health>(d_entity);
-                        //TODO: add damage
-                        if (   (cd.xDamage && entry.normal.x != 0)
-                            || (cd.yDamage && entry.normal.y != 0)
-                        ){
+                        auto& panda = registry.get<Panda>(d_entity);
+
+                        if (cd.normal_matches_mask(entry.normal.x, entry.normal.y)) {
                             //do damage
-                            health.healthPoints -= cd.hitPoints;
-                            //TODO: alive checks?
+                            health.hp -= cd.hp;
+                            if (health.hp <= 0) {
+                                panda.alive = false;
+                            }
                         }
                     }
 
+                    if ( registry.has<Health>(entry.entity)
+                         && registry.has<Panda>(d_entity)
+                    ) {
+                        auto& cd = registry.get<CausesDamage>(d_entity);
+                        auto& panda = registry.get<Panda>(d_entity);
+                        auto& health = registry.get<Health>(entry.entity);
+                        if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)){
+                            //do damage
+                            health.hp -= cd.hp;
 
-                    //check
+
+                            if (health.hp <= 0) {
+                                //TODO: entity-specific "dead" settings?
+                                if (registry.has<Interactable>(entry.entity)) {
+                                    registry.remove<Interactable>(entry.entity);
+                                }
+                            }
+
+                            if (entry.normal.x != 0) {
+                                dv.x_velocity = 400 * entry.normal.x;
+                            }
+                            if (entry.normal.y != 0) {
+                                dv.y_velocity = 400 * entry.normal.y;
+                            }
+                        }
+                    }
 
                     //TODO: add check for food
                     //TODO: add jacko check? (or subsumed by causes_damage check?)

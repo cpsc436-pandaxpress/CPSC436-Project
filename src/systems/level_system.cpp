@@ -42,7 +42,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Transform>(bread, x, y, 0., scale, scale);
             registry.assign<Sprite>(bread, texture, shader, mesh);
             registry.assign<Bread>(bread);
-            registry.assign<CausesDamage>(bread, false, true, 1);
+            registry.assign<CausesDamage>(bread, TOP_VULNERABLE_MASK, 1);
             registry.assign<Health>(bread,1);
             registry.assign<Velocity>(bread, -BREAD_SPEED, 0.f);
             registry.assign<Interactable>(bread);
@@ -61,7 +61,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
                                        scale);
             registry.assign<Sprite>(ghost, texture, shader, mesh);
             registry.assign<Ghost>(ghost);
-            registry.assign<CausesDamage>(ghost, false, true, 1);
+            registry.assign<CausesDamage>(ghost, TOP_VULNERABLE_MASK, 1);
             registry.assign<Health>(ghost,1);
             registry.assign<Velocity>(ghost, -0.f, 0.f);
             registry.assign<Collidable>(ghost, texture.width() * scale,
@@ -78,7 +78,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
                                        scale);
             registry.assign<Sprite>(llama, texture, shader, mesh);
             registry.assign<Llama>(llama);
-            registry.assign<CausesDamage>(llama, false, true, 1);
+            registry.assign<CausesDamage>(llama,TOP_VULNERABLE_MASK, 1);
             registry.assign<Health>(llama,1);
             registry.assign<Velocity>(llama, 0.f, 0.f);
             registry.assign<Interactable>(llama);
@@ -110,7 +110,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             auto scale = static_cast<float>(CELL_WIDTH / texture.width());
             auto stalagmite = registry.create();
             registry.assign<Obstacle>(stalagmite);
-            registry.assign<CausesDamage>(stalagmite, false, true, 1);
+            registry.assign<CausesDamage>(stalagmite, ALL_DMG_MASK, 1);
             registry.assign<Transform>(stalagmite, x, y, 0., scale,
                                        scale);
             registry.assign<Sprite>(stalagmite, texture, shader, mesh);
@@ -128,13 +128,13 @@ void LevelSystem::generateProjectile(float x, float y, Blackboard &blackboard, e
     auto texture = blackboard.texture_manager.get_texture("spit");
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-    auto scale = static_cast<float>(CELL_WIDTH / texture.width()/ 5);
+    auto scale = static_cast<float>(CELL_WIDTH / texture.width() / 2);
     auto projectile = registry.create();
-    registry.assign<Transform>(projectile, x, y - 30, 0., scale,
+    registry.assign<Transform>(projectile, x - 20, y - 30, 0., scale,
                                scale);
     registry.assign<Sprite>(projectile, texture, shader, mesh);
     registry.assign<Spit>(projectile);
-    registry.assign<CausesDamage>(projectile, false, true, 1);
+    registry.assign<CausesDamage>(projectile, ALL_DMG_MASK, 1);
     registry.assign<Health>(projectile,1);
     registry.assign<Velocity>(projectile, PROJECTILE_SPEED_X, PROJECTILE_SPEED_Y);
     registry.assign<Interactable>(projectile);

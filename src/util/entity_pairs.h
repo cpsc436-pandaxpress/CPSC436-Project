@@ -29,3 +29,11 @@ bool unordered_pair_check(
    return set.count(uint_pair(v1, v2)) > 0 || set.count(uint_pair(v2, v1)) > 0;
 }
 
+
+bool ordered_pair_check(
+    const std::unordered_set<uint_pair, PairHash> & set,
+    uint32_t v1,
+    uint32_t v2
+) {
+    return set.count(uint_pair(v1, v2)) > 0;
+}

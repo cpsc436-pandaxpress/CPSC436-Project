@@ -121,7 +121,7 @@ void BossScene::create_panda(Blackboard &blackboard) {
     registry_.assign<ObeysGravity>(panda_entity);
     registry_.assign<Health>(panda_entity, 1);
     registry_.assign<Interactable>(panda_entity);
-    registry_.assign<CausesDamage>(panda_entity, false, true, 1);
+    registry_.assign<CausesDamage>(panda_entity, PANDA_DMG_MASK, 1);
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
 }
@@ -141,7 +141,7 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
     registry_.assign<Chases>(jacko_entity, target);
     registry_.assign<Health>(jacko_entity, 10);
     registry_.assign<Interactable>(jacko_entity);
-    registry_.assign<CausesDamage>(jacko_entity, false, true, 1);
+    registry_.assign<CausesDamage>(jacko_entity, TOP_VULNERABLE_MASK, 1);
     registry_.assign<Velocity>(jacko_entity, 0.f, 0.f);
     registry_.assign<Collidable>(jacko_entity, texture.width() * scaleX, texture.height() * scaleY);
 }
