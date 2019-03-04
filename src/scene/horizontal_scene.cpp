@@ -22,7 +22,7 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         physics_system(),
         player_movement_system(HORIZONTAL_SCENE_ID),
         collision_system(),
-        ghost_movement_system(),
+        enemy_system(),
         player_animation_system(HORIZONTAL_SCENE_ID)
 
 {
@@ -49,7 +49,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
     collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
-    ghost_movement_system.update(blackboard, registry_);
+    enemy_system.update(blackboard, registry_, HORIZONTAL_SCENE_ID);
     player_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
 }

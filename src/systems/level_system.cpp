@@ -44,11 +44,12 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Bread>(bread);
             registry.assign<CausesDamage>(bread, false, true, 1);
             registry.assign<Health>(bread,1);
-            registry.assign<Velocity>(bread, -BREAD_SPEED, 0.f);
+            registry.assign<Velocity>(bread, 0.f, 0.f);
             registry.assign<Interactable>(bread);
             registry.assign<Collidable>(bread, texture.width() * scale,
                                         texture.height() * scale);
             registry.assign<ObeysGravity>(bread);
+
         }
             break;
         case 4: {
@@ -116,6 +117,25 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Sprite>(stalagmite, texture, shader, mesh);
             registry.assign<Collidable>(stalagmite, texture.width() * scale,
                                         texture.height() * scale);
+
+        }
+            break;
+        case 8: {
+            auto texture = blackboard.texture_manager.get_texture("bread");
+            auto shader = blackboard.shader_manager.get_shader("sprite");
+            auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+            auto scale = static_cast<float>(CELL_WIDTH / texture.width()/2);
+            auto bread = registry.create();
+            registry.assign<Transform>(bread, x, y, 0., scale, scale);
+            registry.assign<Sprite>(bread, texture, shader, mesh);
+            registry.assign<Bread>(bread, false);
+            registry.assign<CausesDamage>(bread, false, true, 1);
+            registry.assign<Health>(bread,1);
+            registry.assign<Velocity>(bread, 0.f, 0.f);
+            registry.assign<Interactable>(bread);
+            registry.assign<Collidable>(bread, texture.width() * scale,
+                                        texture.height() * scale);
+            registry.assign<ObeysGravity>(bread);
 
         }
             break;

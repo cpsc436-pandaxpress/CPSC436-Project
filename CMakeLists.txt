@@ -99,7 +99,9 @@ set(SOURCE_FILES
         src/components/timer.cpp
         src/components/timer.h
         src/systems/timer_system.cpp
-        src/systems/timer_system.h)
+        src/systems/timer_system.h
+        src/systems/enemy_system.cpp
+        src/systems/enemy_system.h)
 
 
 # Create executable target

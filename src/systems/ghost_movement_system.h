@@ -5,10 +5,6 @@
 #ifndef PANDAEXPRESS_GHOST_MOVEMENT_SYSTEM_H
 #define PANDAEXPRESS_GHOST_MOVEMENT_SYSTEM_H
 
-
-class ghost_movement_system {
-
-};
 #include "system.h"
 #include "components/ghost.h"
 

@@ -19,7 +19,8 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         physics_system(),
         player_movement_system(VERTICAL_SCENE_ID),
         player_animation_system(VERTICAL_SCENE_ID),
-        collision_system() {
+        collision_system(),
+        enemy_system() {
     init_scene(blackboard);
     gl_has_errors();
 }
@@ -85,6 +86,7 @@ void VerticalScene::update(Blackboard &blackboard) {
     physics_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
+    enemy_system.update(blackboard, registry_, VERTICAL_SCENE_ID);
     timer_system.update(blackboard, registry_);
 }
 
