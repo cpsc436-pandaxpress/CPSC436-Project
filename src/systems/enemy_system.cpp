@@ -12,9 +12,9 @@ void EnemySystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
     vec2 cam_position = blackboard.camera.position();
     vec2 cam_size = blackboard.camera.size();
 
-    if (sceneid == HORIZONTAL_SCENE_ID) {
-        ghost_movement_system.update(blackboard, registry);
+    ghost_movement_system.update(blackboard, registry);
 
+    if (sceneid == HORIZONTAL_SCENE_ID) {
         // Start bread that has entered the screen, delete bread that is no longer playable
         auto bread_view = registry.view<Bread, Transform, Velocity, Collidable>();
         for (auto enemy_entity : bread_view) {
@@ -24,7 +24,7 @@ void EnemySystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
             auto &bread_collidable = bread_view.get<Collidable>(enemy_entity);
 
             if (bread_transform.x + bread_collidable.width < cam_position.x - cam_size.x / 2 ||
-                bread_transform.y - bread_collidable.height > cam_position.y + cam_size.y / 2) {
+                bread_transform.y - bread_collidable.height > cam_position.y + cam_size.y / 2 + VERTICAL_BUFFER) {
                 registry.destroy(enemy_entity);
                 break;
             }
@@ -43,7 +43,7 @@ void EnemySystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
             auto &ghost_collidable = ghost_view.get<Collidable>(enemy_entity);
 
             if (ghost_transform.x + ghost_collidable.width < cam_position.x - cam_size.x / 2 ||
-                    ghost_transform.y - ghost_collidable.height > cam_position.y + cam_size.y / 2) {
+                    ghost_transform.y - ghost_collidable.height > cam_position.y + cam_size.y / 2 + VERTICAL_BUFFER) {
                 registry.destroy(enemy_entity);
                 break;
             }
@@ -58,7 +58,7 @@ void EnemySystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
             auto& llama_timer = llama_view.get<Timer>(enemy_entity);
 
             if (llama_transform.x + llama_collidable.width < cam_position.x - cam_size.x / 2 ||
-                llama_transform.y - llama_collidable.height > cam_position.y + cam_size.y / 2) {
+                llama_transform.y - llama_collidable.height > cam_position.y + cam_size.y / 2 + VERTICAL_BUFFER) {
                 registry.destroy(enemy_entity);
                 break;
             }
@@ -80,7 +80,7 @@ void EnemySystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
             auto &spit_collidable = spit_view.get<Collidable>(enemy_entity);
 
             if (spit_transform.x + spit_collidable.width < cam_position.x - cam_size.x / 2 ||
-                spit_transform.y - spit_collidable.height > cam_position.y + cam_size.y / 2) {
+                spit_transform.y - spit_collidable.height > cam_position.y + cam_size.y / 2 + VERTICAL_BUFFER) {
                 registry.destroy(enemy_entity);
                 break;
             }

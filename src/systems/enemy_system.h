@@ -24,6 +24,7 @@ private:
     const float PROJECTILE_SPEED_X = -300.f;
     const float PROJECTILE_SPEED_Y = 10.f;
     const std::string SPIT_TIMER_LABEL = "spit";
+    const float VERTICAL_BUFFER = 300.f;
 
     void generateProjectile(float x, float y, bool spit_left, Blackboard &blackboard, entt::DefaultRegistry &registry);
 
