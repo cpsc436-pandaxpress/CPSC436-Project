@@ -8,6 +8,7 @@
 #include <components/causes_damage.h>
 #include <components/velocity.h>
 #include <components/platform.h>
+#include <components/timer.h>
 #include "vertical_scene.h"
 #include "util/constants.h"
 
@@ -50,6 +51,7 @@ void VerticalScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Interactable>(panda_entity);
     registry_.assign<CausesDamage>(panda_entity, false, true, 1);
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
+    registry_.assign<Timer>(panda_entity);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
 }
 

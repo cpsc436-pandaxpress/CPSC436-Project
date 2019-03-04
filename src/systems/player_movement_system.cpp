@@ -39,19 +39,20 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
             gravity.gravityFactor = 1.5f;
         }
 
-
-        switch (scene_id) {
-            case HORIZONTAL_SCENE_ID:
-                update_horizontal_scene(blackboard, velocity);
-                break;
-            case VERTICAL_SCENE_ID:
-                update_vertical_scene(blackboard, velocity);
-                break;
-            case BOSS_SCENE_ID:
-                update_boss_scene(blackboard, velocity);
-                break;
-            default:
-                fprintf(stderr, "Invalid scene ID: %d\n", scene_id);
+        if (!panda.recovering) {
+            switch (scene_id) {
+                case HORIZONTAL_SCENE_ID:
+                    update_horizontal_scene(blackboard, velocity);
+                    break;
+                case VERTICAL_SCENE_ID:
+                    update_vertical_scene(blackboard, velocity);
+                    break;
+                case BOSS_SCENE_ID:
+                    update_boss_scene(blackboard, velocity);
+                    break;
+                default:
+                    fprintf(stderr, "Invalid scene ID: %d\n", scene_id);
+            }
         }
 
         /*

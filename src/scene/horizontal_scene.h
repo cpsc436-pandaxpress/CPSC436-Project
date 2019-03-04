@@ -12,6 +12,7 @@
 #include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
 #include <systems/timer_system.h>
+#include <systems/panda_damage_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -47,12 +48,14 @@ private:
     GhostMovementSystem ghost_movement_system;
     PlayerAnimationSystem player_animation_system;
     TimerSystem timer_system;
+    PandaDamageSystem panda_dmg_system;
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);
     void create_tutorial(Blackboard& blackboard);
     void reset_scene(Blackboard& blackboard);
     void init_scene(Blackboard &blackboard);
+    void destroy_scene();
     void update_panda(Blackboard& blackboard);
     void update_tutorial(Blackboard& blackboard);
     void update_camera(Blackboard& blackboard);
