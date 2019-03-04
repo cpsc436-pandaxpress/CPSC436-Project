@@ -156,11 +156,21 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                 if (registry.has<Platform>(entry.entity)) {
                     recorded_collisions.insert(uint_pair(d_entity, entry.entity));
 
-                    if (entry.normal.y == -1) {
-                        //continue;
-                        interactible.grounded = true;
+                    auto& platform = registry.get<Platform>(entry.entity);
 
+                    if (platform.one_way) {
+                        if (entry.normal.y != -1) {
+                            continue;
+                        }
+                        interactible.grounded = true;
                     }
+                    else {
+                        if (entry.normal.y == -1) {
+                            interactible.grounded = true;
+                        }
+                    }
+
+
 
                     // movement is restricted!
                     float remaining_time = 1 - entry.time;
@@ -339,7 +349,7 @@ void PhysicsSystem::swept_collision(
 
     // if there was no collision
     if (   entry_time > exit_time
-        || x_entry < 0.0f && y_entry < 0.0f
+        || (x_entry < 0.0f && y_entry < 0.0f)
         || x_entry > 1.0f
         || y_entry > 1.0f
     ) {
