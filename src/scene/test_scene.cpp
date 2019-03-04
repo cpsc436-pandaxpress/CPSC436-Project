@@ -105,9 +105,10 @@ void TestScene::create_panda(Blackboard &blackboard) {
 
     auto texture = blackboard.textureManager.get_texture("panda");
     auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
     float scale = 0.3f;
     registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scale, scale);
-    registry_.assign<Sprite>(panda_entity, texture, shader);
+    registry_.assign<Sprite>(panda_entity, texture, shader, mesh);
     registry_.assign<Panda>(panda_entity);
     registry_.assign<ObeysGravity>(panda_entity);
     registry_.assign<Health>(panda_entity, 1);
@@ -120,6 +121,7 @@ void TestScene::create_panda(Blackboard &blackboard) {
 
 void TestScene::generate_platforms(Blackboard &blackboard) {
     auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
     float max_x =
             blackboard.camera.position().x + blackboard.camera.size().x; // some distance off camera
     while (last_placed_x < max_x) {
@@ -137,7 +139,7 @@ void TestScene::generate_platforms(Blackboard &blackboard) {
             registry_.assign<Platform>(platform);
             registry_.assign<Transform>(platform, last_placed_x, PLATFORM_START_Y, 0., scale,
                                         scale);
-            registry_.assign<Sprite>(platform, texture, shader);
+            registry_.assign<Sprite>(platform, texture, shader, mesh);
             registry_.assign<Collidable>(platform, texture.width() * scale,
                                          texture.height() * scale);
 
@@ -149,6 +151,7 @@ void TestScene::generate_platforms(Blackboard &blackboard) {
 
 void TestScene::generate_floating_platforms(Blackboard &blackboard) {
     auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
     float max_x =
             blackboard.camera.position().x + blackboard.camera.size().x; // some distance off camera
     while (last_placed_x_floating < max_x) {
@@ -170,7 +173,7 @@ void TestScene::generate_floating_platforms(Blackboard &blackboard) {
             registry_.assign<Transform>(floating_platform, last_placed_x_floating,
                                         FLOATING_PLATFORM_START_Y - yOffset, 0., scale,
                                         scale);
-            registry_.assign<Sprite>(floating_platform, texture, shader);
+            registry_.assign<Sprite>(floating_platform, texture, shader, mesh);
             registry_.assign<Collidable>(floating_platform, texture.width() * scale,
                                          texture.height() * scale);
 
@@ -184,6 +187,7 @@ void TestScene::create_bread(Blackboard &blackboard) {
     auto bread = registry_.create();
     auto texture = blackboard.textureManager.get_texture("bread");
     auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
     float scale = 1;
 
@@ -192,7 +196,7 @@ void TestScene::create_bread(Blackboard &blackboard) {
             + blackboard.randNumGenerator.nextInt(0, (int) blackboard.camera.size().x / 2);
     registry_.assign<Transform>(bread, next_start_x, BREAD_START_Y - texture.height(), 0.,
                                 scale, scale);
-    registry_.assign<Sprite>(bread, texture, shader);
+    registry_.assign<Sprite>(bread, texture, shader, mesh);
     registry_.assign<Bread>(bread);
     registry_.assign<CausesDamage>(bread, false, true, 1);
     registry_.assign<Health>(bread, 1);
@@ -217,12 +221,13 @@ void TestScene::generate_obstacles(Blackboard &blackboard) {
         }
 
         auto shader = blackboard.shader_manager.get_shader("sprite");
+        auto mesh = blackboard.mesh_manager.get_mesh("sprite");
         float scale = 0.9;
         auto obstacle_entity = registry_.create();
         registry_.assign<Transform>(obstacle_entity, last_rock_x - 400.f,
                                     PLATFORM_START_Y - 80.f, 0.,
                                     scale, scale);
-        registry_.assign<Sprite>(obstacle_entity, texture, shader);
+        registry_.assign<Sprite>(obstacle_entity, texture, shader, mesh);
         registry_.assign<Obstacle>(obstacle_entity);
         registry_.assign<Collidable>(obstacle_entity, texture.width() * scale,
                                      texture.height() * scale);
@@ -272,10 +277,11 @@ void TestScene::create_background(Blackboard &blackboard) {
     textures.push_back(blackboard.textureManager.get_texture("bg_back"));
     // end order
     auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
     int i = 0;
     for (Texture t: textures) {
         auto bg_entity = registry_.create();
-        auto &bg = registry_.assign<Background>(bg_entity, t, shader, i);
+        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, i);
         bg.set_pos1(0.0f, 0.0f);
         bg.set_pos2(blackboard.camera.size().x, 0.0f);
         bg.set_rotation_rad(0.0f);

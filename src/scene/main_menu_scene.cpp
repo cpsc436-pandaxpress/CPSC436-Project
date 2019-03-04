@@ -11,8 +11,9 @@ static const int BUTTON_PADDING = 40;
 MainMenuScene::MainMenuScene(Blackboard& blackboard, SceneManager& scene_manager) :
     Scene(scene_manager),
     splash_sprite_(
-        blackboard.textureManager.get_texture("splash"),
-        blackboard.shader_manager.get_shader("sprite")
+        blackboard.texture_manager.get_texture("splash"),
+        blackboard.shader_manager.get_shader("sprite"),
+        blackboard.mesh_manager.get_mesh("sprite")
     ),
     button_width_(0),
     button_height_(0),
@@ -92,12 +93,14 @@ void MainMenuScene::render(Blackboard& blackboard) {
 }
 
 void MainMenuScene::add_item(Blackboard& blackboard, char* texture_name, SceneID sceneID) {
-    auto texture = blackboard.textureManager.get_texture(texture_name);
-    auto bg_texture = blackboard.textureManager.get_texture("pixel");
+    auto texture = blackboard.texture_manager.get_texture(texture_name);
+    auto bg_texture = blackboard.texture_manager.get_texture("pixel");
     auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
-    auto sprite = Sprite(texture, shader);
-    auto bg_sprite = Sprite(bg_texture, shader);
+
+    auto sprite = Sprite(texture, shader, mesh);
+    auto bg_sprite = Sprite(bg_texture, shader, mesh);
 
     button_sprites_.push_back(sprite);
     button_bg_sprites_.push_back(bg_sprite);

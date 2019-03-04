@@ -39,6 +39,7 @@ int main(int argc, char** argv) {
         Camera(1600, 900, 0, 0),
         0,
         InputManager(),
+        MeshManager(),
         ShaderManager(),
         TextureManager(),
         window,
@@ -61,36 +62,35 @@ int main(int argc, char** argv) {
             shaders_path("sprite.vs.glsl"),
             shaders_path("sprite.fs.glsl"),"sprite");
 
-    blackboard.textureManager.load_texture(textures_path("panda.png"), "panda");
-    blackboard.textureManager.load_texture(textures_path("grass_block_1.png"), "platform1");
-    blackboard.textureManager.load_texture(textures_path("platform_center_grass.png"), "platform_center_grass");
-    blackboard.textureManager.load_texture(textures_path("grass_block_2.png"), "platform2");
-    blackboard.textureManager.load_texture(textures_path("bread.png"), "bread");
-    blackboard.textureManager.load_texture(textures_path("play_text.png"), "play_text");
-    blackboard.textureManager.load_texture(textures_path("levels_text.png"), "levels_text");
-    blackboard.textureManager.load_texture(textures_path("config_text.png"), "config_text");
-    blackboard.textureManager.load_texture(textures_path("pixel.png"), "pixel");
-    blackboard.textureManager.load_texture(textures_path("gross_splash.png"), "splash");
-    blackboard.textureManager.load_texture(textures_path("ghost.png"), "ghost");
-    blackboard.textureManager.load_texture(textures_path("llama.png"), "llama");
-    blackboard.textureManager.load_texture(textures_path("spit.png"), "spit");
-    blackboard.textureManager.load_texture(textures_path("branchspiky.png"), "branch1");
-    blackboard.textureManager.load_texture(textures_path("branchspiky2.png"), "branch2");
-    blackboard.textureManager.load_texture(textures_path("bg_back.png"), "bg_back");
-    blackboard.textureManager.load_texture(textures_path("bg_front.png"), "bg_front");
-    blackboard.textureManager.load_texture(textures_path("bg_middle.png"), "bg_middle");
-    blackboard.textureManager.load_texture(textures_path("bg_top.png"), "bg_top");
-    blackboard.textureManager.load_texture(textures_path("tutorial.png"), "tutorial");
-    blackboard.textureManager.load_texture(textures_path("tutorial2.png"), "tutorial_bread");
+    blackboard.texture_manager.load_texture(textures_path("panda.png"), "panda");
+    blackboard.texture_manager.load_texture(textures_path("panda_sprite_sheet.png"), "panda_sprites");
+    blackboard.texture_manager.load_texture(textures_path("grass_block_1.png"), "platform1");
+    blackboard.texture_manager.load_texture(textures_path("platform_center_grass.png"), "platform_center_grass");
+    blackboard.texture_manager.load_texture(textures_path("grass_block_2.png"), "platform2");
+    blackboard.texture_manager.load_texture(textures_path("bread.png"), "bread");
+    blackboard.texture_manager.load_texture(textures_path("play_text.png"), "play_text");
+    blackboard.texture_manager.load_texture(textures_path("levels_text.png"), "levels_text");
+    blackboard.texture_manager.load_texture(textures_path("config_text.png"), "config_text");
+    blackboard.texture_manager.load_texture(textures_path("pixel.png"), "pixel");
+    blackboard.texture_manager.load_texture(textures_path("gross_splash.png"), "splash");
+    blackboard.texture_manager.load_texture(textures_path("ghost.png"), "ghost");
+    blackboard.texture_manager.load_texture(textures_path("llama.png"), "llama");
+    blackboard.texture_manager.load_texture(textures_path("spit.png"), "spit");
+    blackboard.texture_manager.load_texture(textures_path("bg_back.png"), "bg_back");
+    blackboard.texture_manager.load_texture(textures_path("bg_front.png"), "bg_front");
+    blackboard.texture_manager.load_texture(textures_path("bg_middle.png"), "bg_middle");
+    blackboard.texture_manager.load_texture(textures_path("bg_top.png"), "bg_top");
+    blackboard.texture_manager.load_texture(textures_path("tutorial.png"), "tutorial");
+    blackboard.texture_manager.load_texture(textures_path("tutorial2.png"), "tutorial_bread");
 
-    blackboard.textureManager.load_texture(textures_path("jacko.png"), "jacko");
-    blackboard.textureManager.load_texture(textures_path("graveyard.png"), "graveyard");
-    blackboard.textureManager.load_texture(textures_path("burger.png"), "burger");
+    blackboard.texture_manager.load_texture(textures_path("jacko.png"), "jacko");
+    blackboard.texture_manager.load_texture(textures_path("graveyard.png"), "graveyard");
+    blackboard.texture_manager.load_texture(textures_path("burger.png"), "burger");
 
-    blackboard.textureManager.load_texture(textures_path("stalagmite.png"), "stalagmite");
-    blackboard.textureManager.load_texture(textures_path("stalagmite2.png"), "stalagmite2");
+    blackboard.texture_manager.load_texture(textures_path("stalagmite.png"), "stalagmite");
+    blackboard.texture_manager.load_texture(textures_path("stalagmite2.png"), "stalagmite2");
 
-
+    blackboard.mesh_manager.load_mesh("sprite", 4, Sprite::vertices, 6, Sprite::indices);
 
 
     // initialize scenes here
