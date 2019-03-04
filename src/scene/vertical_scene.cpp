@@ -18,6 +18,7 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         sprite_render_system(),
         physics_system(),
         player_movement_system(VERTICAL_SCENE_ID),
+        player_animation_system(VERTICAL_SCENE_ID),
         collision_system() {
     init_scene(blackboard);
     gl_has_errors();
@@ -35,13 +36,14 @@ void VerticalScene::init_scene(Blackboard &blackboard) {
 void VerticalScene::create_panda(Blackboard &blackboard) {
     panda_entity = registry_.create();
 
-    auto texture = blackboard.textureManager.get_texture("panda");
+    auto texture = blackboard.texture_manager.get_texture("panda_sprites");
     auto shader = blackboard.shader_manager.get_shader("sprite");
-    float scaleY = 100.0 / texture.height();
-    float scaleX = 75.0 / texture.width();
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
+    float scaleY = 75.0 / texture.height();
+    float scaleX = 75.0 / texture.width();
     registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scaleX, scaleY);
-    registry_.assign<Sprite>(panda_entity, texture, shader);
+    registry_.assign<Sprite>(panda_entity, texture, shader, mesh);
     registry_.assign<Panda>(panda_entity);
     registry_.assign<ObeysGravity>(panda_entity);
     registry_.assign<Health>(panda_entity, 1);
@@ -82,6 +84,7 @@ void VerticalScene::update(Blackboard &blackboard) {
     collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
+    player_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
 }
 

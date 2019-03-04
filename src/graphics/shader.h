@@ -22,7 +22,7 @@ public:
 
     void bind();
 
-    static void unbind();
+    void unbind();
 
     void set_uniform_vec2(const char* loc, const vec2& val);
     void set_uniform_vec3(const char* loc, const vec3& val);
