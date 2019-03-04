@@ -14,10 +14,15 @@
 
 struct CollisionEntry {
     uint32_t entity;
-    vec2 normal;
+    vec2 normal, d_velocity;
     float time;
 
-    CollisionEntry(uint32_t entity, vec2 normal, float time) :
+
+    CollisionEntry(
+        uint32_t entity,
+        vec2 normal,
+        float time
+    ) :
         entity(entity),
         normal(normal),
         time(time)
@@ -38,14 +43,6 @@ private:
 
     //doesn't handle rotation cuz that shit is hard
     void check_collisions(Blackboard &blackboard, entt::DefaultRegistry &registry);
-    bool check_broadphase(
-        const Collidable& d_collider,
-        const Transform& d_position,
-        const Velocity& d_velocity,
-        const Collidable& s_collider,
-        const Transform& s_position,
-        float dt
-    );
     void swept_collision(
         const Collidable& d_collider,
         const Transform& d_position,

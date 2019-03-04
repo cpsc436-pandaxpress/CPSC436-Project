@@ -26,7 +26,7 @@ void PhysicsSystem::apply_gravity(Blackboard &blackboard, entt::DefaultRegistry 
 
     auto view = registry.view<ObeysGravity, Interactable, Transform, Velocity>();
 
-    for (auto entity: view) {
+    /*for (auto entity: view) {
 
         auto& transform = view.get<Transform>(entity);
         auto& walkable = view.get<Interactable>(entity);
@@ -37,7 +37,7 @@ void PhysicsSystem::apply_gravity(Blackboard &blackboard, entt::DefaultRegistry 
         } else{
             velocity.y_velocity=0.f;
         }
-    }
+    }*/
 
     /***
      * Applying gravity to objects that can't walk on platforms
@@ -50,8 +50,21 @@ void PhysicsSystem::apply_gravity(Blackboard &blackboard, entt::DefaultRegistry 
         auto& velocity = viewNonWalkable.get<Velocity>(entity);
         auto& gravity  = viewNonWalkable.get<ObeysGravity>(entity);
 
-        velocity.y_velocity += gravity.gravityFactor * GRAVITY * blackboard.delta_time;
-    }
+
+        //velocity.y_velocity += gravity.gravityFactor * GRAVITY * blackboard.delta_time;
+
+        if (registry.has<Interactable>(entity)) {
+            auto& interactible = view.get<Interactable>(entity);
+            //if (!interactible.grounded) {
+                velocity.y_velocity += gravity.gravityFactor * GRAVITY * blackboard.delta_time;
+            //} else{
+            //   velocity.y_velocity=0.f;
+            //}
+        }
+        else {
+            velocity.y_velocity += gravity.gravityFactor * GRAVITY * blackboard.delta_time;
+        }
+       }
 
 }
 
@@ -80,80 +93,106 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
 
     auto static_view = registry.view<Collidable, Transform>();
 
-    int i = registry.alive();
-
     auto recorded_collisions = entity_pair_set();
 
     for (auto d_entity : dynamic_view) {
         auto& interactible = dynamic_view.get<Interactable>(d_entity);
-        bool was_grounded = interactible.grounded;
+
         interactible.grounded = false;
 
-        auto collisions = std::vector<CollisionEntry>();
+        auto no_collisions = false;
 
-        for (auto s_entity: static_view) {
-            // if the entities are the same
-            if (d_entity == s_entity) {
-                continue;
+        while (!no_collisions) {
+            auto collisions = std::vector<CollisionEntry>();
+
+            auto &dc = dynamic_view.get<Collidable>(d_entity);
+            auto &dp = dynamic_view.get<Transform>(d_entity);
+            auto &dv = dynamic_view.get<Velocity>(d_entity);
+
+            for (auto s_entity: static_view) {
+                // if the entities are the same
+                if (d_entity == s_entity) {
+                    continue;
+                }
+                //if the entities already collided this frame
+                if (unordered_pair_check(recorded_collisions, d_entity, s_entity)) {
+                    continue;
+                }
+
+                float time, x_norm, y_norm;
+
+                auto &sc = static_view.get<Collidable>(s_entity);
+                auto &sp = static_view.get<Transform>(s_entity);
+
+                //sets time and normals (if applicable) of collision
+                swept_collision(
+                    dc, dp, dv,
+                    sc, sp,
+                    blackboard.delta_time,
+                    time, x_norm, y_norm
+                );
+
+                collisions.emplace_back(
+                    s_entity,
+                    vec2{x_norm, y_norm},
+                    time
+                );
             }
 
-            float time, x_norm, y_norm;
+            //TODO: sort collisions by first-occurring
+            auto sorted_collisions = std::vector<CollisionEntry>();
 
-            auto& dc = dynamic_view.get<Collidable>(d_entity);
-            auto& dp = dynamic_view.get<Transform>(d_entity);
-            auto& dv = dynamic_view.get<Velocity>(d_entity);
-
-            auto& sc = static_view.get<Collidable>(s_entity);
-            auto& sp = static_view.get<Transform>(s_entity);
-
-            //sets time and normals (if applicable) of collision
-            swept_collision(
-                dc, dp, dv,
-                sc, sp,
-                blackboard.delta_time,
-                time, x_norm, y_norm
-            );
-
-            if (time == 1) {
-                // no collision occurred
-                continue;
+            for (auto entry : collisions) {
+                if (entry.time == 1) {
+                    // no collision occurred
+                    continue;
+                }
+                auto inserted = false;
+                for (auto iter = sorted_collisions.begin(); iter != sorted_collisions.end(); iter++) {
+                    if (entry.time <= iter->time) {
+                        sorted_collisions.insert(iter, entry);
+                        inserted = true;
+                        break;
+                    }
+                }
+                if (!inserted) {
+                    sorted_collisions.push_back(entry);
+                }
             }
-            else {
-                //time = std::max<float>(time - 0.01f, 0);
 
-                //if (collision_)
-
-                if (registry.has<Platform>(s_entity)) {
-                    if (y_norm == -1 && x_norm == 0) {
+            for (auto entry : sorted_collisions) {
+                if (registry.has<Platform>(entry.entity)) {
+                    if (entry.normal.y == -1) {
                         interactible.grounded = true;
                     }
 
                     // movement is restricted!
-                    float remaining_time = 1 - time;
-                    float dot_product = (dv.x_velocity * y_norm + dv.y_velocity * x_norm) * remaining_time;
-                    dv.x_velocity = dot_product * y_norm;
-                    dv.y_velocity = dot_product * x_norm;
+                    float remaining_time = 1 - entry.time;
+                    float dot_product = (dv.x_velocity * entry.normal.y + dv.y_velocity * entry.normal.x) * remaining_time;
+                    //dv.x_velocity = dot_product * entry.normal.y;
+                    //dv.y_velocity = dot_product * entry.normal.x;
+                    dv.x_velocity = dv.x_velocity * entry.time + dot_product * entry.normal.y;
+                    dv.y_velocity = dv.y_velocity * entry.time + dot_product * entry.normal.x;
 
-                    //dv.x_velocity *= time;
-                    //dv.y_velocity *= time;
+
+                    recorded_collisions.insert(uint_pair(d_entity, entry.entity));
+
+                    break;
+
+//                    entry.d_velocity.x = entry.time * entry.d_velocity.x + dot_product * entry.normal.y ;
+//                    entry.d_velocity.y = entry.time * entry.d_velocity.y + dot_product * entry.normal.x;
+                } else {
+                    //handle non-blocking
+                    recorded_collisions.insert(uint_pair(d_entity, entry.entity));
                 }
+            }
 
+            if (sorted_collisions.empty()) {
+                no_collisions = true;
             }
         }
 
-        //TODO: move entity
     }
-}
-
-bool check_broadphase(
-    const Collidable& d_collider,
-    const Transform& d_position,
-    const Velocity& d_velocity,
-    const Collidable& s_collider,
-    const Transform& s_position,
-    float dt
-) {
-    return true; //TODO
 }
 
 // accepts the relevant components
@@ -191,10 +230,28 @@ void PhysicsSystem::swept_collision(
     float s_top = s_position.y - s_collider.height / 2;
     float s_bot = s_position.y + s_collider.height / 2;
 
+
+    //first check broadphase
+    float d_min_x = std::min<float>(d_left, d_left + d_vx);
+    float d_max_x = std::max<float>(d_right, d_right + d_vx);
+    float d_min_y = std::min<float>(d_top, d_top + d_vy);
+    float d_max_y = std::max<float>(d_bot, d_bot + d_vy);
+
+    if (   d_min_x > s_right
+        || d_max_x < s_left
+        || d_min_y > s_bot
+        || d_max_y < s_top
+    ) {
+        time = 1;
+        x_norm = 0;
+        y_norm = 0;
+        return;
+    }
+
     // find the distance between the objects on the near and far sides for both x and y
     float x_inv_entry, y_inv_entry, x_inv_exit, y_inv_exit;
 
-    if (d_vx > 0) {
+    if (d_vx >= 0) {
         x_inv_entry = s_left - d_right;
         x_inv_exit = s_right - d_left;
     }
@@ -203,7 +260,7 @@ void PhysicsSystem::swept_collision(
         x_inv_exit = s_left - d_right;
     }
 
-    if (d_vy > 0) {
+    if (d_vy >= 0) {
         y_inv_entry = s_top - d_bot;
         y_inv_exit = s_bot - d_top;
     }
@@ -252,9 +309,14 @@ void PhysicsSystem::swept_collision(
     // otherwise, there WAS a collision
     else {
         // calculate normal of collided surface
-        if (x_entry > y_entry)
-        {
-            if (x_inv_entry < 0.0f)
+        if (x_entry > y_entry) {
+            if (abs(y_inv_entry) < 1) {
+                x_norm = 0;
+                y_norm = 0;
+                time = 1;
+                return;
+            }
+            else if (x_inv_entry < 0.0f)
             {
                 x_norm = 1.0f;
                 y_norm = 0.0f;
@@ -265,9 +327,14 @@ void PhysicsSystem::swept_collision(
                 y_norm = 0.0f;
             }
         }
-        else
-        {
-            if (y_inv_entry < 0.0f)
+        else {
+            if (abs(x_inv_entry) < 1) {
+                x_norm = 0;
+                y_norm = 0;
+                time = 1;
+                return;
+            }
+            else if (y_inv_entry < 0.0f)
             {
                 x_norm = 0.0f;
                 y_norm = 1.0f;
