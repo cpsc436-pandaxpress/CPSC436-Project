@@ -74,8 +74,10 @@ int main(int argc, char** argv) {
     blackboard.texture_manager.load_texture(textures_path("pixel.png"), "pixel");
     blackboard.texture_manager.load_texture(textures_path("gross_splash.png"), "splash");
     blackboard.texture_manager.load_texture(textures_path("ghost.png"), "ghost");
-    blackboard.texture_manager.load_texture(textures_path("llama.png"), "llama");
-    blackboard.texture_manager.load_texture(textures_path("spit.png"), "spit");
+    blackboard.texture_manager.load_texture(textures_path("llama_left.png"), "llama_left");
+    blackboard.texture_manager.load_texture(textures_path("llama_right.png"), "llama_right");
+    blackboard.texture_manager.load_texture(textures_path("spit_left.png"), "spit_left");
+    blackboard.texture_manager.load_texture(textures_path("spit_right.png"), "spit_right");
     blackboard.texture_manager.load_texture(textures_path("bg_back.png"), "bg_back");
     blackboard.texture_manager.load_texture(textures_path("bg_front.png"), "bg_front");
     blackboard.texture_manager.load_texture(textures_path("bg_middle.png"), "bg_middle");

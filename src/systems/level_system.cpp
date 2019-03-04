@@ -70,7 +70,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
         }
             break;
         case 5: {
-            auto texture = blackboard.texture_manager.get_texture("llama");
+            auto texture = blackboard.texture_manager.get_texture("llama_left");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto mesh = blackboard.mesh_manager.get_mesh("sprite");
             auto scale = static_cast<float>(CELL_HEIGHT / texture.height());
@@ -139,25 +139,28 @@ void LevelSystem::generateEntity(int value, float x, float y,
 
         }
             break;
+        case 9: {
+            auto texture = blackboard.texture_manager.get_texture("llama_right");
+            auto shader = blackboard.shader_manager.get_shader("sprite");
+            auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+            auto scale = static_cast<float>(CELL_HEIGHT / texture.height());
+            auto llama = registry.create();
+            registry.assign<Transform>(llama, x, y - 200, 0., scale,
+                                       scale);
+            registry.assign<Sprite>(llama, texture, shader, mesh);
+            registry.assign<Llama>(llama, false);
+            registry.assign<CausesDamage>(llama, false, true, 1);
+            registry.assign<Health>(llama,1);
+            registry.assign<Velocity>(llama, 0.f, 0.f);
+            registry.assign<Interactable>(llama);
+            registry.assign<Collidable>(llama, texture.width() * scale,
+                                        texture.height() * scale);
+            registry.assign<ObeysGravity>(llama);
+            auto& timer = registry.assign<Timer>(llama);
+            timer.save_watch(SPIT_TIMER_LABEL, 3.f);
+        }
+            break;
         default:
             break;
     }
-}
-
-void LevelSystem::generateProjectile(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    auto texture = blackboard.texture_manager.get_texture("spit");
-    auto shader = blackboard.shader_manager.get_shader("sprite");
-    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-    auto scale = static_cast<float>(CELL_WIDTH / texture.width()/ 5);
-    auto projectile = registry.create();
-    registry.assign<Transform>(projectile, x, y - 30, 0., scale,
-                               scale);
-    registry.assign<Sprite>(projectile, texture, shader, mesh);
-    registry.assign<Spit>(projectile);
-    registry.assign<CausesDamage>(projectile, false, true, 1);
-    registry.assign<Health>(projectile,1);
-    registry.assign<Velocity>(projectile, PROJECTILE_SPEED_X, PROJECTILE_SPEED_Y);
-    registry.assign<Interactable>(projectile);
-    registry.assign<Collidable>(projectile, texture.width() * scale,
-                                texture.height() * scale);
 }

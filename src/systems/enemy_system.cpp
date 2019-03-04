@@ -49,17 +49,26 @@ void EnemySystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
             }
         }
 
-        // Destroy llamas that are no longer playable
-        auto llama_view = registry.view<Llama, Transform, Collidable>();
+        // Create llama projectiles and destroy llamas that are no longer playable
+        auto llama_view = registry.view<Llama, Transform, Collidable, Timer>();
         for (auto enemy_entity : llama_view) {
             auto &llama = llama_view.get<Llama>(enemy_entity);
             auto &llama_transform = llama_view.get<Transform>(enemy_entity);
             auto &llama_collidable = llama_view.get<Collidable>(enemy_entity);
+            auto& llama_timer = llama_view.get<Timer>(enemy_entity);
 
             if (llama_transform.x + llama_collidable.width < cam_position.x - cam_size.x / 2 ||
                 llama_transform.y - llama_collidable.height > cam_position.y + cam_size.y / 2) {
                 registry.destroy(enemy_entity);
                 break;
+            }
+
+            if (!llama.alive)
+                break;
+
+            if(llama_timer.is_done(SPIT_TIMER_LABEL)) {
+                generateProjectile(llama_transform.x, llama_transform.y, true, blackboard, registry);
+                llama_timer.reset_watch(SPIT_TIMER_LABEL);
             }
         }
 
@@ -100,5 +109,52 @@ void EnemySystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
                 }
             }
         }
+
+        // Create llama projectiles and destroy llamas that are no longer playable
+        auto llama_view = registry.view<Llama, Transform, Collidable, Timer>();
+        for (auto enemy_entity : llama_view) {
+            auto &llama = llama_view.get<Llama>(enemy_entity);
+            auto &llama_transform = llama_view.get<Transform>(enemy_entity);
+            auto &llama_collidable = llama_view.get<Collidable>(enemy_entity);
+            auto& llama_timer = llama_view.get<Timer>(enemy_entity);
+
+            if (llama_transform.x + llama_collidable.width < cam_position.x - cam_size.x / 2 ||
+                llama_transform.y - llama_collidable.height > cam_position.y + cam_size.y / 2) {
+                registry.destroy(enemy_entity);
+                break;
+            }
+
+            if (!llama.alive)
+                break;
+
+            if(llama_timer.is_done(SPIT_TIMER_LABEL)) {
+                generateProjectile(llama_transform.x, llama_transform.y, llama.left, blackboard, registry);
+                llama_timer.reset_watch(SPIT_TIMER_LABEL);
+            }
+        }
     }
+}
+
+void EnemySystem::generateProjectile(float x, float y, bool spit_left, Blackboard &blackboard,
+        entt::DefaultRegistry &registry) {
+    auto texture = blackboard.texture_manager.get_texture("spit_left");
+    if (!spit_left)
+        texture = blackboard.texture_manager.get_texture("spit_right");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+    auto scale = static_cast<float>(CELL_WIDTH / texture.width()/ 5);
+    auto projectile = registry.create();
+    registry.assign<Transform>(projectile, x, y - 30, 0., scale,
+                               scale);
+    registry.assign<Sprite>(projectile, texture, shader, mesh);
+    registry.assign<Spit>(projectile);
+    registry.assign<CausesDamage>(projectile, false, true, 1);
+    registry.assign<Health>(projectile,1);
+    if (spit_left)
+        registry.assign<Velocity>(projectile, PROJECTILE_SPEED_X, PROJECTILE_SPEED_Y);
+    else
+        registry.assign<Velocity>(projectile, -PROJECTILE_SPEED_X, PROJECTILE_SPEED_Y);
+    registry.assign<Interactable>(projectile);
+    registry.assign<Collidable>(projectile, texture.width() * scale,
+                                texture.height() * scale);
 }

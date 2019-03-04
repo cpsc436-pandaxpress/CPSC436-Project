@@ -29,11 +29,9 @@ protected:
     Random rng_;
     std::queue<std::vector<int>> chunks_;
 
-    const float PROJECTILE_SPEED_X = -300.f;
-    const float PROJECTILE_SPEED_Y = 10.f;
     const int SEED = 48;
-    const std::string SPIT_TIMER_LABEL = "spit";
     const float PLATFORM_HEIGHT = 20.f;
+    const std::string SPIT_TIMER_LABEL = "spit";
 
     virtual void load_next_chunk() = 0;
 
@@ -51,8 +49,6 @@ public:
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override = 0;
 
     virtual void destroy_entities(entt::DefaultRegistry &registry) = 0;
-
-    void generateProjectile(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
 };
 
 
