@@ -45,8 +45,11 @@ bool SceneManager::change_scene(SceneID id) {
 
         if(id==3){
             m_background_music = Mix_LoadMUS(audio_path("graveyard.ogg"));
-        }else{
-            m_background_music = Mix_LoadMUS(audio_path("PE2.ogg"));
+        }else if(id==2){
+            m_background_music = Mix_LoadMUS(audio_path("CC.ogg"));
+        }
+        else{
+            m_background_music = Mix_LoadMUS(audio_path("PE.ogg"));
         }
 
 
