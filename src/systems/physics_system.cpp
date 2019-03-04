@@ -8,6 +8,9 @@
 #include <components/panda.h>
 #include <components/causes_damage.h>
 #include <components/health.h>
+#include <components/food.h>
+#include <components/jacko.h>
+#include <components/chases.h>
 #include "components/platform.h"
 
 
@@ -107,7 +110,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                     continue;
                 }
                 //if the entities already collided this frame
-                if (unordered_pair_check(recorded_collisions, d_entity, s_entity)) {
+                if (ordered_pair_check(recorded_collisions, d_entity, s_entity)) {
                     continue;
                 }
 
@@ -190,7 +193,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                     recorded_collisions.insert(uint_pair(d_entity, entry.entity));
 
 
-                    // check for causes_damage
+                    // check for causing damage to the panda
                     if ( registry.has<CausesDamage>(entry.entity)
                         && registry.has<Panda>(d_entity)
                     ) {
@@ -206,7 +209,23 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                             }
                         }
                     }
+                    else if ( registry.has<CausesDamage>(d_entity)
+                              && registry.has<Panda>(entry.entity)
+                        ) {
+                        auto& cd = registry.get<CausesDamage>(d_entity);
+                        auto& health = registry.get<Health>(entry.entity);
+                        auto& panda = registry.get<Panda>(entry.entity);
 
+                        if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)) {
+                            //do damage
+                            health.hp -= cd.hp;
+                            if (health.hp <= 0) {
+                                 panda.alive = false;
+                            }
+                        }
+                    }
+
+                    // check for the panda causing damage
                     if ( registry.has<Health>(entry.entity)
                          && registry.has<Panda>(d_entity)
                     ) {
@@ -218,24 +237,51 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                             health.hp -= cd.hp;
 
 
-                            if (health.hp <= 0) {
-                                //TODO: entity-specific "dead" settings?
+
+
+                            if (entry.normal.x != 0) {
+                                dv.x_velocity = 700 * entry.normal.x;
+                            }
+                            if (entry.normal.y != 0) {
+                                dv.y_velocity = 700 * entry.normal.y;
+                            }
+
+                            if (registry.has<Jacko>(entry.entity)) {
+                                // panda is hitting jacko
+                                auto& jacko = registry.get<Jacko>(entry.entity);
+                                auto& chases = registry.get<Chases>(entry.entity);
+                                if (health.hp <= 0) {
+                                    registry.remove<Interactable>(entry.entity);
+                                    registry.remove<Chases>(entry.entity);
+                                    registry.assign<ObeysGravity>(entry.entity);
+                                }
+                                else {
+                                    chases.evading = true;
+                                }
+                            }
+                            //else if to exclude jacko from normal death stuff
+                            else if (health.hp <= 0) {
+                                //normal way to kill stuff
                                 if (registry.has<Interactable>(entry.entity)) {
                                     registry.remove<Interactable>(entry.entity);
                                 }
                             }
-
-                            if (entry.normal.x != 0) {
-                                dv.x_velocity = 400 * entry.normal.x;
-                            }
-                            if (entry.normal.y != 0) {
-                                dv.y_velocity = 400 * entry.normal.y;
-                            }
                         }
                     }
 
-                    //TODO: add check for food
-                    //TODO: add jacko check? (or subsumed by causes_damage check?)
+                    //check for food
+                    if ( registry.has<Food>(entry.entity)
+                         && registry.has<Panda>(d_entity)
+                    ) {
+                        auto& panda = registry.get<Panda>(d_entity);
+                        auto& health = registry.get<Health>(d_entity);
+
+                        health.hp ++;
+                        registry.destroy(entry.entity);
+
+                    }
+
+
 
                 }
             }

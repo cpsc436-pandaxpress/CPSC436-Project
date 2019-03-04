@@ -61,7 +61,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
                                        scale);
             registry.assign<Sprite>(ghost, texture, shader, mesh);
             registry.assign<Ghost>(ghost);
-            registry.assign<CausesDamage>(ghost, TOP_VULNERABLE_MASK, 1);
+            registry.assign<CausesDamage>(ghost, ALL_DMG_MASK, 1);
             registry.assign<Health>(ghost,1);
             registry.assign<Velocity>(ghost, -0.f, 0.f);
             registry.assign<Collidable>(ghost, texture.width() * scale,
@@ -96,6 +96,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             auto scale = static_cast<float>(CELL_WIDTH / texture.width());
             auto stalagmite2 = registry.create();
             registry.assign<Obstacle>(stalagmite2);
+            registry.assign<Platform>(stalagmite2, false);
             registry.assign<Transform>(stalagmite2, x, y, 0., scale,
                                        scale);
             registry.assign<Sprite>(stalagmite2, texture, shader, mesh);
@@ -108,14 +109,16 @@ void LevelSystem::generateEntity(int value, float x, float y,
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto mesh = blackboard.mesh_manager.get_mesh("sprite");
             auto scale = static_cast<float>(CELL_WIDTH / texture.width());
+            auto vertical_scale = 0.9f * scale;
+            auto vertical_offset = (scale - vertical_scale) * texture.height();
             auto stalagmite = registry.create();
             registry.assign<Obstacle>(stalagmite);
             registry.assign<CausesDamage>(stalagmite, ALL_DMG_MASK, 1);
-            registry.assign<Transform>(stalagmite, x, y, 0., scale,
-                                       scale);
+            registry.assign<Transform>(stalagmite, x, y + vertical_offset, 0., scale,
+                                       vertical_scale);
             registry.assign<Sprite>(stalagmite, texture, shader, mesh);
             registry.assign<Collidable>(stalagmite, texture.width() * scale,
-                                        texture.height() * scale);
+                                        texture.height() * vertical_scale);
 
         }
             break;

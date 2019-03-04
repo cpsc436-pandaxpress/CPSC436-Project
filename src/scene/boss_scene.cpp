@@ -204,7 +204,7 @@ void BossScene::create_platforms(Blackboard &blackboard) {
 
 
         auto platform = registry_.create();
-        registry_.assign<Platform>(platform);
+        registry_.assign<Platform>(platform, false);
         registry_.assign<Transform>(platform, i * 100, 300, 0., scale, scale);
         registry_.assign<Sprite>(platform, texture, shader, mesh);
         registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale);
@@ -214,7 +214,7 @@ void BossScene::create_platforms(Blackboard &blackboard) {
 
 
         auto platform = registry_.create();
-        registry_.assign<Platform>(platform);
+        registry_.assign<Platform>(platform, false);
         registry_.assign<Transform>(platform, 600, i * 100, 0., scale, scale);
         registry_.assign<Sprite>(platform, texture, shader, mesh);
         registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale);
@@ -224,7 +224,7 @@ void BossScene::create_platforms(Blackboard &blackboard) {
 
 
         auto platform = registry_.create();
-        registry_.assign<Platform>(platform);
+        registry_.assign<Platform>(platform, false);
         registry_.assign<Transform>(platform, -600, i * 100, 0., scale, scale);
         registry_.assign<Sprite>(platform, texture, shader, mesh);
         registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale);
