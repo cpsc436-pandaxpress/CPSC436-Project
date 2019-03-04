@@ -22,14 +22,15 @@ void LevelSystem::generateEntity(int value, float x, float y,
                     (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "platform1" : "platform2");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-            auto scale = static_cast<float>(CELL_WIDTH / texture.width());
+            auto scaleX = static_cast<float>(CELL_WIDTH / texture.width());
+            auto scaleY = static_cast<float>(PLATFORM_HEIGHT / texture.width());
             auto platform = registry.create();
             registry.assign<Platform>(platform);
-            registry.assign<Transform>(platform, x, y, 0., scale,
-                                       scale);
+            registry.assign<Transform>(platform, x, y - CELL_HEIGHT / 2 + PLATFORM_HEIGHT / 2, 0., scaleX,
+                                       scaleY);
             registry.assign<Sprite>(platform, texture, shader, mesh);
-            registry.assign<Collidable>(platform, texture.width() * scale,
-                                        texture.height() * scale);
+            registry.assign<Collidable>(platform, texture.width() * scaleX,
+                                        texture.height() * scaleY);
         }
             break;
         case 3: {
