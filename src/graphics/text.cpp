@@ -7,11 +7,12 @@
 #include "../util/gl_utils.h"
 
 Text::Text(Shader shader, Mesh mesh, FontType font,
-        vec3 color, float width, float height) :
+        vec3 color, const char* text, float width, float height) :
         shader_(shader),
         mesh_(mesh),
         font_(font),
-        color_(color)
+        color_(color),
+        text_(text)
 {
     position_ = {0.f, 0.f};
     pixel_scale_ = {(float) width, (float) height};
@@ -81,7 +82,7 @@ void Text::draw(const mat3& projection) {
         glBindBuffer(GL_ARRAY_BUFFER, mesh_.vbo());
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices),
                         vertices); // Be sure to use glBufferSubData and not glBufferData
-
+        gl_has_errors(); // TODO fix
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         // Render quad
         glDrawArrays(GL_TRIANGLES, 0, 6);

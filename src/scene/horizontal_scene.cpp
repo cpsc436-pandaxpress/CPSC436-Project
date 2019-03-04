@@ -24,8 +24,8 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         player_movement_system(HORIZONTAL_SCENE_ID),
         collision_system(),
         ghost_movement_system(),
-        player_animation_system(HORIZONTAL_SCENE_ID)
-
+        player_animation_system(HORIZONTAL_SCENE_ID),
+        text_system()
 {
     init_scene(blackboard);
     create_tutorial(blackboard);
@@ -96,6 +96,7 @@ void HorizontalScene::update_tutorial(Blackboard &blackboard) {
 void HorizontalScene::render(Blackboard &blackboard) {
     background_render_system.update(blackboard, registry_); // render background first
     sprite_render_system.update(blackboard, registry_);
+    text_system.update(blackboard, registry_);
 }
 
 void HorizontalScene::reset_scene(Blackboard &blackboard) {
@@ -192,24 +193,24 @@ void HorizontalScene::create_text(Blackboard &blackboard) {
     FontType font = FontType();
     font.load(fonts_path("ocraext.ttf"), 24);
 
-    GLuint vao, vbo, ibo;
-
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+//    GLuint vao, vbo, ibo;
+//    glGenVertexArrays(1, &vao);
+//    glGenBuffers(1, &vbo);
+//    glBindVertexArray(vao);
+//    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+//    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+//    glEnableVertexAttribArray(0);
+//    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
+//    glBindVertexArray(0);
+//    auto mesh = Mesh(vao, vbo, 0);
 
     bool result = !gl_has_errors();
-    auto mesh = Mesh(vao, vbo, 0);
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
     vec3 color = {1.0f, 1.0f, 1.0f};
     printf("loading text: %s\n", (result) ? "true" : "false");
 
-    registry_.assign<Text>(text, shader, mesh, font, color, 800.f, 450.f);
+    registry_.assign<Text>(text, shader, mesh, font, color, "Hello World", 800.f, 450.f);
 }
 
 

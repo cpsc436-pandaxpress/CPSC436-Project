@@ -30,26 +30,22 @@ struct Character {
 // A renderer class for rendering text displayed by a font loaded using the
 // FreeType library. A single font is loaded, processed into a list of Character
 // items for later rendering.
-class TextRenderer {
+class TextRenderer
+{
 public:
     // Holds a list of pre-compiled Characters
-    std::map<GLchar, Character> characters;
+    std::map<GLchar, Character> Characters;
     // Shader used for text rendering
-    Shader text_shader;
-
+    Shader TextShader;
     // Constructor
-    TextRenderer(Shader shader, GLuint width, GLuint height);
-
+    TextRenderer(GLuint width, GLuint height);
     // Pre-compiles a list of characters from the given font
-    void load(std::string font, GLuint fontSize);
-
+    void Load(std::string font, GLuint fontSize);
     // Renders a string of text using the precompiled list of characters
-    void render_text(std::string text, GLfloat x, GLfloat y, GLfloat scale,
-                    vec3 color = {1.0f, 1.0f, 1.0f});
-
+    void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color = glm::vec3(1.0f));
 private:
     // Render state
-    GLuint vao, vbo;
+    GLuint VAO, VBO;
 };
 
 #endif

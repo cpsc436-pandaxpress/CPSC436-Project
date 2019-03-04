@@ -23,7 +23,7 @@ private:
     std::string text_;
 
 public:
-    Text(Shader shader, Mesh mesh, FontType font, vec3 color, float width, float height);
+    Text(Shader shader, Mesh mesh, FontType font, vec3 color, const char* text, float width, float height);
     Text(const Text& other);
 
     void draw(const mat3& projection);

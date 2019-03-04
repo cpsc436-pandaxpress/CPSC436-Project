@@ -100,12 +100,12 @@ set(SOURCE_FILES
         src/components/timer.h
         src/systems/timer_system.cpp
         src/systems/timer_system.h
-        src/graphics/text_renderer.cpp
-        src/graphics/text_renderer.h
         src/graphics/text.cpp
         src/graphics/text.h
         src/graphics/font.cpp
-        src/graphics/font.h)
+        src/graphics/font.h
+        src/systems/text_system.cpp
+        src/systems/text_system.h)
 
 
 # Create executable target
