@@ -12,10 +12,12 @@
 #include "components/obeys_gravity.h"
 #include "components/collidable.h"
 #include "scene/horizontal_scene.h"
+#include "scene/vertical_scene.h"
+#include "scene/scene_manager.h"
 
 GhostMovementSystem::GhostMovementSystem() {}
 
-void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry) {
+void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry, SceneID sceneid) {
     vec2 cam_position = blackboard.camera.position();
     vec2 cam_size = blackboard.camera.size();
 
@@ -29,7 +31,11 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
         if (ghost.done)
             break;
         else if (!ghost.onScreen) {
-            if (gh_transform.x + gh_collidable.width / 2 < cam_position.x + cam_size.x / 2) {
+            if ((sceneid == HORIZONTAL_SCENE_ID) && (gh_transform.x + gh_collidable.width / 2 < cam_position.x + cam_size.x / 2)) {
+                ghost.onScreen = true;
+                ghost.waiting = true;
+            }
+            else if ((sceneid == VERTICAL_SCENE_ID) && (gh_transform.y - gh_collidable.height > cam_position.y - cam_size.x / 4)) {
                 ghost.onScreen = true;
                 ghost.waiting = true;
             }
@@ -52,7 +58,12 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
                 ghost.start_pt.y = gh_transform.y;
             }
             else {
-                gh_velocity.x_velocity = HorizontalScene::CAMERA_SPEED;
+                if (sceneid == HORIZONTAL_SCENE_ID)
+                    gh_velocity.x_velocity = HorizontalScene::CAMERA_SPEED;
+                else {
+                    printf("here\n");
+                    gh_velocity.y_velocity = -VerticalScene::CAMERA_SPEED;
+                }
                 if (int(llround(floor(ghost.waittime))) % 2 == 0) {
                     if (ghost.waiting_high && ghost.waiting_left) {
                         gh_transform.x = gh_transform.x + 3;

@@ -12,7 +12,7 @@ void EnemySystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
     vec2 cam_position = blackboard.camera.position();
     vec2 cam_size = blackboard.camera.size();
 
-    ghost_movement_system.update(blackboard, registry);
+    ghost_movement_system.update(blackboard, registry, sceneid);
 
     if (sceneid == HORIZONTAL_SCENE_ID) {
         // Start bread that has entered the screen, delete bread that is no longer playable
