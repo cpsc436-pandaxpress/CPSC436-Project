@@ -99,7 +99,13 @@ set(SOURCE_FILES
         src/components/timer.cpp
         src/components/timer.h
         src/systems/timer_system.cpp
-        src/systems/timer_system.h)
+        src/systems/timer_system.h
+        src/graphics/text_renderer.cpp
+        src/graphics/text_renderer.h
+        src/graphics/text.cpp
+        src/graphics/text.h
+        src/graphics/font.cpp
+        src/graphics/font.h)
 
 
 # Create executable target
@@ -115,7 +121,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS 0)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ext/stb_image/)
 target_include_directories(${PROJECT_NAME} PUBLIC ext/entt/)
-
+target_include_directories(${PROJECT_NAME} PUBLIC /usr/local/include/freetype2/)
 # Find OpenGL
 find_package(OpenGL REQUIRED)
 
@@ -139,7 +145,7 @@ if (IS_OS_LINUX OR IS_OS_MAC)
     if (IS_OS_MAC)
         find_library(COCOA_LIBRARY Cocoa)
         find_library(CF_LIBRARY CoreFoundation)
-        target_link_libraries(${PROJECT_NAME} PUBLIC ${COCOA_LIBRARY} ${CF_LIBRARY})
+        target_link_libraries(${PROJECT_NAME} PUBLIC ${COCOA_LIBRARY} ${CF_LIBRARY} freetype)
     endif()
 elseif (IS_OS_WINDOWS)
     # https://stackoverflow.com/questions/17126860/cmake-link-precompiled-library-depending-on-os-and-architecture

@@ -9,6 +9,7 @@
 #include <components/causes_damage.h>
 #include <components/velocity.h>
 #include <components/tutorial.h>
+#include <graphics/text.h>
 #include "horizontal_scene.h"
 #include "util/constants.h"
 
@@ -113,6 +114,7 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
     blackboard.camera.compose();
     create_background(blackboard);
     create_panda(blackboard);
+    create_text(blackboard);
     level_system.init();
 }
 
@@ -182,6 +184,32 @@ void HorizontalScene::create_tutorial(Blackboard &blackboard) {
     registry_.assign<Tutorial>(tutorial2_entity);
     registry_.assign<Transform>(tutorial2_entity, 900.f, -200.f, 0., scaleX, scaleY);
 
+}
+
+void HorizontalScene::create_text(Blackboard &blackboard) {
+    auto text = registry_.create();
+    auto shader = blackboard.shader_manager.get_shader("text");
+    FontType font = FontType();
+    font.load(fonts_path("ocraext.ttf"), 24);
+
+    GLuint vao, vbo, ibo;
+
+    glGenVertexArrays(1, &vao);
+    glGenBuffers(1, &vbo);
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    bool result = !gl_has_errors();
+    auto mesh = Mesh(vao, vbo, 0);
+    vec3 color = {1.0f, 1.0f, 1.0f};
+    printf("loading text: %s\n", (result) ? "true" : "false");
+
+    registry_.assign<Text>(text, shader, mesh, font, color, 800.f, 450.f);
 }
 
 

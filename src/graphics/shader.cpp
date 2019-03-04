@@ -53,3 +53,11 @@ void Shader::set_input_vec3(const char* loc, size_t vertex_size, size_t attrib_o
     glEnableVertexAttribArray(input_loc);
     glVertexAttribPointer(input_loc, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)attrib_offset);
 }
+
+void Shader::set_uniform_float(const char *loc, const float value) {
+    glUniform1f(glGetUniformLocation(program_id_, loc), value);
+}
+
+void Shader::set_uniform_int(const char *loc, int value) {
+    glUniform1i(glGetUniformLocation(program_id_, loc), value);
+}

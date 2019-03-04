@@ -68,6 +68,7 @@ public:
     static constexpr float CAMERA_SPEED = 400.f;
 
 
+    void create_text(Blackboard &blackboard);
 };
 
 

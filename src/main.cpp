@@ -23,12 +23,6 @@
 #include <iostream>
 #include <scene/boss_scene.h>
 
-
-
-
-
-
-
 int main(int argc, char** argv) {
 
     auto window = Window();
@@ -61,6 +55,10 @@ int main(int argc, char** argv) {
     blackboard.shader_manager.load_shader(
             shaders_path("sprite.vs.glsl"),
             shaders_path("sprite.fs.glsl"),"sprite");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("text.vs.glsl"),
+            shaders_path("text.fs.glsl"), "text");
 
     blackboard.texture_manager.load_texture(textures_path("panda.png"), "panda");
     blackboard.texture_manager.load_texture(textures_path("panda_sprite_sheet.png"), "panda_sprites");
