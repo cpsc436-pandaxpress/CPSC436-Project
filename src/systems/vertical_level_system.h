@@ -16,19 +16,23 @@ private:
 
     void generate_next_chunk(Blackboard &blackboard, entt::DefaultRegistry &registry);
 
+    void destroy_off_screen(entt::DefaultRegistry &registry, float max_y);
+
     const float FIRST_ROW_Y = 300.f;
     const float COL_X_OFFSET = -750.f;
 
-    float last_row_placed_;
+    float last_row_generated_, last_row_loaded_;
 public:
 
     VerticalLevelSystem();
+
+    void init();
 
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry);
 
     void destroy_entities(entt::DefaultRegistry &registry);
 
-    void destroy_off_screen(entt::DefaultRegistry &registry, float x);
+    void update_projectiles(Blackboard &blackboard, entt::DefaultRegistry &registry);
 };
 
 

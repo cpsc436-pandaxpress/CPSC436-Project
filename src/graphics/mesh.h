@@ -6,17 +6,17 @@
 
 #include "../util/gl_utils.h"
 
-// an struct that owns the referenced OpenGL buffers
-class Mesh
-{
+// a struct with non-owning references to the relevant buffers/array
+class Mesh {
 private:
     GLuint vao_;
     GLuint vbo_;
     GLuint ibo_;
 
 public:
-    Mesh(size_t vertex_count, TexturedVertex* vertices, size_t index_count, uint16_t* indices);
-    ~Mesh();
+    Mesh(GLuint vao, GLuint vbo, GLuint ibo);
+
+    Mesh(const Mesh &other);
 
     GLuint vao() { return vao_; }
 
@@ -26,5 +26,5 @@ public:
 
     void bind();
 
-    static void unbind();
+    void unbind();
 };

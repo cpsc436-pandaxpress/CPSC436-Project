@@ -5,6 +5,9 @@
 
 #include "physics_system.h"
 #include <numeric>
+#include <components/panda.h>
+#include <components/causes_damage.h>
+#include <components/health.h>
 #include "components/platform.h"
 
 
@@ -25,20 +28,6 @@ void PhysicsSystem::apply_gravity(Blackboard &blackboard, entt::DefaultRegistry 
      ***/
 
     auto view = registry.view<ObeysGravity, Interactable, Transform, Velocity>();
-
-    /*for (auto entity: view) {
-
-        auto& transform = view.get<Transform>(entity);
-        auto& walkable = view.get<Interactable>(entity);
-        auto& velocity = view.get<Velocity>(entity);
-        auto& gravity  = view.get<ObeysGravity>(entity);
-        if (!walkable.grounded) {
-            velocity.y_velocity += gravity.gravityFactor * blackboard.delta_time;
-        } else{
-            velocity.y_velocity=0.f;
-        }
-    }*/
-
     /***
      * Applying gravity to objects that can't walk on platforms
      ***/
@@ -46,6 +35,7 @@ void PhysicsSystem::apply_gravity(Blackboard &blackboard, entt::DefaultRegistry 
     auto viewNonWalkable = registry.view<ObeysGravity, Transform, Velocity>();
 
     for (auto entity: viewNonWalkable) {
+
         auto& transform = viewNonWalkable.get<Transform>(entity);
         auto& velocity = viewNonWalkable.get<Velocity>(entity);
         auto& gravity  = viewNonWalkable.get<ObeysGravity>(entity);
@@ -162,9 +152,13 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
 
             for (auto entry : sorted_collisions) {
                 if (registry.has<Platform>(entry.entity)) {
-                    if (entry.normal.y == -1) {
-                        interactible.grounded = true;
+                    recorded_collisions.insert(uint_pair(d_entity, entry.entity));
+
+                    if (entry.normal.y != -1) {
+                        continue;
                     }
+
+                    interactible.grounded = true;
 
                     // movement is restricted!
                     float remaining_time = 1 - entry.time;
@@ -175,15 +169,37 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                     dv.y_velocity = dv.y_velocity * entry.time + dot_product * entry.normal.x;
 
 
-                    recorded_collisions.insert(uint_pair(d_entity, entry.entity));
-
                     break;
 
 //                    entry.d_velocity.x = entry.time * entry.d_velocity.x + dot_product * entry.normal.y ;
 //                    entry.d_velocity.y = entry.time * entry.d_velocity.y + dot_product * entry.normal.x;
                 } else {
-                    //handle non-blocking
+                    //handle non-blocking collisions
                     recorded_collisions.insert(uint_pair(d_entity, entry.entity));
+
+
+                    // check for causes_damage
+                    if ( registry.has<CausesDamage>(entry.entity)
+                        && registry.has<Health>(d_entity)
+                    ) {
+                        auto& cd = registry.get<CausesDamage>(entry.entity);
+                        auto& health = registry.get<Health>(d_entity);
+                        //TODO: add damage
+                        if (   (cd.xDamage && entry.normal.x != 0)
+                            || (cd.yDamage && entry.normal.y != 0)
+                        ){
+                            //do damage
+                            health.healthPoints -= cd.hitPoints;
+                            //TODO: alive checks?
+                        }
+                    }
+
+
+                    //check
+
+                    //TODO: add check for food
+                    //TODO: add jacko check? (or subsumed by causes_damage check?)
+
                 }
             }
 

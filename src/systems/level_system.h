@@ -28,15 +28,13 @@ class LevelSystem : public System {
 protected:
     Random rng_;
     std::queue<std::vector<int>> chunks_;
-    std::queue<uint32_t> platform_entities_;
-    std::queue<uint32_t> enemy_entities_;
-    std::queue<uint32_t> projectile_entities_;
-    std::queue<uint32_t> available_entities_;
-    std::queue<uint32_t> obstacle_entities_;
 
     const float BREAD_SPEED = 50.f;
     const float PROJECTILE_SPEED_X = -300.f;
     const float PROJECTILE_SPEED_Y = 10.f;
+    const int SEED = 48;
+    const std::string SPIT_TIMER_LABEL = "spit";
+    const float PLATFORM_HEIGHT = 20.f;
 
     virtual void load_next_chunk() = 0;
 
@@ -45,22 +43,17 @@ protected:
     void generateEntity(int value, float x, float y,
                         Blackboard &blackboard, entt::DefaultRegistry &registry);
 
-    void makeAvailable(const uint32_t e, entt::DefaultRegistry &registry);
-
-    uint32_t createEntity(entt::DefaultRegistry &registry);
-
 public:
 
     LevelSystem();
+
+    void init();
 
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override = 0;
 
     virtual void destroy_entities(entt::DefaultRegistry &registry) = 0;
 
-    virtual void destroy_off_screen(entt::DefaultRegistry &registry, float x) = 0;
-
     void generateProjectile(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
-
 };
 
 

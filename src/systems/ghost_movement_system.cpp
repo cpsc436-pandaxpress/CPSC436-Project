@@ -11,6 +11,7 @@
 #include "components/transform.h"
 #include "components/obeys_gravity.h"
 #include "components/collidable.h"
+#include "scene/horizontal_scene.h"
 
 GhostMovementSystem::GhostMovementSystem() {}
 
@@ -44,14 +45,14 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
                     auto &pa_transform = pandas_view.get<Transform>(panda_entity);
                     ghost.aim_pt.x = pa_transform.x;
                     ghost.aim_pt.y = pa_transform.y;
-                    ghost.aim_tangent.x = abs(pa_transform.x) * -2.5;
-                    ghost.aim_tangent.y = abs(pa_transform.y) * 4;
+                    ghost.aim_tangent.x = abs(pa_transform.x - cam_position.x + cam_size.x) * -2.5;
+                    ghost.aim_tangent.y = pa_transform.y * 4;
                 }
                 ghost.start_pt.x = gh_transform.x;
                 ghost.start_pt.y = gh_transform.y;
             }
             else {
-                gh_velocity.x_velocity = 150;
+                gh_velocity.x_velocity = HorizontalScene::CAMERA_SPEED;
                 if (int(llround(floor(ghost.waittime))) % 2 == 0) {
                     if (ghost.waiting_high && ghost.waiting_left) {
                         gh_transform.x = gh_transform.x + 3;

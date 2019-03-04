@@ -7,6 +7,7 @@
 #include "input_manager.h"
 
 #include "../graphics/camera.h"
+#include "../graphics/mesh_manager.h"
 #include "../graphics/shader_manager.h"
 #include "../graphics/texture_manager.h"
 #include "../graphics/window.h"
@@ -19,8 +20,9 @@ struct Blackboard {
     Camera camera;
     float delta_time;
     InputManager input_manager;
+    MeshManager mesh_manager;
     ShaderManager shader_manager;
-    TextureManager textureManager;
+    TextureManager texture_manager;
     Window& window;
     Random randNumGenerator;
 };

@@ -11,6 +11,7 @@
 #include <systems/horizontal_level_system.h>
 #include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
+#include <systems/timer_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -20,15 +21,16 @@
 #include "../systems/player_movement_system.h"
 #include "../systems/collision_system.h"
 #include "../systems/ghost_movement_system.h"
+#include "../systems/player_animation_system.h"
+
 
 class HorizontalScene: public Scene {
 private:
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;
-    const float CAMERA_SPEED = 150.f;
     const float PANDA_START_X = -10.f;
     const float PANDA_START_Y = -200.f;
-    const float MAX_CAMERA_Y_DIFF = 200.f;
+    const float MAX_CAMERA_Y_DIFF = 250.f;
 
     std::vector<uint32_t> bg_entities;
     uint32_t panda_entity;
@@ -43,6 +45,8 @@ private:
     PlayerMovementSystem player_movement_system;
     CollisionSystem collision_system;
     GhostMovementSystem ghost_movement_system;
+    PlayerAnimationSystem player_animation_system;
+    TimerSystem timer_system;
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);
@@ -60,6 +64,9 @@ public:
     virtual void update(Blackboard& blackboard) override;
 
     virtual void render(Blackboard& blackboard) override;
+
+    static constexpr float CAMERA_SPEED = 400.f;
+
 
 };
 
