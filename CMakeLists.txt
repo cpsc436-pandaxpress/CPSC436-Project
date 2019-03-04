@@ -130,7 +130,10 @@ if (OPENGL_FOUND)
     target_link_libraries(${PROJECT_NAME} PUBLIC ${OPENGL_gl_LIBRARY})
 endif()
 
-
+# Find FreeType
+find_package(Freetype REQUIRED)
+target_include_directories(${PROJECT_NAME} PUBLIC ${FREETYPE_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${FREETYPE_LIBRARIES})
 
 if (IS_OS_LINUX OR IS_OS_MAC)
     # Try to find packages rather than to use the precompiled ones
@@ -145,7 +148,7 @@ if (IS_OS_LINUX OR IS_OS_MAC)
     if (IS_OS_MAC)
         find_library(COCOA_LIBRARY Cocoa)
         find_library(CF_LIBRARY CoreFoundation)
-        target_link_libraries(${PROJECT_NAME} PUBLIC ${COCOA_LIBRARY} ${CF_LIBRARY} freetype)
+        target_link_libraries(${PROJECT_NAME} PUBLIC ${COCOA_LIBRARY} ${CF_LIBRARY})
     endif()
 elseif (IS_OS_WINDOWS)
     # https://stackoverflow.com/questions/17126860/cmake-link-precompiled-library-depending-on-os-and-architecture
