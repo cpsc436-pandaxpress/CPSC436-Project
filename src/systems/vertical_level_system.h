@@ -23,7 +23,7 @@ private:
     const float COL_X_OFFSET = -750.f;
     const int MIN_DIFFICULTY = 3;
     const int MAX_DIFFICULTY = 10;
-    const float LEVEL_UP_INTERVAL = 5;
+    const float LEVEL_UP_INTERVAL = 10;
     const std::string LEVEL_UP_LABEL = "level_up";
 
     float last_row_generated_, last_row_loaded_;
