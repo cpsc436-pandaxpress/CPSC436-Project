@@ -15,7 +15,7 @@ FontType::FontType(const FontType &other) :
         characters(other.characters) {
 }
 
-void FontType::load(std::string font, GLuint fontSize) {
+bool FontType::load(std::string font, GLuint fontSize) {
     // First clear the previously loaded Characters
     this->characters.clear();
     // Then initialize and load the FreeType library
@@ -32,17 +32,16 @@ void FontType::load(std::string font, GLuint fontSize) {
     // Disable byte-alignment restriction
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     // Then for the first 128 ASCII characters, pre-load/compile their characters and store them
-    for (GLubyte c = 0; c < 128; c++) // lol see what I did there
-    {
+    for (GLubyte c = 0; c < 128; c++) {
         // Load character glyph
         if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
             std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
             continue;
         }
         // Generate texture
-        GLuint texture;
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
+        GLuint tex_id;
+        glGenTextures(1, &tex_id);
+        glBindTexture(GL_TEXTURE_2D, tex_id);
         glTexImage2D(
                 GL_TEXTURE_2D,
                 0,
@@ -62,9 +61,9 @@ void FontType::load(std::string font, GLuint fontSize) {
 
         // Now store character for later use
         Character character = {
-                texture,
-                glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-                glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+                tex_id,
+                {(float) face->glyph->bitmap.width, (float) face->glyph->bitmap.rows},
+                {(float) face->glyph->bitmap_left, (float) face->glyph->bitmap_top},
                 static_cast<GLuint>(face->glyph->advance.x)
         };
         characters.insert(std::pair<GLchar, Character>(c, character));
@@ -73,4 +72,6 @@ void FontType::load(std::string font, GLuint fontSize) {
     // Destroy FreeType once we're finished
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
+    bool result = !gl_has_errors();
+    return result;
 }

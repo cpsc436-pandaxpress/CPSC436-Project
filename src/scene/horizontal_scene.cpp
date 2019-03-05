@@ -190,27 +190,20 @@ void HorizontalScene::create_tutorial(Blackboard &blackboard) {
 void HorizontalScene::create_text(Blackboard &blackboard) {
     auto text = registry_.create();
     auto shader = blackboard.shader_manager.get_shader("text");
-    FontType font = FontType();
-    font.load(fonts_path("ocraext.ttf"), 24);
-
-//    GLuint vao, vbo, ibo;
-//    glGenVertexArrays(1, &vao);
-//    glGenBuffers(1, &vbo);
-//    glBindVertexArray(vao);
-//    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-//    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-//    glEnableVertexAttribArray(0);
-//    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
-//    glBindBuffer(GL_ARRAY_BUFFER, 0);
-//    glBindVertexArray(0);
-//    auto mesh = Mesh(vao, vbo, 0);
-
-    bool result = !gl_has_errors();
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-    vec3 color = {1.0f, 1.0f, 1.0f};
-    printf("loading text: %s\n", (result) ? "true" : "false");
+    FontType font = FontType();
+    font.load(fonts_path("ocraext.ttf"), 48);
 
-    registry_.assign<Text>(text, shader, mesh, font, color, "Hello World", 800.f, 450.f);
+    auto chTex = font.characters['C'];
+    bool result = !gl_has_errors();
+    auto texture = Texture(static_cast<int>(chTex.size.x), static_cast<int>(chTex.size.y), chTex.tex_id);
+    printf("loading text: %s\n", (result) ? "true" : "false");
+    registry_.assign<Transform>(text, 0., 0., 0., 1.f, 1.f);
+    auto &sprite = registry_.assign<Sprite>(text, texture, shader, mesh); // TODO write a Text class similar to sprite which has blending (maybe use text.glsl)
+    sprite.set_color(0.0, 1.0, 1.0);
+
+//    vec3 color = {1.0f, 1.0f, 1.0f};
+//    registry_.assign<Text>(text, shader, mesh, font, color, "Hello World", 800.f, 450.f);
 }
 
 

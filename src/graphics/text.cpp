@@ -32,6 +32,71 @@ Text::Text(const Text& other) :
 {}
 
 void Text::draw(const mat3& projection) {
+//    // bind shader
+//    shader_.bind();
+//
+//    // setup blending
+//    glEnable(GL_BLEND);
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//    glDisable(GL_DEPTH_TEST);
+//
+//    // bind buffers
+//    mesh_.bind();
+//
+//    // setup attributes
+//    shader_.set_input_vec3("in_position", sizeof(TexturedVertex), 0);
+//    shader_.set_input_vec3("in_texcoord", sizeof(TexturedVertex), sizeof(vec3));
+//
+//    //setup uniforms
+//    shader_.set_uniform_vec3("textColor", color_);
+//    shader_.set_uniform_mat3("projection", projection);
+//
+//    // bind texture
+//    glActiveTexture(GL_TEXTURE0);
+//
+//    // draw!
+//    // Iterate through all characters
+//    float x = position_.x;
+//    std::string::const_iterator c;
+//    for (c = text_.begin(); c != text_.end(); c++) {
+//        Character ch = font_.characters[*c];
+//
+//        GLfloat xpos = position_.x + ch.Bearing.x * scale_;
+//        GLfloat ypos = position_.y + (font_.characters['H'].Bearing.y - ch.Bearing.y) * scale_;
+//
+//        GLfloat w = ch.Size.x * scale_;
+//        GLfloat h = ch.Size.y * scale_;
+//        // Update VBO for each character
+//        GLfloat vertices[6][4] = {
+//                {xpos,     ypos + h, 0.0, 1.0},
+//                {xpos + w, ypos,     1.0, 0.0},
+//                {xpos,     ypos,     0.0, 0.0},
+//
+//                {xpos,     ypos + h, 0.0, 1.0},
+//                {xpos + w, ypos + h, 1.0, 1.0},
+//                {xpos + w, ypos,     1.0, 0.0}
+//        };
+//        // Render glyph texture over quad
+//        glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+//        // Update content of VBO memory
+//        glBindBuffer(GL_ARRAY_BUFFER, mesh_.vbo());
+//        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices),
+//                        vertices); // Be sure to use glBufferSubData and not glBufferData
+//        gl_has_errors(); // TODO fix
+//        glBindBuffer(GL_ARRAY_BUFFER, 0);
+//        // Render quad
+//        glDrawArrays(GL_TRIANGLES, 0, 6);
+//        // Now advance cursors for next glyph
+//        x += (ch.advance >> 6) *
+//             scale_; // Bitshift by 6 to get value in pixels (1/64th times 2^6 = 64)
+//    }
+//
+//    // unbind buffers
+//    mesh_.unbind();
+//
+//    // unbind shader
+//    shader_.unbind();
+    // transform
     // bind shader
     shader_.bind();
 
@@ -48,47 +113,34 @@ void Text::draw(const mat3& projection) {
     shader_.set_input_vec3("in_texcoord", sizeof(TexturedVertex), sizeof(vec3));
 
     //setup uniforms
-    shader_.set_uniform_vec3("textColor", color_);
+    shader_.set_uniform_vec3("fcolor", color_);
     shader_.set_uniform_mat3("projection", projection);
 
-    // bind texture
-    glActiveTexture(GL_TEXTURE0);
-
-    // draw!
-    // Iterate through all characters
     float x = position_.x;
-    std::string::const_iterator c;
-    for (c = text_.begin(); c != text_.end(); c++) {
-        Character ch = font_.characters[*c];
-
-        GLfloat xpos = position_.x + ch.Bearing.x * scale_;
-        GLfloat ypos = position_.y + (font_.characters['H'].Bearing.y - ch.Bearing.y) * scale_;
-
-        GLfloat w = ch.Size.x * scale_;
-        GLfloat h = ch.Size.y * scale_;
-        // Update VBO for each character
-        GLfloat vertices[6][4] = {
-                {xpos,     ypos + h, 0.0, 1.0},
-                {xpos + w, ypos,     1.0, 0.0},
-                {xpos,     ypos,     0.0, 0.0},
-
-                {xpos,     ypos + h, 0.0, 1.0},
-                {xpos + w, ypos + h, 1.0, 1.0},
-                {xpos + w, ypos,     1.0, 0.0}
+    std::string::const_iterator i;
+    for (i = text_.begin(); i != text_.end(); i++) {
+        mat3 transform = {
+                { 1.f, 0.f, 0.f },
+                { 0.f, 1.f, 0.f },
+                { 0.f, 0.f, 1.f }
         };
-        // Render glyph texture over quad
-        glBindTexture(GL_TEXTURE_2D, ch.TextureID);
-        // Update content of VBO memory
-        glBindBuffer(GL_ARRAY_BUFFER, mesh_.vbo());
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices),
-                        vertices); // Be sure to use glBufferSubData and not glBufferData
-        gl_has_errors(); // TODO fix
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        // Render quad
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        // Now advance cursors for next glyph
-        x += (ch.Advance >> 6) *
-             scale_; // Bitshift by 6 to get value in pixels (1/64th times 2^6 = 64)
+
+        mul_in_place(transform, make_translate_mat3(x, position_.y));
+        mul_in_place(transform, make_rotate_mat3(rotation_));
+        mul_in_place(transform, make_scale_mat3(scale_ * pixel_scale_.x, scale_ * pixel_scale_.y));
+
+        shader_.set_uniform_mat3("transform", transform);
+        auto chTex = font_.characters[*i];
+        auto texture = Texture(static_cast<int>(chTex.size.x), static_cast<int>(chTex.size.y), chTex.tex_id);
+        glActiveTexture(GL_TEXTURE0);
+        texture.bind();
+
+        // draw!
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr);
+
+        // unbind texture
+        texture.unbind();
+        x += (chTex.advance >> 6) * scale_;
     }
 
     // unbind buffers
