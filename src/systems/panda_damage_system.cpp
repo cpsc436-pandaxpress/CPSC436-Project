@@ -29,7 +29,8 @@ void PandaDamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
         if (panda.hurt && !panda.invincible) {
             // Do all damage calcs here
             health.healthPoints--;
-            // Make Panda Bounce TODO
+
+            // Make Panda Bounce
             if (panda.facingRight) {
                 velocity.x_velocity = -DMG_REACTION_X;
             } else {
