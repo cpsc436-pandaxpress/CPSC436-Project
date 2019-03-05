@@ -25,8 +25,8 @@ private:
     SceneID scene_id;
 
     void update_horizontal_scene(Blackboard &blackboard, Velocity &velocity);
-    void update_vertical_scene(Blackboard &blackboard, Velocity &velocity);
-    void update_boss_scene(Blackboard &blackboard, Velocity &velocity);
+    void update_vertical_scene(Blackboard &blackboard, Velocity &velocity, Panda &panda);
+    void update_boss_scene(Blackboard &blackboard, Velocity &velocity, Panda &panda);
 
 };
 

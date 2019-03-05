@@ -12,6 +12,8 @@
 class PandaDamageSystem: System {
 private:
     const float DMG_INVINCIBLE_TIMER = 1.f;
+    const float DMG_REACTION_X = 200.f;
+    const float DMG_REACTION_Y = -1000.f;
     const std::string DMG_TIMER_LABEL = "dmg_invincible";
 public:
     PandaDamageSystem();

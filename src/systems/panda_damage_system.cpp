@@ -23,8 +23,6 @@ void PandaDamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
         auto &health = view.get<Health>(entity);
         auto &velocity = view.get<Velocity>(entity);
         auto &interactable = view.get<Interactable>(entity);
-//        printf("Panda Hurt: %d, hurt: %d, invincible: %d\n", health.healthPoints,
-//               (panda.hurt) ? 1 : -1, (panda.invincible) ? 1 : -1);
         if(panda.recovering && interactable.grounded){
             panda.recovering = false;
         }
@@ -32,8 +30,12 @@ void PandaDamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
             // Do all damage calcs here
             health.healthPoints--;
             // Make Panda Bounce TODO
-            velocity.x_velocity = -100.f;// tmp reaction
-            velocity.y_velocity = -1000.f;// tmp reaction
+            if (panda.facingRight) {
+                velocity.x_velocity = -DMG_REACTION_X;
+            } else {
+                velocity.x_velocity = DMG_REACTION_X;
+            }
+            velocity.y_velocity = DMG_REACTION_Y;// tmp reaction
             interactable.grounded = false;
 
             // Prevent Player control until hit ground

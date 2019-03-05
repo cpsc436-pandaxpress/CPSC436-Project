@@ -100,17 +100,13 @@ void HorizontalScene::render(Blackboard &blackboard) {
 }
 
 void HorizontalScene::reset_scene(Blackboard &blackboard) {
-    destroy_scene();
-    init_scene(blackboard);
-}
-
-void HorizontalScene::destroy_scene() {
     level_system.destroy_entities(registry_);
     registry_.destroy(panda_entity);
     for (uint32_t e: bg_entities) {
         registry_.destroy(e);
     }
     bg_entities.clear();
+    init_scene(blackboard);
 }
 
 void HorizontalScene::init_scene(Blackboard &blackboard) {
