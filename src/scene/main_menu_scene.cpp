@@ -11,8 +11,9 @@ static const int BUTTON_PADDING = 40;
 MainMenuScene::MainMenuScene(Blackboard& blackboard, SceneManager& scene_manager) :
     Scene(scene_manager),
     splash_sprite_(
-        blackboard.textureManager.get_texture("splash"),
-        blackboard.shader_manager.get_shader("sprite")
+        blackboard.texture_manager.get_texture("splash"),
+        blackboard.shader_manager.get_shader("sprite"),
+        blackboard.mesh_manager.get_mesh("sprite")
     ),
     button_width_(0),
     button_height_(0),
@@ -55,8 +56,8 @@ void MainMenuScene::update(Blackboard& blackboard) {
 
 
 
-    int top_center_y = 0; //(int)(cam_size.y * 3 / 4) - (count * BUTTON_HEIGHT + (count-1) * BUTTON_PADDING) / 2;
-    int center_x =  0; //(int)(cam_size.x / 2);
+    int top_center_y = 0;
+    int center_x =  0;
 
     for (auto i = 0; i < count; i++) {
         if (i == selected_button_) {
@@ -76,33 +77,30 @@ void MainMenuScene::update(Blackboard& blackboard) {
     }
 
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN)) {
-        blackboard.camera.set_position(0, 0);
         change_scene(button_targets_[selected_button_]);
     }
 
 }
 
 void MainMenuScene::render(Blackboard& blackboard) {
-    auto cam_size = blackboard.camera.size();
-    blackboard.camera.set_position(cam_size.x / 2, cam_size.y / 2);
-
     auto& projection = blackboard.camera.get_projection();
 
     splash_sprite_.draw(projection);
 
     for (auto i = 0; i < button_sprites_.size(); i++) {
-        //button_bg_sprites_[i].draw(projection);
         button_sprites_[i].draw(projection);
     }
 }
 
 void MainMenuScene::add_item(Blackboard& blackboard, char* texture_name, SceneID sceneID) {
-    auto texture = blackboard.textureManager.get_texture(texture_name);
-    auto bg_texture = blackboard.textureManager.get_texture("pixel");
+    auto texture = blackboard.texture_manager.get_texture(texture_name);
+    auto bg_texture = blackboard.texture_manager.get_texture("pixel");
     auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
-    auto sprite = Sprite(texture, shader);
-    auto bg_sprite = Sprite(bg_texture, shader);
+
+    auto sprite = Sprite(texture, shader, mesh);
+    auto bg_sprite = Sprite(bg_texture, shader, mesh);
 
     button_sprites_.push_back(sprite);
     button_bg_sprites_.push_back(bg_sprite);

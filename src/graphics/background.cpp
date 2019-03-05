@@ -1,11 +1,11 @@
 #include "background.h"
 #include "../util/gl_utils.h"
 
-Background::Background(Texture texture, Shader shader, int z) :
+Background::Background(Texture texture, Shader shader, Mesh mesh, int z) :
         shader_(shader),
         texture_(texture),
-        sp1_(Sprite(texture, shader)),
-        sp2_(Sprite(texture, shader)),
+        sp1_(Sprite(texture, shader, mesh)),
+        sp2_(Sprite(texture, shader, mesh)),
         z(z) {
 }
 
