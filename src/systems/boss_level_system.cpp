@@ -6,6 +6,7 @@
 #include <util/csv_reader.h>
 #include <components/transform.h>
 #include <components/collidable.h>
+#include <components/timer.h>
 #include "boss_level_system.h"
 
 BossLevelSystem::BossLevelSystem(): LevelSystem() {
@@ -53,10 +54,6 @@ void BossLevelSystem::generate_next_chunk(Blackboard &blackboard,
 
 void BossLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
 
-    while (!chunks_.empty()) {
-        chunks_.front().clear();
-        chunks_.pop();
-    }
 }
 
 void BossLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
@@ -69,45 +66,8 @@ void BossLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &regi
     }
 //    destroy_off_screen(registry, min_x); // fixme Do not uncomment, not working right now
     generate_next_chunk(blackboard, registry);
-    update_projectiles(blackboard, registry);
 }
 
 void BossLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float x) {
-    auto view = registry.view<Platform, Transform>();
-    std::queue<uint32_t> rQueue;
-    for (u_int32_t entity: view) {
-        auto &transform = view.get<Transform>(entity);
-        if (transform.x < x) {
-            rQueue.push(entity);
-        }
-    }
-    while (!rQueue.empty()) {
-        const uint32_t e = rQueue.front();
 
-        rQueue.pop();
-    }
-}
-
-void BossLevelSystem::update_projectiles(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    vec2 cam_position = blackboard.camera.position();
-    vec2 cam_size = blackboard.camera.size();
-
-    auto llama_view = registry.view<Llama, Transform, Collidable>();
-    for (auto llama_entity : llama_view) {
-        auto& llama = llama_view.get<Llama>(llama_entity);
-        auto& la_transform = llama_view.get<Transform>(llama_entity);
-        auto& la_collidable = llama_view.get<Collidable>(llama_entity);
-        if (!llama.alive || (la_transform.x + la_collidable.width / 2 > cam_position.x + cam_size.x / 2))
-            break;
-
-        if (la_transform.y > 500)
-            llama.alive = false;
-
-        if(llama.spit_time == 0) {
-            generateProjectile(la_transform.x, la_transform.y, blackboard, registry);
-            llama.spit_time = PROJECTILE_SPACING;
-        } else {
-            llama.spit_time--;
-        }
-    }
 }

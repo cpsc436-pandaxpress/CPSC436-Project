@@ -9,6 +9,7 @@
 #include <components/causes_damage.h>
 #include <components/velocity.h>
 #include <components/tutorial.h>
+#include <components/timer.h>
 #include "horizontal_scene.h"
 #include "util/constants.h"
 
@@ -22,7 +23,9 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         physics_system(),
         player_movement_system(HORIZONTAL_SCENE_ID),
         collision_system(),
-        ghost_movement_system()
+        ghost_movement_system(),
+        player_animation_system(HORIZONTAL_SCENE_ID),
+        panda_dmg_system()
 {
     init_scene(blackboard);
     create_tutorial(blackboard);
@@ -30,6 +33,13 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
 }
 
 void HorizontalScene::update(Blackboard &blackboard) {
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
+        blackboard.camera.set_position(0, 0);
+        reset_scene(blackboard);
+        change_scene(MAIN_MENU_SCENE_ID);
+        return;
+    }
+
     update_camera(blackboard);
     update_panda(blackboard);
     update_tutorial(blackboard);
@@ -39,8 +49,11 @@ void HorizontalScene::update(Blackboard &blackboard) {
     player_movement_system.update(blackboard, registry_);
     collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
+    panda_dmg_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
     ghost_movement_system.update(blackboard, registry_);
+    player_animation_system.update(blackboard, registry_);
+    timer_system.update(blackboard, registry_);
 }
 
 void HorizontalScene::update_panda(Blackboard &blackboard) {
@@ -108,18 +121,23 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
 void HorizontalScene::create_panda(Blackboard &blackboard) {
     panda_entity = registry_.create();
 
-    auto texture = blackboard.textureManager.get_texture("panda");
+    auto texture = blackboard.texture_manager.get_texture("panda_sprites");
     auto shader = blackboard.shader_manager.get_shader("sprite");
-    float scaleY = 100.0 / texture.height();
-    float scaleX = 75.0 / texture.width();
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+    auto sprite = Sprite(texture, shader, mesh);
+
+
+    float scaleY = 75.0f / texture.height();
+    float scaleX = 75.0f / texture.width();
     registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scaleX, scaleY);
-    registry_.assign<Sprite>(panda_entity, texture, shader);
+    registry_.assign<Sprite>(panda_entity, sprite);
     registry_.assign<Panda>(panda_entity);
     registry_.assign<ObeysGravity>(panda_entity);
-    registry_.assign<Health>(panda_entity, 1);
+    registry_.assign<Health>(panda_entity, 3);
     registry_.assign<Interactable>(panda_entity);
     registry_.assign<CausesDamage>(panda_entity, false, true, 1);
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
+    registry_.assign<Timer>(panda_entity);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
 }
 
@@ -127,16 +145,17 @@ void HorizontalScene::create_background(Blackboard &blackboard) {
     std::vector<Texture> textures;
     textures.reserve(4);
     // This order matters for rendering
-    textures.push_back(blackboard.textureManager.get_texture("bg_top"));
-    textures.push_back(blackboard.textureManager.get_texture("bg_front"));
-    textures.push_back(blackboard.textureManager.get_texture("bg_middle"));
-    textures.push_back(blackboard.textureManager.get_texture("bg_back"));
+    textures.push_back(blackboard.texture_manager.get_texture("bg_top"));
+    textures.push_back(blackboard.texture_manager.get_texture("bg_front"));
+    textures.push_back(blackboard.texture_manager.get_texture("bg_middle"));
+    textures.push_back(blackboard.texture_manager.get_texture("bg_back"));
     // end order
     auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
     int i = 0;
     for (Texture t: textures) {
         auto bg_entity = registry_.create();
-        auto &bg = registry_.assign<Background>(bg_entity, t, shader, i);
+        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, i);
         bg.set_pos1(0.0f, 0.0f);
         bg.set_pos2(blackboard.camera.size().x, 0.0f);
         bg.set_rotation_rad(0.0f);
@@ -150,18 +169,19 @@ void HorizontalScene::create_tutorial(Blackboard &blackboard) {
     tutorial_entity = registry_.create();
     tutorial2_entity = registry_.create();
 
-    auto texture =  blackboard.textureManager.get_texture("tutorial");
-    auto texture2 =  blackboard.textureManager.get_texture("tutorial_bread");
+    auto texture =  blackboard.texture_manager.get_texture("tutorial");
+    auto texture2 =  blackboard.texture_manager.get_texture("tutorial_bread");
 
     auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
     float scaleY = 0.25;
     float scaleX = 0.25;
-    registry_.assign<Sprite>(tutorial_entity, texture, shader);
+    registry_.assign<Sprite>(tutorial_entity, texture, shader, mesh);
     registry_.assign<Tutorial>(tutorial_entity);
     registry_.assign<Transform>(tutorial_entity, 400.f, -200.f, 0., scaleX, scaleY);
 
-    registry_.assign<Sprite>(tutorial2_entity, texture2, shader);
+    registry_.assign<Sprite>(tutorial2_entity, texture2, shader, mesh);
     registry_.assign<Tutorial>(tutorial2_entity);
     registry_.assign<Transform>(tutorial2_entity, 900.f, -200.f, 0., scaleX, scaleY);
 

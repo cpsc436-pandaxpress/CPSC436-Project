@@ -11,6 +11,8 @@
 #include <systems/boss_level_system.h>
 #include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
+#include <systems/panda_damage_system.h>
+#include <systems/timer_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -21,6 +23,8 @@
 #include "../systems/collision_system.h"
 #include "../systems/jacko_ai_system.h"
 #include "../systems/chase_system.h"
+#include "../systems/player_animation_system.h"
+
 
 class BossScene: public Scene {
 private:
@@ -47,6 +51,10 @@ private:
     CollisionSystem collision_system;
     ChaseSystem chase_system;
     JackoAISystem jacko_ai_system;
+    PlayerAnimationSystem player_animation_system;
+    TimerSystem timer_system;
+    PandaDamageSystem panda_dmg_system;
+
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);
