@@ -54,10 +54,6 @@ void BossLevelSystem::generate_next_chunk(Blackboard &blackboard,
 
 void BossLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
 
-    while (!chunks_.empty()) {
-        chunks_.front().clear();
-        chunks_.pop();
-    }
 }
 
 void BossLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
@@ -73,6 +69,5 @@ void BossLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &regi
 }
 
 void BossLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float x) {
-
 
 }
