@@ -8,14 +8,9 @@
 #include <unordered_map>
 #include <string>
 
-enum WatchStatus {
-    RUNNING, DONE, NOT_FOUND
-};
-
 struct Watch {
     float time;
     float target_time;
-    WatchStatus status;
 };
 
 class Timer {
@@ -25,7 +20,7 @@ public:
     void save_watch(std::string label, float time);
     void update(float delta_time);
     void reset_watch(std::string label);
-    WatchStatus status(std::string label);
+    bool exists(std::string label);
     void remove(std::string label);
 
 private:
