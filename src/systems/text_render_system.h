@@ -7,9 +7,9 @@
 
 #include "system.h"
 
-class TextSystem : public System {
+class TextRenderSystem : public System {
 public:
-    TextSystem();
+    TextRenderSystem();
 
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;
 };

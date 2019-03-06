@@ -7,8 +7,9 @@
 #include <components/transform.h>
 #include <sstream>
 #include "score_system.h"
+#include "util/constants.h"
 
-ScoreSystem::ScoreSystem() {
+ScoreSystem::ScoreSystem(SceneID scene_id) : scene_id(scene_id) {
 
 }
 
@@ -18,14 +19,36 @@ void ScoreSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
         auto &text = view.get<Text>(entity);
         auto &transform = view.get<Transform>(entity);
         auto cam = blackboard.camera;
-        std::string score_text;
-        std::stringstream ss;
-        ss << "SCORE: ";
-        ss << (int) cam.position().x / 500;
-        score_text = ss.str();
-        text.set_text(score_text);
-        transform.x = cam.position().x - cam.size().x / 2 + X_OFFSET;
-        transform.y = cam.position().y - cam.size().y / 2 + Y_OFFSET;
+        switch (scene_id) {
+            case HORIZONTAL_SCENE_ID: {
+                std::string score_text;
+                std::stringstream ss;
+                ss << "SCORE: ";
+                ss << (int) cam.position().x / 500;
+                score_text = ss.str();
+                text.set_text(score_text);
+                transform.x = cam.position().x - cam.size().x / 2 + X_OFFSET;
+                transform.y = cam.position().y - cam.size().y / 2 + Y_OFFSET;
+            }
+                break;
+            case VERTICAL_SCENE_ID: {
+                std::string score_text;
+                std::stringstream ss;
+                ss << "SCORE: ";
+                ss << (int) abs(cam.position().y) / 500;
+                score_text = ss.str();
+                text.set_text(score_text);
+                transform.x = cam.position().x - cam.size().x / 2 + X_OFFSET;
+                transform.y = cam.position().y + cam.size().y / 2 - Y_OFFSET;
+            }
+                break;
+            case BOSS_SCENE_ID: {
+
+            }
+                break;
+            default:
+                fprintf(stderr, "Invalid scene ID: %d\n", scene_id);
+        }
     }
 
 }

@@ -26,9 +26,9 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         collision_system(),
         ghost_movement_system(),
         player_animation_system(HORIZONTAL_SCENE_ID),
-        text_system(),
+        text_render_system(),
         text_transform_system(),
-        score_system()
+        score_system(HORIZONTAL_SCENE_ID)
 {
     init_scene(blackboard);
     create_tutorial(blackboard);
@@ -101,7 +101,7 @@ void HorizontalScene::update_tutorial(Blackboard &blackboard) {
 void HorizontalScene::render(Blackboard &blackboard) {
     background_render_system.update(blackboard, registry_); // render background first
     sprite_render_system.update(blackboard, registry_);
-    text_system.update(blackboard, registry_);
+    text_render_system.update(blackboard, registry_);
 }
 
 void HorizontalScene::reset_scene(Blackboard &blackboard) {
@@ -111,6 +111,7 @@ void HorizontalScene::reset_scene(Blackboard &blackboard) {
         registry_.destroy(e);
     }
     bg_entities.clear();
+    registry_.destroy(score_entity);
     init_scene(blackboard);
 }
 

@@ -104,8 +104,8 @@ set(SOURCE_FILES
         src/graphics/text.h
         src/graphics/font.cpp
         src/graphics/font.h
-        src/systems/text_system.cpp
-        src/systems/text_system.h
+        src/systems/text_render_system.cpp
+        src/systems/text_render_system.h
         src/systems/text_transform_system.cpp
         src/systems/text_transform_system.h
         src/systems/score_system.cpp

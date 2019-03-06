@@ -12,7 +12,7 @@
 #include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
 #include <systems/timer_system.h>
-#include <systems/text_system.h>
+#include <systems/text_render_system.h>
 #include <systems/text_transform_system.h>
 #include <systems/score_system.h>
 #include "scene.h"
@@ -51,7 +51,7 @@ private:
     GhostMovementSystem ghost_movement_system;
     PlayerAnimationSystem player_animation_system;
     TimerSystem timer_system;
-    TextSystem text_system;
+    TextRenderSystem text_render_system;
     TextTransformSystem text_transform_system;
     ScoreSystem score_system;
 

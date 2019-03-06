@@ -3,13 +3,13 @@
 //
 
 #include <graphics/text.h>
-#include "text_system.h"
+#include "text_render_system.h"
 
-TextSystem::TextSystem() {
+TextRenderSystem::TextRenderSystem() {
 
 }
 
-void TextSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+void TextRenderSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     // construct a view for all entities with a sprite
     auto view = registry.view<Text>();
 

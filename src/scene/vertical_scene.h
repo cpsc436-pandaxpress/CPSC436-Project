@@ -15,11 +15,15 @@
 #include <systems/collision_system.h>
 #include <systems/vertical_level_system.h>
 #include <systems/timer_system.h>
+#include <systems/text_transform_system.h>
+#include <systems/text_render_system.h>
+#include <systems/score_system.h>
 
 class VerticalScene : public Scene {
 private:
 
     uint32_t panda_entity;
+    uint32_t score_entity;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
     PhysicsSystem physics_system;
@@ -28,6 +32,10 @@ private:
     VerticalLevelSystem level_system;
     PlayerAnimationSystem player_animation_system;
     TimerSystem timer_system;
+
+    TextRenderSystem text_render_system;
+    TextTransformSystem text_transform_system;
+    ScoreSystem score_system;
 
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;
@@ -47,6 +55,8 @@ public:
     virtual void update(Blackboard& blackboard) override;
 
     virtual void render(Blackboard& blackboard) override;
+
+    void create_score_text(Blackboard &blackboard);
 };
 
 #endif //PANDAEXPRESS_VERTICAL_SCENE_H

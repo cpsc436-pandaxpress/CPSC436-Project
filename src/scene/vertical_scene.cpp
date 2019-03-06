@@ -8,6 +8,9 @@
 #include <components/causes_damage.h>
 #include <components/velocity.h>
 #include <components/platform.h>
+#include <graphics/font.h>
+#include <graphics/text.h>
+#include <components/score.h>
 #include "vertical_scene.h"
 #include "util/constants.h"
 
@@ -19,7 +22,10 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         physics_system(),
         player_movement_system(VERTICAL_SCENE_ID),
         player_animation_system(VERTICAL_SCENE_ID),
-        collision_system() {
+        collision_system(),
+        text_transform_system(),
+        text_render_system(),
+        score_system(VERTICAL_SCENE_ID) {
     init_scene(blackboard);
     gl_has_errors();
 }
@@ -30,6 +36,7 @@ void VerticalScene::init_scene(Blackboard &blackboard) {
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
     create_panda(blackboard);
+    create_score_text(blackboard);
     level_system.init();
 }
 
@@ -84,6 +91,8 @@ void VerticalScene::update(Blackboard &blackboard) {
     collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
+    score_system.update(blackboard, registry_);
+    text_transform_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
 }
@@ -91,10 +100,26 @@ void VerticalScene::update(Blackboard &blackboard) {
 void VerticalScene::render(Blackboard &blackboard) {
     // update the rendering systems
     sprite_render_system.update(blackboard, registry_);
+    text_render_system.update(blackboard, registry_);
 }
 
 void VerticalScene::reset_scene(Blackboard &blackboard) {
     registry_.destroy(panda_entity);
     level_system.destroy_entities(registry_);
+    registry_.destroy(score_entity);
     init_scene(blackboard);
+}
+
+void VerticalScene::create_score_text(Blackboard &blackboard) {
+    auto shader = blackboard.shader_manager.get_shader("text");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+
+    FontType font = FontType();
+    font.load(fonts_path("TitilliumWeb-Bold.ttf"), 48);
+
+    score_entity = registry_.create();
+    std::string textVal = "SCORE: 0";
+    auto &text = registry_.assign<Text>(score_entity, shader, mesh, font, textVal);
+    registry_.assign<Transform>(score_entity, 0., 0., 0., 1.f, 1.f);
+    registry_.assign<Score>(score_entity);
 }
