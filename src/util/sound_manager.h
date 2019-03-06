@@ -6,12 +6,20 @@
 #define PANDAEXPRESS_SOUND_MANAGER_H
 
 
-class SoundManager {
 
+#include <SDL.h>
+#include <SDL_mixer.h>
+#include <sstream>
+#include "util/constants.h"
+
+class SoundManager {
 public:
     SoundManager();
     void init();
+    void changeBackgroundMusic(SceneID id);
 
+private:
+    Mix_Music* m_background_music;
 };
 
 

@@ -22,3 +22,7 @@ void SoundManager::init() {
     m_background_music =  Mix_LoadMUS(audio_path("PE.ogg"));
     Mix_PlayMusic(m_background_music, -1);
 }
+
+void SoundManager::changeBackgroundMusic(SceneID id) {
+
+}
