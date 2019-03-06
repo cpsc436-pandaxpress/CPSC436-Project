@@ -37,8 +37,8 @@ void LevelSystem::generateEntity(int value, float x, float y,
             auto texture = blackboard.texture_manager.get_texture("bread");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-            float scaleY = 75.0 / texture.height();
-            float scaleX = 75.0 / texture.width();
+            float scaleY = 75.0f / texture.height();
+            float scaleX = 75.0f / texture.width();
             auto bread = registry.create();
             registry.assign<Transform>(bread, x, y, 0., scaleX, scaleY);
             registry.assign<Sprite>(bread, texture, shader, mesh);
@@ -56,8 +56,8 @@ void LevelSystem::generateEntity(int value, float x, float y,
             auto texture = blackboard.texture_manager.get_texture("ghost");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-            float scaleY = 70.0 / texture.height();
-            float scaleX = 85.0 / texture.width();
+            float scaleY = 70.0f / texture.height();
+            float scaleX = 85.0f / texture.width();
             auto ghost = registry.create();
             registry.assign<Transform>(ghost, x, y, 0., scaleX,
                                        scaleY);
@@ -74,8 +74,8 @@ void LevelSystem::generateEntity(int value, float x, float y,
             auto texture = blackboard.texture_manager.get_texture("llama");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-            float scaleY = 180.0 / texture.height();
-            float scaleX = 180.0 / texture.width();
+            float scaleY = 180.0f / texture.height();
+            float scaleX = 180.0f / texture.width();
             auto llama = registry.create();
             registry.assign<Transform>(llama, x, y - 200, 0., scaleX,
                                        scaleY);
