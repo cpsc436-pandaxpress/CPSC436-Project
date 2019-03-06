@@ -60,8 +60,9 @@ void EnemyAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
         auto &llama = llama_view.get<Llama>(llama_entity);
         auto &sprite = llama_view.get<Sprite>(llama_entity);
         auto& timer = llama_view.get<Timer>(llama_entity);
-        float target_time = timer.watches["spit"].target_time;
-        float time = timer.curr_time;
+        float target_time, time;
+//        float target_time = timer.watches["spit"].target_time;
+//        float time = timer.curr_time;
 
         animateLlama(llama.alive, time, target_time, sprite);
     }
