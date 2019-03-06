@@ -20,7 +20,7 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         level_system(),
         sprite_render_system(),
         sprite_transform_system(),
-        background_transform_system(),
+        background_transform_system(BOSS_SCENE_ID),
         background_render_system(),
         physics_system(),
         player_movement_system(BOSS_SCENE_ID),
