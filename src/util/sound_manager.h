@@ -10,7 +10,7 @@ class SoundManager {
 
 public:
     SoundManager();
-
+    void init();
 
 };
 
