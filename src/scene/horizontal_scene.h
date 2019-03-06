@@ -13,6 +13,8 @@
 #include <systems/background_transform_system.h>
 #include <systems/timer_system.h>
 #include <systems/text_system.h>
+#include <systems/text_transform_system.h>
+#include <systems/score_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -37,6 +39,7 @@ private:
     uint32_t panda_entity;
     uint32_t tutorial_entity;
     uint32_t tutorial2_entity;
+    uint32_t score_entity;
     HorizontalLevelSystem level_system;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
@@ -49,6 +52,8 @@ private:
     PlayerAnimationSystem player_animation_system;
     TimerSystem timer_system;
     TextSystem text_system;
+    TextTransformSystem text_transform_system;
+    ScoreSystem score_system;
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);
@@ -70,7 +75,7 @@ public:
     static constexpr float CAMERA_SPEED = 400.f;
 
 
-    void create_text(Blackboard &blackboard);
+    void create_score_text(Blackboard &blackboard);
 };
 
 

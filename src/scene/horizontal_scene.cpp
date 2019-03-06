@@ -10,6 +10,7 @@
 #include <components/velocity.h>
 #include <components/tutorial.h>
 #include <graphics/text.h>
+#include <components/score.h>
 #include "horizontal_scene.h"
 #include "util/constants.h"
 
@@ -25,7 +26,9 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         collision_system(),
         ghost_movement_system(),
         player_animation_system(HORIZONTAL_SCENE_ID),
-        text_system()
+        text_system(),
+        text_transform_system(),
+        score_system()
 {
     init_scene(blackboard);
     create_tutorial(blackboard);
@@ -52,6 +55,8 @@ void HorizontalScene::update(Blackboard &blackboard) {
     sprite_transform_system.update(blackboard, registry_);
     ghost_movement_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
+    score_system.update(blackboard, registry_);
+    text_transform_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
 }
 
@@ -115,7 +120,7 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
     blackboard.camera.compose();
     create_background(blackboard);
     create_panda(blackboard);
-    create_text(blackboard);
+    create_score_text(blackboard);
     level_system.init();
 }
 
@@ -187,23 +192,18 @@ void HorizontalScene::create_tutorial(Blackboard &blackboard) {
 
 }
 
-void HorizontalScene::create_text(Blackboard &blackboard) {
-    auto text = registry_.create();
+void HorizontalScene::create_score_text(Blackboard &blackboard) {
     auto shader = blackboard.shader_manager.get_shader("text");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+
     FontType font = FontType();
-    font.load(fonts_path("ocraext.ttf"), 48);
+    font.load(fonts_path("TitilliumWeb-Bold.ttf"), 48);
 
-    auto chTex = font.characters['C'];
-    bool result = !gl_has_errors();
-    auto texture = Texture(static_cast<int>(chTex.size.x), static_cast<int>(chTex.size.y), chTex.tex_id);
-    printf("loading text: %s\n", (result) ? "true" : "false");
-    registry_.assign<Transform>(text, 0., 0., 0., 1.f, 1.f);
-    auto &sprite = registry_.assign<Sprite>(text, texture, shader, mesh); // TODO write a Text class similar to sprite which has blending (maybe use text.glsl)
-    sprite.set_color(0.0, 1.0, 1.0);
-
-//    vec3 color = {1.0f, 1.0f, 1.0f};
-//    registry_.assign<Text>(text, shader, mesh, font, color, "Hello World", 800.f, 450.f);
+    score_entity = registry_.create();
+    std::string textVal = "SCORE: 0";
+    auto &text = registry_.assign<Text>(score_entity, shader, mesh, font, textVal);
+    registry_.assign<Transform>(score_entity, 0., 0., 0., 1.f, 1.f);
+    registry_.assign<Score>(score_entity);
 }
 
 

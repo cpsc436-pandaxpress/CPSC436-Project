@@ -17,13 +17,13 @@ private:
     Mesh mesh_;
     Shader shader_;
     FontType font_;
-    vec2 position_, pixel_scale_;
+    vec2 position_;
     vec3 color_;
-    float rotation_, scale_;
+    float scale_;
     std::string text_;
 
 public:
-    Text(Shader shader, Mesh mesh, FontType font, vec3 color, const char* text, float width, float height);
+    Text(Shader shader, Mesh mesh, FontType font, std::string text);
     Text(const Text& other);
 
     void draw(const mat3& projection);
@@ -37,12 +37,12 @@ public:
 
     void set_size(int x_size, int y_size);
 
-    float rotation_rad();
-    void set_rotation_rad(float theta);
-
     vec3 color();
     void set_color(const vec3& color);
     void set_color(float r, float g, float b);
+
+    std::string text();
+    void set_text(std::string text);
 };
 
 

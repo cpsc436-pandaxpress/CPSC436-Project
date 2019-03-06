@@ -105,7 +105,12 @@ set(SOURCE_FILES
         src/graphics/font.cpp
         src/graphics/font.h
         src/systems/text_system.cpp
-        src/systems/text_system.h)
+        src/systems/text_system.h
+        src/systems/text_transform_system.cpp
+        src/systems/text_transform_system.h
+        src/systems/score_system.cpp
+        src/systems/score_system.h
+        src/components/score.h)
 
 
 # Create executable target
