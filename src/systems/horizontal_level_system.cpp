@@ -10,6 +10,7 @@
 #include <components/timer.h>
 #include "horizontal_level_system.h"
 
+
 HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem() {
     init();
 }
@@ -60,7 +61,6 @@ void HorizontalLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
     registry.destroy<Bread>();
     registry.destroy<Ghost>();
     registry.destroy<Obstacle>();
-
     while (!chunks_.empty()) {
         chunks_.front().clear();
         chunks_.pop();

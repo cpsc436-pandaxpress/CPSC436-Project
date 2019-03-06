@@ -33,7 +33,7 @@ protected:
     const float PROJECTILE_SPEED_X = -300.f;
     const float PROJECTILE_SPEED_Y = 10.f;
     const int SEED = 48;
-    const std::string SPIT_TIMER_LABEL = "spit";
+//    const std::string SPIT_TIMER_LABEL = "spit";
     const float PLATFORM_HEIGHT = 20.f;
 
     virtual void load_next_chunk() = 0;
@@ -44,6 +44,8 @@ protected:
                         Blackboard &blackboard, entt::DefaultRegistry &registry);
 
 public:
+    const std::string SPIT_TIMER_LABEL = "spit";
+
 
     LevelSystem();
 

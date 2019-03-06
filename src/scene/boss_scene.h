@@ -24,6 +24,8 @@
 #include "../systems/jacko_ai_system.h"
 #include "../systems/chase_system.h"
 #include "../systems/player_animation_system.h"
+#include "../systems/enemy_animation_system.h"
+
 
 
 class BossScene: public Scene {
@@ -54,6 +56,8 @@ private:
     PlayerAnimationSystem player_animation_system;
     TimerSystem timer_system;
     PandaDamageSystem panda_dmg_system;
+    EnemyAnimationSystem enemy_animation_system;
+
 
 
     void create_background(Blackboard &blackboard);

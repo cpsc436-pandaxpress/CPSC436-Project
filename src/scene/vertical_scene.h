@@ -16,6 +16,8 @@
 #include <systems/vertical_level_system.h>
 #include <systems/timer_system.h>
 #include <systems/panda_damage_system.h>
+#include <systems/enemy_animation_system.h>
+
 
 class VerticalScene : public Scene {
 private:
@@ -28,6 +30,7 @@ private:
     CollisionSystem collision_system;
     VerticalLevelSystem level_system;
     PlayerAnimationSystem player_animation_system;
+    EnemyAnimationSystem enemy_animation_system;
     TimerSystem timer_system;
     PandaDamageSystem panda_dmg_system;
 

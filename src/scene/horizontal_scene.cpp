@@ -25,7 +25,8 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         collision_system(),
         ghost_movement_system(),
         player_animation_system(HORIZONTAL_SCENE_ID),
-        panda_dmg_system()
+        panda_dmg_system(),
+        enemy_animation_system()
 {
     init_scene(blackboard);
     create_tutorial(blackboard);
@@ -54,6 +55,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
     ghost_movement_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
+    enemy_animation_system.update(blackboard, registry_);
 }
 
 void HorizontalScene::update_panda(Blackboard &blackboard) {
