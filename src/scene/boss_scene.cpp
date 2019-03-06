@@ -89,6 +89,7 @@ void BossScene::render(Blackboard &blackboard) {
 }
 
 void BossScene::reset_scene(Blackboard &blackboard) {
+
     level_system.destroy_entities(registry_);
     registry_.destroy(panda_entity);
     registry_.destroy(jacko_entity);

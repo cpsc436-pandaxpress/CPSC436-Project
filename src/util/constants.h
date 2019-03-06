@@ -14,6 +14,11 @@
 #define levels_path(name) data_path "/levels/" name
 
 typedef int SceneID;
+typedef int SFXID;
+
+static const SFXID SFX_JUMP = 0;
+static const SFXID SFX_JACKO_LAUGH = 1;
+static const SFXID SFX_PANDA_HURT = 2;
 
 static const SceneID MAIN_MENU_SCENE_ID   = 0;
 static const SceneID HORIZONTAL_SCENE_ID  = 1;

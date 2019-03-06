@@ -17,9 +17,10 @@ public:
     SoundManager();
     void init();
     void changeBackgroundMusic(SceneID id);
-
+    void playSFX(SFXID id);
 private:
     Mix_Music* m_background_music;
+    Mix_Chunk* m_sfx;
 };
 
 
