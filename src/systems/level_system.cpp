@@ -99,7 +99,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             auto scale = static_cast<float>(CELL_WIDTH / texture.width());
             auto stalagmite2 = registry.create();
             registry.assign<Obstacle>(stalagmite2);
-            registry.assign<Transform>(stalagmite2, x, y-35.f, 0., scale,
+            registry.assign<Transform>(stalagmite2, x, y - 35.f, 0., scale,
                                        scale);
             registry.assign<Sprite>(stalagmite2, texture, shader, mesh);
             registry.assign<Collidable>(stalagmite2, texture.width() * scale,
@@ -114,7 +114,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             auto stalagmite = registry.create();
             registry.assign<Obstacle>(stalagmite);
             registry.assign<CausesDamage>(stalagmite, false, true, 1);
-            registry.assign<Transform>(stalagmite, x, y-30.f, 0., scale,
+            registry.assign<Transform>(stalagmite, x, y - 30.f, 0., scale,
                                        scale);
             registry.assign<Sprite>(stalagmite, texture, shader, mesh);
             registry.assign<Collidable>(stalagmite, texture.width() * scale,
@@ -133,7 +133,7 @@ void LevelSystem::generateProjectile(float x, float y, Blackboard &blackboard, e
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
     auto scale = static_cast<float>(CELL_WIDTH / texture.width()/2);
     auto projectile = registry.create();
-    registry.assign<Transform>(projectile, x - 80, y + 30, 0., scale,
+    registry.assign<Transform>(projectile, x - 80.f, y + 30.f, 0., scale,
                                scale);
     registry.assign<Sprite>(projectile, texture, shader, mesh);
     registry.assign<Spit>(projectile);
