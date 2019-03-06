@@ -53,16 +53,7 @@ void BossLevelSystem::generate_next_chunk(Blackboard &blackboard,
 }
 
 void BossLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
-    registry.destroy<Platform>();
-    registry.destroy<Llama>();
-    registry.destroy<Spit>();
-    registry.destroy<Bread>();
-    registry.destroy<Ghost>();
-    registry.destroy<Obstacle>();
-    while (!chunks_.empty()) {
-        chunks_.front().clear();
-        chunks_.pop();
-    }
+
 }
 
 void BossLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
