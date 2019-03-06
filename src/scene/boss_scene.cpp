@@ -12,6 +12,7 @@
 #include <components/jacko.h>
 #include <components/chases.h>
 #include <components/tutorial.h>
+#include <components/timer.h>
 #include "boss_scene.h"
 #include "util/constants.h"
 
@@ -27,7 +28,9 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         collision_system(),
         chase_system(),
         jacko_ai_system(blackboard, registry_),
-        player_animation_system(BOSS_SCENE_ID){
+        player_animation_system(BOSS_SCENE_ID),
+        timer_system(),
+        panda_dmg_system(){
     init_scene(blackboard);
 
     gl_has_errors();
@@ -49,9 +52,11 @@ void BossScene::update(Blackboard &blackboard) {
     player_movement_system.update(blackboard, registry_);
     collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
+    panda_dmg_system.update(blackboard, registry_);
     jacko_ai_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
+    timer_system.update(blackboard, registry_);
 }
 
 void BossScene::update_panda(Blackboard &blackboard) {
@@ -119,11 +124,12 @@ void BossScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Sprite>(panda_entity, texture, shader, mesh);
     registry_.assign<Panda>(panda_entity);
     registry_.assign<ObeysGravity>(panda_entity);
-    registry_.assign<Health>(panda_entity, 1);
+    registry_.assign<Health>(panda_entity, 3);
     registry_.assign<Interactable>(panda_entity);
     registry_.assign<CausesDamage>(panda_entity, false, true, 1);
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
+    registry_.assign<Timer>(panda_entity);
 }
 
 void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
