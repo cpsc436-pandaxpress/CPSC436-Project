@@ -18,6 +18,7 @@
 #include "../util/blackboard.h"
 #include "../systems/physics_system.h"
 #include "../systems/player_movement_system.h"
+#include "../systems/timer_system.h"
 #include "../systems/collision_system.h"
 #include "../systems/jacko_ai_system.h"
 #include "../systems/chase_system.h"
@@ -50,6 +51,7 @@ private:
     ChaseSystem chase_system;
     JackoAISystem jacko_ai_system;
     PlayerAnimationSystem player_animation_system;
+    TimerSystem timer_system;
 
 
     void create_background(Blackboard &blackboard);
@@ -70,6 +72,7 @@ public:
     void create_platforms(Blackboard &blackboard);
     void create_food(Blackboard &blackboard);
     virtual void render(Blackboard& blackboard) override;
+    void update_falling_platforms(Blackboard &blackboard);
 
 };
 

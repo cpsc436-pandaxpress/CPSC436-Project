@@ -61,18 +61,11 @@ void BossLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
 }
 
 void BossLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    float max_x =
-            blackboard.camera.position().x + blackboard.camera.size().x; // some distance off camera
-    float min_x =
-            blackboard.camera.position().x - blackboard.camera.size().x; // some distance off camera
-    while (last_col_loaded_ < max_x) {
-        load_next_chunk();
-    }
-//    destroy_off_screen(registry, min_x); // fixme Do not uncomment, not working right now
-    generate_next_chunk(blackboard, registry);
+
 }
 
 void BossLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float x) {
 
 
 }
+

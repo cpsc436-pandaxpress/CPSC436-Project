@@ -84,6 +84,7 @@ set(SOURCE_FILES
         src/systems/chase_system.h
         src/util/node.cpp
         src/util/node.h
+        src/components/falling_platform.h
         src/util/selector_node.h
         src/util/selector_node.cpp
         src/systems/jacko_ai_system.cpp

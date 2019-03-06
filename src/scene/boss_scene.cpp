@@ -7,10 +7,12 @@
 #include <components/obeys_gravity.h>
 #include <components/health.h>
 #include <components/interactable.h>
+#include <components/falling_platform.h>
 #include <components/causes_damage.h>
 #include <components/velocity.h>
 #include <components/jacko.h>
 #include <components/chases.h>
+#include <components/timer.h>
 #include <components/tutorial.h>
 #include "boss_scene.h"
 #include "util/constants.h"
@@ -26,6 +28,7 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         player_movement_system(BOSS_SCENE_ID),
         collision_system(),
         chase_system(),
+        timer_system(),
         jacko_ai_system(blackboard, registry_),
         player_animation_system(BOSS_SCENE_ID){
     init_scene(blackboard);
@@ -43,6 +46,7 @@ void BossScene::update(Blackboard &blackboard) {
 
     update_camera(blackboard);
     update_panda(blackboard);
+    update_falling_platforms(blackboard);
 
 
     chase_system.update(blackboard, registry_);
@@ -52,6 +56,7 @@ void BossScene::update(Blackboard &blackboard) {
     jacko_ai_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
+    timer_system.update(blackboard, registry_);
 }
 
 void BossScene::update_panda(Blackboard &blackboard) {
@@ -88,6 +93,7 @@ void BossScene::reset_scene(Blackboard &blackboard) {
     registry_.destroy(panda_entity);
     registry_.destroy(jacko_entity);
     registry_.destroy<Food>();
+    registry_.destroy<Platform>();
     for (uint32_t e: bg_entities) {
         registry_.destroy(e);
     }
@@ -230,9 +236,29 @@ void BossScene::create_platforms(Blackboard &blackboard) {
         registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale);
     }
 
+    auto falling_platform = registry_.create();
+    registry_.assign<Platform>(falling_platform);
+    registry_.assign<FallingPlatform>(falling_platform);
+    registry_.assign<Transform>(falling_platform, 0, 100, 0, scale, scale);
+    registry_.assign<Sprite>(falling_platform, texture, shader, mesh);
+    registry_.assign<Velocity>(falling_platform, 0.f, 0.f);
+    registry_.assign<Collidable>(falling_platform, texture.width() * scale, texture.height() * scale);
+    auto& timer = registry_.assign<Timer>(falling_platform);
+
+
 }
 
-
+void BossScene::update_falling_platforms(Blackboard &blackboard) {
+    auto falling_platform_view = registry_.view<Platform, Transform, Timer, FallingPlatform>();
+    for (auto falling_platform_entity : falling_platform_view) {
+        auto& platform_timer  = falling_platform_view.get<Timer>(falling_platform_entity);
+        auto& falling_platform  = falling_platform_view.get<FallingPlatform>(falling_platform_entity);
+        if(platform_timer.is_done("fall")) {
+            registry_.assign<ObeysGravity>(falling_platform_entity,1.4f);
+            registry_.remove<Timer>(falling_platform_entity);
+        }
+    }
+}
 
 
 

@@ -6,8 +6,10 @@
 #include <iostream>
 #include "components/collidable.h"
 #include "components/jacko.h"
+#include "components/timer.h"
 #include "components/health.h"
 #include "components/platform.h"
+#include "components/falling_platform.h"
 #include "components/food.h"
 #include "components/velocity.h"
 #include "components/interactable.h"
@@ -39,8 +41,8 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
      */
 
     auto interactable_view = registry.view<Interactable, Collidable, Transform, Velocity>();
-
     auto platform_view = registry.view<Collidable, Transform, Platform>();
+    auto falling_platform_view = registry.view<Collidable, Transform, FallingPlatform, Timer>();
 
     for (auto entity: interactable_view) {
         auto &interactable = interactable_view.get<Interactable>(entity);
@@ -64,12 +66,39 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
             }
 
         }
+        for (auto pl_entity: falling_platform_view) {
+            if (registry.has<Panda>(pl_entity) || registry.has<Bread>(pl_entity))
+                break;
+
+            auto &collidable2 = falling_platform_view.get<Collidable>(pl_entity);
+            auto &transform2 = falling_platform_view.get<Transform>(pl_entity);
+            auto &platform = falling_platform_view.get<FallingPlatform>(pl_entity);
+            auto &timer = falling_platform_view.get<Timer>(pl_entity);
+
+            if (checkCollision(collidable1, transform1, velocity, collidable2, transform2)) {
+                if (transform1.y < transform2.y) {
+                    transform1.y = transform2.y - collidable1.height / 2 - collidable2.height / 2;
+                    hitTheGround = true;
+                    platform.shaking = true;
+                    if(!timer.watch_exists("fall")){
+                        timer.save_watch("fall", 0.5f);
+                    }
+
+                }
+            }
+
+        }
+
         if (!hitTheGround) {
             interactable.grounded = false;
         } else {
             interactable.grounded = true;
         }
     }
+
+
+
+
 
     // TODO: generalize this to use the causesDamage component
     auto pandas_view = registry.view<Panda, Transform, Interactable, Collidable, Velocity>();
