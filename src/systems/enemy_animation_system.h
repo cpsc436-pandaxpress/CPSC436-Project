@@ -16,13 +16,13 @@ public:
 
 private:
     float breadWidth = 0.143;
-    float breadHeight = 1.0;
+    float breadHeight = 0.5;
     float llamaWidth = 0.0714;
-    float llamaHeight = 0.5;
+    float llamaHeight = 0.25;
     float ghostWidth = 0.1428;
     float ghostHeight = 1.f;
     float jackoWidth = 0.143f;
-    float jackoHeight = 0.5f;
+    float jackoHeight = 0.25f;
     float spitWidth = 0.5f;
     float spitHeight = 0.5f;
 
@@ -34,9 +34,9 @@ private:
     float animationTime = 0.f;
     float frameRate = 4.f;
 
-    void animateBread(Sprite &sprite);
-    void animateLlama(float time, float target_time, Sprite &sprite);
-    void animateJacko(Sprite &sprite);
+    void animateBread(bool alive, Sprite &sprite);
+    void animateLlama(bool alive, float time, float targetTime, Sprite &sprite);
+    void animateJacko(bool alive, bool evading, Sprite &sprite);
     void animateGhost(Sprite &sprite);
     void animateSpit(Sprite &sprite);
 
