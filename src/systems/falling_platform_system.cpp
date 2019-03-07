@@ -15,9 +15,9 @@ void FallingPlatformSystem::update(Blackboard& blackboard, entt::DefaultRegistry
 
         if(falling_platform.shaking){
             if(falling_platform.shakeLeft){
-                transform.x-=1;
+                transform.x-=5;
             }else{
-                transform.x+=1;
+                transform.x+=5;
             }
             falling_platform.shakeLeft=!falling_platform.shakeLeft;
         }
