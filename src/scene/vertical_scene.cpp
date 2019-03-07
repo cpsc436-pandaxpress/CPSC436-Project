@@ -24,8 +24,7 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         player_movement_system(VERTICAL_SCENE_ID),
         player_animation_system(VERTICAL_SCENE_ID),
         collision_system(),
-        panda_dmg_system() {
-        collision_system(),
+        panda_dmg_system(),
         text_transform_system(),
         text_render_system(),
         score_system(VERTICAL_SCENE_ID) {

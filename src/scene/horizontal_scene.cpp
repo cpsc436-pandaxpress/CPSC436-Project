@@ -27,8 +27,7 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         collision_system(),
         ghost_movement_system(),
         player_animation_system(HORIZONTAL_SCENE_ID),
-        panda_dmg_system()
-        player_animation_system(HORIZONTAL_SCENE_ID),
+        panda_dmg_system(),
         text_render_system(),
         text_transform_system(),
         score_system(HORIZONTAL_SCENE_ID)
