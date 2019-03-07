@@ -10,6 +10,10 @@ Timer::Timer() {
     curr_time = 0;
 }
 
+bool::Timer::watch_exists(string label){
+    return(watches.find(label)!=watches.end());
+}
+
 void Timer::save_watch(string label, float time) {
     watches[label] = {time, curr_time + time};
 }

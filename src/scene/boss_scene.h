@@ -20,8 +20,10 @@
 #include "../util/blackboard.h"
 #include "../systems/physics_system.h"
 #include "../systems/player_movement_system.h"
+#include "../systems/timer_system.h"
 #include "../systems/collision_system.h"
 #include "../systems/jacko_ai_system.h"
+#include "../systems/falling_platform_system.h"
 #include "../systems/chase_system.h"
 #include "../systems/player_animation_system.h"
 
@@ -53,6 +55,7 @@ private:
     JackoAISystem jacko_ai_system;
     PlayerAnimationSystem player_animation_system;
     TimerSystem timer_system;
+    FallingPlatformSystem falling_platform_system;
     PandaDamageSystem panda_dmg_system;
 
 

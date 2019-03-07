@@ -84,6 +84,7 @@ set(SOURCE_FILES
         src/systems/chase_system.h
         src/util/node.cpp
         src/util/node.h
+        src/components/falling_platform.h
         src/util/selector_node.h
         src/util/selector_node.cpp
         src/systems/jacko_ai_system.cpp
@@ -99,6 +100,7 @@ set(SOURCE_FILES
         src/components/timer.cpp
         src/components/timer.h
         src/systems/timer_system.cpp
+        src/systems/timer_system.h src/systems/falling_platform_system.cpp src/systems/falling_platform_system.h
         src/systems/timer_system.h
         src/systems/panda_damage_system.cpp
         src/systems/panda_damage_system.h src/util/sound_manager.cpp src/util/sound_manager.h)

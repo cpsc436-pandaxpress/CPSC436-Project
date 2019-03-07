@@ -7,10 +7,12 @@
 #include <components/obeys_gravity.h>
 #include <components/health.h>
 #include <components/interactable.h>
+#include <components/falling_platform.h>
 #include <components/causes_damage.h>
 #include <components/velocity.h>
 #include <components/jacko.h>
 #include <components/chases.h>
+#include <components/timer.h>
 #include <components/tutorial.h>
 #include <components/timer.h>
 #include "boss_scene.h"
@@ -30,7 +32,9 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         jacko_ai_system(blackboard, registry_),
         player_animation_system(BOSS_SCENE_ID),
         timer_system(),
+        falling_platform_system(),
         panda_dmg_system(){
+
     init_scene(blackboard);
 
     gl_has_errors();
@@ -57,6 +61,7 @@ void BossScene::update(Blackboard &blackboard) {
     sprite_transform_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
+    falling_platform_system.update(blackboard, registry_);
 }
 
 void BossScene::update_panda(Blackboard &blackboard) {
@@ -94,6 +99,7 @@ void BossScene::reset_scene(Blackboard &blackboard) {
     registry_.destroy(panda_entity);
     registry_.destroy(jacko_entity);
     registry_.destroy<Food>();
+    registry_.destroy<Platform>();
     for (uint32_t e: bg_entities) {
         registry_.destroy(e);
     }
@@ -236,9 +242,18 @@ void BossScene::create_platforms(Blackboard &blackboard) {
         registry_.assign<Sprite>(platform, texture, shader, mesh);
         registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale);
     }
+/*
+    auto falling_platform = registry_.create();
+    registry_.assign<Platform>(falling_platform);
+    registry_.assign<FallingPlatform>(falling_platform);
+    registry_.assign<Transform>(falling_platform, 0, 100, 0, scale, scale);
+    registry_.assign<Sprite>(falling_platform, texture, shader, mesh);
+    registry_.assign<Velocity>(falling_platform, 0.f, 0.f);
+    registry_.assign<Collidable>(falling_platform, texture.width() * scale, texture.height() * scale);
+    auto& timer = registry_.assign<Timer>(falling_platform);
 
+*/
 }
-
 
 
 
