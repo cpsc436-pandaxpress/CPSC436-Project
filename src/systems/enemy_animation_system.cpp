@@ -74,15 +74,17 @@ void EnemyAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
 
 void EnemyAnimationSystem::animateBread(bool alive, Sprite &sprite){
     int row;
-    int index = ((int) animationTime % breadFrames);
     if (alive) {
         row = 1;
     } else {
         row = 2;
         frameRate = 15.f;
+        breadFrames = 3;
     }
-    vec2 uv1 = {index*breadWidth, breadHeight*(row-1)};
-    vec2 uv2 = {(index+1)*breadWidth, (row)*breadHeight - 0.08f};
+    int index = ((int) animationTime % breadFrames);
+
+    vec2 uv1 = {index*breadWidth, breadHeight*(row-1) + 0.01f};
+    vec2 uv2 = {(index+1)*breadWidth, (row)*breadHeight - 0.01f};
     sprite.set_uvs(uv1, uv2);
 }
 
@@ -98,7 +100,7 @@ void EnemyAnimationSystem::animateLlama(bool alive, float time, float targetTime
         row = 3;
         i = 0.0f;
         frameRate = 10.f;
-        llamaFrames = 6;
+        llamaFrames = 5;
     }
 
 //    float mod = fmod(time, targetTime);
