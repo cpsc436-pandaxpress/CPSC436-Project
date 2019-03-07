@@ -63,6 +63,7 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
             walkable.grounded = false;
             velocity.y_velocity = -PANDA_JUMP_SPEED;
             time_since_jump = 0.f;
+            blackboard.soundManager.playSFX(SFX_JUMP);
             holding_jump = true;
         }
 
@@ -101,7 +102,8 @@ void PlayerMovementSystem::update_horizontal_scene(Blackboard &blackboard, Veloc
     }
 }
 
-void PlayerMovementSystem::update_vertical_scene(Blackboard &blackboard, Velocity &velocity, Panda &panda) {
+void PlayerMovementSystem::update_vertical_scene(Blackboard &blackboard,
+        Velocity &velocity, Panda &panda) {
     const float dvx = PANDA_ACCELERATION * blackboard.delta_time;
     if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
         // First if for quick turn around, otherwise it felt too slidey when switching movement direction
@@ -133,7 +135,8 @@ void PlayerMovementSystem::update_vertical_scene(Blackboard &blackboard, Velocit
     }
 }
 
-void PlayerMovementSystem::update_boss_scene(Blackboard &blackboard, Velocity &velocity, Panda &panda) {
+void PlayerMovementSystem::update_boss_scene(Blackboard &blackboard,
+        Velocity &velocity, Panda &panda) {
     const float dvx = PANDA_ACCELERATION * blackboard.delta_time;
     if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
         // First if for quick turn around, otherwise it felt too slidey when switching movement direction

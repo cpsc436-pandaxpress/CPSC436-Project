@@ -43,10 +43,11 @@ int main(int argc, char** argv) {
         ShaderManager(),
         TextureManager(),
         window,
-        Random(0)
+        Random(0),
+        SoundManager()
     };
 
-    auto scene_manager = SceneManager();
+
 
     //load assets and configure
 
@@ -99,7 +100,9 @@ int main(int argc, char** argv) {
 
 
     blackboard.mesh_manager.load_mesh("sprite", 4, Sprite::vertices, 6, Sprite::indices);
+    blackboard.soundManager.init();
 
+    auto scene_manager = SceneManager(blackboard);
 
     // initialize scenes here
     MainMenuScene main_menu(blackboard, scene_manager);

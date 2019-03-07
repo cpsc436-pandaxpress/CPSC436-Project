@@ -8,9 +8,10 @@
 
 #include "../util/blackboard.h"
 #include "../util/input_manager.h"
+#include "../util/constants.h"
 
 // Simple int ID
-typedef uint32_t SceneID;
+
 
 //prototype declaration to avoid circular references
 class SceneManager;
