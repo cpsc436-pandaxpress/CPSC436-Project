@@ -38,12 +38,15 @@ if(id==BOSS_SCENE_ID){
 void SoundManager::playSFX(SFXID id) {
     if(id==SFX_JUMP){
         m_sfx = Mix_LoadWAV(audio_path("jump.wav"));
+        Mix_PlayChannel(1, m_sfx,0);
     }
     if(id==SFX_JACKO_LAUGH){
         m_sfx = Mix_LoadWAV(audio_path("JackoLaugh.wav"));
+        Mix_PlayChannel(2, m_sfx,0);
     }
     if(id==SFX_PANDA_HURT){
         m_sfx = Mix_LoadWAV(audio_path("PandaHurt.wav"));
+        Mix_PlayChannel(3, m_sfx,0);
     }
-    Mix_PlayChannel(-1, m_sfx,0);
+
 }
