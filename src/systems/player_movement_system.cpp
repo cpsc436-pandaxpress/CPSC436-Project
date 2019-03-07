@@ -101,7 +101,8 @@ void PlayerMovementSystem::update_horizontal_scene(Blackboard &blackboard, Veloc
     }
 }
 
-void PlayerMovementSystem::update_vertical_scene(Blackboard &blackboard, Velocity &velocity) {
+void PlayerMovementSystem::update_vertical_scene(Blackboard &blackboard,
+        Velocity &velocity, Panda &panda) {
     const float dvx = PANDA_ACCELERATION * blackboard.delta_time;
     if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
         // First if for quick turn around, otherwise it felt too slidey when switching movement direction
@@ -133,7 +134,8 @@ void PlayerMovementSystem::update_vertical_scene(Blackboard &blackboard, Velocit
     }
 }
 
-void PlayerMovementSystem::update_boss_scene(Blackboard &blackboard, Velocity &velocity) {
+void PlayerMovementSystem::update_boss_scene(Blackboard &blackboard,
+        Velocity &velocity, Panda &panda) {
     const float dvx = PANDA_ACCELERATION * blackboard.delta_time;
     if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
         // First if for quick turn around, otherwise it felt too slidey when switching movement direction
