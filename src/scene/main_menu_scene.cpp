@@ -93,6 +93,7 @@ void MainMenuScene::render(Blackboard& blackboard) {
     auto& projection = blackboard.camera.get_projection();
 
     splash_sprite_.draw(projection);
+    create_background(blackboard);
 
     for (auto i = 0; i < button_sprites_.size(); i++) {
         button_sprites_[i].draw(projection);
