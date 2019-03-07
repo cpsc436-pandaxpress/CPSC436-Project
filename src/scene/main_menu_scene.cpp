@@ -3,8 +3,10 @@
 //
 
 #include "main_menu_scene.h"
+#include <graphics/background.h>
 
-static const int BUTTON_WIDTH = 280;
+
+static const int BUTTON_WIDTH = 350;
 static const int BUTTON_HEIGHT = 120;
 static const int BUTTON_PADDING = 40;
 
@@ -20,7 +22,9 @@ MainMenuScene::MainMenuScene(Blackboard& blackboard, SceneManager& scene_manager
     button_sprites_(),
     button_bg_sprites_(),
     button_y_positions_(),
-    button_targets_()
+    button_targets_(),
+    background_transform_system(),
+    background_render_system()
 {
 }
 
@@ -29,6 +33,8 @@ void MainMenuScene::update(Blackboard& blackboard) {
     auto cam_size = blackboard.camera.size();
     splash_sprite_.set_size((int)cam_size.x, (int)cam_size.y);
     splash_sprite_.set_pos(0, 0);
+
+    background_transform_system.update(blackboard, registry_);
 
     //set button alignment
     int count = button_sprites_.size();
@@ -61,7 +67,7 @@ void MainMenuScene::update(Blackboard& blackboard) {
 
     for (auto i = 0; i < count; i++) {
         if (i == selected_button_) {
-            button_sprites_[i].set_color(0.7f, 0.9f, 0.7f);
+            button_sprites_[i].set_color(0.7f, 0.9f, 0.9f);
             button_bg_sprites_[i].set_color(0.5f, 0.5f, 0.5f);
         }
         else {
@@ -107,4 +113,30 @@ void MainMenuScene::add_item(Blackboard& blackboard, char* texture_name, SceneID
     button_bg_sprites_.push_back(bg_sprite);
     button_y_positions_.push_back(0);
     button_targets_.push_back(sceneID);
+}
+
+
+void MainMenuScene::create_background(Blackboard &blackboard) {
+    std::vector<Texture> textures;
+    textures.reserve(4);
+    // This order matters for rendering
+    textures.push_back(blackboard.texture_manager.get_texture("bg_top"));
+    textures.push_back(blackboard.texture_manager.get_texture("bg_front"));
+    textures.push_back(blackboard.texture_manager.get_texture("bg_middle"));
+    textures.push_back(blackboard.texture_manager.get_texture("bg_back"));
+    // end order
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+    int i = 0;
+    for (Texture t: textures) {
+        auto bg_entity = registry_.create();
+        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, i);
+        bg.set_pos1(0.0f, 0.0f);
+        bg.set_pos2(blackboard.camera.size().x, 0.0f);
+        bg.set_rotation_rad(0.0f);
+        bg.set_scale(blackboard.camera.size().x / t.width(),
+                     blackboard.camera.size().y / t.height());
+        bg_entities.push_back(bg_entity);
+        i++;
+    }
 }

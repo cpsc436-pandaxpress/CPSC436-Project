@@ -7,18 +7,26 @@
 
 #include <cinttypes>
 #include <vector>
+#include <systems/background_render_system.h>
+#include <systems/background_transform_system.h>
 #include "scene.h"
+
 
 
 class MainMenuScene : public Scene {
 private:
     Sprite splash_sprite_;
     uint32_t button_width_, button_height_;
+    std::vector<uint32_t> bg_entities;
     std::vector<Sprite> button_sprites_;
     std::vector<Sprite> button_bg_sprites_;
     std::vector<uint32_t> button_y_positions_;
     std::vector<SceneID> button_targets_;
     int selected_button_ = -1;
+    BackgroundRenderSystem background_render_system;
+    BackgroundTransformSystem background_transform_system;
+
+    void create_background(Blackboard &blackboard);
 
 public:
     MainMenuScene(Blackboard& blackboard, SceneManager& scene_manager);
