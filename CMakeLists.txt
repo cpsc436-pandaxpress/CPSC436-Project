@@ -100,7 +100,7 @@ set(SOURCE_FILES
         src/components/timer.cpp
         src/components/timer.h
         src/systems/timer_system.cpp
-        src/systems/timer_system.h)
+        src/systems/timer_system.h src/systems/falling_platform_system.cpp src/systems/falling_platform_system.h)
 
 
 # Create executable target

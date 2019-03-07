@@ -30,7 +30,8 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         chase_system(),
         timer_system(),
         jacko_ai_system(blackboard, registry_),
-        player_animation_system(BOSS_SCENE_ID){
+        player_animation_system(BOSS_SCENE_ID),
+        falling_platform_system(){
     init_scene(blackboard);
 
     gl_has_errors();
@@ -46,7 +47,6 @@ void BossScene::update(Blackboard &blackboard) {
 
     update_camera(blackboard);
     update_panda(blackboard);
-    update_falling_platforms(blackboard);
 
 
     chase_system.update(blackboard, registry_);
@@ -57,6 +57,7 @@ void BossScene::update(Blackboard &blackboard) {
     sprite_transform_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
+    falling_platform_system.update(blackboard, registry_);
 }
 
 void BossScene::update_panda(Blackboard &blackboard) {
@@ -248,17 +249,6 @@ void BossScene::create_platforms(Blackboard &blackboard) {
 
 }
 
-void BossScene::update_falling_platforms(Blackboard &blackboard) {
-    auto falling_platform_view = registry_.view<Platform, Transform, Timer, FallingPlatform>();
-    for (auto falling_platform_entity : falling_platform_view) {
-        auto& platform_timer  = falling_platform_view.get<Timer>(falling_platform_entity);
-        auto& falling_platform  = falling_platform_view.get<FallingPlatform>(falling_platform_entity);
-        if(platform_timer.is_done("fall")) {
-            registry_.assign<ObeysGravity>(falling_platform_entity,1.4f);
-            registry_.remove<Timer>(falling_platform_entity);
-        }
-    }
-}
 
 
 
