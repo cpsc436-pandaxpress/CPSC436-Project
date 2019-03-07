@@ -17,6 +17,7 @@ class Timer {
 public:
     Timer();
     bool is_done(std::string label);
+    bool watch_exists(std::string label);
     void save_watch(std::string label, float time);
     void update(float delta_time);
     void reset_watch(std::string label);

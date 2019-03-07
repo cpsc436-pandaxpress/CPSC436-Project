@@ -15,11 +15,11 @@
 class SceneManager {
 private:
     std::unordered_map<SceneID, Scene*> scenes_;
-
+    Blackboard& blackboard;
     bool current_scene_set_ = false;
 
 public:
-    SceneManager();
+    SceneManager(Blackboard& blackboard);
     SceneID current_scene_;
     // adds scene to scenes_ with key of id
     // DOES NOT manage memory of provided scene, should be done elsewhere
