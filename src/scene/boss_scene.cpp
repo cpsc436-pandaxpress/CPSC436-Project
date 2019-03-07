@@ -151,7 +151,7 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
     registry_.assign<Interactable>(jacko_entity);
     registry_.assign<CausesDamage>(jacko_entity, false, true, 1);
     registry_.assign<Velocity>(jacko_entity, 0.f, 0.f);
-    registry_.assign<Collidable>(jacko_entity, texture.width() * scaleX, texture.height() * scaleY);
+    registry_.assign<Collidable>(jacko_entity, texture.width() * scaleX*0.75, texture.height() * scaleY);
 }
 
 void BossScene::create_food(Blackboard &blackboard) {
