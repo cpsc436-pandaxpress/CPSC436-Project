@@ -22,7 +22,7 @@ void FallingPlatformSystem::update(Blackboard& blackboard, entt::DefaultRegistry
             falling_platform.shakeLeft=!falling_platform.shakeLeft;
         }
 
-        if(platform_timer.is_done(std::to_string(falling_platform_entity))) {
+        if(platform_timer.is_done("fall")) {
             falling_platform.shaking = false;
             registry.assign<ObeysGravity>(falling_platform_entity,1.4f);
             registry.remove<Timer>(falling_platform_entity);
