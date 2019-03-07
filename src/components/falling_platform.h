@@ -10,8 +10,10 @@
  */
 struct FallingPlatform {
     bool shaking;
+    bool shakeLeft;
     FallingPlatform():
-        shaking(false)
+        shaking(false),
+        shakeLeft(false)
     {}
 };
 #endif //PANDAEXPRESS_FLOATING_PLATFORM_H

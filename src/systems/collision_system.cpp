@@ -80,8 +80,8 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
                     transform1.y = transform2.y - collidable1.height / 2 - collidable2.height / 2;
                     hitTheGround = true;
                     platform.shaking = true;
-                    if(!timer.watch_exists("fall")){
-                        timer.save_watch("fall", 1.f);
+                    if(!timer.watch_exists(to_string(pl_entity))){
+                        timer.save_watch(to_string(pl_entity), 1.f);
                     }
 
                 }

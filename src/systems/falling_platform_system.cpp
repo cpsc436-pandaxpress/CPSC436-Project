@@ -6,6 +6,7 @@
 
 
 void FallingPlatformSystem::update(Blackboard& blackboard, entt::DefaultRegistry& registry) {
+
     auto falling_platform_view = registry.view<Platform, Transform, Timer, FallingPlatform>();
     for (auto falling_platform_entity : falling_platform_view) {
         auto& platform_timer  = falling_platform_view.get<Timer>(falling_platform_entity);
@@ -13,16 +14,15 @@ void FallingPlatformSystem::update(Blackboard& blackboard, entt::DefaultRegistry
         auto& falling_platform  = falling_platform_view.get<FallingPlatform>(falling_platform_entity);
 
         if(falling_platform.shaking){
-            if(goingLeft){
-                transform.x-=5;
-                goingLeft=false;
+            if(falling_platform.shakeLeft){
+                transform.x-=1;
             }else{
-                transform.x+=5;
-                goingLeft=true;
+                transform.x+=1;
             }
+            falling_platform.shakeLeft=!falling_platform.shakeLeft;
         }
 
-        if(platform_timer.is_done("fall")) {
+        if(platform_timer.is_done(std::to_string(falling_platform_entity))) {
             falling_platform.shaking = false;
             registry.assign<ObeysGravity>(falling_platform_entity,1.4f);
             registry.remove<Timer>(falling_platform_entity);

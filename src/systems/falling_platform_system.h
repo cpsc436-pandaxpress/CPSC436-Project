@@ -6,6 +6,8 @@
 #define PANDAEXPRESS_FALLING_PLATFORM_SYSTEM_H
 
 #include <util/blackboard.h>
+#include <string>
+#include <iostream>
 #include <entt/entity/registry.hpp>
 #include <components/obeys_gravity.h>
 #include <components/interactable.h>
@@ -23,7 +25,7 @@ public:
 
     void update(Blackboard& blackboard, entt::DefaultRegistry& registry);
 private:
-    bool goingLeft = false;
+
 };
 
 
