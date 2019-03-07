@@ -14,10 +14,10 @@ void FallingPlatformSystem::update(Blackboard& blackboard, entt::DefaultRegistry
 
         if(falling_platform.shaking){
             if(goingLeft){
-                transform.x-=4;
+                transform.x-=5;
                 goingLeft=false;
             }else{
-                transform.x+=4;
+                transform.x+=5;
                 goingLeft=true;
             }
         }
