@@ -81,7 +81,7 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
                     hitTheGround = true;
                     platform.shaking = true;
                     if(!timer.watch_exists("fall")){
-                        timer.save_watch("fall", 0.5f);
+                        timer.save_watch("fall", 1.f);
                     }
 
                 }
