@@ -15,6 +15,7 @@
 #include <systems/collision_system.h>
 #include <systems/vertical_level_system.h>
 #include <systems/timer_system.h>
+#include <systems/panda_damage_system.h>
 #include <systems/text_transform_system.h>
 #include <systems/text_render_system.h>
 #include <systems/score_system.h>
@@ -32,6 +33,7 @@ private:
     VerticalLevelSystem level_system;
     PlayerAnimationSystem player_animation_system;
     TimerSystem timer_system;
+    PandaDamageSystem panda_dmg_system;
 
     TextRenderSystem text_render_system;
     TextTransformSystem text_transform_system;
