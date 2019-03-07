@@ -101,7 +101,14 @@ set(SOURCE_FILES
         src/systems/timer_system.cpp
         src/systems/timer_system.h
         src/systems/panda_damage_system.cpp
-        src/systems/panda_damage_system.h)
+        src/systems/panda_damage_system.h
+        src/graphics/health_bar.cpp
+        src/graphics/health_bar.h
+        src/systems/health_bar_transform_system.cpp
+        src/systems/health_bar_transform_system.h
+        src/systems/health_bar_render_system.cpp
+        src/systems/health_bar_render_system.h
+        )
 
 
 # Create executable target
