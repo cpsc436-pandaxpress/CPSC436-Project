@@ -29,8 +29,6 @@ private:
     const int jackoFrames = 7;
     const int spitFrames = 2;
     const int ghostFrames = 7;
-    int breadFrames = 7;
-    int llamaFrames = 14;
     float animationTime = 0.f;
     float frameRate = 4.f;
 

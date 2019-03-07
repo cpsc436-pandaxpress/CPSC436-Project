@@ -85,11 +85,11 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Health>(llama,1);
             registry.assign<Velocity>(llama, 0.f, 0.f);
             registry.assign<Interactable>(llama);
-            registry.assign<Collidable>(llama, texture.width() * scaleX,
-                                        texture.height() * scaleY);
+            registry.assign<Collidable>(llama, texture.width() * scaleX - 150.f,
+                                        texture.height() * scaleY - 10.f);
             registry.assign<ObeysGravity>(llama);
             auto& timer = registry.assign<Timer>(llama);
-            timer.save_watch(SPIT_TIMER_LABEL, 3.f);
+            timer.save_watch(SPIT_TIMER_LABEL, 2.3f);
         }
             break;
         case 6: {
