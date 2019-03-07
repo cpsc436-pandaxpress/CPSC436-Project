@@ -204,7 +204,9 @@ void HorizontalScene::create_health_bar(Blackboard &blackboard) {
     float height = 50.f;
     float width = 500.f;
     vec2 size = {width, height};
-    registry_.assign<HealthBar>(health_entity, mesh, shader, size);
+    auto &bg = registry_.assign<HealthBar>(health_entity, mesh, shader, size);
+    bg.set_color_start(vec3{39.f / 256, 174.f / 256, 96.f / 256});
+    bg.set_color_end(vec3{46.f / 256, 204.f / 256, 113.f / 256});
     registry_.assign<Transform>(health_entity, 0., 0., 0., 1.0, 1.0);
 }
 

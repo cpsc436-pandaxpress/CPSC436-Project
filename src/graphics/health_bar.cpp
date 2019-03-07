@@ -140,9 +140,9 @@ vec3 HealthBar::color_end() {
 }
 
 void HealthBar::set_color_end(const vec3 &color) {
-    color_start_ = {color.x, color.y, color.z};
+    color_end_ = {color.x, color.y, color.z};
 }
 
 void HealthBar::set_color_end(float r, float g, float b) {
-    color_start_ = {r, g, b};
+    color_end_ = {r, g, b};
 }

@@ -21,10 +21,10 @@ void main()
     float stroke_thickness = 0.07;
     vec3 s = vec3(231.0, 76.0, 60.0) / 256.0;
     vec3 c = vec3(46.0, 204.0, 113.0) / 256.0;
-    vec3 fcolor = mix(s, c, pos_x);
+    vec3 fcolor = mix(start_color, end_color, pos_x);
 //    if (mod(pos_x, i) <= segment_thickness) { // thickness of segments
 //        color = vec4(0.0); // Blank
 //    } else {
 //	}
-    color = vec4(fcolor, 1.0);
+        color = vec4(fcolor, 1.0);
 }
