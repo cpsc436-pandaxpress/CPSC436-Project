@@ -26,7 +26,7 @@ void EnemyAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
         auto &bread = bread_view.get<Bread>(bread_entity);
         auto &sprite = bread_view.get<Sprite>(bread_entity);
 
-        animateBread(bread.alive, sprite);
+         animateBread(bread.alive, sprite);
     }
 
 
@@ -74,6 +74,7 @@ void EnemyAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
 
 void EnemyAnimationSystem::animateBread(bool alive, Sprite &sprite){
     int row;
+    frameRate = 4.f;
     if (alive) {
         row = 1;
     } else {
@@ -112,6 +113,7 @@ void EnemyAnimationSystem::animateLlama(bool alive, float time, float targetTime
 }
 
 void EnemyAnimationSystem::animateJacko(bool alive, bool evading, Sprite &sprite){
+    frameRate = 4.f;
     int row;
     if (alive) {
         row = ((int) animationTime % 2);
@@ -129,6 +131,7 @@ void EnemyAnimationSystem::animateJacko(bool alive, bool evading, Sprite &sprite
 }
 
 void EnemyAnimationSystem::animateGhost(Sprite &sprite){
+    frameRate = 4.f;
     int index = ((int) animationTime % ghostFrames);
     vec2 uv1 = {index*ghostWidth + 0.005f, index*ghostHeight};
     vec2 uv2 = {(index+1)*ghostWidth + 0.005f, (1+index)*ghostHeight};
@@ -136,6 +139,7 @@ void EnemyAnimationSystem::animateGhost(Sprite &sprite){
 }
 
 void EnemyAnimationSystem::animateSpit(Sprite &sprite){
+    frameRate = 4.f;
     int index = ((int) animationTime % spitFrames);
     vec2 uv1 = {index*spitWidth, 0.f};
     vec2 uv2 = {(index+1)*spitWidth, spitHeight};
