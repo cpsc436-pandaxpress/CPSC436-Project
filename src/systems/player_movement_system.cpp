@@ -39,19 +39,20 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
             gravity.gravityFactor = 1.5f;
         }
 
-
-        switch (scene_id) {
-            case HORIZONTAL_SCENE_ID:
-                update_horizontal_scene(blackboard, velocity);
-                break;
-            case VERTICAL_SCENE_ID:
-                update_vertical_scene(blackboard, velocity);
-                break;
-            case BOSS_SCENE_ID:
-                update_boss_scene(blackboard, velocity);
-                break;
-            default:
-                fprintf(stderr, "Invalid scene ID: %d\n", scene_id);
+        if (!panda.recovering) {
+            switch (scene_id) {
+                case HORIZONTAL_SCENE_ID:
+                    update_horizontal_scene(blackboard, velocity);
+                    break;
+                case VERTICAL_SCENE_ID:
+                    update_vertical_scene(blackboard, velocity, panda);
+                    break;
+                case BOSS_SCENE_ID:
+                    update_boss_scene(blackboard, velocity, panda);
+                    break;
+                default:
+                    fprintf(stderr, "Invalid scene ID: %d\n", scene_id);
+            }
         }
 
         /*
@@ -111,6 +112,7 @@ void PlayerMovementSystem::update_vertical_scene(Blackboard &blackboard, Velocit
         } else {
             velocity.x_velocity = -PANDA_SPEED;
         }
+      panda.facingRight = false;
     } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
         if (velocity.x_velocity < 0) {
             velocity.x_velocity = dvx;
@@ -119,6 +121,7 @@ void PlayerMovementSystem::update_vertical_scene(Blackboard &blackboard, Velocit
         } else {
             velocity.x_velocity = PANDA_SPEED;
         }
+      panda.facingRight = true;
     } else {
         if (velocity.x_velocity - dvx > 0) {
             velocity.x_velocity -= dvx;
@@ -141,6 +144,7 @@ void PlayerMovementSystem::update_boss_scene(Blackboard &blackboard, Velocity &v
         } else {
             velocity.x_velocity = -PANDA_SPEED;
         }
+        panda.facingRight = false;
     } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
         if (velocity.x_velocity < 0) {
             velocity.x_velocity = dvx;
@@ -149,6 +153,7 @@ void PlayerMovementSystem::update_boss_scene(Blackboard &blackboard, Velocity &v
         } else {
             velocity.x_velocity = PANDA_SPEED;
         }
+        panda.facingRight = true;
     } else {
         if (velocity.x_velocity - dvx > 0) {
             velocity.x_velocity -= dvx;
