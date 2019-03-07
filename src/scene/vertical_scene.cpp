@@ -115,7 +115,7 @@ void VerticalScene::create_score_text(Blackboard &blackboard) {
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
     FontType font = FontType();
-    font.load(fonts_path("TitilliumWeb-Bold.ttf"), 48);
+    font.load(fonts_path("blocky.ttf"), 64);
 
     score_entity = registry_.create();
     std::string textVal = "SCORE: 0";
