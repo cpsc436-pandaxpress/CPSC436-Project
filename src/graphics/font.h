@@ -8,7 +8,6 @@
 #include <unordered_map>
 #include <string>
 #include <GL/glew.h>
-#include <glm/glm.hpp>
 #include "texture.h"
 #include <util/gl_utils.h>
 
