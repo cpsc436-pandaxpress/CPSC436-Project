@@ -63,7 +63,7 @@ void MainMenuScene::update(Blackboard& blackboard) {
 
 
     int button_y = -250;
-    int button_x =  200;
+    int button_x =  350;
 
     for (auto i = 0; i < count; i++) {
         if (i == selected_button_) {

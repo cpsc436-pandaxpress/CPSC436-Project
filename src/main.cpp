@@ -69,7 +69,7 @@ int main(int argc, char** argv) {
     blackboard.texture_manager.load_texture(textures_path("platform_center_grass.png"), "platform_center_grass");
     blackboard.texture_manager.load_texture(textures_path("grass_block_2.png"), "platform2");
     blackboard.texture_manager.load_texture(textures_path("bread_sprite_sheet.png"), "bread");
-    blackboard.texture_manager.load_texture(textures_path("menu_back.png"), "splash");
+    blackboard.texture_manager.load_texture(textures_path("menu_full.png"), "splash");
     blackboard.texture_manager.load_texture(textures_path("menu_bamboo.png"), "menu_bamboo");
     blackboard.texture_manager.load_texture(textures_path("menu_grass.png"), "menu_grass");
     blackboard.texture_manager.load_texture(textures_path("menu_kelly.png"), "menu_kelly");
