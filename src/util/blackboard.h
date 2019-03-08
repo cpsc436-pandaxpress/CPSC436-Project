@@ -12,6 +12,8 @@
 #include "../graphics/texture_manager.h"
 #include "../graphics/window.h"
 #include "../util/random.h"
+#include "../util/constants.h"
+#include "../util/sound_manager.h"
 
 
 // Struct containing all our singletons
@@ -25,4 +27,5 @@ struct Blackboard {
     TextureManager texture_manager;
     Window& window;
     Random randNumGenerator;
+    SoundManager soundManager;
 };

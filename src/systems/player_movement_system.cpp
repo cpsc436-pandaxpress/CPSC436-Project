@@ -63,6 +63,7 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
             walkable.grounded = false;
             velocity.y_velocity = -PANDA_JUMP_SPEED;
             time_since_jump = 0.f;
+            blackboard.soundManager.playSFX(SFX_JUMP);
             holding_jump = true;
         }
 
