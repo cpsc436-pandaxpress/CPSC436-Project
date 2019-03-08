@@ -90,14 +90,14 @@ void LevelSystem::generateEntity(int value, float x, float y,
         }
             break;
         case 6: {
-            auto texture = blackboard.texture_manager.get_texture("stalagmite2");
+            auto texture = blackboard.texture_manager.get_texture("stalagmite");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto mesh = blackboard.mesh_manager.get_mesh("sprite");
             auto scale = static_cast<float>(CELL_WIDTH / texture.width());
             auto stalagmite2 = registry.create();
             registry.assign<Obstacle>(stalagmite2);
             registry.assign<Transform>(stalagmite2, x, y, 0., scale,
-                                       scale);
+                                       scale*1.8f);
             registry.assign<Sprite>(stalagmite2, texture, shader, mesh);
             registry.assign<Collidable>(stalagmite2, texture.width() * scale,
                                         texture.height() * scale);
@@ -107,11 +107,11 @@ void LevelSystem::generateEntity(int value, float x, float y,
             auto texture = blackboard.texture_manager.get_texture("stalagmite");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-            auto scale = static_cast<float>(CELL_WIDTH / texture.width());
+            auto scale = static_cast<float>(CELL_WIDTH*0.5f / texture.width());
             auto stalagmite = registry.create();
             registry.assign<Obstacle>(stalagmite);
             registry.assign<CausesDamage>(stalagmite, false, true, 1);
-            registry.assign<Transform>(stalagmite, x, y, 0., scale,
+            registry.assign<Transform>(stalagmite, x, y - CELL_HEIGHT*0.75f + PLATFORM_HEIGHT, 0., scale*2.f,
                                        scale);
             registry.assign<Sprite>(stalagmite, texture, shader, mesh);
             registry.assign<Collidable>(stalagmite, texture.width() * scale,
