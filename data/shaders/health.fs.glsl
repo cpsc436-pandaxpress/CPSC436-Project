@@ -38,16 +38,8 @@ void main()
     vec3 stroke_color = vec3(0.0);
 
     vec3 start_color, end_color;
-    if (health > 0.75) { // Green gradient
-        start_color = vec3(46.f, 204.f, 113.f) / 256.0;
-        end_color = vec3(39.f, 174.f, 96.f) / 256.0;
-    } else if (health > 0.4) { // Orange gradient
-        start_color = vec3(230.f, 126.f, 34.f) / 256.0;
-        end_color = vec3(211.f, 84.f, 0.f) / 256.0;
-    } else { // Red gradient
-        start_color = vec3(231.f, 76.f, 60.f) / 256.0;
-        end_color = vec3(192.f, 57.f, 43.f) / 256.0;
-    }
+    start_color = vec3(231.f, 76.f, 60.f) / 256.0;
+    end_color = vec3(46.f, 204.f, 113.f) / 256.0;
 
     float aspect = scale.x / scale.y;
     float strokeX = stroke_thickness / aspect;
