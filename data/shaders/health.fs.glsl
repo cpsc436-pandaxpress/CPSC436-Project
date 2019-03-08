@@ -51,12 +51,12 @@ void main()
     float aspect = scale.x / scale.y;
     float strokeX = stroke_thickness / aspect;
     float strokeY = stroke_thickness;
-    if (stroke_area(pos_x, strokeX) || stroke_area(pos_y, strokeY)){
+    if (stroke_area(pos_x, strokeX) || stroke_area(pos_y, strokeY)) { // Stroke
         color = vec4(stroke_color, 1.0);
     } else if (pos_x >= segment_thickness && pos_x <= (1.0 - segment_thickness)
         && segment_pos(pos_x, n, i, segment_thickness)) { // thickness of segments
         color = vec4(stroke_color, 0.5); // Blank
-    } else { // Color in health
+    } else { // Color in the health value
         if (pos_x < health){
             vec3 fcolor = mix(start_color, end_color, pos_x * health);
             color = vec4(fcolor, 1.0);

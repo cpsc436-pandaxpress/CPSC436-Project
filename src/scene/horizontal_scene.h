@@ -73,9 +73,6 @@ public:
     virtual void render(Blackboard& blackboard) override;
 
     static constexpr float CAMERA_SPEED = 400.f;
-
-
-    void create_health_bar(Blackboard &blackboard);
 };
 
 

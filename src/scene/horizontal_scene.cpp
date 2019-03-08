@@ -139,7 +139,7 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Sprite>(panda_entity, sprite);
     registry_.assign<Panda>(panda_entity);
     registry_.assign<ObeysGravity>(panda_entity);
-    registry_.assign<Health>(panda_entity, 5);
+    registry_.assign<Health>(panda_entity, 3);
     registry_.assign<Interactable>(panda_entity);
     registry_.assign<CausesDamage>(panda_entity, false, true, 1);
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
@@ -202,10 +202,6 @@ void HorizontalScene::create_tutorial(Blackboard &blackboard) {
     registry_.assign<Sprite>(tutorial2_entity, texture2, shader, mesh);
     registry_.assign<Tutorial>(tutorial2_entity);
     registry_.assign<Transform>(tutorial2_entity, 900.f, -200.f, 0., scaleX, scaleY);
-
-}
-
-void HorizontalScene::create_health_bar(Blackboard &blackboard) {
 
 }
 
