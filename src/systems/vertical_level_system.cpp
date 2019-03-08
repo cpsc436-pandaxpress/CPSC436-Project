@@ -5,7 +5,6 @@
 #include <util/csv_reader.h>
 #include <util/constants.h>
 #include "vertical_level_system.h"
-#include <iostream>
 #include <components/timer.h>
 #include <algorithm>
 
