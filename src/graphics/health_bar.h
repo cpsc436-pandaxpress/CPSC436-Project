@@ -16,7 +16,7 @@ private:
     Mesh mesh_;
     vec2 position_, size_, scale_;
     vec3 color_start_, color_end_;
-    float rotation_;
+    float rotation_, health_;
 public:
     static vec3 vertices[4];
     static uint16_t indices[6];
@@ -39,6 +39,9 @@ public:
 
     float rotation_rad();
     void set_rotation_rad(float theta);
+
+    float health();
+    void set_health(float health_percentage);
 
     vec3 color_start();
     void set_color_start(const vec3& color);

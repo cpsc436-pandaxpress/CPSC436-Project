@@ -25,6 +25,7 @@ HealthBar::HealthBar(Mesh mesh, Shader shader, vec2 size) :
     color_start_ = {1.f, 1.f, 1.f};
     color_end_ = {1.f, 1.f, 1.f};
     rotation_ = 0.f;
+    health_ = 1.0f;
 }
 
 HealthBar::HealthBar(const HealthBar &other) :
@@ -48,6 +49,7 @@ void HealthBar::draw(const mat3 &projection) {
     mul_in_place(transform, make_rotate_mat3(rotation_));
     mul_in_place(transform, make_scale_mat3(size_.x, size_.y));
     mul_in_place(transform, make_scale_mat3(scale_.x, scale_.y));
+    vec2 scale = {scale_.x * size_.x, scale_.y * size_.y};
 
     // bind shader
     shader_.bind();
@@ -72,6 +74,8 @@ void HealthBar::draw(const mat3 &projection) {
     shader_.set_uniform_mat3("projection", projection);
     shader_.set_uniform_vec3("start_color", color_start_);
     shader_.set_uniform_vec3("end_color", color_end_);
+    shader_.set_uniform_vec2("scale", scale);
+    shader_.set_uniform_float("health", health_);
 
     // draw! TODO
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr);
@@ -121,6 +125,14 @@ float HealthBar::rotation_rad() {
 
 void HealthBar::set_rotation_rad(float theta) {
     rotation_ = theta;
+}
+
+float HealthBar::health() {
+    return health_;
+}
+
+void HealthBar::set_health(float health_percentage) {
+    health_ = health_percentage;
 }
 
 vec3 HealthBar::color_start() {

@@ -201,13 +201,14 @@ void HorizontalScene::create_health_bar(Blackboard &blackboard) {
     auto shader = blackboard.shader_manager.get_shader("health");
     auto mesh = blackboard.mesh_manager.get_mesh("health");
 
-    float height = 50.f;
-    float width = 500.f;
+    float height = 75.f;
+    float width = 750.f;
     vec2 size = {width, height};
-    auto &bg = registry_.assign<HealthBar>(health_entity, mesh, shader, size);
-    bg.set_color_start(vec3{39.f / 256, 174.f / 256, 96.f / 256});
-    bg.set_color_end(vec3{46.f / 256, 204.f / 256, 113.f / 256});
-    registry_.assign<Transform>(health_entity, 0., 0., 0., 1.0, 1.0);
+    auto &healthbar = registry_.assign<HealthBar>(health_entity, mesh, shader, size);
+    healthbar.set_color_start(vec3{39.f / 256, 174.f / 256, 96.f / 256});
+    healthbar.set_color_end(vec3{46.f / 256, 204.f / 256, 113.f / 256});
+    healthbar.set_health(0.5f);
+    registry_.assign<Transform>(health_entity, 0., 0., 0., 0.5, 0.5);
 }
 
 

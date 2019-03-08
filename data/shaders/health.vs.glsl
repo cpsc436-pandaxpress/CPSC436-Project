@@ -4,6 +4,7 @@ in vec3 in_position;
 
 // Passed to fragment shader
 out float pos_x;
+out float pos_y;
 
 // Application data
 uniform mat3 transform;
@@ -13,6 +14,7 @@ void main()
 {
 	vec3 pos = projection * transform * vec3(in_position.xy, 1.0);
 	pos_x = in_position.x + 0.5;
+	pos_y = in_position.y + 0.5;
 //    vec3 pos = transform * vec3(in_position.xy, 1.0);
 	gl_Position = vec4(pos.xy, in_position.z, 1.0);
 }
