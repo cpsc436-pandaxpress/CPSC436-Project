@@ -23,6 +23,10 @@ void HealthBarTransformSystem::update(Blackboard &blackboard, entt::DefaultRegis
         auto &healthBar = view.get<HealthBar>(entity);
         // transform the HealthBar
         // keep at bottom of screen centered
+        healthBar.set_status(0);
+        if (panda.invincible) {
+            healthBar.set_status(1);
+        }
         healthBar.set_pos(transform.x,
                           blackboard.camera.position().y + blackboard.camera.size().y / 2 - 100.f);
         healthBar.set_rotation_rad(transform.theta);

@@ -76,6 +76,7 @@ void HealthBar::draw(const mat3 &projection) {
     shader_.set_uniform_vec3("end_color", color_end_);
     shader_.set_uniform_vec2("scale", scale);
     shader_.set_uniform_float("health", health_);
+    shader_.set_uniform_int("status", status_);
 
     // draw! TODO
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr);
@@ -157,4 +158,12 @@ void HealthBar::set_color_end(const vec3 &color) {
 
 void HealthBar::set_color_end(float r, float g, float b) {
     color_end_ = {r, g, b};
+}
+
+void HealthBar::set_status(int flag) {
+    status_ = flag;
+}
+
+int HealthBar::status() {
+    return status_;
 }

@@ -17,6 +17,7 @@ private:
     vec2 position_, size_, scale_;
     vec3 color_start_, color_end_;
     float rotation_, health_;
+    int status_;
 public:
     static vec3 vertices[4];
     static uint16_t indices[6];
@@ -50,6 +51,9 @@ public:
     vec3 color_end();
     void set_color_end(const vec3& color);
     void set_color_end(float r, float g, float b);
+
+    void set_status(int flag);
+    int status();
 };
 
 

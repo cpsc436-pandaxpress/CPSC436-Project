@@ -12,9 +12,15 @@ uniform mat3 projection;
 
 void main()
 {
-	vec3 pos = projection * transform * vec3(in_position.xy, 1.0);
 	pos_x = in_position.x + 0.5;
 	pos_y = in_position.y + 0.5;
+	float slant_factor = 15.0;
+	mat3 slanted = mat3(
+            vec3(1.0, 0.0, 0.0),
+            vec3(0.0, 1.0, 0.0),
+            vec3(- pos_y / slant_factor, 0.0, 1.0)
+    );
+	vec3 pos = projection * transform * slanted * vec3(in_position.xy, 1.0);
 //    vec3 pos = transform * vec3(in_position.xy, 1.0);
 	gl_Position = vec4(pos.xy, in_position.z, 1.0);
 }

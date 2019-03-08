@@ -6,6 +6,7 @@ in float pos_y;
 // Application data
 uniform vec2 scale;
 uniform float health;
+uniform int status;
 
 // Output color
 layout(location = 0) out  vec4 color;
@@ -30,7 +31,7 @@ bool stroke_area(float pos, float stroke_thickness) {
 
 void main()
 {
-    int n = 5;
+    int n = 3; // Number of segments
     float i = 1.0f / n;
     float segment_thickness = 0.01;
     float stroke_thickness = 0.1;
@@ -57,6 +58,10 @@ void main()
         && segment_pos(pos_x, n, i, segment_thickness)) { // thickness of segments
         color = vec4(stroke_color, 0.5); // Blank
     } else { // Color in the health value
+        if (status == 1) { // invincible
+            start_color =  vec3(52.0, 152.0, 219.0) / 256.0f;
+            end_color = vec3(41, 128, 185) / 256.0f;
+        }
         if (pos_x < health){
             vec3 fcolor = mix(start_color, end_color, pos_x * health);
             color = vec4(fcolor, 1.0);
