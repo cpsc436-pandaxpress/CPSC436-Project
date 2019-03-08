@@ -16,12 +16,12 @@ uint16_t HealthBar::indices[] = {
         2, 3, 0
 };
 
-HealthBar::HealthBar(Mesh mesh, Shader shader, vec2 size) :
+HealthBar::HealthBar(Mesh mesh, Shader shader, vec2 size, vec2 scale) :
         shader_(shader),
         mesh_(mesh),
-        size_(size) {
+        size_(size),
+        scale_(scale) {
     position_ = {0.f, 0.f};
-    scale_ = {1.f, 1.f};
     color_start_ = {1.f, 1.f, 1.f};
     color_end_ = {1.f, 1.f, 1.f};
     rotation_ = 0.f;

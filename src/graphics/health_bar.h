@@ -21,7 +21,7 @@ public:
     static vec3 vertices[4];
     static uint16_t indices[6];
 
-    HealthBar(Mesh mesh, Shader shader, vec2 size);
+    HealthBar(Mesh mesh, Shader shader, vec2 size, vec2 scale);
     HealthBar(const HealthBar& other);
 
     void draw(const mat3& projection);

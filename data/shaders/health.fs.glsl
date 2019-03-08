@@ -4,8 +4,6 @@ in float pos_x;
 in float pos_y;
 
 // Application data
-uniform vec3 start_color;
-uniform vec3 end_color;
 uniform vec2 scale;
 uniform float health;
 
@@ -37,9 +35,19 @@ void main()
     float segment_thickness = 0.01;
     float stroke_thickness = 0.1;
     vec3 stroke_color = vec3(0.0);
-    float total_health = 3.0;
-//    vec3 s = vec3(231.0, 76.0, 60.0) / 256.0;
-//    vec3 c = vec3(46.0, 204.0, 113.0) / 256.0;
+
+    vec3 start_color, end_color;
+    if (health > 0.75) { // Green gradient
+        start_color = vec3(46.f, 204.f, 113.f) / 256.0;
+        end_color = vec3(39.f, 174.f, 96.f) / 256.0;
+    } else if (health > 0.4) { // Orange gradient
+        start_color = vec3(230.f, 126.f, 34.f) / 256.0;
+        end_color = vec3(211.f, 84.f, 0.f) / 256.0;
+    } else { // Red gradient
+        start_color = vec3(231.f, 76.f, 60.f) / 256.0;
+        end_color = vec3(192.f, 57.f, 43.f) / 256.0;
+    }
+
     float aspect = scale.x / scale.y;
     float strokeX = stroke_thickness / aspect;
     float strokeY = stroke_thickness;
@@ -50,8 +58,7 @@ void main()
         color = vec4(stroke_color, 0.5); // Blank
     } else { // Color in health
         if (pos_x < health){
-            float health_frac = health / total_health;
-            vec3 fcolor = mix(start_color, end_color, pos_x * health_frac);
+            vec3 fcolor = mix(start_color, end_color, pos_x * health);
             color = vec4(fcolor, 1.0);
         } else {
             color = vec4(0.0, 0.0, 0.0, 1.0);

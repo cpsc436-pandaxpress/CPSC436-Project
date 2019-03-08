@@ -107,7 +107,6 @@ void HorizontalScene::render(Blackboard &blackboard) {
 void HorizontalScene::reset_scene(Blackboard &blackboard) {
     level_system.destroy_entities(registry_);
     registry_.destroy(panda_entity);
-    registry_.destroy(health_entity);
     for (uint32_t e: bg_entities) {
         registry_.destroy(e);
     }
@@ -140,12 +139,23 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Sprite>(panda_entity, sprite);
     registry_.assign<Panda>(panda_entity);
     registry_.assign<ObeysGravity>(panda_entity);
-    registry_.assign<Health>(panda_entity, 3);
+    registry_.assign<Health>(panda_entity, 5);
     registry_.assign<Interactable>(panda_entity);
     registry_.assign<CausesDamage>(panda_entity, false, true, 1);
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
     registry_.assign<Timer>(panda_entity);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
+
+    auto shaderHealth = blackboard.shader_manager.get_shader("health");
+    auto meshHealth = blackboard.mesh_manager.get_mesh("health");
+    float height = 75.f;
+    float width = 750.f;
+    vec2 size = {width, height};
+    vec2 scale = {0.5, 0.5};
+    auto &healthbar = registry_.assign<HealthBar>(panda_entity,
+                                                  meshHealth, shaderHealth, size, scale);
+    healthbar.set_color_start(vec3{39.f / 256, 174.f / 256, 96.f / 256});
+    healthbar.set_color_end(vec3{46.f / 256, 204.f / 256, 113.f / 256});
 }
 
 void HorizontalScene::create_background(Blackboard &blackboard) {
@@ -196,19 +206,7 @@ void HorizontalScene::create_tutorial(Blackboard &blackboard) {
 }
 
 void HorizontalScene::create_health_bar(Blackboard &blackboard) {
-    health_entity = registry_.create();
 
-    auto shader = blackboard.shader_manager.get_shader("health");
-    auto mesh = blackboard.mesh_manager.get_mesh("health");
-
-    float height = 75.f;
-    float width = 750.f;
-    vec2 size = {width, height};
-    auto &healthbar = registry_.assign<HealthBar>(health_entity, mesh, shader, size);
-    healthbar.set_color_start(vec3{39.f / 256, 174.f / 256, 96.f / 256});
-    healthbar.set_color_end(vec3{46.f / 256, 204.f / 256, 113.f / 256});
-    healthbar.set_health(0.5f);
-    registry_.assign<Transform>(health_entity, 0., 0., 0., 0.5, 0.5);
 }
 
 
