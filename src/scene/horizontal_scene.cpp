@@ -122,7 +122,6 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
     blackboard.camera.compose();
     create_background(blackboard);
     create_panda(blackboard);
-    create_health_bar(blackboard);
     level_system.init();
 }
 
