@@ -9,6 +9,7 @@
 #include <components/velocity.h>
 #include <components/platform.h>
 #include <graphics/background.h>
+#include <components/timer.h>
 #include "vertical_scene.h"
 #include "util/constants.h"
 
@@ -21,8 +22,10 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         player_movement_system(VERTICAL_SCENE_ID),
         player_animation_system(VERTICAL_SCENE_ID),
         collision_system(),
+        panda_dmg_system(),
         background_render_system(),
-        background_transform_system(VERTICAL_SCENE_ID) {
+        background_transform_system(VERTICAL_SCENE_ID)
+{
     init_scene(blackboard);
     gl_has_errors();
 }
@@ -44,16 +47,17 @@ void VerticalScene::create_panda(Blackboard &blackboard) {
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
-    float scaleY = 75.0 / texture.height();
-    float scaleX = 75.0 / texture.width();
+    float scaleY = 75.0f / texture.height();
+    float scaleX = 75.0f / texture.width();
     registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scaleX, scaleY);
     registry_.assign<Sprite>(panda_entity, texture, shader, mesh);
     registry_.assign<Panda>(panda_entity);
     registry_.assign<ObeysGravity>(panda_entity);
-    registry_.assign<Health>(panda_entity, 1);
+    registry_.assign<Health>(panda_entity, 3);
     registry_.assign<Interactable>(panda_entity);
     registry_.assign<CausesDamage>(panda_entity, false, true, 1);
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
+    registry_.assign<Timer>(panda_entity);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
 }
 
@@ -89,6 +93,7 @@ void VerticalScene::update(Blackboard &blackboard) {
     player_movement_system.update(blackboard, registry_);
     collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
+    panda_dmg_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);

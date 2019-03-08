@@ -15,6 +15,7 @@
 #include <systems/collision_system.h>
 #include <systems/vertical_level_system.h>
 #include <systems/timer_system.h>
+#include <systems/panda_damage_system.h>
 #include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
 
@@ -31,12 +32,13 @@ private:
     VerticalLevelSystem level_system;
     PlayerAnimationSystem player_animation_system;
     TimerSystem timer_system;
+    PandaDamageSystem panda_dmg_system;
     BackgroundRenderSystem background_render_system;
     BackgroundTransformSystem background_transform_system;
 
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;
-    const float CAMERA_SPEED = 350.f;
+    const float CAMERA_SPEED = 250.f;
     const float PANDA_START_X = -10.f;
     const float PANDA_START_Y = -200.f;
     const float PLATFORM_START_X = -0.f;
