@@ -94,6 +94,7 @@ void MainMenuScene::render(Blackboard& blackboard) {
 
     splash_sprite_.draw(projection);
     create_background(blackboard);
+    create_panda(blackboard);
 
     for (auto i = 0; i < button_sprites_.size(); i++) {
         button_sprites_[i].draw(projection);
@@ -116,15 +117,30 @@ void MainMenuScene::add_item(Blackboard& blackboard, char* texture_name, SceneID
     button_targets_.push_back(sceneID);
 }
 
+void MainMenuScene::create_panda(Blackboard &blackboard) {
+    panda_entity = registry_.create();
+    auto texture = blackboard.texture_manager.get_texture("menu_vaping_panda");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+
+    float scaleY = 75.0 / texture.height();
+    float scaleX = 75.0 / texture.width();
+    registry_.assign<Transform>(panda_entity, 100.f, 100.f, 0., scaleX, scaleY);
+    registry_.assign<Sprite>(panda_entity, texture, shader, mesh);
+    registry_.assign<Panda>(panda_entity);
+}
+
 
 void MainMenuScene::create_background(Blackboard &blackboard) {
     std::vector<Texture> textures;
     textures.reserve(4);
     // This order matters for rendering
-    textures.push_back(blackboard.texture_manager.get_texture("bg_top"));
-    textures.push_back(blackboard.texture_manager.get_texture("bg_front"));
-    textures.push_back(blackboard.texture_manager.get_texture("bg_middle"));
-    textures.push_back(blackboard.texture_manager.get_texture("bg_back"));
+//    textures.push_back(blackboard.texture_manager.get_texture("menu_front_grass"));
+//    textures.push_back(blackboard.texture_manager.get_texture("panda_express_logo"));
+//    textures.push_back(blackboard.texture_manager.get_texture("menu_sun"));
+//    textures.push_back(blackboard.texture_manager.get_texture("menu_grass"));
+//    textures.push_back(blackboard.texture_manager.get_texture("menu_bamboo"));
+//    textures.push_back(blackboard.texture_manager.get_texture("menu_back"));
     // end order
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");

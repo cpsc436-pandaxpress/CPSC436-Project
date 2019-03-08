@@ -32,9 +32,9 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         jacko_ai_system(blackboard, registry_),
         player_animation_system(BOSS_SCENE_ID),
         timer_system(),
-        falling_platform_system(),
         panda_dmg_system(),
-        enemy_animation_system(){
+        falling_platform_system(),
+        enemy_animation_system() {
 
     init_scene(blackboard);
 

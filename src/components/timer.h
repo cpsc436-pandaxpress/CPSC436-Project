@@ -15,6 +15,9 @@ struct Watch {
 
 class Timer {
 public:
+    float curr_time;
+    std::unordered_map<std::string, Watch> watches;
+
     Timer();
     bool is_done(std::string label);
     bool watch_exists(std::string label);
@@ -24,9 +27,6 @@ public:
     bool exists(std::string label);
     void remove(std::string label);
 
-private:
-    float curr_time;
-    std::unordered_map<std::string, Watch> watches;
 };
 
 

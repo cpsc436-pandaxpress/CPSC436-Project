@@ -100,9 +100,9 @@ set(SOURCE_FILES
         src/components/timer.cpp
         src/components/timer.h
         src/systems/timer_system.cpp
+        src/systems/timer_system.h
         src/systems/falling_platform_system.cpp
         src/systems/falling_platform_system.h
-        src/systems/timer_system.h
         src/systems/panda_damage_system.cpp
         src/systems/panda_damage_system.h
         src/systems/enemy_animation_system.cpp

@@ -56,8 +56,8 @@ void HorizontalScene::update(Blackboard &blackboard) {
     ghost_movement_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
-    enemy_animation_system.update(blackboard, registry_);
     falling_platform_system.update(blackboard, registry_);
+    enemy_animation_system.update(blackboard, registry_);
 }
 
 void HorizontalScene::update_panda(Blackboard &blackboard) {

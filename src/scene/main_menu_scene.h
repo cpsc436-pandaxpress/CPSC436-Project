@@ -9,6 +9,12 @@
 #include <vector>
 #include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
+#include "../systems/sprite_render_system.h"
+#include "../systems/sprite_transform_system.h"
+#include "../util/blackboard.h"
+#include "../systems/collision_system.h"
+#include "../systems/player_animation_system.h"
+#include "../systems/enemy_animation_system.h"
 #include "scene.h"
 
 
@@ -17,6 +23,7 @@ class MainMenuScene : public Scene {
 private:
     Sprite splash_sprite_;
     uint32_t button_width_, button_height_;
+    uint32_t panda_entity;
     std::vector<uint32_t> bg_entities;
     std::vector<Sprite> button_sprites_;
     std::vector<Sprite> button_bg_sprites_;
@@ -27,6 +34,7 @@ private:
     BackgroundTransformSystem background_transform_system;
 
     void create_background(Blackboard &blackboard);
+    void create_panda(Blackboard &blackboard);
 
 public:
     MainMenuScene(Blackboard& blackboard, SceneManager& scene_manager);

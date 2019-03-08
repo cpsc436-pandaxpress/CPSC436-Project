@@ -26,7 +26,7 @@ void EnemyAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
         auto &bread = bread_view.get<Bread>(bread_entity);
         auto &sprite = bread_view.get<Sprite>(bread_entity);
 
-        animateBread(bread.alive, sprite);
+         animateBread(bread.alive, sprite);
     }
 
 
@@ -60,9 +60,8 @@ void EnemyAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
         auto &llama = llama_view.get<Llama>(llama_entity);
         auto &sprite = llama_view.get<Sprite>(llama_entity);
         auto& timer = llama_view.get<Timer>(llama_entity);
-        float target_time, time;
-//        float target_time = timer.watches["spit"].target_time;
-//        float time = timer.curr_time;
+        float target_time = timer.watches["spit"].target_time;
+        float time = timer.curr_time;
 
         animateLlama(llama.alive, time, target_time, sprite);
     }
@@ -74,6 +73,9 @@ void EnemyAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
 
 void EnemyAnimationSystem::animateBread(bool alive, Sprite &sprite){
     int row;
+    int breadFrames = 7;
+    frameRate = 4.f;
+
     if (alive) {
         row = 1;
     } else {
@@ -89,29 +91,27 @@ void EnemyAnimationSystem::animateBread(bool alive, Sprite &sprite){
 }
 
 void EnemyAnimationSystem::animateLlama(bool alive, float time, float targetTime, Sprite &sprite){
-    frameRate = 8.f;
+    frameRate = 6.f;
+    int llamaFrames = 14;
     int row = 1;
-    float i = 0.035;
-    //    if llama facing left {
-//        row = 4;
-//        i = 0.035f;
-//    }
+    float i = 0.014f;
+
     if (!alive) {
         row = 3;
         i = 0.0f;
         frameRate = 10.f;
         llamaFrames = 5;
-    }
+    } 
 
-//    float mod = fmod(time, targetTime);
-//    int index = ((int) (mod*frameRate) % llamaFrames);
-    int index = ((int) (animationTime) % llamaFrames);
-    vec2 uv1 = {index*llamaWidth, llamaHeight*(row-1)};
-    vec2 uv2 = {(index+1)*llamaWidth, (row*llamaHeight) - i};
+    float mod = fmod(time, targetTime);
+    int index = ((int) (mod*frameRate) % llamaFrames);
+    vec2 uv1 = {index*llamaWidth +0.005f, llamaHeight*(row-1)};
+    vec2 uv2 = {(index+1)*llamaWidth + 0.01f, (row*llamaHeight) - i};
     sprite.set_uvs(uv1, uv2);
 }
 
 void EnemyAnimationSystem::animateJacko(bool alive, bool evading, Sprite &sprite){
+    frameRate = 4.f;
     int row;
     if (alive) {
         row = ((int) animationTime % 2);
@@ -129,6 +129,7 @@ void EnemyAnimationSystem::animateJacko(bool alive, bool evading, Sprite &sprite
 }
 
 void EnemyAnimationSystem::animateGhost(Sprite &sprite){
+    frameRate = 4.f;
     int index = ((int) animationTime % ghostFrames);
     vec2 uv1 = {index*ghostWidth + 0.005f, index*ghostHeight};
     vec2 uv2 = {(index+1)*ghostWidth + 0.005f, (1+index)*ghostHeight};
@@ -136,6 +137,7 @@ void EnemyAnimationSystem::animateGhost(Sprite &sprite){
 }
 
 void EnemyAnimationSystem::animateSpit(Sprite &sprite){
+    frameRate = 4.f;
     int index = ((int) animationTime % spitFrames);
     vec2 uv1 = {index*spitWidth, 0.f};
     vec2 uv2 = {(index+1)*spitWidth, spitHeight};

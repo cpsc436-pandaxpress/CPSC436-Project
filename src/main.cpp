@@ -35,6 +35,7 @@ int main(int argc, char** argv) {
 
     window.initialize("Express Panda", 800, 450);
 
+
     Blackboard blackboard = {
         Camera(1600, 900, 0, 0),
         0,
@@ -72,6 +73,7 @@ int main(int argc, char** argv) {
     blackboard.texture_manager.load_texture(textures_path("menu_full.png"), "splash");
     blackboard.texture_manager.load_texture(textures_path("menu_bamboo.png"), "menu_bamboo");
     blackboard.texture_manager.load_texture(textures_path("menu_grass.png"), "menu_grass");
+    blackboard.texture_manager.load_texture(textures_path("menu_front_grass.png"), "menu_front_grass");
     blackboard.texture_manager.load_texture(textures_path("menu_kelly.png"), "menu_kelly");
     blackboard.texture_manager.load_texture(textures_path("menu_sun.png"), "menu_sun");
     blackboard.texture_manager.load_texture(textures_path("menu_vaping_panda.png"), "menu_vaping_panda");
