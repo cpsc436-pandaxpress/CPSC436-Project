@@ -16,6 +16,8 @@
 #include <systems/vertical_level_system.h>
 #include <systems/timer_system.h>
 #include <systems/panda_damage_system.h>
+#include <systems/health_bar_render_system.h>
+#include <systems/health_bar_transform_system.h>
 
 class VerticalScene : public Scene {
 private:
@@ -30,6 +32,8 @@ private:
     PlayerAnimationSystem player_animation_system;
     TimerSystem timer_system;
     PandaDamageSystem panda_dmg_system;
+    HealthBarRenderSystem health_bar_render_system;
+    HealthBarTransformSystem health_bar_transform_system;
 
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;

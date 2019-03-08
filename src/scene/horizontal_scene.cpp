@@ -155,8 +155,6 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
     vec2 scale = {0.5, 0.5};
     auto &healthbar = registry_.assign<HealthBar>(panda_entity,
                                                   meshHealth, shaderHealth, size, scale);
-    healthbar.set_color_start(vec3{39.f / 256, 174.f / 256, 96.f / 256});
-    healthbar.set_color_end(vec3{46.f / 256, 204.f / 256, 113.f / 256});
 }
 
 void HorizontalScene::create_background(Blackboard &blackboard) {
