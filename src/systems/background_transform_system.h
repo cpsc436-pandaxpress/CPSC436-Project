@@ -5,17 +5,23 @@
 #ifndef PANDAEXPRESS_BACKGROUND_TRANSFORM_SYSTEM_H
 #define PANDAEXPRESS_BACKGROUND_TRANSFORM_SYSTEM_H
 
-
-
-
 #include "system.h"
+#include <scene/scene.h>
+#include <graphics/background.h>
 
 class BackgroundTransformSystem: public System {
+private:
+    SceneID scene_id;
 public:
-    const float LAYER_SPEED = 37.5f;
-    BackgroundTransformSystem();
+    const float HORIZONTAL_LAYER_SPEED = 37.5f;
+    const float VERTICAL_LAYER_SPEED = 15.0f;
+    BackgroundTransformSystem(SceneID scene_id);
 
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;
+
+    void horizontal_background_transform(Blackboard &blackboard, Background &background);
+
+    void vertical_background_transform(Blackboard &blackboard, Background &background);
 };
 
 

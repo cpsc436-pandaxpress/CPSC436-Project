@@ -44,4 +44,7 @@ public:
     void set_rotation_rad(float theta);
 
     int z_pos();
+    void set_z_pos(int z_pos);
+
+    vec2 texture_size();
 };
