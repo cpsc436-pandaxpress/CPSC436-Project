@@ -47,3 +47,11 @@ bool Timer::exists(string label) {
 void Timer::remove(std::string label) {
     watches.erase(label);
 }
+
+float Timer::get_curr_time(std::string label) {
+    return curr_time;
+}
+
+float Timer::get_target_time(std::string label){
+    return watches[label].target_time;
+}
