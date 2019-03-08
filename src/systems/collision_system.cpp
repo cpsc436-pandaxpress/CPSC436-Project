@@ -37,6 +37,7 @@ bool checkObstaclePandaCollision(Collidable pa_co, Transform pa_tr, Collidable o
 
 CollisionSystem::CollisionSystem() {
 
+}
 
 bool checkCollision(Collidable collidable1, Transform transform1, Velocity velocity1, Collidable collidable2, Transform transform2) {
 
@@ -133,7 +134,7 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
 //            }
 //
 //            if (checkObstaclePandaCollision(pa_collidable, pa_transform, fd_collidable, fd_transform)) {
-//                health.healthPoints++;
+//                health.hp++;
 //                food.eaten = true;
 //            }
 //        }
@@ -155,13 +156,13 @@ void CollisionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& regi
 //
 //        if (checkEnemyPandaCollisionSafe(pa_collidable, pa_transform, pa_velocity, ja_collidable, ja_transform)) {
 //            pa_velocity.y_velocity = -900.f;
-//            ja_health.healthPoints--;
+//            ja_health.hp--;
 //            if (jacko.alive) {
 //                ja_chases.evading = true;
 //            }
 //
 //
-//            if (ja_health.healthPoints < 1) {
+//            if (ja_health.hp < 1) {
 //                jacko.alive = false;
 //            }
 //
