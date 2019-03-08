@@ -1,12 +1,12 @@
 //
 // Created by Prayansh Srivastava on 2019-02-15.
 //
-#include "level_system.h"
+
 
 #ifndef PANDAEXPRESS_BOSS_LEVEL_SYSTEM_H
 #define PANDAEXPRESS_BOSS_LEVEL_SYSTEM_H
 
-#endif //PANDAEXPRESS_BOSS_LEVEL_SYSTEM_H
+#include "level_system.h"
 
 class BossLevelSystem : public LevelSystem {
     void load_next_chunk();
@@ -27,4 +27,8 @@ public:
     void destroy_entities(entt::DefaultRegistry &registry);
 
     void destroy_off_screen(entt::DefaultRegistry &registry, float x);
+
+    void update_falling_platforms(Blackboard &blackboard, entt::DefaultRegistry &registry);
 };
+
+#endif //PANDAEXPRESS_BOSS_LEVEL_SYSTEM_H

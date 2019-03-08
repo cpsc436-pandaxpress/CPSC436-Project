@@ -9,8 +9,10 @@
 #include <iostream>
 #include "components/collidable.h"
 #include "components/jacko.h"
+#include "components/timer.h"
 #include "components/health.h"
 #include "components/platform.h"
+#include "components/falling_platform.h"
 #include "components/food.h"
 #include "components/velocity.h"
 #include "components/interactable.h"
@@ -33,13 +35,8 @@ bool checkEnemyPandaCollisionFatal(Collidable pa_co, Transform pa_tr, Collidable
 bool checkEnemyPandaCollisionSafe(Collidable pa_co, Transform pa_tr, Velocity pa_velocity, Collidable br_co, Transform br_tr);
 bool checkObstaclePandaCollision(Collidable pa_co, Transform pa_tr, Collidable ob_co, Transform ob_tr);
 
-
-
-
 CollisionSystem::CollisionSystem() {
 
-
-}
 
 bool checkCollision(Collidable collidable1, Transform transform1, Velocity velocity1, Collidable collidable2, Transform transform2) {
 

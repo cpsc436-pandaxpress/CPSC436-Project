@@ -122,6 +122,28 @@ void LevelSystem::generateEntity(int value, float x, float y,
 
         }
             break;
+        case 8: {
+            auto texture = blackboard.texture_manager.get_texture(
+                    (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "platform1" : "platform2");
+            auto shader = blackboard.shader_manager.get_shader("sprite");
+            auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+            auto scaleX = static_cast<float>(CELL_WIDTH / texture.width());
+            auto scaleY = static_cast<float>(PLATFORM_HEIGHT / texture.width());
+            auto falling_platform = registry.create();
+
+            registry.assign<Platform>(falling_platform);
+            registry.assign<Transform>(falling_platform, x, y - CELL_HEIGHT / 2 + PLATFORM_HEIGHT / 2, 0., scaleX,
+                                       scaleY);
+            registry.assign<Sprite>(falling_platform, texture, shader, mesh);
+            registry.assign<Collidable>(falling_platform, texture.width() * scaleX,
+                                        texture.height() * scaleY);
+
+            registry.assign<FallingPlatform>(falling_platform);
+            registry.assign<Velocity>(falling_platform, 0.f, 0.f);
+            auto& timer = registry.assign<Timer>(falling_platform);
+
+        }
+            break;
         default:
             break;
     }
