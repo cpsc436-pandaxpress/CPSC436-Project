@@ -117,6 +117,7 @@ void VerticalScene::create_background(Blackboard &blackboard) {
     // This order matters for rendering
     auto tex1 = blackboard.texture_manager.get_texture("clouds1");
     auto tex2 = blackboard.texture_manager.get_texture("clouds2");
+    auto tex3 = blackboard.texture_manager.get_texture("horizon");
     // end order
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
@@ -124,18 +125,27 @@ void VerticalScene::create_background(Blackboard &blackboard) {
     auto bg_entity1 = registry_.create();
     auto &bg = registry_.assign<Background>(bg_entity1, tex1, shader, mesh, -1);
     bg.set_pos1(200.0f, 0.0f);
-    bg.set_pos2(200.0f, blackboard.camera.size().y);
+    bg.set_pos2(200.0f, -blackboard.camera.size().y);
     bg.set_rotation_rad(0.0f);
     bg.set_scale(blackboard.camera.size().x / tex1.width(),
-                 blackboard.camera.size().y / tex2.height());
+                 blackboard.camera.size().y / tex1.height());
     bg_entities.push_back(bg_entity1);
 
     auto bg_entity2 = registry_.create();
     auto &bg2 = registry_.assign<Background>(bg_entity2, tex2, shader, mesh, 1);
     bg2.set_pos1(-200.0f, 0.0f);
-    bg2.set_pos2(-200.f, blackboard.camera.size().y);
+    bg2.set_pos2(-200.f, -blackboard.camera.size().y);
     bg2.set_rotation_rad(0.0f);
-    bg2.set_scale(blackboard.camera.size().x / tex1.width(),
+    bg2.set_scale(blackboard.camera.size().x / tex2.width(),
                  blackboard.camera.size().y / tex2.height());
     bg_entities.push_back(bg_entity2);
+
+    auto bg_entity0 = registry_.create();
+    auto &bg0 = registry_.assign<Background>(bg_entity0, tex3, shader, mesh, 0);
+    bg0.set_pos1(0.0f, blackboard.camera.size().y);
+    bg0.set_pos2(0.0f, 0.0f);
+    bg0.set_rotation_rad(0.0f);
+    bg0.set_scale(blackboard.camera.size().x / tex3.width(),
+                 blackboard.camera.size().y / tex3.height());
+    bg_entities.push_back(bg_entity0);
 }

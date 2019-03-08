@@ -44,16 +44,18 @@ void BackgroundTransformSystem::horizontal_background_transform(Blackboard &blac
 
 void BackgroundTransformSystem::vertical_background_transform(Blackboard &blackboard,
                                                               Background &background) {
-    Camera camera = blackboard.camera;
-    float displacement = background.z_pos() * VERTICAL_LAYER_SPEED * blackboard.delta_time;
-    background.set_pos1(background.pos1().x + displacement, background.pos1().y);
-    background.set_pos2(background.pos2().x + displacement, background.pos2().y);
-    if (background.pos1().y > (camera.position().y + camera.size().y)) {
-        background.set_pos1(background.pos1().x, background.pos1().y - camera.size().y * 2);
-        background.set_z_pos(background.z_pos() * -1);
-    }
-    if (background.pos2().y > (camera.position().y + camera.size().y)) {
-        background.set_pos2(background.pos2().x, background.pos2().y - camera.size().y * 2);
-        background.set_z_pos(background.z_pos() * -1);
+    if (background.z_pos() != 0) {
+        Camera camera = blackboard.camera;
+        float displacement = background.z_pos() * VERTICAL_LAYER_SPEED * blackboard.delta_time;
+        background.set_pos1(background.pos1().x + displacement, background.pos1().y);
+        background.set_pos2(background.pos2().x + displacement, background.pos2().y);
+        if (background.pos1().y > (camera.position().y + camera.size().y)) {
+            background.set_pos1(background.pos1().x, background.pos1().y - camera.size().y * 2);
+            background.set_z_pos(background.z_pos() * -1);
+        }
+        if (background.pos2().y > (camera.position().y + camera.size().y)) {
+            background.set_pos2(background.pos2().x, background.pos2().y - camera.size().y * 2);
+            background.set_z_pos(background.z_pos() * -1);
+        }
     }
 }
