@@ -149,7 +149,7 @@ void LevelSystem::generate_bread(bool move_left, float x, float y, Blackboard &b
     registry.assign<Transform>(bread, x, y, 0., scaleX, scaleY);
     registry.assign<Sprite>(bread, texture, shader, mesh);
     registry.assign<Bread>(bread, move_left);
-    registry.assign<CausesDamage>(bread, ALL_DMG_MASK, 1);
+    registry.assign<CausesDamage>(bread, TOP_VULNERABLE_MASK, 1);
     registry.assign<Health>(bread,1);
     registry.assign<Velocity>(bread, 0.f, 0.f);
     registry.assign<Interactable>(bread);
