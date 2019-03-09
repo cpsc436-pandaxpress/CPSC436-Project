@@ -17,7 +17,7 @@ BossLevelSystem::BossLevelSystem() : LevelSystem() {
 void BossLevelSystem::init() {
     LevelSystem::init();
     last_col_generated_ = last_col_loaded_ = FIRST_COL_X;
-    load_next_chunk(0);
+    generated_ = false;
 }
 
 void BossLevelSystem::load_next_chunk(int level) {
@@ -39,8 +39,7 @@ void BossLevelSystem::load_next_chunk(int level) {
 // y should range from (-400, 400)
 void BossLevelSystem::generate_next_chunk(Blackboard &blackboard,
                                           entt::DefaultRegistry &registry) {
-    float off_screen = blackboard.camera.position().x + blackboard.camera.size().x;
-    while (last_col_generated_ < off_screen && !chunks_.empty()) { // second condn is safety check
+    while (!chunks_.empty()) {
         std::vector<int> col = chunks_.front();
         float y = -400.0f;
         for (int c:col) {
@@ -58,5 +57,10 @@ void BossLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
 }
 
 void BossLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    generate_next_chunk(blackboard, registry);
+    if (!generated_) {
+        load_next_chunk(0);
+        load_next_chunk(1);
+        generate_next_chunk(blackboard, registry);
+        generated_ = true;
+    }
 }

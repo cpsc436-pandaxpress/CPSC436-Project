@@ -36,8 +36,7 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         falling_platform_system(),
         enemy_animation_system(),
         health_bar_render_system(),
-        health_bar_transform_system()
-{
+        health_bar_transform_system() {
     init_scene(blackboard);
     reset_scene(blackboard); // idk why??? but this is required
     gl_has_errors();
@@ -66,9 +65,12 @@ void BossScene::update(Blackboard &blackboard) {
     enemy_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
     falling_platform_system.update(blackboard, registry_);
+    background_transform_system.update(blackboard, registry_);
 }
 
 void BossScene::render(Blackboard &blackboard) {
+    glClearColor(30.f / 256.f, 55.f / 256.f, 153.f / 256.f, 1); // same colour as the top of the background
+    glClear(GL_COLOR_BUFFER_BIT);
     background_render_system.update(blackboard, registry_); // render background first
     sprite_render_system.update(blackboard, registry_);
     health_bar_render_system.update(blackboard, registry_);
@@ -88,12 +90,10 @@ void BossScene::update_panda(Blackboard &blackboard) {
 }
 
 void BossScene::update_camera(Blackboard &blackboard) {
-    vec2 cam_position = blackboard.camera.position();
-
     auto &panda_transform = registry_.get<Transform>(panda_entity);
     float y_offset = std::min(0.f, panda_transform.y + MAX_CAMERA_Y_DIFF);
 
-
+    blackboard.camera.set_position(panda_transform.x, y_offset);
     blackboard.camera.compose();
 }
 
@@ -166,8 +166,8 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
     registry_.assign<CausesDamage>(jacko_entity, TOP_VULNERABLE_MASK, 1);
     registry_.assign<Velocity>(jacko_entity, 0.f, 0.f);
     registry_.assign<Collidable>(jacko_entity,
-            texture.width() * scaleX * 0.75,
-            texture.height() * scaleY
+                                 texture.width() * scaleX * 0.75,
+                                 texture.height() * scaleY
     );
 
     auto shaderHealth = blackboard.shader_manager.get_shader("health");
@@ -195,29 +195,29 @@ void BossScene::create_food(Blackboard &blackboard) {
     registry_.assign<Interactable>(burger_entity);
     registry_.assign<ObeysGravity>(burger_entity);
     registry_.assign<Velocity>(burger_entity);
-    registry_.assign<Collidable>(burger_entity, texture.width() * scaleX, texture.height() * scaleY);
+    registry_.assign<Collidable>(burger_entity, texture.width() * scaleX,
+                                 texture.height() * scaleY);
 
 }
 
 void BossScene::create_background(Blackboard &blackboard) {
     std::vector<Texture> textures;
-    textures.reserve(1);
+    textures.reserve(4);
     // This order matters for rendering
-    textures.push_back(blackboard.texture_manager.get_texture("graveyard"));
-    //textures.push_back(blackboard.textureManager.get_texture("bg_front"));
-    //textures.push_back(blackboard.textureManager.get_texture("bg_middle"));
-    //textures.push_back(blackboard.textureManager.get_texture("bg_back"));
+    textures.push_back(blackboard.texture_manager.get_texture("grave_top"));
+    textures.push_back(blackboard.texture_manager.get_texture("grave_middle"));
+    textures.push_back(blackboard.texture_manager.get_texture("grave_front"));
+    textures.push_back(blackboard.texture_manager.get_texture("grave_back"));
     // end order
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
-
     int i = 0;
+    int indices[4] = {3, 1, 2, 0};
     for (Texture t: textures) {
         auto bg_entity = registry_.create();
-        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, i);
+        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, indices[i], false);
         bg.set_pos1(0.0f, 0.0f);
-        bg.set_pos2(blackboard.camera.size().x, 0.0f);
         bg.set_rotation_rad(0.0f);
         bg.set_scale(blackboard.camera.size().x / t.width(),
                      blackboard.camera.size().y / t.height());

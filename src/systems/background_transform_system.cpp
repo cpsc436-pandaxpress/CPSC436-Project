@@ -24,6 +24,10 @@ void BackgroundTransformSystem::update(Blackboard &blackboard, entt::DefaultRegi
                 vertical_background_transform(blackboard, background);
             }
                 break;
+            case BOSS_SCENE_ID: {
+                boss_background_transform(blackboard, background);
+            }
+                break;
         }
     }
 }
@@ -57,5 +61,41 @@ void BackgroundTransformSystem::vertical_background_transform(Blackboard &blackb
             background.set_pos2(background.pos2().x, background.pos2().y - camera.size().y * 2);
             background.set_z_pos(background.z_pos() * -1);
         }
+    }
+}
+
+float BackgroundTransformSystem::clamp(float val, float from, float to) {
+    if (val > from) {
+        return std::min(val, to);
+    } else if (val < to) {
+        return std::max(val, from);
+    } else {
+        return val;
+    }
+}
+
+void BackgroundTransformSystem::boss_background_transform(Blackboard &blackboard,
+                                                          Background &background) {
+    if (background.z_pos() == 0) { // follow the camera
+        // this is the moon
+        Camera camera = blackboard.camera;
+        float displacement = blackboard.delta_time * 1;
+        background.set_pos1(camera.position().x + displacement, camera.position().y);
+    } else if (background.z_pos() == 3) { // follow the camera only in x-direction
+        // This is the grass
+        Camera camera = blackboard.camera;
+        float displacement = blackboard.delta_time * 1;
+        background.set_pos1(camera.position().x + displacement, background.pos1().y);
+    } else {
+        // everything else
+        float og_pos1 = 0.0;
+        float clampValue = blackboard.camera.size().x / 0.5f;
+        float displacement = clamp(
+                (og_pos1 - blackboard.camera.position().x) * (background.z_pos() / 10.0f),
+                -clampValue,
+                clampValue
+        );
+        vec2 pos1 = background.pos1();
+        background.set_pos1(blackboard.camera.position().x + displacement, pos1.y);
     }
 }

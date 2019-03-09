@@ -14,6 +14,7 @@ class BossLevelSystem : public LevelSystem {
 
     const float FIRST_COL_X = -800.f;
     float last_col_generated_, last_col_loaded_;
+    bool generated_;
 
 public:
 
