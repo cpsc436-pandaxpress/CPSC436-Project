@@ -28,7 +28,6 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         background_render_system(),
         physics_system(),
         player_movement_system(BOSS_SCENE_ID),
-        collision_system(),
         chase_system(),
         jacko_ai_system(blackboard, registry_),
         player_animation_system(BOSS_SCENE_ID),
@@ -58,7 +57,6 @@ void BossScene::update(Blackboard &blackboard) {
 
     chase_system.update(blackboard, registry_);
     player_movement_system.update(blackboard, registry_);
-    collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
     panda_dmg_system.update(blackboard, registry_);
     health_bar_transform_system.update(blackboard, registry_);

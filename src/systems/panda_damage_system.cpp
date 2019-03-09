@@ -28,7 +28,7 @@ void PandaDamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
         }
         if (panda.hurt && !panda.invincible) {
             // Do all damage calcs here
-            health.hp--;
+            health.health_points--;
             blackboard.soundManager.playSFX(SFX_PANDA_HURT);
             // Make Panda Bounce
             if (panda.facingRight) {

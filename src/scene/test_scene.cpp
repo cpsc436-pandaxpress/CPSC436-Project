@@ -25,7 +25,6 @@ TestScene::TestScene(Blackboard &blackboard, SceneManager &scene_manager) :
         sprite_render_system(),
         physics_system(),
         player_movement_system(),
-        collision_system(),
         obstacles(),
         background_render_system(),
         background_transform_system() {
@@ -62,7 +61,6 @@ void TestScene::update(Blackboard &blackboard) {
 
     background_transform_system.update(blackboard, registry_);
     player_movement_system.update(blackboard, registry_);
-    collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
 }

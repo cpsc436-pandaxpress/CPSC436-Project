@@ -26,7 +26,6 @@
 #include "../util/blackboard.h"
 #include "../systems/physics_system.h"
 #include "../systems/player_movement_system.h"
-#include "../systems/collision_system.h"
 #include "../systems/enemy_system.h"
 #include "../systems/player_animation_system.h"
 #include "../systems/enemy_animation_system.h"
@@ -53,7 +52,6 @@ private:
     BackgroundTransformSystem background_transform_system;
     PhysicsSystem physics_system;
     PlayerMovementSystem player_movement_system;
-    CollisionSystem collision_system;
     EnemySystem enemy_system;
     PlayerAnimationSystem player_animation_system;
     EnemyAnimationSystem enemy_animation_system;

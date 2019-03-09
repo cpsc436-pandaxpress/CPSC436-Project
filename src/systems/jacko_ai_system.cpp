@@ -193,7 +193,7 @@ int JackoAISystem::getPandaHealth(Blackboard& blackboard, entt::DefaultRegistry&
     auto panda_view = registry.view<Panda, Health>();
     for(auto panda_entity : panda_view){
         auto &health = panda_view.get<Health>(panda_entity);
-        return health.hp;
+        return health.health_points;
     }
     return 0;
 }
@@ -202,7 +202,7 @@ int JackoAISystem::getJackoHealth(Blackboard& blackboard, entt::DefaultRegistry&
     auto jacko_view = registry.view<Jacko, Health>();
     for(auto jacko_entity : jacko_view){
         auto &health = jacko_view.get<Health>(jacko_entity);
-        return health.hp;
+        return health.health_points;
     }
     return 0;
 }

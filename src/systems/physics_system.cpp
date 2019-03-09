@@ -214,7 +214,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         auto& health = registry.get<Health>(entry.entity);
                         if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)){
                             //do damage
-                            health.hp -= cd.hp;
+                            health.health_points -= cd.hp;
 
                             if (entry.normal.x != 0) {
                                 dv.x_velocity = 700 * entry.normal.x;
@@ -227,7 +227,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                 // panda is hitting jacko
                                 auto& jacko = registry.get<Jacko>(entry.entity);
                                 auto& chases = registry.get<Chases>(entry.entity);
-                                if (health.hp <= 0) {
+                                if (health.health_points <= 0) {
                                     registry.remove<Interactable>(entry.entity);
                                     registry.remove<Chases>(entry.entity);
                                     registry.assign<ObeysGravity>(entry.entity);
@@ -237,7 +237,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                 }
                             }
                             //else if to exclude jacko from normal death stuff
-                            else if (health.hp <= 0) {
+                            else if (health.health_points <= 0) {
                                 //normal way to kill stuff
                                 if (registry.has<Interactable>(entry.entity)) {
                                     registry.remove<Interactable>(entry.entity);
@@ -253,7 +253,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         auto& panda = registry.get<Panda>(d_entity);
                         auto& health = registry.get<Health>(d_entity);
 
-                        health.hp ++;
+                        health.health_points ++;
                         registry.destroy(entry.entity);
                     }
                 }
