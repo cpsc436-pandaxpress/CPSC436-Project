@@ -23,8 +23,8 @@ void ScoreSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
             case HORIZONTAL_SCENE_ID: {
                 std::string score_text;
                 std::stringstream ss;
-                ss << "SCORE: ";
-                ss << (int) cam.position().x / 500;
+//                ss << "SCORE: ";
+                ss << (int) cam.position().x / 50;
                 score_text = ss.str();
                 text.set_text(score_text);
                 transform.x = cam.position().x - cam.size().x / 2 + X_OFFSET;
@@ -34,8 +34,8 @@ void ScoreSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
             case VERTICAL_SCENE_ID: {
                 std::string score_text;
                 std::stringstream ss;
-                ss << "SCORE: ";
-                ss << (int) abs(cam.position().y) / 500;
+//                ss << "SCORE: ";
+                ss << (int) abs(cam.position().y) / 50;
                 score_text = ss.str();
                 text.set_text(score_text);
                 transform.x = cam.position().x + cam.size().x / 2 - X_OFFSET * 3;
