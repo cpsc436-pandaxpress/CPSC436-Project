@@ -7,7 +7,6 @@
 #include <components/transform.h>
 #include <components/collidable.h>
 #include <components/timer.h>
-#include <iostream>
 #include "horizontal_level_system.h"
 
 HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem() {
@@ -30,7 +29,6 @@ void HorizontalLevelSystem::load_next_chunk() {
 
 void HorizontalLevelSystem::load_next_chunk(int level) {
     std::string level_path = levels_path("");
-    std::cout << level << "\n";
     std::string levelFile = level_path + "level_" + std::to_string(level) + ".csv";
     CSVReader reader(levelFile);
     std::vector<std::vector<int>> dataList = reader.getData();
