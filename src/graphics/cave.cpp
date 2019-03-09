@@ -280,13 +280,12 @@ void Cave::draw(const mat3 &projection) {
             0  // offset = 0
     );
 
-    //setup uniforms
-    shader_.set_uniform_mat3("transform", transform);
-    shader_.set_uniform_mat3("projection", projection);
-    shader_.set_uniform_vec3("start_color", color_start_);
-    shader_.set_uniform_vec3("end_color", color_end_);
-    shader_.set_uniform_vec2("scale", scale);
-    shader_.set_uniform_int("status", status_);
+    shader_.set_input_vec3(
+            "in_color",
+            0, // No values between vertices
+            sizeof(vec3)  // offset = sizeOf(vec3)
+    );
+
 
     // draw!
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr);
