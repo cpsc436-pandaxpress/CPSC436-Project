@@ -149,13 +149,14 @@ void LevelSystem::generateEntity(int value, float x, float y,
             auto cave = registry.create();
             auto shaderCave = blackboard.shader_manager.get_shader("cave");
             auto meshCave = blackboard.mesh_manager.get_mesh("cave");
-            registry.assign<Transform>(cave, 100, 100, 0., 20, 20);
+            registry.assign<Transform>(cave, 100, 200, 0., 80, 80);
+            registry.assign<Interactable>(cave);
             float heightCave = 750.f;
             float widthCave = 750.f;
             vec2 sizeCave = {widthCave, heightCave};
-            vec2 scaleCave = {20, 20};
+            vec2 scaleCave = {-80, 80};
             auto &caveE = registry.assign<Cave>(cave, meshCave, shaderCave, sizeCave, scaleCave);
-            caveE.set_pos(x, y);
+            caveE.set_pos(550, -550);
             printf("Rendering Cave (%f, %f)\n", x, y);
         }
             break;

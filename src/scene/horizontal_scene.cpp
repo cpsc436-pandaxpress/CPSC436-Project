@@ -108,9 +108,9 @@ void HorizontalScene::render(Blackboard &blackboard) {
     glClearColor(19.f / 256.f, 136.f / 256.f, 126.f / 256.f, 1); // same colour as the top of the background
     glClear(GL_COLOR_BUFFER_BIT);
     background_render_system.update(blackboard, registry_); // render background first
+    cave_render_system.update(blackboard, registry_);
     sprite_render_system.update(blackboard, registry_);
     health_bar_render_system.update(blackboard, registry_);
-    cave_render_system.update(blackboard, registry_);
 }
 
 void HorizontalScene::reset_scene(Blackboard &blackboard) {

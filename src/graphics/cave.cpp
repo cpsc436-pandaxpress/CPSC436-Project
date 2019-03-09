@@ -291,7 +291,7 @@ void Cave::draw(const mat3 &projection) {
 
 
     // draw!
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr);
+    glDrawElements(GL_TRIANGLES, 168, GL_UNSIGNED_SHORT, nullptr);
 
     // unbind buffer
     mesh_.unbind();
