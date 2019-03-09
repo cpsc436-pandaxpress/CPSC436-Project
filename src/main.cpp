@@ -63,20 +63,12 @@ int main(int argc, char** argv) {
             shaders_path("sprite.vs.glsl"),
             shaders_path("sprite.fs.glsl"),"sprite");
 
-    blackboard.texture_manager.load_texture(textures_path("panda.png"), "panda");
     blackboard.texture_manager.load_texture(textures_path("panda_sprite_sheet.png"), "panda_sprites");
     blackboard.texture_manager.load_texture(textures_path("grass_block_1.png"), "platform1");
     blackboard.texture_manager.load_texture(textures_path("platform_center_grass.png"), "platform_center_grass");
     blackboard.texture_manager.load_texture(textures_path("grass_block_2.png"), "platform2");
     blackboard.texture_manager.load_texture(textures_path("bread_sprite_sheet.png"), "bread");
     blackboard.texture_manager.load_texture(textures_path("menu_full.png"), "splash");
-    blackboard.texture_manager.load_texture(textures_path("menu_bamboo.png"), "menu_bamboo");
-    blackboard.texture_manager.load_texture(textures_path("menu_grass.png"), "menu_grass");
-    blackboard.texture_manager.load_texture(textures_path("menu_front_grass.png"), "menu_front_grass");
-    blackboard.texture_manager.load_texture(textures_path("menu_kelly.png"), "menu_kelly");
-    blackboard.texture_manager.load_texture(textures_path("menu_sun.png"), "menu_sun");
-    blackboard.texture_manager.load_texture(textures_path("menu_vaping_panda.png"), "menu_vaping_panda");
-    blackboard.texture_manager.load_texture(textures_path("panda_express_logo.png"), "panda_express_logo");
     blackboard.texture_manager.load_texture(textures_path("play_text.png"), "play_text");
     blackboard.texture_manager.load_texture(textures_path("levels_text.png"), "levels_text");
     blackboard.texture_manager.load_texture(textures_path("config_text.png"), "config_text");

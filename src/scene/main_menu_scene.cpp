@@ -22,9 +22,7 @@ MainMenuScene::MainMenuScene(Blackboard& blackboard, SceneManager& scene_manager
     button_sprites_(),
     button_bg_sprites_(),
     button_y_positions_(),
-    button_targets_(),
-    background_transform_system(),
-    background_render_system()
+    button_targets_()
 {
 }
 
@@ -33,8 +31,6 @@ void MainMenuScene::update(Blackboard& blackboard) {
     auto cam_size = blackboard.camera.size();
     splash_sprite_.set_size((int)cam_size.x, (int)cam_size.y);
     splash_sprite_.set_pos(0, 0);
-
-    background_transform_system.update(blackboard, registry_);
 
     //set button alignment
     int count = button_sprites_.size();
@@ -74,8 +70,6 @@ void MainMenuScene::update(Blackboard& blackboard) {
             button_sprites_[i].set_color(1.f, 1.f, 1.f);
             button_bg_sprites_[i].set_color(0.3f, 0.3f, 0.3f);
         }
-//        float height = 75.0f / texture.height();
-//        float width = 75.0f / texture.width();
         button_sprites_[i].set_size(BUTTON_WIDTH, BUTTON_HEIGHT);
         button_bg_sprites_[i].set_size(BUTTON_WIDTH, BUTTON_HEIGHT);
         auto vertical_offset = (BUTTON_HEIGHT + BUTTON_PADDING) * i;
@@ -93,8 +87,6 @@ void MainMenuScene::render(Blackboard& blackboard) {
     auto& projection = blackboard.camera.get_projection();
 
     splash_sprite_.draw(projection);
-    create_background(blackboard);
-    create_panda(blackboard);
 
     for (auto i = 0; i < button_sprites_.size(); i++) {
         button_sprites_[i].draw(projection);
@@ -115,45 +107,4 @@ void MainMenuScene::add_item(Blackboard& blackboard, char* texture_name, SceneID
     button_bg_sprites_.push_back(bg_sprite);
     button_y_positions_.push_back(0);
     button_targets_.push_back(sceneID);
-}
-
-void MainMenuScene::create_panda(Blackboard &blackboard) {
-    panda_entity = registry_.create();
-    auto texture = blackboard.texture_manager.get_texture("menu_vaping_panda");
-    auto shader = blackboard.shader_manager.get_shader("sprite");
-    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-
-    float scaleY = 75.0 / texture.height();
-    float scaleX = 75.0 / texture.width();
-    registry_.assign<Transform>(panda_entity, 100.f, 100.f, 0., scaleX, scaleY);
-    registry_.assign<Sprite>(panda_entity, texture, shader, mesh);
-    registry_.assign<Panda>(panda_entity);
-}
-
-
-void MainMenuScene::create_background(Blackboard &blackboard) {
-    std::vector<Texture> textures;
-    textures.reserve(4);
-    // This order matters for rendering
-//    textures.push_back(blackboard.texture_manager.get_texture("menu_front_grass"));
-//    textures.push_back(blackboard.texture_manager.get_texture("panda_express_logo"));
-//    textures.push_back(blackboard.texture_manager.get_texture("menu_sun"));
-//    textures.push_back(blackboard.texture_manager.get_texture("menu_grass"));
-//    textures.push_back(blackboard.texture_manager.get_texture("menu_bamboo"));
-//    textures.push_back(blackboard.texture_manager.get_texture("menu_back"));
-    // end order
-    auto shader = blackboard.shader_manager.get_shader("sprite");
-    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-    int i = 0;
-    for (Texture t: textures) {
-        auto bg_entity = registry_.create();
-        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, i);
-        bg.set_pos1(0.0f, 0.0f);
-        bg.set_pos2(blackboard.camera.size().x, 0.0f);
-        bg.set_rotation_rad(0.0f);
-        bg.set_scale(blackboard.camera.size().x / t.width(),
-                     blackboard.camera.size().y / t.height());
-        bg_entities.push_back(bg_entity);
-        i++;
-    }
 }
