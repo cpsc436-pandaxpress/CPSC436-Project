@@ -7,7 +7,7 @@
 MeshManager::MeshManager() : meshes_() {}
 
 MeshManager::~MeshManager() {
-    for (auto& entry: meshes_) {
+    for (auto &entry: meshes_) {
         GLuint vbo, ibo, vao;
         vbo = entry.second.vbo();
         ibo = entry.second.ibo();
@@ -19,11 +19,11 @@ MeshManager::~MeshManager() {
 }
 
 bool MeshManager::load_mesh(
-    const char *name,
-    size_t vertex_count,
-    TexturedVertex *vertices,
-    size_t index_count,
-    uint16_t *indices
+        const char *name,
+        size_t vertex_count,
+        TexturedVertex *vertices,
+        size_t index_count,
+        uint16_t *indices
 ) {
 
     auto key_str = std::string(name);
@@ -39,6 +39,42 @@ bool MeshManager::load_mesh(
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(TexturedVertex) * vertex_count, vertices, GL_STATIC_DRAW);
+
+    glGenBuffers(1, &ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16_t) * index_count, indices, GL_STATIC_DRAW);
+
+    glBindVertexArray(0);
+
+    bool result = !gl_has_errors();
+
+    auto mesh = Mesh(vao, vbo, ibo);
+    meshes_.insert(std::pair<std::string, Mesh>(key_str, mesh));
+
+    return result;
+}
+
+bool MeshManager::load_mesh(
+        const char *name,
+        size_t vertex_count,
+        vec3 *vertices,
+        size_t index_count,
+        uint16_t *indices
+) {
+
+    auto key_str = std::string(name);
+    if (meshes_.count(key_str) > 0) {
+        return false; // Mesh with given name already loaded!
+    }
+
+    GLuint vao, vbo, ibo;
+
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vec3) * vertex_count, vertices, GL_STATIC_DRAW);
 
     glGenBuffers(1, &ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);

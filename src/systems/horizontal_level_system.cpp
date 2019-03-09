@@ -6,23 +6,30 @@
 #include <util/csv_reader.h>
 #include <components/transform.h>
 #include <components/collidable.h>
-#include <iostream>
 #include <components/timer.h>
 #include "horizontal_level_system.h"
 
 HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem() {
-    init();
+
 }
 
 void HorizontalLevelSystem::init(){
     LevelSystem::init();
     last_col_generated_ = last_col_loaded_ = FIRST_COL_X;
+    difficulty = MIN_DIFFICULTY;
+    difficulty_timer.save_watch(LEVEL_UP_LABEL, LEVEL_UP_INTERVAL);
+    load_next_chunk(0);
 }
 
 void HorizontalLevelSystem::load_next_chunk() {
     std::string level_path = levels_path("");
-    int levelN = rng_.nextInt(0, 8);
-    std::string levelFile = level_path + "level_" + std::to_string(levelN) + ".csv";
+    int level = rng_.nextInt(std::max(1, difficulty - DIFFICULTY_RANGE), difficulty);
+    load_next_chunk(level);
+}
+
+void HorizontalLevelSystem::load_next_chunk(int level) {
+    std::string level_path = levels_path("");
+    std::string levelFile = level_path + "level_" + std::to_string(level) + ".csv";
     CSVReader reader(levelFile);
     std::vector<std::vector<int>> dataList = reader.getData();
     for (int i = 0; i < dataList[0].size(); i++) {
@@ -75,6 +82,14 @@ void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry
     while (last_col_loaded_ < max_x) {
         load_next_chunk();
     }
+
+    difficulty_timer.update(blackboard.delta_time);
+
+    if (difficulty < MAX_DIFFICULTY && difficulty_timer.is_done(LEVEL_UP_LABEL)) {
+        difficulty++;
+        difficulty_timer.reset_watch(LEVEL_UP_LABEL);
+    }
+
     destroy_off_screen(registry, min_x);
     generate_next_chunk(blackboard, registry);
 }
