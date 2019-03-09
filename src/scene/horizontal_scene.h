@@ -19,6 +19,7 @@
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
+#include "../systems/cave_render_system.h"
 #include "../systems/sprite_transform_system.h"
 #include "../util/blackboard.h"
 #include "../systems/physics_system.h"
@@ -58,6 +59,7 @@ private:
     FallingPlatformSystem falling_platform_system;
     PandaDamageSystem panda_dmg_system;
     HealthBarRenderSystem health_bar_render_system;
+    CaveRenderSystem cave_render_system;
     HealthBarTransformSystem health_bar_transform_system;
 
     void create_background(Blackboard &blackboard);

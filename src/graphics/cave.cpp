@@ -276,15 +276,16 @@ void Cave::draw(const mat3 &projection) {
     // setup attributes
     shader_.set_input_vec3(
             "in_position",
-            0, // No values between vertices
+            sizeof(Vertex), // No values between vertices
             0  // offset = 0
     );
 
     shader_.set_input_vec3(
             "in_color",
-            0, // No values between vertices
+            sizeof(Vertex), // No values between vertices
             sizeof(vec3)  // offset = sizeOf(vec3)
     );
+
     shader_.set_uniform_mat3("transform", transform);
     shader_.set_uniform_mat3("projection", projection);
 
