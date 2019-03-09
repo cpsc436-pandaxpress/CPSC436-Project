@@ -14,6 +14,8 @@
 #include <systems/timer_system.h>
 #include <systems/falling_platform_system.h>
 #include <systems/panda_damage_system.h>
+#include <systems/health_bar_render_system.h>
+#include <systems/health_bar_transform_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -24,6 +26,8 @@
 #include "../systems/collision_system.h"
 #include "../systems/ghost_movement_system.h"
 #include "../systems/player_animation_system.h"
+#include "../systems/enemy_animation_system.h"
+
 
 
 class HorizontalScene: public Scene {
@@ -38,6 +42,7 @@ private:
     uint32_t panda_entity;
     uint32_t tutorial_entity;
     uint32_t tutorial2_entity;
+    uint32_t health_entity;
     HorizontalLevelSystem level_system;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
@@ -48,9 +53,12 @@ private:
     CollisionSystem collision_system;
     GhostMovementSystem ghost_movement_system;
     PlayerAnimationSystem player_animation_system;
+    EnemyAnimationSystem enemy_animation_system;
     TimerSystem timer_system;
     FallingPlatformSystem falling_platform_system;
     PandaDamageSystem panda_dmg_system;
+    HealthBarRenderSystem health_bar_render_system;
+    HealthBarTransformSystem health_bar_transform_system;
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);
@@ -70,8 +78,6 @@ public:
     virtual void render(Blackboard& blackboard) override;
 
     static constexpr float CAMERA_SPEED = 400.f;
-
-
 };
 
 
