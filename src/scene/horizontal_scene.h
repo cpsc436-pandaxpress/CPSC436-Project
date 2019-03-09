@@ -16,6 +16,7 @@
 #include <systems/panda_damage_system.h>
 #include <systems/health_bar_render_system.h>
 #include <systems/health_bar_transform_system.h>
+#include <systems/cave_render_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -59,6 +60,7 @@ private:
     PandaDamageSystem panda_dmg_system;
     HealthBarRenderSystem health_bar_render_system;
     HealthBarTransformSystem health_bar_transform_system;
+    CaveRenderSystem cave_render_system;
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);

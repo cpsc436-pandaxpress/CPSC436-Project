@@ -31,7 +31,8 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         falling_platform_system(),
         enemy_animation_system(),
         health_bar_render_system(),
-        health_bar_transform_system()
+        health_bar_transform_system(),
+        cave_render_system()
 {
     init_scene(blackboard);
     create_tutorial(blackboard);
@@ -109,6 +110,7 @@ void HorizontalScene::render(Blackboard &blackboard) {
     background_render_system.update(blackboard, registry_); // render background first
     sprite_render_system.update(blackboard, registry_);
     health_bar_render_system.update(blackboard, registry_);
+    cave_render_system.update(blackboard, registry_);
 }
 
 void HorizontalScene::reset_scene(Blackboard &blackboard) {
