@@ -9,6 +9,7 @@
 #include <components/causes_damage.h>
 #include <components/velocity.h>
 #include <components/tutorial.h>
+#include <components/timer.h>
 #include "horizontal_scene.h"
 #include "util/constants.h"
 
@@ -17,13 +18,15 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         level_system(),
         sprite_render_system(),
         sprite_transform_system(),
-        background_transform_system(),
+        background_transform_system(HORIZONTAL_SCENE_ID),
         background_render_system(),
         physics_system(),
         player_movement_system(HORIZONTAL_SCENE_ID),
         collision_system(),
         ghost_movement_system(),
-        player_animation_system(HORIZONTAL_SCENE_ID)
+        player_animation_system(HORIZONTAL_SCENE_ID),
+        falling_platform_system(),
+        panda_dmg_system()
 
 {
     init_scene(blackboard);
@@ -48,10 +51,12 @@ void HorizontalScene::update(Blackboard &blackboard) {
     player_movement_system.update(blackboard, registry_);
     collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
+    panda_dmg_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
     ghost_movement_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
+    falling_platform_system.update(blackboard, registry_);
 }
 
 void HorizontalScene::update_panda(Blackboard &blackboard) {
@@ -93,6 +98,8 @@ void HorizontalScene::update_tutorial(Blackboard &blackboard) {
 }
 
 void HorizontalScene::render(Blackboard &blackboard) {
+    glClearColor(19.f / 256.f, 136.f / 256.f, 126.f / 256.f, 1); // same colour as the top of the background
+    glClear(GL_COLOR_BUFFER_BIT);
     background_render_system.update(blackboard, registry_); // render background first
     sprite_render_system.update(blackboard, registry_);
 }
@@ -125,16 +132,17 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
     auto sprite = Sprite(texture, shader, mesh);
 
 
-    float scaleY = 75.0 / texture.height();
-    float scaleX = 75.0 / texture.width();
+    float scaleY = 75.0f / texture.height();
+    float scaleX = 75.0f / texture.width();
     registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scaleX, scaleY);
     registry_.assign<Sprite>(panda_entity, sprite);
     registry_.assign<Panda>(panda_entity);
     registry_.assign<ObeysGravity>(panda_entity);
-    registry_.assign<Health>(panda_entity, 1);
+    registry_.assign<Health>(panda_entity, 3);
     registry_.assign<Interactable>(panda_entity);
     registry_.assign<CausesDamage>(panda_entity, false, true, 1);
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
+    registry_.assign<Timer>(panda_entity);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
 }
 
