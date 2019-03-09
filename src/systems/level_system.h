@@ -33,7 +33,7 @@ protected:
     const float BREAD_SPEED = 50.f;
     const float PROJECTILE_SPEED_X = -300.f;
     const float PROJECTILE_SPEED_Y = 10.f;
-    const int SEED = 48;
+    const unsigned int SEED = 1;
 
 
     const float PLATFORM_HEIGHT = 20.f;

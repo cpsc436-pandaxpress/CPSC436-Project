@@ -10,6 +10,7 @@
 #include <components/velocity.h>
 #include <components/tutorial.h>
 #include <components/timer.h>
+#include <graphics/health_bar.h>
 #include "horizontal_scene.h"
 #include "util/constants.h"
 
@@ -25,9 +26,11 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         collision_system(),
         ghost_movement_system(),
         player_animation_system(HORIZONTAL_SCENE_ID),
+        panda_dmg_system(),
         falling_platform_system(),
-        panda_dmg_system()
-
+        enemy_animation_system(),
+        health_bar_render_system(),
+        health_bar_transform_system()
 {
     init_scene(blackboard);
     create_tutorial(blackboard);
@@ -54,9 +57,11 @@ void HorizontalScene::update(Blackboard &blackboard) {
     panda_dmg_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
     ghost_movement_system.update(blackboard, registry_);
+    health_bar_transform_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
     falling_platform_system.update(blackboard, registry_);
+    enemy_animation_system.update(blackboard, registry_);
 }
 
 void HorizontalScene::update_panda(Blackboard &blackboard) {
@@ -102,6 +107,7 @@ void HorizontalScene::render(Blackboard &blackboard) {
     glClear(GL_COLOR_BUFFER_BIT);
     background_render_system.update(blackboard, registry_); // render background first
     sprite_render_system.update(blackboard, registry_);
+    health_bar_render_system.update(blackboard, registry_);
 }
 
 void HorizontalScene::reset_scene(Blackboard &blackboard) {
@@ -144,6 +150,15 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
     registry_.assign<Timer>(panda_entity);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
+
+    auto shaderHealth = blackboard.shader_manager.get_shader("health");
+    auto meshHealth = blackboard.mesh_manager.get_mesh("health");
+    float height = 75.f;
+    float width = 750.f;
+    vec2 size = {width, height};
+    vec2 scale = {0.5, 0.5};
+    auto &healthbar = registry_.assign<HealthBar>(panda_entity,
+                                                  meshHealth, shaderHealth, size, scale);
 }
 
 void HorizontalScene::create_background(Blackboard &blackboard) {
@@ -170,12 +185,13 @@ void HorizontalScene::create_background(Blackboard &blackboard) {
         i++;
     }
 }
+
 void HorizontalScene::create_tutorial(Blackboard &blackboard) {
     tutorial_entity = registry_.create();
     tutorial2_entity = registry_.create();
 
-    auto texture =  blackboard.texture_manager.get_texture("tutorial");
-    auto texture2 =  blackboard.texture_manager.get_texture("tutorial_bread");
+    auto texture = blackboard.texture_manager.get_texture("tutorial");
+    auto texture2 = blackboard.texture_manager.get_texture("tutorial_bread");
 
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");

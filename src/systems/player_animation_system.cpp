@@ -1,7 +1,6 @@
 
 #include "player_animation_system.h"
 #include "components/panda.h"
-#include "components/interactable.h"
 #include "util/constants.h"
 #include "scene/horizontal_scene.h"
 
@@ -40,13 +39,13 @@ void PlayerAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry
 void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Interactable &walkable, Sprite &sprite) {
     float frameRate = 8.f;
     int frames, row;
+    int index = 0;
     /*
      * Walking
      */
     if (walkable.grounded) {
         frames = 8;
-        row = 0;
-        animate(frames, row, sprite);
+        row = 2;
         if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)){
             frameRate = 10.f;
         } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)){
@@ -59,7 +58,7 @@ void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Inte
     if (!walkable.grounded) {
         frames = 2;
         row = 2;
-        animate(frames, row, sprite);
+        index = 8;
         if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)){
             frameRate = 3.f;
         } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)){
@@ -68,6 +67,7 @@ void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Inte
             frameRate = 2.f;
         }
     }
+    animate(frames, index, row, sprite);
 
     animationTime += frameRate*blackboard.delta_time;
 
@@ -75,8 +75,9 @@ void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Inte
 
 void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, Interactable &walkable, Sprite &sprite) {
     float frameRate = 8.f;
-    int frames, row;
+    int frames, index, row;
     bool idle = true;
+    index = 0;
 
     if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
         direction_left = true;
@@ -90,25 +91,20 @@ void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, I
      */
 
     if (walkable.grounded) {
+        frames = 8;
         if (direction_left) {
             if (!idle){
-                frames = 8;
-                row = 1;
-                animate(frames, row, sprite);
+                row = 3;
             } else {
-                frames = 1;
                 row = 1;
-                animate(frames, row, sprite);
+                frameRate = 3.f;
             }
 
         } else if (!direction_left && !idle){
-            frames = 8;
-            row = 0;
-            animate(frames, row, sprite);
+            row = 2;
         } else {
-            frames = 1;
             row = 0;
-            animate(frames, row, sprite);
+            frameRate = 3.f;
         }
     }
 
@@ -118,23 +114,22 @@ void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, I
 
     if (!walkable.grounded) {
         frameRate = 1.f;
+        frames = 2;
+        index = 8;
         if (direction_left) {
-            frames = 2;
             row = 3;
-            animate(frames, row, sprite);
         } else {
-            frames = 2;
             row = 2;
-            animate(frames, row, sprite);
         }
     }
+    animate(frames, index, row, sprite);
     animationTime += frameRate*blackboard.delta_time;
 
 }
 
-void PlayerAnimationSystem::animate(int frames, int row, Sprite &sprite){
-    int index = ((int) animationTime % frames);
-    vec2 uv1 = {index*pandawidth + 0.006f, pandaheight*row};
-    vec2 uv2 = {(index+1)*pandawidth + 0.006f, pandaheight*(1+row) - 0.03f};
+void PlayerAnimationSystem::animate(int frames, int index, int row, Sprite &sprite){
+    index += ((int) animationTime % frames);
+    vec2 uv1 = {index*pandawidth, pandaheight*row};
+    vec2 uv2 = {(index+1)*pandawidth - 0.001f, pandaheight*(1+row) - 0.02f};
     sprite.set_uvs(uv1, uv2);
 }
