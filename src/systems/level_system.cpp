@@ -154,8 +154,9 @@ void LevelSystem::generateEntity(int value, float x, float y,
             float widthCave = 750.f;
             vec2 sizeCave = {widthCave, heightCave};
             vec2 scaleCave = {20, 20};
-            registry.assign<Cave>(cave, meshCave, shaderCave, sizeCave, scaleCave);
-
+            auto &caveE = registry.assign<Cave>(cave, meshCave, shaderCave, sizeCave, scaleCave);
+            caveE.set_pos(x, y);
+            printf("Rendering Cave (%f, %f)\n", x, y);
         }
             break;
         default:
