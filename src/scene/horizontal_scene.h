@@ -12,7 +12,10 @@
 #include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
 #include <systems/timer_system.h>
+#include <systems/falling_platform_system.h>
 #include <systems/panda_damage_system.h>
+#include <systems/health_bar_render_system.h>
+#include <systems/health_bar_transform_system.h>
 #include <systems/text_render_system.h>
 #include <systems/text_transform_system.h>
 #include <systems/score_system.h>
@@ -26,6 +29,8 @@
 #include "../systems/collision_system.h"
 #include "../systems/ghost_movement_system.h"
 #include "../systems/player_animation_system.h"
+#include "../systems/enemy_animation_system.h"
+
 
 
 class HorizontalScene: public Scene {
@@ -51,8 +56,12 @@ private:
     CollisionSystem collision_system;
     GhostMovementSystem ghost_movement_system;
     PlayerAnimationSystem player_animation_system;
+    EnemyAnimationSystem enemy_animation_system;
     TimerSystem timer_system;
+    FallingPlatformSystem falling_platform_system;
     PandaDamageSystem panda_dmg_system;
+    HealthBarRenderSystem health_bar_render_system;
+    HealthBarTransformSystem health_bar_transform_system;
     TextRenderSystem text_render_system;
     TextTransformSystem text_transform_system;
     ScoreSystem score_system;
@@ -65,7 +74,7 @@ private:
     void update_panda(Blackboard& blackboard);
     void update_tutorial(Blackboard& blackboard);
     void update_camera(Blackboard& blackboard);
-
+    void create_score_text(Blackboard &blackboard);
 public:
     HorizontalScene(Blackboard &blackboard,
                     SceneManager &scene_manager);
@@ -75,9 +84,6 @@ public:
     virtual void render(Blackboard& blackboard) override;
 
     static constexpr float CAMERA_SPEED = 400.f;
-
-
-    void create_score_text(Blackboard &blackboard);
 };
 
 

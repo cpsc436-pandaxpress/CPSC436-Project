@@ -16,6 +16,11 @@
 #include <systems/vertical_level_system.h>
 #include <systems/timer_system.h>
 #include <systems/panda_damage_system.h>
+#include <systems/background_render_system.h>
+#include <systems/background_transform_system.h>
+#include <systems/enemy_animation_system.h>
+#include <systems/health_bar_render_system.h>
+#include <systems/health_bar_transform_system.h>
 #include <systems/text_transform_system.h>
 #include <systems/text_render_system.h>
 #include <systems/score_system.h>
@@ -25,6 +30,7 @@ private:
 
     uint32_t panda_entity;
     uint32_t score_entity;
+    std::vector<uint32_t> bg_entities;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
     PhysicsSystem physics_system;
@@ -32,8 +38,13 @@ private:
     CollisionSystem collision_system;
     VerticalLevelSystem level_system;
     PlayerAnimationSystem player_animation_system;
+    EnemyAnimationSystem enemy_animation_system;
     TimerSystem timer_system;
     PandaDamageSystem panda_dmg_system;
+    BackgroundRenderSystem background_render_system;
+    BackgroundTransformSystem background_transform_system;
+    HealthBarRenderSystem health_bar_render_system;
+    HealthBarTransformSystem health_bar_transform_system;
 
     TextRenderSystem text_render_system;
     TextTransformSystem text_transform_system;
@@ -41,7 +52,7 @@ private:
 
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;
-    const float CAMERA_SPEED = 350.f;
+    const float CAMERA_SPEED = 250.f;
     const float PANDA_START_X = -10.f;
     const float PANDA_START_Y = -200.f;
     const float PLATFORM_START_X = -0.f;
@@ -50,7 +61,7 @@ private:
     void create_panda(Blackboard& blackboard);
     void reset_scene(Blackboard& blackboard);
     void init_scene(Blackboard &blackboard);
-
+    void create_score_text(Blackboard &blackboard);
 public:
     VerticalScene(Blackboard& blackboard, SceneManager& scene_manager);
 
@@ -58,7 +69,7 @@ public:
 
     virtual void render(Blackboard& blackboard) override;
 
-    void create_score_text(Blackboard &blackboard);
+    void create_background(Blackboard &blackboard);
 };
 
 #endif //PANDAEXPRESS_VERTICAL_SCENE_H

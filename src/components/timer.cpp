@@ -10,6 +10,10 @@ Timer::Timer() {
     curr_time = 0;
 }
 
+bool::Timer::watch_exists(string label){
+    return(watches.find(label)!=watches.end());
+}
+
 void Timer::save_watch(string label, float time) {
     watches[label] = {time, curr_time + time};
 }
@@ -42,4 +46,12 @@ bool Timer::exists(string label) {
 
 void Timer::remove(std::string label) {
     watches.erase(label);
+}
+
+float Timer::get_curr_time(std::string label) {
+    return curr_time;
+}
+
+float Timer::get_target_time(std::string label){
+    return watches[label].target_time;
 }

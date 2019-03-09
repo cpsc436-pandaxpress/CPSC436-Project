@@ -80,6 +80,7 @@ void ChaseSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
                 velocity.x_velocity=0;
             }else{
                 chases.stomping=false;
+                blackboard.soundManager.playSFX(SFX_JACKO_LAUGH);
             }
 
 

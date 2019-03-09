@@ -29,7 +29,7 @@ void PandaDamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
         if (panda.hurt && !panda.invincible) {
             // Do all damage calcs here
             health.healthPoints--;
-
+            blackboard.soundManager.playSFX(SFX_PANDA_HURT);
             // Make Panda Bounce
             if (panda.facingRight) {
                 velocity.x_velocity = -DMG_REACTION_X;
@@ -52,7 +52,7 @@ void PandaDamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
             timer.remove(DMG_TIMER_LABEL);
         }
 
-        if (health.healthPoints < 0) {
+        if (health.healthPoints <= 0) {
             panda.alive = false;
         }
         panda.hurt = false; // Clear DMG flag

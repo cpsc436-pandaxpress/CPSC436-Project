@@ -22,6 +22,7 @@
 #include <util/csv_reader.h>
 #include <iostream>
 #include <scene/boss_scene.h>
+#include <graphics/health_bar.h>
 
 int main(int argc, char** argv) {
 
@@ -37,10 +38,11 @@ int main(int argc, char** argv) {
         ShaderManager(),
         TextureManager(),
         window,
-        Random(0)
+        Random(0),
+        SoundManager()
     };
 
-    auto scene_manager = SceneManager();
+
 
     //load assets and configure
 
@@ -57,6 +59,14 @@ int main(int argc, char** argv) {
             shaders_path("sprite.fs.glsl"),"sprite");
 
     blackboard.shader_manager.load_shader(
+            shaders_path("sample.vs.glsl"),
+            shaders_path("sample.fs.glsl"),"sample");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("health.vs.glsl"),
+            shaders_path("health.fs.glsl"),"health");
+
+    blackboard.shader_manager.load_shader(
             shaders_path("text.vs.glsl"),
             shaders_path("text.fs.glsl"), "text");
 
@@ -65,15 +75,15 @@ int main(int argc, char** argv) {
     blackboard.texture_manager.load_texture(textures_path("grass_block_1.png"), "platform1");
     blackboard.texture_manager.load_texture(textures_path("platform_center_grass.png"), "platform_center_grass");
     blackboard.texture_manager.load_texture(textures_path("grass_block_2.png"), "platform2");
-    blackboard.texture_manager.load_texture(textures_path("bread.png"), "bread");
+    blackboard.texture_manager.load_texture(textures_path("bread_sprite_sheet.png"), "bread");
     blackboard.texture_manager.load_texture(textures_path("play_text.png"), "play_text");
     blackboard.texture_manager.load_texture(textures_path("levels_text.png"), "levels_text");
     blackboard.texture_manager.load_texture(textures_path("config_text.png"), "config_text");
     blackboard.texture_manager.load_texture(textures_path("pixel.png"), "pixel");
     blackboard.texture_manager.load_texture(textures_path("gross_splash.png"), "splash");
-    blackboard.texture_manager.load_texture(textures_path("ghost.png"), "ghost");
-    blackboard.texture_manager.load_texture(textures_path("llama.png"), "llama");
-    blackboard.texture_manager.load_texture(textures_path("spit.png"), "spit");
+    blackboard.texture_manager.load_texture(textures_path("ghost_sprite_sheet.png"), "ghost");
+    blackboard.texture_manager.load_texture(textures_path("llama_sprite_sheet.png"), "llama");
+    blackboard.texture_manager.load_texture(textures_path("spit_sprite_sheet.png"), "spit");
     blackboard.texture_manager.load_texture(textures_path("bg_back.png"), "bg_back");
     blackboard.texture_manager.load_texture(textures_path("bg_front.png"), "bg_front");
     blackboard.texture_manager.load_texture(textures_path("bg_middle.png"), "bg_middle");
@@ -81,15 +91,22 @@ int main(int argc, char** argv) {
     blackboard.texture_manager.load_texture(textures_path("tutorial.png"), "tutorial");
     blackboard.texture_manager.load_texture(textures_path("tutorial2.png"), "tutorial_bread");
 
-    blackboard.texture_manager.load_texture(textures_path("jacko.png"), "jacko");
+    blackboard.texture_manager.load_texture(textures_path("jacko_sprite_sheet.png"), "jacko");
     blackboard.texture_manager.load_texture(textures_path("graveyard.png"), "graveyard");
     blackboard.texture_manager.load_texture(textures_path("burger.png"), "burger");
 
     blackboard.texture_manager.load_texture(textures_path("stalagmite.png"), "stalagmite");
     blackboard.texture_manager.load_texture(textures_path("stalagmite2.png"), "stalagmite2");
 
-    blackboard.mesh_manager.load_mesh("sprite", 4, Sprite::vertices, 6, Sprite::indices);
+    blackboard.texture_manager.load_texture(textures_path("clouds_1.png"), "clouds1");
+    blackboard.texture_manager.load_texture(textures_path("clouds_2.png"), "clouds2");
+    blackboard.texture_manager.load_texture(textures_path("sky_bg.png"), "horizon");
 
+    blackboard.mesh_manager.load_mesh("health", 4, HealthBar::vertices, 6, HealthBar::indices);
+    blackboard.mesh_manager.load_mesh("sprite", 4, Sprite::vertices, 6, Sprite::indices);
+    blackboard.soundManager.init();
+
+    auto scene_manager = SceneManager(blackboard);
 
     // initialize scenes here
     MainMenuScene main_menu(blackboard, scene_manager);

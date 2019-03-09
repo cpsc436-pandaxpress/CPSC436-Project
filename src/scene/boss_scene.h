@@ -13,6 +13,8 @@
 #include <systems/background_transform_system.h>
 #include <systems/panda_damage_system.h>
 #include <systems/timer_system.h>
+#include <systems/health_bar_render_system.h>
+#include <systems/health_bar_transform_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -20,10 +22,14 @@
 #include "../util/blackboard.h"
 #include "../systems/physics_system.h"
 #include "../systems/player_movement_system.h"
+#include "../systems/timer_system.h"
 #include "../systems/collision_system.h"
 #include "../systems/jacko_ai_system.h"
+#include "../systems/falling_platform_system.h"
 #include "../systems/chase_system.h"
 #include "../systems/player_animation_system.h"
+#include "../systems/enemy_animation_system.h"
+
 
 
 class BossScene: public Scene {
@@ -53,7 +59,11 @@ private:
     JackoAISystem jacko_ai_system;
     PlayerAnimationSystem player_animation_system;
     TimerSystem timer_system;
+    FallingPlatformSystem falling_platform_system;
     PandaDamageSystem panda_dmg_system;
+    EnemyAnimationSystem enemy_animation_system;
+    HealthBarRenderSystem health_bar_render_system;
+    HealthBarTransformSystem health_bar_transform_system;
 
 
     void create_background(Blackboard &blackboard);
