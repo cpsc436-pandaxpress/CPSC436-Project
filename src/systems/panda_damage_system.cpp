@@ -52,7 +52,7 @@ void PandaDamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
             timer.remove(DMG_TIMER_LABEL);
         }
 
-        if (health.healthPoints <= 0) {
+        if (health.health_points <= 0) {
             panda.alive = false;
         }
         panda.hurt = false; // Clear DMG flag
