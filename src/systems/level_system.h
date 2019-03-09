@@ -45,6 +45,8 @@ protected:
     void generateEntity(int value, float x, float y,
                         Blackboard &blackboard, entt::DefaultRegistry &registry);
 
+    void destroy_entities(entt::DefaultRegistry &registry);
+
 public:
 
     LevelSystem();
@@ -52,8 +54,6 @@ public:
     void init();
 
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override = 0;
-
-    virtual void destroy_entities(entt::DefaultRegistry &registry) = 0;
 
     void generate_bread(bool move_left, float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
 

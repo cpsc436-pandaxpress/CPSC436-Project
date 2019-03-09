@@ -173,3 +173,23 @@ void LevelSystem::generate_bread(bool move_left, float x, float y, Blackboard &b
                                 texture.height() * scaleY);
     registry.assign<ObeysGravity>(bread);
 }
+
+/*
+ * Contract to destroy anything created in generate_entity()
+ * For example projectiles created elsewhere wont be destroyed here and have to be done by the
+ * system creating it
+*/
+
+void LevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
+    registry.destroy<Platform>();
+    registry.destroy<Llama>();
+    registry.destroy<Ghost>();
+    registry.destroy<Bread>();
+    registry.destroy<Obstacle>();
+    registry.destroy<Cave>();
+
+    while (!chunks_.empty()) {
+        chunks_.front().clear();
+        chunks_.pop();
+    }
+}
