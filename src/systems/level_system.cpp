@@ -100,7 +100,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             auto stalagmite2 = registry.create();
             registry.assign<Obstacle>(stalagmite2);
             registry.assign<Platform>(stalagmite2, false);
-            registry.assign<Transform>(stalagmite2, x, y, 0., scale,
+            registry.assign<Transform>(stalagmite2, x, y, 0., scale, scale);
             registry.assign<Sprite>(stalagmite2, texture, shader, mesh);
             registry.assign<Collidable>(stalagmite2, texture.width() * scale,
                                         texture.height() * scale);
