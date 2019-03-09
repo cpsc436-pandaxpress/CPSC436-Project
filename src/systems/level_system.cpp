@@ -34,22 +34,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
         }
             break;
         case 3: {
-            auto texture = blackboard.texture_manager.get_texture("bread");
-            auto shader = blackboard.shader_manager.get_shader("sprite");
-            auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-            float scaleY = 75.0f / texture.height();
-            float scaleX = 75.0f / texture.width();
-            auto bread = registry.create();
-            registry.assign<Transform>(bread, x, y, 0., scaleX, scaleY);
-            registry.assign<Sprite>(bread, texture, shader, mesh);
-            registry.assign<Bread>(bread);
-            registry.assign<CausesDamage>(bread, false, true, 1);
-            registry.assign<Health>(bread,1);
-            registry.assign<Velocity>(bread, -BREAD_SPEED, 0.f);
-            registry.assign<Interactable>(bread);
-            registry.assign<Collidable>(bread, texture.width() * scaleX,
-                                        texture.height() * scaleY);
-            registry.assign<ObeysGravity>(bread);
+            generate_bread(true, x, y, blackboard, registry);
         }
             break;
         case 4: {
@@ -74,8 +59,8 @@ void LevelSystem::generateEntity(int value, float x, float y,
             auto texture = blackboard.texture_manager.get_texture("llama");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-            float scaleY = 180.0f / texture.height();
-            float scaleX = 180.0f / texture.width();
+            float scaleY = 150.0f / texture.height();
+            float scaleX = 150.0f / texture.width();
             auto llama = registry.create();
             registry.assign<Transform>(llama, x, y - 200, 0., scaleX,
                                        scaleY);
@@ -160,25 +145,31 @@ void LevelSystem::generateEntity(int value, float x, float y,
             printf("Rendering Cave (%f, %f)\n", x, y);
         }
             break;
+        case 9: {
+            generate_bread(false, x, y, blackboard, registry);
+        }
+            break;
         default:
             break;
     }
 }
 
-void LevelSystem::generateProjectile(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    auto texture = blackboard.texture_manager.get_texture("spit");
+void LevelSystem::generate_bread(bool move_left, float x, float y, Blackboard &blackboard,
+                                 entt::DefaultRegistry &registry) {
+    auto texture = blackboard.texture_manager.get_texture("bread");
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-    auto scale = static_cast<float>(CELL_WIDTH / texture.width()/2);
-    auto projectile = registry.create();
-    registry.assign<Transform>(projectile, x - 80.f, y + 30.f, 0., scale,
-                               scale);
-    registry.assign<Sprite>(projectile, texture, shader, mesh);
-    registry.assign<Spit>(projectile);
-    registry.assign<CausesDamage>(projectile, false, true, 1);
-    registry.assign<Health>(projectile,1);
-    registry.assign<Velocity>(projectile, PROJECTILE_SPEED_X, PROJECTILE_SPEED_Y);
-    registry.assign<Interactable>(projectile);
-    registry.assign<Collidable>(projectile, texture.width() * scale,
-                                texture.height() * scale);
+    float scaleY = 75.0f / texture.height();
+    float scaleX = 75.0f / texture.width();
+    auto bread = registry.create();
+    registry.assign<Transform>(bread, x, y, 0., scaleX, scaleY);
+    registry.assign<Sprite>(bread, texture, shader, mesh);
+    registry.assign<Bread>(bread, move_left);
+    registry.assign<CausesDamage>(bread, false, true, 1);
+    registry.assign<Health>(bread,1);
+    registry.assign<Velocity>(bread, 0.f, 0.f);
+    registry.assign<Interactable>(bread);
+    registry.assign<Collidable>(bread, texture.width() * scaleX,
+                                texture.height() * scaleY);
+    registry.assign<ObeysGravity>(bread);
 }

@@ -16,6 +16,9 @@
 #include <systems/panda_damage_system.h>
 #include <systems/health_bar_render_system.h>
 #include <systems/health_bar_transform_system.h>
+#include <systems/text_render_system.h>
+#include <systems/text_transform_system.h>
+#include <systems/score_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -25,7 +28,7 @@
 #include "../systems/physics_system.h"
 #include "../systems/player_movement_system.h"
 #include "../systems/collision_system.h"
-#include "../systems/ghost_movement_system.h"
+#include "../systems/enemy_system.h"
 #include "../systems/player_animation_system.h"
 #include "../systems/enemy_animation_system.h"
 
@@ -43,7 +46,7 @@ private:
     uint32_t panda_entity;
     uint32_t tutorial_entity;
     uint32_t tutorial2_entity;
-    uint32_t health_entity;
+    uint32_t score_entity;
     HorizontalLevelSystem level_system;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
@@ -52,7 +55,7 @@ private:
     PhysicsSystem physics_system;
     PlayerMovementSystem player_movement_system;
     CollisionSystem collision_system;
-    GhostMovementSystem ghost_movement_system;
+    EnemySystem enemy_system;
     PlayerAnimationSystem player_animation_system;
     EnemyAnimationSystem enemy_animation_system;
     TimerSystem timer_system;
@@ -61,6 +64,9 @@ private:
     HealthBarRenderSystem health_bar_render_system;
     CaveRenderSystem cave_render_system;
     HealthBarTransformSystem health_bar_transform_system;
+    TextRenderSystem text_render_system;
+    TextTransformSystem text_transform_system;
+    ScoreSystem score_system;
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);
@@ -70,7 +76,7 @@ private:
     void update_panda(Blackboard& blackboard);
     void update_tutorial(Blackboard& blackboard);
     void update_camera(Blackboard& blackboard);
-
+    void create_score_text(Blackboard &blackboard);
 public:
     HorizontalScene(Blackboard &blackboard,
                     SceneManager &scene_manager);

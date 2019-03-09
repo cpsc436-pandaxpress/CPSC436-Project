@@ -70,6 +70,10 @@ int main(int argc, char** argv) {
     blackboard.shader_manager.load_shader(
             shaders_path("cave.vs.glsl"),
             shaders_path("cave.fs.glsl"),"cave");
+  
+     blackboard.shader_manager.load_shader(
+            shaders_path("text.vs.glsl"),
+            shaders_path("text.fs.glsl"), "text");
 
     blackboard.texture_manager.load_texture(textures_path("panda.png"), "panda");
     blackboard.texture_manager.load_texture(textures_path("panda_sprite_sheet.png"), "panda_sprites");
@@ -81,7 +85,7 @@ int main(int argc, char** argv) {
     blackboard.texture_manager.load_texture(textures_path("levels_text.png"), "levels_text");
     blackboard.texture_manager.load_texture(textures_path("config_text.png"), "config_text");
     blackboard.texture_manager.load_texture(textures_path("pixel.png"), "pixel");
-    blackboard.texture_manager.load_texture(textures_path("gross_splash.png"), "splash");
+    blackboard.texture_manager.load_texture(textures_path("menu_full.png"), "splash");
     blackboard.texture_manager.load_texture(textures_path("ghost_sprite_sheet.png"), "ghost");
     blackboard.texture_manager.load_texture(textures_path("llama_sprite_sheet.png"), "llama");
     blackboard.texture_manager.load_texture(textures_path("spit_sprite_sheet.png"), "spit");
