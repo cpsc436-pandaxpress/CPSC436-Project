@@ -38,7 +38,7 @@ void ScoreSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
                 ss << (int) abs(cam.position().y) / 500;
                 score_text = ss.str();
                 text.set_text(score_text);
-                transform.x = cam.position().x - cam.size().x / 2 + X_OFFSET;
+                transform.x = cam.position().x + cam.size().x / 2 - X_OFFSET * 3;
                 transform.y = cam.position().y + cam.size().y / 2 - Y_OFFSET;
             }
                 break;
