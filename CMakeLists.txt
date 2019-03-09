@@ -103,7 +103,7 @@ set(SOURCE_FILES
         src/systems/timer_system.h src/systems/falling_platform_system.cpp src/systems/falling_platform_system.h
         src/systems/timer_system.h
         src/systems/panda_damage_system.cpp
-        src/systems/panda_damage_system.h src/util/sound_manager.cpp src/util/sound_manager.h)
+        src/systems/panda_damage_system.h src/util/sound_manager.cpp src/util/sound_manager.h src/systems/enemy_system.cpp src/systems/enemy_system.h)
 
 
 # Create executable target

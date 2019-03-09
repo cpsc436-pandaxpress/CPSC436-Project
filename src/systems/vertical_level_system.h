@@ -40,8 +40,6 @@ public:
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry);
 
     void destroy_entities(entt::DefaultRegistry &registry);
-
-    void update_projectiles(Blackboard &blackboard, entt::DefaultRegistry &registry);
 };
 
 
