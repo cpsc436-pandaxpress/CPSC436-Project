@@ -33,7 +33,7 @@ private:
     float frameRate = 4.f;
 
     void animateBread(bool alive, Sprite &sprite);
-    void animateLlama(bool alive, float time, float targetTime, Sprite &sprite);
+    void animateLlama(bool alive, float currentTime, float targetTime, Sprite &sprite);
     void animateJacko(bool alive, bool evading, Sprite &sprite);
     void animateGhost(Sprite &sprite);
     void animateSpit(Sprite &sprite);

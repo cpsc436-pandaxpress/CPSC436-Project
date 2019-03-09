@@ -60,10 +60,10 @@ void EnemyAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
         auto &llama = llama_view.get<Llama>(llama_entity);
         auto &sprite = llama_view.get<Sprite>(llama_entity);
         auto& timer = llama_view.get<Timer>(llama_entity);
-        float target_time = timer.watches["spit"].target_time;
-        float time = timer.curr_time;
+        float curr_time = timer.get_curr_time("spit");
+        float target_time = timer.get_target_time("spit");
 
-        animateLlama(llama.alive, time, target_time, sprite);
+        animateLlama(llama.alive, curr_time, target_time, sprite);
     }
 
     animationTime += frameRate*blackboard.delta_time;
@@ -90,7 +90,7 @@ void EnemyAnimationSystem::animateBread(bool alive, Sprite &sprite){
     sprite.set_uvs(uv1, uv2);
 }
 
-void EnemyAnimationSystem::animateLlama(bool alive, float time, float targetTime, Sprite &sprite){
+void EnemyAnimationSystem::animateLlama(bool alive, float currentTime, float targetTime, Sprite &sprite){
     frameRate = 6.f;
     int llamaFrames = 14;
     int row = 1;
@@ -103,7 +103,7 @@ void EnemyAnimationSystem::animateLlama(bool alive, float time, float targetTime
         llamaFrames = 5;
     } 
 
-    float mod = fmod(time, targetTime);
+    float mod = fmod(currentTime, targetTime);
     int index = ((int) (mod*frameRate) % llamaFrames);
     vec2 uv1 = {index*llamaWidth +0.005f, llamaHeight*(row-1)};
     vec2 uv2 = {(index+1)*llamaWidth + 0.01f, (row*llamaHeight) - i};

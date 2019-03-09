@@ -35,7 +35,6 @@ int main(int argc, char** argv) {
 
     window.initialize("Express Panda", 800, 450);
 
-
     Blackboard blackboard = {
         Camera(1600, 900, 0, 0),
         0,
@@ -99,6 +98,9 @@ int main(int argc, char** argv) {
     blackboard.texture_manager.load_texture(textures_path("stalagmite.png"), "stalagmite");
     blackboard.texture_manager.load_texture(textures_path("stalagmite2.png"), "stalagmite2");
 
+    blackboard.texture_manager.load_texture(textures_path("clouds_1.png"), "clouds1");
+    blackboard.texture_manager.load_texture(textures_path("clouds_2.png"), "clouds2");
+    blackboard.texture_manager.load_texture(textures_path("sky_bg.png"), "horizon");
 
 
     blackboard.mesh_manager.load_mesh("sprite", 4, Sprite::vertices, 6, Sprite::indices);
