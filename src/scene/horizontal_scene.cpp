@@ -34,7 +34,7 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         enemy_animation_system(),
         health_bar_render_system(),
         cave_render_system(),
-        health_bar_transform_system()
+        health_bar_transform_system(),
         text_render_system(),
         text_transform_system(),
         score_system(HORIZONTAL_SCENE_ID)
