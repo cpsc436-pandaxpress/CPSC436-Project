@@ -11,6 +11,7 @@
 #include <components/tutorial.h>
 #include <components/timer.h>
 #include <graphics/health_bar.h>
+#include <graphics/cave.h>
 #include <graphics/text.h>
 #include <components/score.h>
 #include "horizontal_scene.h"
@@ -32,7 +33,8 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         falling_platform_system(),
         enemy_animation_system(),
         health_bar_render_system(),
-        health_bar_transform_system(),
+        cave_render_system(),
+        health_bar_transform_system()
         text_render_system(),
         text_transform_system(),
         score_system(HORIZONTAL_SCENE_ID)
@@ -113,6 +115,7 @@ void HorizontalScene::render(Blackboard &blackboard) {
     glClearColor(19.f / 256.f, 136.f / 256.f, 126.f / 256.f, 1); // same colour as the top of the background
     glClear(GL_COLOR_BUFFER_BIT);
     background_render_system.update(blackboard, registry_); // render background first
+    cave_render_system.update(blackboard, registry_);
     sprite_render_system.update(blackboard, registry_);
     health_bar_render_system.update(blackboard, registry_);
     text_render_system.update(blackboard, registry_);

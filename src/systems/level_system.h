@@ -21,6 +21,7 @@
 #include <components/obstacle.h>
 #include <components/interactable.h>
 #include <components/obeys_gravity.h>
+#include <graphics/cave.h>
 #include "util/random.h"
 #include "system.h"
 #include <queue>
