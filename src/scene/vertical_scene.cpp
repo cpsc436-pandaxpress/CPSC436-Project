@@ -29,6 +29,7 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         panda_dmg_system(),
         background_render_system(),
         background_transform_system(VERTICAL_SCENE_ID),
+        enemy_system(),
         enemy_animation_system(),
         text_transform_system(),
         text_render_system(),
@@ -117,6 +118,7 @@ void VerticalScene::update(Blackboard &blackboard) {
     score_system.update(blackboard, registry_);
     text_transform_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
+    enemy_system.update(blackboard, registry_, VERTICAL_SCENE_ID);
     enemy_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
 }

@@ -18,6 +18,7 @@
 #include <systems/panda_damage_system.h>
 #include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
+#include <systems/enemy_system.h>
 #include <systems/enemy_animation_system.h>
 #include <systems/health_bar_render_system.h>
 #include <systems/health_bar_transform_system.h>
@@ -43,6 +44,7 @@ private:
     PandaDamageSystem panda_dmg_system;
     BackgroundRenderSystem background_render_system;
     BackgroundTransformSystem background_transform_system;
+    EnemySystem enemy_system;
     HealthBarRenderSystem health_bar_render_system;
     HealthBarTransformSystem health_bar_transform_system;
 
@@ -52,7 +54,6 @@ private:
 
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;
-    const float CAMERA_SPEED = 250.f;
     const float PANDA_START_X = -10.f;
     const float PANDA_START_Y = -200.f;
     const float PLATFORM_START_X = -0.f;
@@ -70,6 +71,8 @@ public:
     virtual void render(Blackboard& blackboard) override;
 
     void create_background(Blackboard &blackboard);
+
+    static constexpr float CAMERA_SPEED = 250.f;
 };
 
 #endif //PANDAEXPRESS_VERTICAL_SCENE_H

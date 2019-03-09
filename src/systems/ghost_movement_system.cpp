@@ -1,5 +1,5 @@
 //
-// Created by Becca Roth on 2019-02-22.
+// Created by Rebecca Roth on 2019-02-22.
 //
 
 #include "ghost_movement_system.h"
@@ -12,10 +12,12 @@
 #include "components/obeys_gravity.h"
 #include "components/collidable.h"
 #include "scene/horizontal_scene.h"
+#include "scene/vertical_scene.h"
+#include "scene/scene_manager.h"
 
 GhostMovementSystem::GhostMovementSystem() {}
 
-void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry) {
+void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry, SceneID sceneid) {
     vec2 cam_position = blackboard.camera.position();
     vec2 cam_size = blackboard.camera.size();
 
@@ -29,12 +31,16 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
         if (ghost.done)
             break;
         else if (!ghost.onScreen) {
-            if (gh_transform.x + gh_collidable.width / 2 < cam_position.x + cam_size.x / 2) {
+            if ((sceneid == HORIZONTAL_SCENE_ID) && (gh_transform.x + gh_collidable.width / 2 < cam_position.x + cam_size.x / 2)) {
+                ghost.onScreen = true;
+                ghost.waiting = true;
+            }
+            else if ((sceneid == VERTICAL_SCENE_ID) && (gh_transform.y - gh_collidable.height > cam_position.y - cam_size.x / 4)) {
                 ghost.onScreen = true;
                 ghost.waiting = true;
             }
         }
-        // Waiting state
+            // Waiting state
         else if (ghost.onScreen && ghost.waiting){
             if (ghost.waittime < 0){
                 ghost.waiting = false;
@@ -52,7 +58,12 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
                 ghost.start_pt.y = gh_transform.y;
             }
             else {
-                gh_velocity.x_velocity = HorizontalScene::CAMERA_SPEED;
+                if (sceneid == HORIZONTAL_SCENE_ID)
+                    gh_velocity.x_velocity = HorizontalScene::CAMERA_SPEED;
+                else {
+                    printf("here\n");
+                    gh_velocity.y_velocity = -VerticalScene::CAMERA_SPEED;
+                }
                 if (int(llround(floor(ghost.waittime))) % 2 == 0) {
                     if (ghost.waiting_high && ghost.waiting_left) {
                         gh_transform.x = gh_transform.x + 3;
@@ -75,14 +86,14 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
                 ghost.waittime = ghost.waittime - blackboard.delta_time*4;
             }
         }
-        // Curve to swoop at player
+            // Curve to swoop at player
         else if (ghost.onScreen && !ghost.waiting){
             if (ghost.swoopTime <= 1){
                 float t = ghost.swoopTime;
                 float x=(2*t*t*t-3*t*t+1)*ghost.start_pt.x+(-2*t*t*t+3*t*t)*ghost.aim_pt.x+
-                  (t*t*t-2*t*t+t)*ghost.start_tangent.x+(t*t*t-t*t)*ghost.aim_tangent.x;
+                        (t*t*t-2*t*t+t)*ghost.start_tangent.x+(t*t*t-t*t)*ghost.aim_tangent.x;
                 float y=(2*t*t*t-3*t*t+1)*ghost.start_pt.y+(-2*t*t*t+3*t*t)*ghost.aim_pt.y+
-                  (t*t*t-2*t*t+1)*ghost.start_tangent.y+(t*t*t-t*t)*ghost.aim_tangent.y;
+                        (t*t*t-2*t*t+1)*ghost.start_tangent.y+(t*t*t-t*t)*ghost.aim_tangent.y;
                 gh_transform.x = x;
                 gh_transform.y = y;
                 ghost.swoopTime = ghost.swoopTime + blackboard.delta_time/2;
