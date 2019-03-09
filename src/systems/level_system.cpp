@@ -100,7 +100,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
                                        scale*1.8f);
             registry.assign<Sprite>(stalagmite2, texture, shader, mesh);
             registry.assign<Collidable>(stalagmite2, texture.width() * scale,
-                                        texture.height() * scale);
+                                        texture.height() * scale*1.8);
             break;
         }
         case 7: {
@@ -114,7 +114,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             registry.assign<Transform>(stalagmite, x, y - CELL_HEIGHT*0.75f + PLATFORM_HEIGHT, 0., scale*2.f,
                                        scale);
             registry.assign<Sprite>(stalagmite, texture, shader, mesh);
-            registry.assign<Collidable>(stalagmite, texture.width() * scale,
+            registry.assign<Collidable>(stalagmite, texture.width() * scale*2.f,
                                         texture.height() * scale);
 
         }
