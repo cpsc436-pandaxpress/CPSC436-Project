@@ -11,6 +11,7 @@
 #include <components/tutorial.h>
 #include <components/timer.h>
 #include <graphics/health_bar.h>
+#include <graphics/cave.h>
 #include "horizontal_scene.h"
 #include "util/constants.h"
 

@@ -115,7 +115,7 @@ set(SOURCE_FILES
         src/systems/health_bar_transform_system.h
         src/systems/health_bar_render_system.cpp
         src/systems/health_bar_render_system.h
-        )
+        src/graphics/cave.cpp src/graphics/cave.h src/systems/cave_render_system.cpp src/systems/cave_render_system.h)
 
 
 # Create executable target

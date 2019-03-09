@@ -145,6 +145,19 @@ void LevelSystem::generateEntity(int value, float x, float y,
 
         }
             break;
+        case 10: {
+            auto cave = registry.create();
+            auto shaderCave = blackboard.shader_manager.get_shader("cave");
+            auto meshCave = blackboard.mesh_manager.get_mesh("cave");
+            registry.assign<Transform>(cave, 100, 100, 0., 20, 20);
+            float heightCave = 750.f;
+            float widthCave = 750.f;
+            vec2 sizeCave = {widthCave, heightCave};
+            vec2 scaleCave = {20, 20};
+            registry.assign<Cave>(cave, meshCave, shaderCave, sizeCave, scaleCave);
+
+        }
+            break;
         default:
             break;
     }

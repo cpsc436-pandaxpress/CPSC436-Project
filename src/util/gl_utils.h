@@ -23,6 +23,12 @@ struct TexturedVertex
     vec2 texcoord;
 };
 
+struct Vertex
+{
+    vec3 position;
+    vec3 color;
+};
+
 
 void gl_flush_errors();
 
