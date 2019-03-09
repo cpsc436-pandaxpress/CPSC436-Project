@@ -94,6 +94,10 @@ int main(int argc, char** argv) {
     blackboard.texture_manager.load_texture(textures_path("stalagmite.png"), "stalagmite");
     blackboard.texture_manager.load_texture(textures_path("stalagmite2.png"), "stalagmite2");
 
+    blackboard.texture_manager.load_texture(textures_path("clouds_1.png"), "clouds1");
+    blackboard.texture_manager.load_texture(textures_path("clouds_2.png"), "clouds2");
+    blackboard.texture_manager.load_texture(textures_path("sky_bg.png"), "horizon");
+
     blackboard.mesh_manager.load_mesh("health", 4, HealthBar::vertices, 6, HealthBar::indices);
     blackboard.mesh_manager.load_mesh("sprite", 4, Sprite::vertices, 6, Sprite::indices);
     blackboard.soundManager.init();

@@ -19,7 +19,7 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         level_system(),
         sprite_render_system(),
         sprite_transform_system(),
-        background_transform_system(),
+        background_transform_system(HORIZONTAL_SCENE_ID),
         background_render_system(),
         physics_system(),
         player_movement_system(HORIZONTAL_SCENE_ID),
@@ -101,6 +101,8 @@ void HorizontalScene::update_tutorial(Blackboard &blackboard) {
 }
 
 void HorizontalScene::render(Blackboard &blackboard) {
+    glClearColor(19.f / 256.f, 136.f / 256.f, 126.f / 256.f, 1); // same colour as the top of the background
+    glClear(GL_COLOR_BUFFER_BIT);
     background_render_system.update(blackboard, registry_); // render background first
     sprite_render_system.update(blackboard, registry_);
     health_bar_render_system.update(blackboard, registry_);

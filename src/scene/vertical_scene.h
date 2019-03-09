@@ -16,6 +16,8 @@
 #include <systems/vertical_level_system.h>
 #include <systems/timer_system.h>
 #include <systems/panda_damage_system.h>
+#include <systems/background_render_system.h>
+#include <systems/background_transform_system.h>
 #include <systems/health_bar_render_system.h>
 #include <systems/health_bar_transform_system.h>
 
@@ -23,6 +25,7 @@ class VerticalScene : public Scene {
 private:
 
     uint32_t panda_entity;
+    std::vector<uint32_t> bg_entities;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
     PhysicsSystem physics_system;
@@ -32,6 +35,8 @@ private:
     PlayerAnimationSystem player_animation_system;
     TimerSystem timer_system;
     PandaDamageSystem panda_dmg_system;
+    BackgroundRenderSystem background_render_system;
+    BackgroundTransformSystem background_transform_system;
     HealthBarRenderSystem health_bar_render_system;
     HealthBarTransformSystem health_bar_transform_system;
 
@@ -53,6 +58,8 @@ public:
     virtual void update(Blackboard& blackboard) override;
 
     virtual void render(Blackboard& blackboard) override;
+
+    void create_background(Blackboard &blackboard);
 };
 
 #endif //PANDAEXPRESS_VERTICAL_SCENE_H
