@@ -18,6 +18,7 @@
 #include <systems/panda_damage_system.h>
 #include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
+#include <systems/enemy_animation_system.h>
 #include <systems/health_bar_render_system.h>
 #include <systems/health_bar_transform_system.h>
 
@@ -33,6 +34,7 @@ private:
     CollisionSystem collision_system;
     VerticalLevelSystem level_system;
     PlayerAnimationSystem player_animation_system;
+    EnemyAnimationSystem enemy_animation_system;
     TimerSystem timer_system;
     PandaDamageSystem panda_dmg_system;
     BackgroundRenderSystem background_render_system;

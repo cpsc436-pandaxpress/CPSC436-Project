@@ -28,6 +28,8 @@
 #include "../systems/falling_platform_system.h"
 #include "../systems/chase_system.h"
 #include "../systems/player_animation_system.h"
+#include "../systems/enemy_animation_system.h"
+
 
 
 class BossScene: public Scene {
@@ -59,6 +61,7 @@ private:
     TimerSystem timer_system;
     FallingPlatformSystem falling_platform_system;
     PandaDamageSystem panda_dmg_system;
+    EnemyAnimationSystem enemy_animation_system;
     HealthBarRenderSystem health_bar_render_system;
     HealthBarTransformSystem health_bar_transform_system;
 

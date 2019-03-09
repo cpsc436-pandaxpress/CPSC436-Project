@@ -26,8 +26,9 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         collision_system(),
         ghost_movement_system(),
         player_animation_system(HORIZONTAL_SCENE_ID),
-        falling_platform_system(),
         panda_dmg_system(),
+        falling_platform_system(),
+        enemy_animation_system(),
         health_bar_render_system(),
         health_bar_transform_system()
 {
@@ -60,6 +61,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
     player_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
     falling_platform_system.update(blackboard, registry_);
+    enemy_animation_system.update(blackboard, registry_);
 }
 
 void HorizontalScene::update_panda(Blackboard &blackboard) {

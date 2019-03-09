@@ -26,6 +26,8 @@
 #include "../systems/collision_system.h"
 #include "../systems/ghost_movement_system.h"
 #include "../systems/player_animation_system.h"
+#include "../systems/enemy_animation_system.h"
+
 
 
 class HorizontalScene: public Scene {
@@ -51,6 +53,7 @@ private:
     CollisionSystem collision_system;
     GhostMovementSystem ghost_movement_system;
     PlayerAnimationSystem player_animation_system;
+    EnemyAnimationSystem enemy_animation_system;
     TimerSystem timer_system;
     FallingPlatformSystem falling_platform_system;
     PandaDamageSystem panda_dmg_system;
