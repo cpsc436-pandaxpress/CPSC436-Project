@@ -7,8 +7,12 @@
 
 struct Bread {
     bool alive;
+    bool started;
+    bool left;
 
-    Bread() : alive(true) {}
+    Bread() : Bread(true) {}
+
+    Bread(bool move_left) : alive(true), started(false), left(move_left) {}
 };
 
 #endif //PANDAEXPRESS_BREAD_H

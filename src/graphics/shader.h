@@ -27,8 +27,9 @@ public:
     void set_uniform_vec2(const char* loc, const vec2& val);
     void set_uniform_vec3(const char* loc, const vec3& val);
     void set_uniform_mat3(const char* loc, const mat3& val);
+    void set_uniform_float(const char* loc, float val);
+    void set_uniform_int(const char* loc, int val);
 
     void set_input_vec2(const char* loc, size_t size, size_t position);
     void set_input_vec3(const char* loc, size_t size, size_t position);
-
 };

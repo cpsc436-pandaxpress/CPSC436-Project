@@ -25,9 +25,12 @@ struct Ghost {
     bool waiting_right;
     bool waiting_left;
     bool done;
+    bool horizontal;
 
-    Ghost() : waittime(10.0), swoopTime(0.0), start_pt({0.0,0.0}), start_tangent({0.0,0.0}),
-              aim_pt({0.0,0.0}), aim_tangent({0.0,0.0}), onScreen(false), waiting(false),
-              waiting_high(true), waiting_low(false), waiting_right(false), waiting_left(true), done(false){}
+    Ghost(): Ghost(true){}
+
+    Ghost(bool horizontal_level) : waittime(10.0), swoopTime(0.0), start_pt({0.0,0.0}), start_tangent({0.0,0.0}),
+                                   aim_pt({0.0,0.0}), aim_tangent({0.0,0.0}), onScreen(false), waiting(false), waiting_high(true),
+                                   waiting_low(false), waiting_right(false), waiting_left(true), done(false), horizontal(horizontal_level){}
 };
 #endif //PANDAEXPRESS_GHOST_H

@@ -12,10 +12,12 @@
  */
 
 struct Health {
-    int hp;
+    int health_points;
+    int max_health;
 
 
-    Health(int hp) :
-            hp(hp) {}
+    Health(int healthPoints) :
+            health_points(healthPoints),
+            max_health(healthPoints) {}
 };
 #endif //PANDAEXPRESS_HEALTH_H

@@ -92,7 +92,6 @@ void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry
 
     destroy_off_screen(registry, min_x);
     generate_next_chunk(blackboard, registry);
-    update_projectiles(blackboard, registry);
 }
 
 void HorizontalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float x) {
@@ -141,29 +140,6 @@ void HorizontalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, 
         auto &transform = obstacles.get<Transform>(entity);
         if (transform.x < x) {
             registry.destroy(entity);
-        }
-    }
-}
-
-void HorizontalLevelSystem::update_projectiles(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    vec2 cam_position = blackboard.camera.position();
-    vec2 cam_size = blackboard.camera.size();
-
-    auto llama_view = registry.view<Llama, Transform, Collidable, Timer>();
-    for (auto llama_entity : llama_view) {
-        auto& llama = llama_view.get<Llama>(llama_entity);
-        auto& la_transform = llama_view.get<Transform>(llama_entity);
-        auto& la_collidable = llama_view.get<Collidable>(llama_entity);
-        auto& la_timer = llama_view.get<Timer>(llama_entity);
-        if (!llama.alive || (la_transform.x + la_collidable.width / 2 > cam_position.x + cam_size.x / 2))
-            break;
-
-        if (la_transform.y > 500)
-            llama.alive = false;
-
-        if(la_timer.is_done(SPIT_TIMER_LABEL)) {
-            generateProjectile(la_transform.x, la_transform.y, blackboard, registry);
-            la_timer.reset_watch(SPIT_TIMER_LABEL);
         }
     }
 }

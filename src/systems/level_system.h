@@ -35,7 +35,6 @@ protected:
     const float PROJECTILE_SPEED_Y = 10.f;
     const unsigned int SEED = 1;
 
-
     const float PLATFORM_HEIGHT = 20.f;
 
     virtual void load_next_chunk() = 0;
@@ -55,7 +54,7 @@ public:
 
     virtual void destroy_entities(entt::DefaultRegistry &registry) = 0;
 
-    void generateProjectile(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void generate_bread(bool move_left, float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
 
     const std::string FALLING_PLATFORM_TIMER_LABEL = "fall";
     const std::string SPIT_TIMER_LABEL = "spit";

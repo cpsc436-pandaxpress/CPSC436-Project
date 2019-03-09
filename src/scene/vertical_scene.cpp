@@ -10,6 +10,10 @@
 #include <components/platform.h>
 #include <graphics/background.h>
 #include <components/timer.h>
+#include <graphics/health_bar.h>
+#include <graphics/font.h>
+#include <graphics/text.h>
+#include <components/score.h>
 #include "vertical_scene.h"
 #include "util/constants.h"
 
@@ -25,7 +29,11 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         panda_dmg_system(),
         background_render_system(),
         background_transform_system(VERTICAL_SCENE_ID),
-        enemy_animation_system()
+        enemy_system(),
+        enemy_animation_system(),
+        text_transform_system(),
+        text_render_system(),
+        score_system(VERTICAL_SCENE_ID)
 {
     init_scene(blackboard);
     gl_has_errors();
@@ -38,6 +46,7 @@ void VerticalScene::init_scene(Blackboard &blackboard) {
     blackboard.camera.compose();
     create_background(blackboard);
     create_panda(blackboard);
+    create_score_text(blackboard);
     level_system.init();
 }
 
@@ -60,6 +69,15 @@ void VerticalScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
     registry_.assign<Timer>(panda_entity);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
+
+    auto shaderHealth = blackboard.shader_manager.get_shader("health");
+    auto meshHealth = blackboard.mesh_manager.get_mesh("health");
+    float height = 75.f;
+    float width = 750.f;
+    vec2 size = {width, height};
+    vec2 scale = {0.5, 0.5};
+    auto &healthbar = registry_.assign<HealthBar>(panda_entity,
+                                                  meshHealth, shaderHealth, size, scale);
 }
 
 void VerticalScene::update(Blackboard &blackboard) {
@@ -96,7 +114,11 @@ void VerticalScene::update(Blackboard &blackboard) {
     physics_system.update(blackboard, registry_);
     panda_dmg_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
+    health_bar_transform_system.update(blackboard, registry_);
+    score_system.update(blackboard, registry_);
+    text_transform_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
+    enemy_system.update(blackboard, registry_, VERTICAL_SCENE_ID);
     enemy_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
 }
@@ -108,6 +130,8 @@ void VerticalScene::render(Blackboard &blackboard) {
     glClear(GL_COLOR_BUFFER_BIT);
     background_render_system.update(blackboard, registry_);
     sprite_render_system.update(blackboard, registry_);
+    health_bar_render_system.update(blackboard, registry_);
+    text_render_system.update(blackboard, registry_);
 }
 
 void VerticalScene::reset_scene(Blackboard &blackboard) {
@@ -117,6 +141,7 @@ void VerticalScene::reset_scene(Blackboard &blackboard) {
         registry_.destroy(e);
     }
     bg_entities.clear();
+    registry_.destroy(score_entity);
     init_scene(blackboard);
 }
 
@@ -155,4 +180,18 @@ void VerticalScene::create_background(Blackboard &blackboard) {
     bg0.set_scale(blackboard.camera.size().x / tex3.width(),
                  blackboard.camera.size().y / tex3.height());
     bg_entities.push_back(bg_entity0);
+}
+
+void VerticalScene::create_score_text(Blackboard &blackboard) {
+    auto shader = blackboard.shader_manager.get_shader("text");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+
+    FontType font = FontType();
+    font.load(fonts_path("TitilliumWeb-Bold.ttf"), 64);
+
+    score_entity = registry_.create();
+    std::string textVal = "SCORE: 0";
+    auto &text = registry_.assign<Text>(score_entity, shader, mesh, font, textVal);
+    registry_.assign<Transform>(score_entity, 0., 0., 0., 1.f, 1.f);
+    registry_.assign<Score>(score_entity);
 }

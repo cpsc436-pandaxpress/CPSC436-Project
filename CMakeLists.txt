@@ -104,11 +104,30 @@ set(SOURCE_FILES
         src/systems/falling_platform_system.cpp
         src/systems/falling_platform_system.h
         src/systems/panda_damage_system.cpp
-        src/systems/panda_damage_system.h
+        src/systems/enemy_system.cpp
+        src/systems/enemy_system.h
         src/systems/enemy_animation_system.cpp
         src/systems/enemy_animation_system.h
         src/util/sound_manager.cpp
-        src/util/sound_manager.h)
+        src/util/sound_manager.h
+        src/graphics/health_bar.cpp
+        src/graphics/health_bar.h
+        src/systems/health_bar_transform_system.cpp
+        src/systems/health_bar_transform_system.h
+        src/systems/health_bar_render_system.cpp
+        src/systems/health_bar_render_system.h
+        src/graphics/text.cpp
+        src/graphics/text.h
+        src/graphics/font.cpp
+        src/graphics/font.h
+        src/systems/text_render_system.cpp
+        src/systems/text_render_system.h
+        src/systems/text_transform_system.cpp
+        src/systems/text_transform_system.h
+        src/systems/score_system.cpp
+        src/systems/score_system.h
+        src/components/score.h
+        )
 
 
 # Create executable target
@@ -124,7 +143,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS 0)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ext/stb_image/)
 target_include_directories(${PROJECT_NAME} PUBLIC ext/entt/)
-
+target_include_directories(${PROJECT_NAME} PUBLIC /usr/local/include/freetype2/)
 # Find OpenGL
 find_package(OpenGL REQUIRED)
 
@@ -133,7 +152,10 @@ if (OPENGL_FOUND)
     target_link_libraries(${PROJECT_NAME} PUBLIC ${OPENGL_gl_LIBRARY})
 endif()
 
-
+# Find FreeType
+find_package(Freetype REQUIRED)
+target_include_directories(${PROJECT_NAME} PUBLIC ${FREETYPE_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${FREETYPE_LIBRARIES})
 
 if (IS_OS_LINUX OR IS_OS_MAC)
     # Try to find packages rather than to use the precompiled ones
