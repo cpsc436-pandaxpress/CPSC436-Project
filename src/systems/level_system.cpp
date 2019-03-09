@@ -84,6 +84,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             auto scale = static_cast<float>(CELL_WIDTH / texture.width());
             auto stalagmite2 = registry.create();
             registry.assign<Obstacle>(stalagmite2);
+            registry.assign<CausesDamage>(stalagmite2, ALL_DMG_MASK, 1);
             registry.assign<Platform>(stalagmite2, false);
             registry.assign<Transform>(stalagmite2, x, y, 0., scale,
                                        scale*1.8f);
