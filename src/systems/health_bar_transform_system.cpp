@@ -29,9 +29,9 @@ void HealthBarTransformSystem::update(Blackboard &blackboard, entt::DefaultRegis
             healthBar.set_status(1);
         }
         healthBar.set_pos(blackboard.camera.position().x - blackboard.camera.size().x / 2
-                          + (healthBar.size().x / 2 * healthBar.scale().x + 100.f),
+                          + (healthBar.size().x / 2 * healthBar.scale().x + PANDA_HB_OFFSET_X),
                           blackboard.camera.position().y + blackboard.camera.size().y / 2
-                          - (healthBar.size().y / 2 * healthBar.scale().y + 50.f)
+                          - (healthBar.size().y / 2 * healthBar.scale().y + PANDA_HB_OFFSET_Y)
         );
         healthBar.set_rotation_rad(transform.theta);
         healthBar.set_health(health.healthPoints / (float) health.max_health);

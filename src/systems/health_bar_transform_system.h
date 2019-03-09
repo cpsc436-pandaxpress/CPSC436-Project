@@ -8,6 +8,9 @@
 #include "system.h"
 
 class HealthBarTransformSystem : public System {
+private:
+    const float PANDA_HB_OFFSET_X = 100.f;
+    const float PANDA_HB_OFFSET_Y = 50.f;
 public:
     HealthBarTransformSystem();
 
