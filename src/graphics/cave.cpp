@@ -286,6 +286,12 @@ void Cave::draw(const mat3 &projection) {
             sizeof(vec3)  // offset = sizeOf(vec3)
     );
 
+    shader_.set_input_vec3(
+            "fcolor",
+            sizeof(Vertex), // No values between vertices
+            sizeof(vec3)  // offset = sizeOf(vec3)
+    );
+
     shader_.set_uniform_mat3("transform", transform);
     shader_.set_uniform_mat3("projection", projection);
 
