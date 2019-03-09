@@ -24,6 +24,7 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         collision_system(),
         panda_dmg_system(),
         background_render_system(),
+        falling_platform_system(),
         background_transform_system(VERTICAL_SCENE_ID)
 {
     init_scene(blackboard);
@@ -97,6 +98,7 @@ void VerticalScene::update(Blackboard &blackboard) {
     sprite_transform_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
+    falling_platform_system.update(blackboard, registry_);
 }
 
 void VerticalScene::render(Blackboard &blackboard) {
