@@ -141,16 +141,16 @@ void EnemySystem::handle_llamas(vec2 cam_position, vec2 cam_size, SceneID scenei
             for (auto panda_entity : pandas_view) {
                 auto &pa_transform = pandas_view.get<Transform>(panda_entity);
                 if (pa_transform.x <= llama_transform.x) {
+                    llama_transform.x_scale = abs(llama_transform.x_scale);
                     if (llama_timer.is_done(SPIT_TIMER_LABEL)) {
                         generate_projectile(llama_transform.x, llama_transform.y, true, blackboard, registry);
                         llama_timer.reset_watch(SPIT_TIMER_LABEL);
-                        llama_transform.x_scale = abs(llama_transform.x_scale);
                     }
                 } else {
+                    llama_transform.x_scale = -abs(llama_transform.x_scale);
                     if (llama_timer.is_done(SPIT_TIMER_LABEL)) {
                         generate_projectile(llama_transform.x, llama_transform.y, false, blackboard, registry);
                         llama_timer.reset_watch(SPIT_TIMER_LABEL);
-                        llama_transform.x_scale = -llama_transform.x_scale;
                     }
                 }
             }
