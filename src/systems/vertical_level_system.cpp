@@ -87,7 +87,6 @@ void VerticalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &
 
     destroy_off_screen(registry, max_y);
     generate_next_chunk(blackboard, registry);
-    update_projectiles(blackboard, registry);
 }
 
 void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float max_y) {
@@ -112,22 +111,6 @@ void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, fl
         auto &transform = spits.get<Transform>(entity);
         if (transform.y > max_y) {
             registry.destroy(entity);
-        }
-    }
-}
-
-void VerticalLevelSystem::update_projectiles(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    auto llama_view = registry.view<Llama, Transform, Timer>();
-    for (auto llama_entity : llama_view) {
-        auto& llama = llama_view.get<Llama>(llama_entity);
-        auto& la_transform = llama_view.get<Transform>(llama_entity);
-        auto& la_timer  = llama_view.get<Timer>(llama_entity);
-        if (!llama.alive)
-            break;
-
-        if(la_timer.is_done(SPIT_TIMER_LABEL)) {
-            generateProjectile(la_transform.x, la_transform.y, blackboard, registry);
-            la_timer.reset_watch(SPIT_TIMER_LABEL);
         }
     }
 }
