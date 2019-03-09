@@ -92,7 +92,6 @@ int main(int argc, char** argv) {
     blackboard.texture_manager.load_texture(textures_path("burger.png"), "burger");
 
     blackboard.texture_manager.load_texture(textures_path("stalagmite.png"), "stalagmite");
-    blackboard.texture_manager.load_texture(textures_path("stalagmite2.png"), "stalagmite2");
 
     blackboard.texture_manager.load_texture(textures_path("clouds_1.png"), "clouds1");
     blackboard.texture_manager.load_texture(textures_path("clouds_2.png"), "clouds2");
