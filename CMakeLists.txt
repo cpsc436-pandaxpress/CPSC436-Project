@@ -108,7 +108,14 @@ set(SOURCE_FILES
         src/systems/enemy_animation_system.cpp
         src/systems/enemy_animation_system.h
         src/util/sound_manager.cpp
-        src/util/sound_manager.h)
+        src/util/sound_manager.h
+        src/graphics/health_bar.cpp
+        src/graphics/health_bar.h
+        src/systems/health_bar_transform_system.cpp
+        src/systems/health_bar_transform_system.h
+        src/systems/health_bar_render_system.cpp
+        src/systems/health_bar_render_system.h
+        )
 
 
 # Create executable target

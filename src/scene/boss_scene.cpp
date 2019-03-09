@@ -15,6 +15,7 @@
 #include <components/timer.h>
 #include <components/tutorial.h>
 #include <components/timer.h>
+#include <graphics/health_bar.h>
 #include "boss_scene.h"
 #include "util/constants.h"
 
@@ -34,9 +35,12 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         timer_system(),
         panda_dmg_system(),
         falling_platform_system(),
-        enemy_animation_system() {
+        enemy_animation_system(),
+        health_bar_render_system(),
+        health_bar_transform_system()
+{
     init_scene(blackboard);
-
+    reset_scene(blackboard); // idk why??? but this is required
     gl_has_errors();
 }
 
@@ -57,6 +61,7 @@ void BossScene::update(Blackboard &blackboard) {
     collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
     panda_dmg_system.update(blackboard, registry_);
+    health_bar_transform_system.update(blackboard, registry_);
     jacko_ai_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
@@ -92,10 +97,10 @@ void BossScene::update_camera(Blackboard &blackboard) {
 void BossScene::render(Blackboard &blackboard) {
     background_render_system.update(blackboard, registry_); // render background first
     sprite_render_system.update(blackboard, registry_);
+    health_bar_render_system.update(blackboard, registry_);
 }
 
 void BossScene::reset_scene(Blackboard &blackboard) {
-
     level_system.destroy_entities(registry_);
     registry_.destroy(panda_entity);
     registry_.destroy(jacko_entity);
@@ -113,11 +118,10 @@ void BossScene::init_scene(Blackboard &blackboard) {
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
     create_background(blackboard);
-    create_panda(blackboard);
     create_food(blackboard);
     create_jacko(blackboard, burger_entity);
-
     create_platforms(blackboard);
+    create_panda(blackboard);
 }
 
 void BossScene::create_panda(Blackboard &blackboard) {
@@ -138,6 +142,14 @@ void BossScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
     registry_.assign<Timer>(panda_entity);
+    auto shaderHealth = blackboard.shader_manager.get_shader("health");
+    auto meshHealth = blackboard.mesh_manager.get_mesh("health");
+    float height = 75.f;
+    float width = 750.f;
+    vec2 size = {width, height};
+    vec2 scale = {0.5, 0.5};
+    auto &healthbar = registry_.assign<HealthBar>(panda_entity,
+                                                  meshHealth, shaderHealth, size, scale);
 }
 
 void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
@@ -157,7 +169,19 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
     registry_.assign<Interactable>(jacko_entity);
     registry_.assign<CausesDamage>(jacko_entity, false, true, 1);
     registry_.assign<Velocity>(jacko_entity, 0.f, 0.f);
-    registry_.assign<Collidable>(jacko_entity, texture.width() * scaleX*0.75, texture.height() * scaleY);
+    registry_.assign<Collidable>(jacko_entity,
+            texture.width() * scaleX * 0.75,
+            texture.height() * scaleY
+    );
+
+    auto shaderHealth = blackboard.shader_manager.get_shader("health");
+    auto meshHealth = blackboard.mesh_manager.get_mesh("health");
+    float height = 75.f;
+    float width = 750.f;
+    vec2 size = {width, height};
+    vec2 scale = {0.3, 0.3};
+    auto &healthbar = registry_.assign<HealthBar>(jacko_entity,
+                                                  meshHealth, shaderHealth, size, scale);
 }
 
 void BossScene::create_food(Blackboard &blackboard) {

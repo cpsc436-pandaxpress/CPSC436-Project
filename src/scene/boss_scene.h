@@ -13,6 +13,8 @@
 #include <systems/background_transform_system.h>
 #include <systems/panda_damage_system.h>
 #include <systems/timer_system.h>
+#include <systems/health_bar_render_system.h>
+#include <systems/health_bar_transform_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -60,7 +62,8 @@ private:
     FallingPlatformSystem falling_platform_system;
     PandaDamageSystem panda_dmg_system;
     EnemyAnimationSystem enemy_animation_system;
-
+    HealthBarRenderSystem health_bar_render_system;
+    HealthBarTransformSystem health_bar_transform_system;
 
 
     void create_background(Blackboard &blackboard);
