@@ -22,11 +22,15 @@
 #include <systems/enemy_animation_system.h>
 #include <systems/health_bar_render_system.h>
 #include <systems/health_bar_transform_system.h>
+#include <systems/text_transform_system.h>
+#include <systems/text_render_system.h>
+#include <systems/score_system.h>
 
 class VerticalScene : public Scene {
 private:
 
     uint32_t panda_entity;
+    uint32_t score_entity;
     std::vector<uint32_t> bg_entities;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
@@ -44,6 +48,10 @@ private:
     HealthBarRenderSystem health_bar_render_system;
     HealthBarTransformSystem health_bar_transform_system;
 
+    TextRenderSystem text_render_system;
+    TextTransformSystem text_transform_system;
+    ScoreSystem score_system;
+
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;
     const float PANDA_START_X = -10.f;
@@ -54,7 +62,7 @@ private:
     void create_panda(Blackboard& blackboard);
     void reset_scene(Blackboard& blackboard);
     void init_scene(Blackboard &blackboard);
-
+    void create_score_text(Blackboard &blackboard);
 public:
     VerticalScene(Blackboard& blackboard, SceneManager& scene_manager);
 

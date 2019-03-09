@@ -12,6 +12,7 @@
 #define textures_path(name) data_path "/textures/" name
 #define audio_path(name) data_path "/audio/" name
 #define levels_path(name) data_path "/levels/" name
+#define fonts_path(name) data_path "/fonts/" name
 
 typedef int SceneID;
 typedef int SFXID;

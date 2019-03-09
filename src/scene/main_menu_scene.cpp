@@ -3,9 +3,11 @@
 //
 
 #include "main_menu_scene.h"
+#include <graphics/background.h>
 
-static const int BUTTON_WIDTH = 320;
-static const int BUTTON_HEIGHT = 100;
+
+static const int BUTTON_WIDTH = 350;
+static const int BUTTON_HEIGHT = 120;
 static const int BUTTON_PADDING = 40;
 
 MainMenuScene::MainMenuScene(Blackboard& blackboard, SceneManager& scene_manager) :
@@ -56,24 +58,23 @@ void MainMenuScene::update(Blackboard& blackboard) {
 
 
 
-    int top_center_y = 0;
-    int center_x =  0;
+    int button_y = -250;
+    int button_x =  350;
 
     for (auto i = 0; i < count; i++) {
         if (i == selected_button_) {
-            button_sprites_[i].set_color(1.f, 0.3f, 0.7f);
+            button_sprites_[i].set_color(0.7f, 0.9f, 0.9f);
             button_bg_sprites_[i].set_color(0.5f, 0.5f, 0.5f);
         }
         else {
-            button_sprites_[i].set_color(0.5f, 0.5f, 0.5f);
+            button_sprites_[i].set_color(1.f, 1.f, 1.f);
             button_bg_sprites_[i].set_color(0.3f, 0.3f, 0.3f);
         }
-
         button_sprites_[i].set_size(BUTTON_WIDTH, BUTTON_HEIGHT);
         button_bg_sprites_[i].set_size(BUTTON_WIDTH, BUTTON_HEIGHT);
         auto vertical_offset = (BUTTON_HEIGHT + BUTTON_PADDING) * i;
-        button_sprites_[i].set_pos(center_x, top_center_y + vertical_offset);
-        button_bg_sprites_[i].set_pos(center_x, top_center_y + vertical_offset);
+        button_sprites_[i].set_pos(button_x, button_y + vertical_offset);
+        button_bg_sprites_[i].set_pos(button_x, button_y + vertical_offset);
     }
 
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN)) {
