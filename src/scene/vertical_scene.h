@@ -12,6 +12,7 @@
 #include <queue>
 #include <systems/player_movement_system.h>
 #include <systems/player_animation_system.h>
+#include <systems/falling_platform_system.h>
 #include <systems/vertical_level_system.h>
 #include <systems/timer_system.h>
 #include <systems/panda_damage_system.h>
@@ -41,6 +42,7 @@ private:
     TimerSystem timer_system;
     PandaDamageSystem panda_dmg_system;
     BackgroundRenderSystem background_render_system;
+    FallingPlatformSystem falling_platform_system;
     BackgroundTransformSystem background_transform_system;
     EnemySystem enemy_system;
     HealthBarRenderSystem health_bar_render_system;
