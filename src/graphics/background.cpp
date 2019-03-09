@@ -69,6 +69,16 @@ void Background::set_rotation_rad(float theta) {
     sp2_.set_rotation_rad(theta);
 }
 
-int Background::z_pos(){
+int Background::z_pos() {
     return z;
 }
+
+void Background::set_z_pos(int z_pos) {
+    z = z_pos;
+}
+
+vec2 Background::texture_size() {
+    return {(float) texture_.width(), (float) texture_.height()};
+}
+
+
