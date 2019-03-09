@@ -26,6 +26,7 @@ HealthBar::HealthBar(Mesh mesh, Shader shader, vec2 size, vec2 scale) :
     color_end_ = {1.f, 1.f, 1.f};
     rotation_ = 0.f;
     health_ = 1.0f;
+    status_ = 0;
 }
 
 HealthBar::HealthBar(const HealthBar &other) :
@@ -35,7 +36,9 @@ HealthBar::HealthBar(const HealthBar &other) :
         scale_(other.scale_),
         color_start_(other.color_start_),
         color_end_(other.color_end_),
-        rotation_(other.rotation_) {}
+        rotation_(other.rotation_),
+        status_(other.status_)
+{}
 
 void HealthBar::draw(const mat3 &projection) {
     // transform
@@ -78,7 +81,7 @@ void HealthBar::draw(const mat3 &projection) {
     shader_.set_uniform_float("health", health_);
     shader_.set_uniform_int("status", status_);
 
-    // draw! TODO
+    // draw!
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr);
 
     // unbind buffer
