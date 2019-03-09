@@ -25,7 +25,6 @@ TestScene::TestScene(Blackboard &blackboard, SceneManager &scene_manager) :
         sprite_render_system(),
         physics_system(),
         player_movement_system(),
-        collision_system(),
         obstacles(),
         background_render_system(),
         background_transform_system() {
@@ -62,7 +61,6 @@ void TestScene::update(Blackboard &blackboard) {
 
     background_transform_system.update(blackboard, registry_);
     player_movement_system.update(blackboard, registry_);
-    collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
 }
@@ -113,7 +111,7 @@ void TestScene::create_panda(Blackboard &blackboard) {
     registry_.assign<ObeysGravity>(panda_entity);
     registry_.assign<Health>(panda_entity, 1);
     registry_.assign<Interactable>(panda_entity);
-    registry_.assign<CausesDamage>(panda_entity, false, true, 1);
+    registry_.assign<CausesDamage>(panda_entity, PANDA_DMG_MASK, 1);
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
     registry_.assign<Collidable>(panda_entity, texture.width() * scale, texture.height() * scale);
 
@@ -198,7 +196,7 @@ void TestScene::create_bread(Blackboard &blackboard) {
                                 scale, scale);
     registry_.assign<Sprite>(bread, texture, shader, mesh);
     registry_.assign<Bread>(bread);
-    registry_.assign<CausesDamage>(bread, false, true, 1);
+    registry_.assign<CausesDamage>(bread, TOP_VULNERABLE_MASK, 1);
     registry_.assign<Health>(bread, 1);
     registry_.assign<Velocity>(bread, -BREAD_SPEED, 0.f);
     registry_.assign<Collidable>(bread, texture.width() * scale, texture.height() * scale);
