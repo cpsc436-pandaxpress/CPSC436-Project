@@ -19,7 +19,8 @@
 #include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
 #include <systems/enemy_animation_system.h>
-
+#include <systems/health_bar_render_system.h>
+#include <systems/health_bar_transform_system.h>
 
 class VerticalScene : public Scene {
 private:
@@ -38,6 +39,8 @@ private:
     PandaDamageSystem panda_dmg_system;
     BackgroundRenderSystem background_render_system;
     BackgroundTransformSystem background_transform_system;
+    HealthBarRenderSystem health_bar_render_system;
+    HealthBarTransformSystem health_bar_transform_system;
 
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;
