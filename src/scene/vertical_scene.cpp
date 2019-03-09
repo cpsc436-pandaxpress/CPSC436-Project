@@ -24,7 +24,7 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         collision_system(),
         panda_dmg_system(),
         background_render_system(),
-        background_transform_system(VERTICAL_SCENE_ID)
+        background_transform_system(VERTICAL_SCENE_ID),
         enemy_animation_system()
 {
     init_scene(blackboard);
