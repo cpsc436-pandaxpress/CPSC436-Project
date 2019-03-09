@@ -32,5 +32,4 @@ public:
 
     void set_input_vec2(const char* loc, size_t size, size_t position);
     void set_input_vec3(const char* loc, size_t size, size_t position);
-
 };

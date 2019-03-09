@@ -66,6 +66,10 @@ int main(int argc, char** argv) {
             shaders_path("health.vs.glsl"),
             shaders_path("health.fs.glsl"),"health");
 
+    blackboard.shader_manager.load_shader(
+            shaders_path("text.vs.glsl"),
+            shaders_path("text.fs.glsl"), "text");
+
     blackboard.texture_manager.load_texture(textures_path("panda.png"), "panda");
     blackboard.texture_manager.load_texture(textures_path("panda_sprite_sheet.png"), "panda_sprites");
     blackboard.texture_manager.load_texture(textures_path("grass_block_1.png"), "platform1");
