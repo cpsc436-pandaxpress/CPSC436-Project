@@ -44,20 +44,14 @@ void PhysicsSystem::apply_gravity(Blackboard &blackboard, entt::DefaultRegistry 
         auto& gravity  = viewNonWalkable.get<ObeysGravity>(entity);
 
 
-        //velocity.y_velocity += gravity.gravityFactor * GRAVITY * blackboard.delta_time;
-
         if (registry.has<Interactable>(entity)) {
             auto& interactible = view.get<Interactable>(entity);
-            //if (!interactible.grounded) {
-                velocity.y_velocity += gravity.gravityFactor * GRAVITY * blackboard.delta_time;
-            //} else{
-            //   velocity.y_velocity=0.f;
-            //}
+            velocity.y_velocity += gravity.gravityFactor * GRAVITY * blackboard.delta_time;
         }
         else {
             velocity.y_velocity += gravity.gravityFactor * GRAVITY * blackboard.delta_time;
-        }
-       }
+         }
+    }
 
 }
 
@@ -80,7 +74,6 @@ void PhysicsSystem::apply_velocity(Blackboard &blackboard, entt::DefaultRegistry
 void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     // check all dynamic phys objects
     // against all other phys objects
-
 
     auto dynamic_view = registry.view<Interactable, Collidable, Transform, Velocity>();
 
@@ -173,22 +166,17 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         }
                     }
 
-
-
                     // movement is restricted!
                     float remaining_time = 1 - entry.time;
                     float dot_product = (dv.x_velocity * entry.normal.y + dv.y_velocity * entry.normal.x) * remaining_time;
-                    //dv.x_velocity = dot_product * entry.normal.y;
-                    //dv.y_velocity = dot_product * entry.normal.x;
                     dv.x_velocity = dv.x_velocity * entry.time + dot_product * entry.normal.y;
                     dv.y_velocity = dv.y_velocity * entry.time + dot_product * entry.normal.x;
 
                     // stop at first blocking collision
                     break;
 
-//                    entry.d_velocity.x = entry.time * entry.d_velocity.x + dot_product * entry.normal.y ;
-//                    entry.d_velocity.y = entry.time * entry.d_velocity.y + dot_product * entry.normal.x;
-                } else {
+               }
+                else {
                     //handle non-blocking collisions
                     recorded_collisions.insert(uint_pair(d_entity, entry.entity));
 
@@ -202,11 +190,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         auto& panda = registry.get<Panda>(d_entity);
 
                         if (cd.normal_matches_mask(entry.normal.x, entry.normal.y)) {
-                            //do damage
-                            health.hp -= cd.hp;
-                            if (health.hp <= 0) {
-                                panda.alive = false;
-                            }
+                            panda.hurt = true;
                         }
                     }
                     else if ( registry.has<CausesDamage>(d_entity)
@@ -217,11 +201,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         auto& panda = registry.get<Panda>(entry.entity);
 
                         if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)) {
-                            //do damage
-                            health.hp -= cd.hp;
-                            if (health.hp <= 0) {
-                                 panda.alive = false;
-                            }
+                            panda.hurt = true;
                         }
                     }
 
@@ -235,9 +215,6 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)){
                             //do damage
                             health.hp -= cd.hp;
-
-
-
 
                             if (entry.normal.x != 0) {
                                 dv.x_velocity = 700 * entry.normal.x;
@@ -278,11 +255,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
 
                         health.hp ++;
                         registry.destroy(entry.entity);
-
                     }
-
-
-
                 }
             }
 
