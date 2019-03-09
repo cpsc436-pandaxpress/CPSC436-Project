@@ -26,7 +26,7 @@ void EnemySystem::generate_projectile(float x, float y, bool spit_left, Blackboa
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
     auto scale = static_cast<float>(CELL_WIDTH / texture.width()/ 2);
     auto projectile = registry.create();
-    registry.assign<Transform>(projectile, x - 15, y + 25, 0., scale,
+    registry.assign<Transform>(projectile, x - 15.f, y + 25.f, 0., scale,
                                scale);
     registry.assign<Sprite>(projectile, texture, shader, mesh);
     registry.assign<Spit>(projectile);
