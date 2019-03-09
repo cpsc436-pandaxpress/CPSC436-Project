@@ -14,6 +14,7 @@
 class VerticalLevelSystem : public LevelSystem {
 private:
     void load_next_chunk();
+    void load_next_chunk(int level);
 
     void generate_next_chunk(Blackboard &blackboard, entt::DefaultRegistry &registry);
 

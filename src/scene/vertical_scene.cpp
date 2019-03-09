@@ -10,6 +10,7 @@
 #include <components/platform.h>
 #include <graphics/background.h>
 #include <components/timer.h>
+#include <graphics/health_bar.h>
 #include "vertical_scene.h"
 #include "util/constants.h"
 
@@ -24,8 +25,11 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         collision_system(),
         panda_dmg_system(),
         background_render_system(),
+
         falling_platform_system(),
-        background_transform_system(VERTICAL_SCENE_ID)
+        background_transform_system(VERTICAL_SCENE_ID),
+        enemy_animation_system()
+
 {
     init_scene(blackboard);
     gl_has_errors();
@@ -60,6 +64,15 @@ void VerticalScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
     registry_.assign<Timer>(panda_entity);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
+
+    auto shaderHealth = blackboard.shader_manager.get_shader("health");
+    auto meshHealth = blackboard.mesh_manager.get_mesh("health");
+    float height = 75.f;
+    float width = 750.f;
+    vec2 size = {width, height};
+    vec2 scale = {0.5, 0.5};
+    auto &healthbar = registry_.assign<HealthBar>(panda_entity,
+                                                  meshHealth, shaderHealth, size, scale);
 }
 
 void VerticalScene::update(Blackboard &blackboard) {
@@ -96,7 +109,9 @@ void VerticalScene::update(Blackboard &blackboard) {
     physics_system.update(blackboard, registry_);
     panda_dmg_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
+    health_bar_transform_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
+    enemy_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
     falling_platform_system.update(blackboard, registry_);
 }
@@ -108,6 +123,7 @@ void VerticalScene::render(Blackboard &blackboard) {
     glClear(GL_COLOR_BUFFER_BIT);
     background_render_system.update(blackboard, registry_);
     sprite_render_system.update(blackboard, registry_);
+    health_bar_render_system.update(blackboard, registry_);
 }
 
 void VerticalScene::reset_scene(Blackboard &blackboard) {
