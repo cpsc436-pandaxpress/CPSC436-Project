@@ -54,7 +54,7 @@ void BossScene::update(Blackboard &blackboard) {
     update_camera(blackboard);
     update_panda(blackboard);
 
-
+    level_system.update(blackboard, registry_);
     chase_system.update(blackboard, registry_);
     player_movement_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
@@ -66,6 +66,12 @@ void BossScene::update(Blackboard &blackboard) {
     enemy_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
     falling_platform_system.update(blackboard, registry_);
+}
+
+void BossScene::render(Blackboard &blackboard) {
+    background_render_system.update(blackboard, registry_); // render background first
+    sprite_render_system.update(blackboard, registry_);
+    health_bar_render_system.update(blackboard, registry_);
 }
 
 void BossScene::update_panda(Blackboard &blackboard) {
@@ -91,26 +97,6 @@ void BossScene::update_camera(Blackboard &blackboard) {
     blackboard.camera.compose();
 }
 
-
-void BossScene::render(Blackboard &blackboard) {
-    background_render_system.update(blackboard, registry_); // render background first
-    sprite_render_system.update(blackboard, registry_);
-    health_bar_render_system.update(blackboard, registry_);
-}
-
-void BossScene::reset_scene(Blackboard &blackboard) {
-    level_system.destroy_entities(registry_);
-    registry_.destroy(panda_entity);
-    registry_.destroy(jacko_entity);
-    registry_.destroy<Food>();
-    registry_.destroy<Platform>();
-    for (uint32_t e: bg_entities) {
-        registry_.destroy(e);
-    }
-    bg_entities.clear();
-    init_scene(blackboard);
-}
-
 void BossScene::init_scene(Blackboard &blackboard) {
     blackboard.randNumGenerator.init(0);
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
@@ -118,9 +104,21 @@ void BossScene::init_scene(Blackboard &blackboard) {
     create_background(blackboard);
     create_food(blackboard);
     create_jacko(blackboard, burger_entity);
-    create_platforms(blackboard);
     create_panda(blackboard);
+    level_system.init();
 }
+
+void BossScene::reset_scene(Blackboard &blackboard) {
+    level_system.destroy_entities(registry_);
+    registry_.destroy(panda_entity);
+    registry_.destroy(jacko_entity);
+    for (uint32_t e: bg_entities) {
+        registry_.destroy(e);
+    }
+    bg_entities.clear();
+    init_scene(blackboard);
+}
+
 
 void BossScene::create_panda(Blackboard &blackboard) {
     panda_entity = registry_.create();
@@ -227,55 +225,6 @@ void BossScene::create_background(Blackboard &blackboard) {
         i++;
     }
 
-}
-
-
-void BossScene::create_platforms(Blackboard &blackboard) {
-
-    auto shader = blackboard.shader_manager.get_shader("sprite");
-    auto texture = blackboard.texture_manager.get_texture("platform1");
-    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-    float scale = 100.0f / texture.width();
-    for (int i = -6; i < 7; i++) {
-
-
-        auto platform = registry_.create();
-        registry_.assign<Platform>(platform, false);
-        registry_.assign<Transform>(platform, i * 100, 300, 0., scale, scale);
-        registry_.assign<Sprite>(platform, texture, shader, mesh);
-        registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale);
-    }
-
-    for (int i = -5; i < 0; i += 2) {
-
-
-        auto platform = registry_.create();
-        registry_.assign<Platform>(platform, false);
-        registry_.assign<Transform>(platform, 600, i * 100, 0., scale, scale);
-        registry_.assign<Sprite>(platform, texture, shader, mesh);
-        registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale);
-    }
-
-    for (int i = -5; i < 0; i += 2) {
-
-
-        auto platform = registry_.create();
-        registry_.assign<Platform>(platform, false);
-        registry_.assign<Transform>(platform, -600, i * 100, 0., scale, scale);
-        registry_.assign<Sprite>(platform, texture, shader, mesh);
-        registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale);
-    }
-/*
-    auto falling_platform = registry_.create();
-    registry_.assign<Platform>(falling_platform);
-    registry_.assign<FallingPlatform>(falling_platform);
-    registry_.assign<Transform>(falling_platform, 0, 100, 0, scale, scale);
-    registry_.assign<Sprite>(falling_platform, texture, shader, mesh);
-    registry_.assign<Velocity>(falling_platform, 0.f, 0.f);
-    registry_.assign<Collidable>(falling_platform, texture.width() * scale, texture.height() * scale);
-    auto& timer = registry_.assign<Timer>(falling_platform);
-
-*/
 }
 
 

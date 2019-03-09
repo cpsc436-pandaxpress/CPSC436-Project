@@ -7,21 +7,22 @@
 #include <components/transform.h>
 #include <components/collidable.h>
 #include <components/timer.h>
+#include <components/food.h>
 #include "boss_level_system.h"
 
-BossLevelSystem::BossLevelSystem(): LevelSystem() {
+BossLevelSystem::BossLevelSystem() : LevelSystem() {
     init();
 }
 
-void BossLevelSystem::init(){
+void BossLevelSystem::init() {
     LevelSystem::init();
     last_col_generated_ = last_col_loaded_ = FIRST_COL_X;
+    load_next_chunk(0);
 }
 
-void BossLevelSystem::load_next_chunk() {
+void BossLevelSystem::load_next_chunk(int level) {
     std::string level_path = levels_path("");
-    int levelN = rng_.nextInt(0, 8);
-    std::string levelFile = level_path + "level_" + std::to_string(levelN) + ".csv";
+    std::string levelFile = level_path + "boss_level_" + std::to_string(level) + ".csv";
     CSVReader reader(levelFile);
     std::vector<std::vector<int>> dataList = reader.getData();
     for (int i = 0; i < dataList[0].size(); i++) {
@@ -36,9 +37,8 @@ void BossLevelSystem::load_next_chunk() {
 }
 
 // y should range from (-400, 400)
-
 void BossLevelSystem::generate_next_chunk(Blackboard &blackboard,
-                                                entt::DefaultRegistry &registry) {
+                                          entt::DefaultRegistry &registry) {
     float off_screen = blackboard.camera.position().x + blackboard.camera.size().x;
     while (last_col_generated_ < off_screen && !chunks_.empty()) { // second condn is safety check
         std::vector<int> col = chunks_.front();
@@ -53,13 +53,10 @@ void BossLevelSystem::generate_next_chunk(Blackboard &blackboard,
 }
 
 void BossLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
-
+    registry.destroy<Food>();
+    registry.destroy<Platform>();
 }
 
 void BossLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-
-}
-
-void BossLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, float x) {
-
+    generate_next_chunk(blackboard, registry);
 }
