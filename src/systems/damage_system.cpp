@@ -19,7 +19,7 @@ DamageSystem::DamageSystem() {
 void DamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     auto health_views = registry.view<Health>();
     for (auto entity: health_views) {
-        auto health = health_views.get(entity);
+        auto &health = health_views.get(entity);
         if (health.hurt) {
             if (registry.has<Panda>(entity)) {
                 handle_panda_damage(entity, blackboard, registry);
