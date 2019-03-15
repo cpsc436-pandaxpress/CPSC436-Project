@@ -103,7 +103,6 @@ set(SOURCE_FILES
         src/systems/timer_system.h
         src/systems/falling_platform_system.cpp
         src/systems/falling_platform_system.h
-        src/systems/panda_damage_system.cpp
         src/systems/enemy_system.cpp
         src/systems/enemy_system.h
         src/systems/enemy_animation_system.cpp
@@ -130,7 +129,8 @@ set(SOURCE_FILES
         src/systems/score_system.cpp
         src/systems/score_system.h
         src/components/score.h
-        )
+        src/systems/damage_system.cpp
+        src/systems/damage_system.h)
 
 
 # Create executable target

@@ -14,10 +14,11 @@
 struct Health {
     int healthPoints;
     int max_health;
-
+    bool hurt;
 
     Health(int healthPoints) :
             healthPoints(healthPoints),
-            max_health(healthPoints) {}
+            max_health(healthPoints),
+            hurt(false) {}
 };
 #endif //PANDAEXPRESS_HEALTH_H
