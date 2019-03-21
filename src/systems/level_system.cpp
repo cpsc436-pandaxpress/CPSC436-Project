@@ -130,6 +130,21 @@ void LevelSystem::generateEntity(int value, float x, float y,
 
         }
             break;
+        case 10: {
+            auto cave = registry.create();
+            auto shaderCave = blackboard.shader_manager.get_shader("cave");
+            auto meshCave = blackboard.mesh_manager.get_mesh("cave");
+            registry.assign<Transform>(cave, 100, 200, 0., 80, 80);
+            registry.assign<Interactable>(cave);
+            float heightCave = 750.f;
+            float widthCave = 750.f;
+            vec2 sizeCave = {widthCave, heightCave};
+            vec2 scaleCave = {-80, 80};
+            auto &caveE = registry.assign<Cave>(cave, meshCave, shaderCave, sizeCave, scaleCave);
+            caveE.set_pos(550, -550);
+            printf("Rendering Cave (%f, %f)\n", x, y);
+        }
+            break;
         case 9: {
             generate_bread(false, x, y, blackboard, registry);
         }
@@ -157,4 +172,24 @@ void LevelSystem::generate_bread(bool move_left, float x, float y, Blackboard &b
     registry.assign<Collidable>(bread, texture.width() * scaleX,
                                 texture.height() * scaleY);
     registry.assign<ObeysGravity>(bread);
+}
+
+/*
+ * Contract to destroy anything created in generate_entity()
+ * For example projectiles created elsewhere wont be destroyed here and have to be done by the
+ * system creating it
+*/
+
+void LevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
+    registry.destroy<Platform>();
+    registry.destroy<Llama>();
+    registry.destroy<Ghost>();
+    registry.destroy<Bread>();
+    registry.destroy<Obstacle>();
+    registry.destroy<Cave>();
+
+    while (!chunks_.empty()) {
+        chunks_.front().clear();
+        chunks_.pop();
+    }
 }

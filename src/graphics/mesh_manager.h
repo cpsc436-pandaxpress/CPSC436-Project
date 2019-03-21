@@ -37,5 +37,13 @@ public:
             uint16_t * indices
     );
 
+    bool load_mesh(
+            const char* name,
+            size_t vertex_count,
+            Vertex* vertices,
+            size_t index_count,
+            uint16_t * indices
+    );
+
     Mesh get_mesh(const char* name);
 };
