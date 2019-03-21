@@ -23,6 +23,7 @@
 #include <iostream>
 #include <scene/boss_scene.h>
 #include <graphics/health_bar.h>
+#include <graphics/cave.h>
 
 int main(int argc, char** argv) {
 
@@ -67,6 +68,10 @@ int main(int argc, char** argv) {
             shaders_path("health.fs.glsl"),"health");
 
     blackboard.shader_manager.load_shader(
+            shaders_path("cave.vs.glsl"),
+            shaders_path("cave.fs.glsl"),"cave");
+  
+     blackboard.shader_manager.load_shader(
             shaders_path("text.vs.glsl"),
             shaders_path("text.fs.glsl"), "text");
 
@@ -102,6 +107,7 @@ int main(int argc, char** argv) {
     blackboard.texture_manager.load_texture(textures_path("sky_bg.png"), "horizon");
 
     blackboard.mesh_manager.load_mesh("health", 4, HealthBar::vertices, 6, HealthBar::indices);
+    blackboard.mesh_manager.load_mesh("cave", 41, Cave::vertices, 168, Cave::indices);
     blackboard.mesh_manager.load_mesh("sprite", 4, Sprite::vertices, 6, Sprite::indices);
     blackboard.soundManager.init();
 

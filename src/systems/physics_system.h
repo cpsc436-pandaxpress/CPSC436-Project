@@ -49,10 +49,18 @@ private:
         const Velocity& d_velocity,
         const Collidable& s_collider,
         const Transform& s_position,
+        const Velocity& s_velocity,
         float dt,
         float& time,
         float& x_norm,
         float& y_norm
+    );
+    bool static_collision(
+        const Collidable &d_collider,
+        const Transform &d_position,
+        const Collidable &s_collider,
+        const Transform &s_position,
+        float buffer
     );
 };
 

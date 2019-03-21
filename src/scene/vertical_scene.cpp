@@ -37,7 +37,7 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
 
 {
     init_scene(blackboard);
-    gl_has_errors();
+    gl_has_errors("vertical_scene");
 }
 
 

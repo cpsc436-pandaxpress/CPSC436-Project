@@ -23,10 +23,17 @@ struct TexturedVertex
     vec2 texcoord;
 };
 
+struct Vertex
+{
+    vec3 position;
+    vec3 color;
+};
+
 
 void gl_flush_errors();
 
 bool gl_has_errors();
+bool gl_has_errors(char* tag);
 
 bool gl_compile_shader(GLuint shader);
 
