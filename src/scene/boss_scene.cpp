@@ -16,6 +16,7 @@
 #include <components/tutorial.h>
 #include <components/timer.h>
 #include <graphics/health_bar.h>
+#include <components/layer.h>
 #include "boss_scene.h"
 #include "util/constants.h"
 
@@ -142,6 +143,7 @@ void BossScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
     registry_.assign<Timer>(panda_entity);
+    registry_.assign<Layer>(panda_entity, PANDA_LAYER);
     auto shaderHealth = blackboard.shader_manager.get_shader("health");
     auto meshHealth = blackboard.mesh_manager.get_mesh("health");
     float height = 75.f;
@@ -173,6 +175,7 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
             texture.width() * scaleX * 0.75,
             texture.height() * scaleY
     );
+    registry_.assign<Layer>(jacko_entity, ENEMY_LAYER);
 
     auto shaderHealth = blackboard.shader_manager.get_shader("health");
     auto meshHealth = blackboard.mesh_manager.get_mesh("health");
@@ -200,6 +203,7 @@ void BossScene::create_food(Blackboard &blackboard) {
     registry_.assign<ObeysGravity>(burger_entity);
     registry_.assign<Velocity>(burger_entity);
     registry_.assign<Collidable>(burger_entity, texture.width() * scaleX, texture.height() * scaleY);
+    registry_.assign<Layer>(burger_entity, ITEM_LAYER);
 
 }
 
@@ -246,6 +250,7 @@ void BossScene::create_platforms(Blackboard &blackboard) {
         registry_.assign<Transform>(platform, i * 100, 300, 0., scale, scale);
         registry_.assign<Sprite>(platform, texture, shader, mesh);
         registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale);
+        registry_.assign<Layer>(platform, TERRAIN_LAYER);
     }
 
     for (int i = -5; i < 0; i += 2) {
@@ -256,6 +261,7 @@ void BossScene::create_platforms(Blackboard &blackboard) {
         registry_.assign<Transform>(platform, 600, i * 100, 0., scale, scale);
         registry_.assign<Sprite>(platform, texture, shader, mesh);
         registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale);
+        registry_.assign<Layer>(platform, TERRAIN_LAYER);
     }
 
     for (int i = -5; i < 0; i += 2) {
@@ -266,21 +272,6 @@ void BossScene::create_platforms(Blackboard &blackboard) {
         registry_.assign<Transform>(platform, -600, i * 100, 0., scale, scale);
         registry_.assign<Sprite>(platform, texture, shader, mesh);
         registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale);
+        registry_.assign<Layer>(platform, TERRAIN_LAYER);
     }
-/*
-    auto falling_platform = registry_.create();
-    registry_.assign<Platform>(falling_platform);
-    registry_.assign<FallingPlatform>(falling_platform);
-    registry_.assign<Transform>(falling_platform, 0, 100, 0, scale, scale);
-    registry_.assign<Sprite>(falling_platform, texture, shader, mesh);
-    registry_.assign<Velocity>(falling_platform, 0.f, 0.f);
-    registry_.assign<Collidable>(falling_platform, texture.width() * scale, texture.height() * scale);
-    auto& timer = registry_.assign<Timer>(falling_platform);
-
-*/
 }
-
-
-
-
-
