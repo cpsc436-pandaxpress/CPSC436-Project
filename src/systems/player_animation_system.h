@@ -7,6 +7,8 @@
 
 #include "system.h"
 #include "components/interactable.h"
+#include "components/panda.h"
+#include "components/transform.h"
 #include "scene/scene.h"
 
 
@@ -19,18 +21,20 @@ public:
 
 private:
     float pandawidth = 0.1;
-    float pandaheight = 0.25;
+    float pandaheight = 0.333;
     SceneID scene_id;
 
 
     float animationTime = 0.f;
     bool direction_left = false;
+    int death_index = 0;
 
 
-    void animate(int frames, int index, int row, Sprite &sprite);
 
-    void update_horizontal_scene(Blackboard &blackboard, Interactable &walkable, Sprite &sprite);
-    void update_vertical_boss_scene(Blackboard &blackboard, Interactable &walkable, Sprite &sprite);
+    void animate(bool alive, int frames, int index, int row, Sprite &sprite);
+
+    void update_horizontal_scene(Blackboard &blackboard, Interactable &walkable, Sprite &sprite, Panda &panda);
+    void update_vertical_boss_scene(Blackboard &blackboard, Interactable &walkable, Sprite &sprite, Panda &panda, Transform &transform);
 
 
 

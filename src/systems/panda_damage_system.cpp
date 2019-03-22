@@ -51,9 +51,17 @@ void PandaDamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
             panda.invincible = false;
             timer.remove(DMG_TIMER_LABEL);
         }
-
         if (health.healthPoints <= 0) {
             panda.alive = false;
+            panda.deathAnimation = true;
+            velocity.x_velocity = 0.f;
+            velocity.y_velocity = 0.f;
+            timer.save_watch(DEATH_TIMER_LABEL, DEATH_TIMER);
+        }
+        if (timer.exists(DEATH_TIMER_LABEL) && timer.is_done(DEATH_TIMER_LABEL)) {
+            panda.deathAnimation = false;
+            timer.remove(DEATH_TIMER_LABEL);
+            printf("%s, \n", "alive");
         }
         panda.hurt = false; // Clear DMG flag
     }

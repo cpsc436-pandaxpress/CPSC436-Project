@@ -1,10 +1,7 @@
 
 #include "player_animation_system.h"
-#include "components/panda.h"
 #include "util/constants.h"
 #include "scene/horizontal_scene.h"
-
-
 
 
 PlayerAnimationSystem::PlayerAnimationSystem(SceneID scene_id) :
@@ -12,22 +9,23 @@ PlayerAnimationSystem::PlayerAnimationSystem(SceneID scene_id) :
 
 void PlayerAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
 
-    auto view = registry.view<Panda, Interactable, Sprite>();
+    auto view = registry.view<Panda, Interactable, Sprite, Transform>();
 
     for (auto entity: view) {
         auto &panda = view.get<Panda>(entity);
+        auto &transform = view.get<Transform>(entity);
         auto &walkable = view.get<Interactable>(entity);
         auto &sprite = view.get<Sprite>(entity);
 
         switch (scene_id) {
             case HORIZONTAL_SCENE_ID:
-                update_horizontal_scene(blackboard, walkable, sprite);
+                update_horizontal_scene(blackboard, walkable, sprite, panda);
                 break;
             case VERTICAL_SCENE_ID:
-                update_vertical_boss_scene(blackboard, walkable, sprite);
+                update_vertical_boss_scene(blackboard, walkable, sprite, panda, transform);
                 break;
             case BOSS_SCENE_ID:
-                update_vertical_boss_scene(blackboard, walkable, sprite);
+                update_vertical_boss_scene(blackboard, walkable, sprite, panda, transform);
                 break;
             default:
                 fprintf(stderr, "Invalid scene ID: %d\n", scene_id);
@@ -36,7 +34,8 @@ void PlayerAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry
     }
 }
 
-void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Interactable &walkable, Sprite &sprite) {
+void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Interactable &walkable, Sprite &sprite,
+                                                    Panda &panda) {
     float frameRate = 8.f;
     int frames, row;
     int index = 0;
@@ -45,10 +44,9 @@ void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Inte
      */
     if (walkable.grounded) {
         frames = 8;
-        row = 2;
-        if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)){
+        if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
             frameRate = 10.f;
-        } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)){
+        } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
             frameRate = 6.f;
         }
     }
@@ -57,23 +55,38 @@ void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Inte
      */
     if (!walkable.grounded) {
         frames = 2;
-        row = 2;
         index = 8;
-        if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)){
+        if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
             frameRate = 3.f;
-        } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)){
+        } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
             frameRate = 1.f;
         } else {
             frameRate = 2.f;
         }
     }
-    animate(frames, index, row, sprite);
+
+    if (panda.alive){
+        row = 1;
+        animate(true, frames, index, row, sprite);
+//        printf("%d, \n", death_index);
+    } else {
+        int mod = ((int) animationTime % 4);
+        printf("%f, \n", animationTime);
+        if (death_index < frames && mod == 0) {
+            frames = 10;
+            frameRate = 1.f;
+            row = 2;
+//            printf("%d, \n", death_index);
+            animate(false, frames, death_index, row, sprite);
+        }
+    }
 
     animationTime += frameRate*blackboard.delta_time;
 
 }
 
-void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, Interactable &walkable, Sprite &sprite) {
+void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, Interactable &walkable, Sprite &sprite,
+                                                       Panda &panda, Transform &transform) {
     float frameRate = 8.f;
     int frames, index, row;
     bool idle = true;
@@ -81,9 +94,11 @@ void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, I
 
     if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
         direction_left = true;
+        transform.x_scale = -abs(transform.x_scale);
         idle = false;
-    } else if(blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)){
+    } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
         direction_left = false;
+        transform.x_scale = abs(transform.x_scale);
         idle = false;
     }
     /*
@@ -92,16 +107,8 @@ void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, I
 
     if (walkable.grounded) {
         frames = 8;
-        if (direction_left) {
-            if (!idle){
-                row = 3;
-            } else {
-                row = 1;
-                frameRate = 3.f;
-            }
-
-        } else if (!direction_left && !idle){
-            row = 2;
+        if (!idle) {
+            row = 1;
         } else {
             row = 0;
             frameRate = 3.f;
@@ -116,20 +123,31 @@ void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, I
         frameRate = 1.f;
         frames = 2;
         index = 8;
-        if (direction_left) {
-            row = 3;
-        } else {
+        row = 1;
+    }
+
+    if (panda.alive){
+        animate(true, frames, index, row, sprite);
+    } else {
+        frames = 10;
+        if (death_index < frames) {
             row = 2;
+            frameRate = 1.f;
+            animate(false, frames, death_index, row, sprite);
         }
     }
-    animate(frames, index, row, sprite);
-    animationTime += frameRate*blackboard.delta_time;
+    animationTime += frameRate * blackboard.delta_time;
 
 }
 
-void PlayerAnimationSystem::animate(int frames, int index, int row, Sprite &sprite){
-    index += ((int) animationTime % frames);
-    vec2 uv1 = {index*pandawidth, pandaheight*row};
-    vec2 uv2 = {(index+1)*pandawidth - 0.001f, pandaheight*(1+row) - 0.02f};
+void PlayerAnimationSystem::animate(bool alive, int frames, int index, int row, Sprite &sprite) {
+    if (alive) {
+        index += ((int) animationTime % frames);
+        death_index = 0;
+    } else{
+        death_index++;
+    }
+    vec2 uv1 = {index * pandawidth - 0.004f, pandaheight * row + 0.03f};
+    vec2 uv2 = {(index + 1) * pandawidth - 0.008f, pandaheight * (1 + row) - 0.09f};
     sprite.set_uvs(uv1, uv2);
 }
