@@ -126,6 +126,14 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                     time, x_norm, y_norm
                 );
 
+                if (time == 1) {
+                    if (static_collision(dc, dp, sc, sp, 0)) {
+                        time = 0;
+                        x_norm = 0;
+                        y_norm = 0;
+                    }
+                }
+
                 collisions.emplace_back(
                     s_entity,
                     vec2{x_norm, y_norm},
@@ -150,13 +158,20 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                     }
                 }
                 if (!inserted) {
+
                     sorted_collisions.push_back(entry);
                 }
             }
 
             for (auto entry : sorted_collisions) {
                 if (registry.has<Platform>(entry.entity)) {
+
                     recorded_collisions.insert(uint_pair(d_entity, entry.entity));
+
+                    if (entry.normal.x == 0 && entry.normal.y == 0) {
+                        // static collision; ignore for platforms
+                        continue;
+                    }
 
                     auto& platform = registry.get<Platform>(entry.entity);
 
@@ -181,7 +196,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                     // stop at first blocking collision
                     break;
 
-               }
+                }
                 else {
                     //handle non-blocking collisions
                     recorded_collisions.insert(uint_pair(d_entity, entry.entity));
@@ -194,8 +209,10 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         auto& cd = registry.get<CausesDamage>(entry.entity);
                         auto& health = registry.get<Health>(d_entity);
                         auto& panda = registry.get<Panda>(d_entity);
-
-                        if (cd.normal_matches_mask(entry.normal.x, entry.normal.y)) {
+                        if (entry.normal.x == 0 && entry.normal.y == 0) {
+                            panda.hurt = true;
+                        }
+                        else if (cd.normal_matches_mask(entry.normal.x, entry.normal.y)) {
                             panda.hurt = true;
                         }
                     }
@@ -206,6 +223,9 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         auto& health = registry.get<Health>(entry.entity);
                         auto& panda = registry.get<Panda>(entry.entity);
 
+                        if (entry.normal.x == 0 && entry.normal.y == 0) {
+                            panda.hurt = true;
+                        }
                         if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)) {
                             panda.hurt = true;
                         }
@@ -313,12 +333,6 @@ void PhysicsSystem::swept_collision(
     float s_top = s_position.y - s_collider.height / 2;
     float s_bot = s_position.y + s_collider.height / 2;
 
-    if (static_collision(d_collider, d_position, s_collider, s_position, 2)) {
-        x_norm = - abs(d_vx) / d_vx;
-        y_norm = - abs(d_vy) / d_vy;
-        time = 0;
-        return;
-    }
 
 
     //first check broadphase
@@ -477,6 +491,7 @@ bool PhysicsSystem::static_collision(
     float s_right = s_position.x + s_collider.width / 2;
     float s_top = s_position.y - s_collider.height / 2;
     float s_bot = s_position.y + s_collider.height / 2;
+
 
     bool no_collide =
            d_left > s_right + buffer
