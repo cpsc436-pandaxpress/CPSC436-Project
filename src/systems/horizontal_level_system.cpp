@@ -31,9 +31,9 @@ void HorizontalLevelSystem::load_next_chunk(int level) {
     std::string level_path = levels_path("");
     std::string levelFile = level_path + "level_" + std::to_string(level) + ".csv";
     CSVReader reader(levelFile);
-    std::vector<std::vector<int>> dataList = reader.getData();
+    std::vector<std::vector<char>> dataList = reader.getData();
     for (int i = 0; i < dataList[0].size(); i++) {
-        std::vector<int> col;
+        std::vector<char> col;
         col.reserve(9);
         for (int j = 0; j < 9; j++) {
             col.push_back(dataList[j][i]);
@@ -49,7 +49,7 @@ void HorizontalLevelSystem::generate_next_chunk(Blackboard &blackboard,
                                                 entt::DefaultRegistry &registry) {
     float off_screen = blackboard.camera.position().x + blackboard.camera.size().x;
     while (last_col_generated_ < off_screen && !chunks_.empty()) { // second condn is safety check
-        std::vector<int> col = chunks_.front();
+        std::vector<char> col = chunks_.front();
         float y = -400.0f;
         for (int c:col) {
             generateEntity(c, last_col_generated_, y, blackboard, registry);
