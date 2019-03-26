@@ -24,7 +24,7 @@ public:
             fileName(filename), delimeter(delm) {}
 
     // Function to fetch data from a CSV File
-    std::vector<std::vector<int>> getData();
+    std::vector<std::vector<char>> getData();
 };
 
 

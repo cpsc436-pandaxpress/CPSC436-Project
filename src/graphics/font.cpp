@@ -72,6 +72,6 @@ bool FontType::load(std::string font, GLuint fontSize) {
     // Destroy FreeType once we're finished
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
-    bool result = !gl_has_errors();
+    bool result = !gl_has_errors("font");
     return result;
 }

@@ -45,7 +45,6 @@ set(SOURCE_FILES
         src/graphics/mesh.cpp
         src/graphics/camera.cpp
         src/systems/player_movement_system.cpp
-        src/systems/collision_system.cpp
         src/systems/sprite_render_system.cpp
         src/systems/sprite_transform_system.cpp
         src/util/constants.h

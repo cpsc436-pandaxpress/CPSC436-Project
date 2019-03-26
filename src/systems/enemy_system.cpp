@@ -31,7 +31,7 @@ void EnemySystem::generate_projectile(float x, float y, bool spit_left, Blackboa
 
     registry.assign<Sprite>(projectile, texture, shader, mesh);
     registry.assign<Spit>(projectile);
-    registry.assign<CausesDamage>(projectile, false, true, 1);
+    registry.assign<CausesDamage>(projectile, TOP_VULNERABLE_MASK, 1);
     registry.assign<Health>(projectile, 1);
     if (spit_left) {
         registry.assign<Velocity>(projectile, PROJECTILE_SPEED_X, PROJECTILE_SPEED_Y);

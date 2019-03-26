@@ -29,10 +29,10 @@ void VerticalLevelSystem::load_next_chunk(int level) {
     std::string level_path = levels_path("");
     std::string levelFile = level_path + "vlevel_" + std::to_string(level) + ".csv";
     CSVReader reader(levelFile);
-    std::vector<std::vector<int>> dataList = reader.getData();
+    std::vector<std::vector<char>> dataList = reader.getData();
     for (int i = dataList.size() - 1; i >= 0; i--) {
         auto line = dataList[i];
-        std::vector<int> row;
+        std::vector<char> row;
         row.reserve(line.size());
         for (int j = 0; j < line.size(); j++) {
             row.push_back(dataList[i][j]);
@@ -46,7 +46,7 @@ void VerticalLevelSystem::generate_next_chunk(Blackboard &blackboard,
                                               entt::DefaultRegistry &registry) {
     float off_screen = blackboard.camera.position().y - blackboard.camera.size().x;
     while (last_row_generated_ > off_screen && !chunks_.empty()) {
-        std::vector<int> col = chunks_.front();
+        std::vector<char> col = chunks_.front();
         float x = COL_X_OFFSET;
         for (int c:col) {
             generateEntity(c, x, last_row_generated_, blackboard, registry);

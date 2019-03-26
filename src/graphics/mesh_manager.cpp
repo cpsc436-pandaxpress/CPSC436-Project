@@ -46,7 +46,7 @@ bool MeshManager::load_mesh(
 
     glBindVertexArray(0);
 
-    bool result = !gl_has_errors();
+    bool result = !gl_has_errors("mesh_manager");
 
     auto mesh = Mesh(vao, vbo, ibo);
     meshes_.insert(std::pair<std::string, Mesh>(key_str, mesh));
@@ -82,7 +82,7 @@ bool MeshManager::load_mesh(
 
     glBindVertexArray(0);
 
-    bool result = !gl_has_errors();
+    bool result = !gl_has_errors("mesh_manager");
 
     auto mesh = Mesh(vao, vbo, ibo);
     meshes_.insert(std::pair<std::string, Mesh>(key_str, mesh));
@@ -118,7 +118,7 @@ bool MeshManager::load_mesh(
 
     glBindVertexArray(0);
 
-    bool result = !gl_has_errors();
+    bool result = !gl_has_errors("mesh_manager");
 
     auto mesh = Mesh(vao, vbo, ibo);
     meshes_.insert(std::pair<std::string, Mesh>(key_str, mesh));
