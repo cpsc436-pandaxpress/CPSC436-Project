@@ -33,6 +33,7 @@ struct Vertex
 void gl_flush_errors();
 
 bool gl_has_errors();
+bool gl_has_errors(char* tag);
 
 bool gl_compile_shader(GLuint shader);
 

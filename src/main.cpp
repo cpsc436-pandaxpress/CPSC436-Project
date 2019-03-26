@@ -145,7 +145,7 @@ int main(int argc, char** argv) {
     bool quit = false;
     while (!quit) {
         //update blackboard
-        blackboard.delta_time = window.delta_time();
+        blackboard.delta_time = std::min<float>(window.delta_time(), 0.25f);
         blackboard.input_manager.update();
 
         scene_manager.update(blackboard);
