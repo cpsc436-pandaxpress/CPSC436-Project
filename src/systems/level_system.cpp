@@ -14,10 +14,10 @@ void LevelSystem::init() {
     rng_.init(SEED);
 }
 
-void LevelSystem::generateEntity(int value, float x, float y,
+void LevelSystem::generateEntity(char value, float x, float y,
                                  Blackboard &blackboard, entt::DefaultRegistry &registry) {
     switch (value) {
-        case 1: {
+        case '1': {
             auto texture = blackboard.texture_manager.get_texture(
                     (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "platform1" : "platform2");
             auto shader = blackboard.shader_manager.get_shader("sprite");
@@ -33,11 +33,11 @@ void LevelSystem::generateEntity(int value, float x, float y,
                                         texture.height() * scaleY);
         }
             break;
-        case 3: {
+        case '3': {
             generate_bread(true, x, y, blackboard, registry);
         }
             break;
-        case 4: {
+        case '4': {
             auto texture = blackboard.texture_manager.get_texture("ghost");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto mesh = blackboard.mesh_manager.get_mesh("sprite");
@@ -48,14 +48,14 @@ void LevelSystem::generateEntity(int value, float x, float y,
                                        scaleY);
             registry.assign<Sprite>(ghost, texture, shader, mesh);
             registry.assign<Ghost>(ghost);
-            registry.assign<CausesDamage>(ghost, false, true, 1);
+            registry.assign<CausesDamage>(ghost, ALL_DMG_MASK, 1);
             registry.assign<Health>(ghost,1);
             registry.assign<Velocity>(ghost, -0.f, 0.f);
             registry.assign<Collidable>(ghost, texture.width() * scaleX,
                                         texture.height() * scaleY);
         }
             break;
-        case 5: {
+        case '5': {
             auto texture = blackboard.texture_manager.get_texture("llama");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto mesh = blackboard.mesh_manager.get_mesh("sprite");
@@ -66,7 +66,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
                                        scaleY);
             registry.assign<Sprite>(llama, texture, shader, mesh);
             registry.assign<Llama>(llama);
-            registry.assign<CausesDamage>(llama, false, true, 1);
+            registry.assign<CausesDamage>(llama,TOP_VULNERABLE_MASK, 1);
             registry.assign<Health>(llama,1);
             registry.assign<Velocity>(llama, 0.f, 0.f);
             registry.assign<Interactable>(llama);
@@ -77,13 +77,17 @@ void LevelSystem::generateEntity(int value, float x, float y,
             timer.save_watch(SPIT_TIMER_LABEL, 2.3f);
         }
             break;
-        case 6: {
+        case '6': {
             auto texture = blackboard.texture_manager.get_texture("stalagmite");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto mesh = blackboard.mesh_manager.get_mesh("sprite");
             auto scale = static_cast<float>(CELL_WIDTH / texture.width());
             auto stalagmite2 = registry.create();
             registry.assign<Obstacle>(stalagmite2);
+            registry.assign<CausesDamage>(stalagmite2, ALL_DMG_MASK, 1);
+            //
+            //
+            // registry.assign<Platform>(stalagmite2, false);
             registry.assign<Transform>(stalagmite2, x, y, 0., scale,
                                        scale*1.8f);
             registry.assign<Sprite>(stalagmite2, texture, shader, mesh);
@@ -91,24 +95,22 @@ void LevelSystem::generateEntity(int value, float x, float y,
                                         texture.height() * scale*1.8);
             break;
         }
-        case 7: {
+        case '7': {
             auto texture = blackboard.texture_manager.get_texture("stalagmite");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto mesh = blackboard.mesh_manager.get_mesh("sprite");
             auto scale = static_cast<float>(CELL_WIDTH*0.5f / texture.width());
             auto stalagmite = registry.create();
             registry.assign<Obstacle>(stalagmite);
-            registry.assign<CausesDamage>(stalagmite, false, true, 1);
+            registry.assign<CausesDamage>(stalagmite, ALL_DMG_MASK, 1);
             registry.assign<Transform>(stalagmite, x, y - CELL_HEIGHT*0.75f + PLATFORM_HEIGHT, 0., scale*2.f,
                                        scale);
             registry.assign<Sprite>(stalagmite, texture, shader, mesh);
             registry.assign<Collidable>(stalagmite, texture.width() * scale*2.f,
                                         texture.height() * scale);
-
-
         }
             break;
-        case 8: {
+        case '8': {
             auto texture = blackboard.texture_manager.get_texture(
                     (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "platform1" : "platform2");
             auto shader = blackboard.shader_manager.get_shader("sprite");
@@ -130,7 +132,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
 
         }
             break;
-        case 10: {
+        case 'a': {
             auto cave = registry.create();
             auto shaderCave = blackboard.shader_manager.get_shader("cave");
             auto meshCave = blackboard.mesh_manager.get_mesh("cave");
@@ -142,13 +144,29 @@ void LevelSystem::generateEntity(int value, float x, float y,
             vec2 scaleCave = {-80, 80};
             auto &caveE = registry.assign<Cave>(cave, meshCave, shaderCave, sizeCave, scaleCave);
             caveE.set_pos(550, -550);
-            printf("Rendering Cave (%f, %f)\n", x, y);
+            //printf("Rendering Cave (%f, %f)\n", x, y);
         }
             break;
-        case 9: {
+        case '9': {
             generate_bread(false, x, y, blackboard, registry);
         }
             break;
+        case 'b': {
+            auto texture = blackboard.texture_manager.get_texture(
+                    (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "platform1" : "platform2");
+            auto shader = blackboard.shader_manager.get_shader("sprite");
+            auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+            auto scaleX = static_cast<float>(CELL_WIDTH / texture.width());
+            auto scaleY = static_cast<float>(CELL_HEIGHT / texture.height());
+            auto platform = registry.create();
+            registry.assign<Platform>(platform, false);
+            registry.assign<Transform>(platform, x, y, 0., scaleX,
+                                       scaleY);
+            registry.assign<Sprite>(platform, texture, shader, mesh);
+            registry.assign<Collidable>(platform, texture.width() * scaleX,
+                                        texture.height() * scaleY);
+        }
+
         default:
             break;
     }
@@ -165,7 +183,7 @@ void LevelSystem::generate_bread(bool move_left, float x, float y, Blackboard &b
     registry.assign<Transform>(bread, x, y, 0., scaleX, scaleY);
     registry.assign<Sprite>(bread, texture, shader, mesh);
     registry.assign<Bread>(bread, move_left);
-    registry.assign<CausesDamage>(bread, false, true, 1);
+    registry.assign<CausesDamage>(bread, TOP_VULNERABLE_MASK, 1);
     registry.assign<Health>(bread,1);
     registry.assign<Velocity>(bread, 0.f, 0.f);
     registry.assign<Interactable>(bread);

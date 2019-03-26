@@ -26,7 +26,6 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         background_render_system(),
         physics_system(),
         player_movement_system(HORIZONTAL_SCENE_ID),
-        collision_system(),
         enemy_system(),
         player_animation_system(HORIZONTAL_SCENE_ID),
         panda_dmg_system(),
@@ -41,7 +40,7 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
 {
     init_scene(blackboard);
     create_tutorial(blackboard);
-    gl_has_errors();
+    gl_has_errors("horizontal_scene");
 }
 
 void HorizontalScene::update(Blackboard &blackboard) {
@@ -59,7 +58,6 @@ void HorizontalScene::update(Blackboard &blackboard) {
     level_system.update(blackboard, registry_);
     background_transform_system.update(blackboard, registry_);
     player_movement_system.update(blackboard, registry_);
-    collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
     panda_dmg_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
@@ -159,7 +157,7 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
     registry_.assign<ObeysGravity>(panda_entity);
     registry_.assign<Health>(panda_entity, 3);
     registry_.assign<Interactable>(panda_entity);
-    registry_.assign<CausesDamage>(panda_entity, false, true, 1);
+    registry_.assign<CausesDamage>(panda_entity, PANDA_DMG_MASK, 1);
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
     registry_.assign<Timer>(panda_entity);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
