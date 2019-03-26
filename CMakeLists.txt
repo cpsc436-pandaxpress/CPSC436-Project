@@ -89,8 +89,8 @@ set(SOURCE_FILES
         src/systems/jacko_ai_system.cpp
         src/systems/jacko_ai_system.h
         src/components/evades.h
-        src/systems/boss_level_system.h
-        src/systems/boss_level_system.cpp
+        src/level/boss_level_system.h
+        src/level/boss_level_system.cpp
         src/systems/ghost_movement_system.cpp
         src/systems/ghost_movement_system.h
         src/graphics/mesh_manager.cpp
