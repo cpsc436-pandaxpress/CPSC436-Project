@@ -8,14 +8,14 @@
 #include <vector>
 
 typedef unsigned int LevelType;
-const LevelType HORIZONTAL_TYPE = 0;
-const LevelType VERTICAL_TYPE = 1;
+const LevelType HORIZONTAL_LEVEL_TYPE = 0;
+const LevelType VERTICAL_LEVEL_TYPE = 1;
 
 class Level {
 private:
     Level();
 
-    char** rows_;
+    std::vector<std::vector<char>> rows_;
     size_t width_, height_;
 
 public:

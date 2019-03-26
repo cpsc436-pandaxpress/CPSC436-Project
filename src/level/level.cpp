@@ -8,28 +8,31 @@
 #include <util/csv_reader.h>
 #include "level.h"
 
-Level::Level() : width_(0), height_(0), rows_(nullptr) {}
+Level::Level() : width_(0), height_(0), rows_() {}
 
 Level::~Level() {
-    for (int i = 0; i < height_; i++) {
-        delete[] rows_[i];
-    }
-    delete[] rows_;
+
 }
 
 char Level::get_tile_at(int x, int y) const {
+    if (y >= rows_.size())
+        return '\0';
+
+    if (x >= rows_[y].size())
+        return '\0';
+
     return rows_[y][x];
 }
 
 Level Level::load_level(int id, LevelType type) {
     switch (type) {
-        case HORIZONTAL_TYPE: {
+        case HORIZONTAL_LEVEL_TYPE: {
             std::string level_path = levels_path("");
             std::string level_file = level_path + "level_" + std::to_string(id) + ".csv";
             return load_from_path(level_file);
         }
 
-        case VERTICAL_TYPE: {
+        case VERTICAL_LEVEL_TYPE: {
             std::string level_path = levels_path("");
             std::string level_file = level_path + "vlevel_" + std::to_string(id) + ".csv";
             return load_from_path(level_file);
@@ -46,19 +49,14 @@ Level Level::load_from_path(std::string path) {
     auto data = reader.getData();
 
     Level level;
-    level.rows_ = new char*[data.size()];
     level.height_ = (int) data.size();
 
-    int x = 0, y = 0;
+    int y = 0;
     for (const auto &row : data) {
-        level.rows_[x] = new char[row.size()];
+        level.rows_[y] = row;
         if (level.width_ < (int) row.size())
             level.width_ = (int) row.size();
 
-        for (const char tile : row) {
-            level.rows_[y][x] = tile;
-            x++;
-        }
         y++;
     }
 
