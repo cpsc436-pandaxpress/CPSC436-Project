@@ -10,10 +10,6 @@
 
 Level::Level() : width_(0), height_(0), rows_() {}
 
-Level::~Level() {
-
-}
-
 char Level::get_tile_at(int x, int y) const {
     if (y >= rows_.size())
         return '\0';
@@ -49,13 +45,13 @@ Level Level::load_from_path(std::string path) {
     auto data = reader.getData();
 
     Level level;
-    level.height_ = (int) data.size();
+    level.height_ = data.size();
 
     int y = 0;
     for (const auto &row : data) {
-        level.rows_[y] = row;
-        if (level.width_ < (int) row.size())
-            level.width_ = (int) row.size();
+        level.rows_.push_back(row);
+        if (level.width_ < row.size())
+            level.width_ = row.size();
 
         y++;
     }
