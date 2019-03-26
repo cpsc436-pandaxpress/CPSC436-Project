@@ -28,7 +28,6 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         background_render_system(),
         physics_system(),
         player_movement_system(BOSS_SCENE_ID),
-        collision_system(),
         chase_system(),
         jacko_ai_system(blackboard, registry_),
         player_animation_system(BOSS_SCENE_ID),
@@ -58,7 +57,6 @@ void BossScene::update(Blackboard &blackboard) {
 
     chase_system.update(blackboard, registry_);
     player_movement_system.update(blackboard, registry_);
-    collision_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
     panda_dmg_system.update(blackboard, registry_);
     health_bar_transform_system.update(blackboard, registry_);
@@ -138,7 +136,7 @@ void BossScene::create_panda(Blackboard &blackboard) {
     registry_.assign<ObeysGravity>(panda_entity);
     registry_.assign<Health>(panda_entity, 3);
     registry_.assign<Interactable>(panda_entity);
-    registry_.assign<CausesDamage>(panda_entity, false, true, 1);
+    registry_.assign<CausesDamage>(panda_entity, PANDA_DMG_MASK, 1);
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
     registry_.assign<Timer>(panda_entity);
@@ -167,7 +165,7 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
     registry_.assign<Chases>(jacko_entity, target);
     registry_.assign<Health>(jacko_entity, 10);
     registry_.assign<Interactable>(jacko_entity);
-    registry_.assign<CausesDamage>(jacko_entity, false, true, 1);
+    registry_.assign<CausesDamage>(jacko_entity, TOP_VULNERABLE_MASK, 1);
     registry_.assign<Velocity>(jacko_entity, 0.f, 0.f);
     registry_.assign<Collidable>(jacko_entity,
             texture.width() * scaleX * 0.75,
@@ -242,7 +240,7 @@ void BossScene::create_platforms(Blackboard &blackboard) {
 
 
         auto platform = registry_.create();
-        registry_.assign<Platform>(platform);
+        registry_.assign<Platform>(platform, false);
         registry_.assign<Transform>(platform, i * 100, 300, 0., scale, scale);
         registry_.assign<Sprite>(platform, texture, shader, mesh);
         registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale);
@@ -252,7 +250,7 @@ void BossScene::create_platforms(Blackboard &blackboard) {
 
 
         auto platform = registry_.create();
-        registry_.assign<Platform>(platform);
+        registry_.assign<Platform>(platform, false);
         registry_.assign<Transform>(platform, 600, i * 100, 0., scale, scale);
         registry_.assign<Sprite>(platform, texture, shader, mesh);
         registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale);
@@ -262,7 +260,7 @@ void BossScene::create_platforms(Blackboard &blackboard) {
 
 
         auto platform = registry_.create();
-        registry_.assign<Platform>(platform);
+        registry_.assign<Platform>(platform, false);
         registry_.assign<Transform>(platform, -600, i * 100, 0., scale, scale);
         registry_.assign<Sprite>(platform, texture, shader, mesh);
         registry_.assign<Collidable>(platform, texture.width() * scale, texture.height() * scale);
