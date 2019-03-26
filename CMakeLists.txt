@@ -129,7 +129,8 @@ set(SOURCE_FILES
         src/systems/score_system.cpp
         src/systems/score_system.h
         src/components/score.h
-        )
+        src/level/level.cpp
+        src/level/level.h)
 
 
 # Create executable target
