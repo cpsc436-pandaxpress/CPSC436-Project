@@ -6,7 +6,7 @@
 #ifndef PANDAEXPRESS_BOSS_LEVEL_SYSTEM_H
 #define PANDAEXPRESS_BOSS_LEVEL_SYSTEM_H
 
-#include "level_system.h"
+#include "level/level_system.h"
 
 class BossLevelSystem : public LevelSystem {
     void load_next_chunk();

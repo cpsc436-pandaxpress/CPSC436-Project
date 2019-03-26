@@ -65,19 +65,19 @@ set(SOURCE_FILES
         src/scene/vertical_scene.h
         src/util/csv_reader.cpp
         src/util/csv_reader.h
-        src/systems/level_system.cpp
-        src/systems/level_system.h
+        src/level/level_system.cpp
+        src/level/level_system.h
         src/scene/horizontal_scene.cpp
         src/scene/horizontal_scene.h
         src/scene/boss_scene.cpp
         src/scene/boss_scene.h
-        src/systems/horizontal_level_system.h
-        src/systems/horizontal_level_system.cpp
+        src/level/horizontal_level_system.h
+        src/level/horizontal_level_system.cpp
         src/components/ghost.h
         src/components/llama.h src/components/spit.h
         src/components/tutorial.h
-        src/systems/vertical_level_system.cpp
-        src/systems/vertical_level_system.h
+        src/level/vertical_level_system.cpp
+        src/level/vertical_level_system.h
         src/components/chases.h
         src/systems/chase_system.cpp
         src/systems/chase_system.h

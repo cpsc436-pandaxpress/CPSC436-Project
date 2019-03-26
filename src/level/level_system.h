@@ -23,7 +23,7 @@
 #include <components/obeys_gravity.h>
 #include <graphics/cave.h>
 #include "util/random.h"
-#include "system.h"
+#include "systems/system.h"
 #include <queue>
 
 class LevelSystem : public System {

@@ -12,7 +12,7 @@
 #include "components/llama.h"
 #include "components/spit.h"
 #include "systems/ghost_movement_system.h"
-#include "systems/level_system.h"
+#include "level/level_system.h"
 #include "components/velocity.h"
 #include "components/transform.h"
 #include "components/collidable.h"
