@@ -3,14 +3,15 @@
 //
 
 #include <util/constants.h>
-#include <util/csv_reader.h>
 #include <components/transform.h>
 #include <components/collidable.h>
 #include <components/timer.h>
 #include "horizontal_level_system.h"
 
 HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem() {
-
+    for (int i = 0; i <= MAX_DIFFICULTY; i++) {
+        levels[i] = Level::load_level(i, HORIZONTAL_LEVEL_TYPE);
+    }
 }
 
 void HorizontalLevelSystem::init(){
@@ -22,21 +23,17 @@ void HorizontalLevelSystem::init(){
 }
 
 void HorizontalLevelSystem::load_next_chunk() {
-    std::string level_path = levels_path("");
     int level = rng_.nextInt(std::max(1, difficulty - DIFFICULTY_RANGE), difficulty);
     load_next_chunk(level);
 }
 
-void HorizontalLevelSystem::load_next_chunk(int level) {
-    std::string level_path = levels_path("");
-    std::string levelFile = level_path + "level_" + std::to_string(level) + ".csv";
-    CSVReader reader(levelFile);
-    std::vector<std::vector<char>> dataList = reader.getData();
-    for (int i = 0; i < dataList[0].size(); i++) {
+void HorizontalLevelSystem::load_next_chunk(int id) {
+    Level lvl = levels[id];
+    for (int x = 0; x < lvl.width(); x++) {
         std::vector<char> col;
-        col.reserve(9);
-        for (int j = 0; j < 9; j++) {
-            col.push_back(dataList[j][i]);
+        col.reserve(lvl.height());
+        for (int y = 0; y < lvl.height(); y++) {
+            col.push_back(lvl.get_tile_at(x, y));
         }
         last_col_loaded_ += CELL_WIDTH;
         chunks_.push(col);

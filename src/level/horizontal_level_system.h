@@ -3,6 +3,7 @@
 //
 #include "level_system.h"
 #include "components/timer.h"
+#include "level.h"
 
 #ifndef PANDAEXPRESS_HORIZONTAL_LEVEL_SYSTEM_H
 #define PANDAEXPRESS_HORIZONTAL_LEVEL_SYSTEM_H
@@ -11,7 +12,7 @@
 
 class HorizontalLevelSystem : public LevelSystem {
     void load_next_chunk();
-    void load_next_chunk(int level);
+    void load_next_chunk(int id);
 
     void generate_next_chunk(Blackboard &blackboard, entt::DefaultRegistry &registry);
 
@@ -28,6 +29,8 @@ class HorizontalLevelSystem : public LevelSystem {
     int difficulty;
 
     Timer difficulty_timer;
+
+    std::unordered_map<int, Level> levels;
 
 public:
 
