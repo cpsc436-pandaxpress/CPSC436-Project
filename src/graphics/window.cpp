@@ -6,8 +6,12 @@
 
 #include "window.h"
 
+Window::~Window() {
+    SDL_QuitSubSystem(SDL_INIT_VIDEO);
+}
+
 bool Window::initialize(const char* title, uint32_t width, uint32_t height) {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0) {
         // Could not initialize video!
         printf("SDL could not initialize video subsystems! ERROR: %s\n", SDL_GetError());
         return false;
