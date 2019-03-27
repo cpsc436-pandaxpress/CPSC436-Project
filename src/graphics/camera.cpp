@@ -44,3 +44,7 @@ void Camera::compose() {
 const mat3& Camera::get_projection() {
     return projection_;
 }
+
+const vec2 Camera::get_relative_pos(vec2 pos) {
+    return {position_.x - dimensions_.x / 2.f + pos.x, position_.y - dimensions_.y / 2.f + pos.y};
+}

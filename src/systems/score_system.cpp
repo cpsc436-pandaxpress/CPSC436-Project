@@ -27,8 +27,9 @@ void ScoreSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
                 ss << (int) cam.position().x / 50;
                 score_text = ss.str();
                 text.set_text(score_text);
-                transform.x = cam.position().x - cam.size().x / 2 + X_OFFSET;
-                transform.y = cam.position().y - cam.size().y / 2 + Y_OFFSET;
+                vec2 pos = cam.get_relative_pos({X_OFFSET, Y_OFFSET});
+                transform.x = pos.x;
+                transform.y = pos.y;
             }
                 break;
             case VERTICAL_SCENE_ID: {
@@ -38,6 +39,7 @@ void ScoreSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
                 ss << (int) abs(cam.position().y) / 50;
                 score_text = ss.str();
                 text.set_text(score_text);
+                vec2 pos = cam.get_relative_pos({X_OFFSET, Y_OFFSET});
                 transform.x = cam.position().x + cam.size().x / 2 - X_OFFSET * 3;
                 transform.y = cam.position().y + cam.size().y / 2 - Y_OFFSET;
             }
