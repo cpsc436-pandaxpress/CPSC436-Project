@@ -95,7 +95,12 @@ void BackgroundTransformSystem::boss_background_transform(Blackboard &blackboard
                 -clampValue,
                 clampValue
         );
+        float maxDist = blackboard.camera.size().y / 0.8f;
+        float displacementY = clamp(
+                (og_pos1 - blackboard.camera.position().y) * (background.z_pos() / 2.0f),
+                0, maxDist);
         vec2 pos1 = background.pos1();
-        background.set_pos1(blackboard.camera.position().x + displacement, pos1.y);
+        background.set_pos1(blackboard.camera.position().x + displacement,
+                blackboard.camera.position().y + displacementY);
     }
 }

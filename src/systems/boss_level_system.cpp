@@ -7,7 +7,6 @@
 #include <components/transform.h>
 #include <components/collidable.h>
 #include <components/timer.h>
-#include <components/food.h>
 #include "boss_level_system.h"
 
 BossLevelSystem::BossLevelSystem() : LevelSystem() {
@@ -54,8 +53,6 @@ void BossLevelSystem::generate_next_chunk(Blackboard &blackboard,
 
 void BossLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
     LevelSystem::destroy_entities(registry);
-    registry.destroy<Food>();
-    registry.destroy<Platform>();
 }
 
 void BossLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
