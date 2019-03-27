@@ -10,6 +10,7 @@
 #include <queue>
 #include <systems/boss_level_system.h>
 #include <systems/background_render_system.h>
+#include <systems/a_star_system.h>
 #include <systems/background_transform_system.h>
 #include <systems/panda_damage_system.h>
 #include <systems/timer_system.h>
@@ -56,6 +57,7 @@ private:
     PlayerAnimationSystem player_animation_system;
     TimerSystem timer_system;
     FallingPlatformSystem falling_platform_system;
+    AStarSystem a_star_system;
     PandaDamageSystem panda_dmg_system;
     EnemyAnimationSystem enemy_animation_system;
     HealthBarRenderSystem health_bar_render_system;

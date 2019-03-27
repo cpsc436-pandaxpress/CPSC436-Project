@@ -36,7 +36,9 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         falling_platform_system(),
         enemy_animation_system(),
         health_bar_render_system(),
-        health_bar_transform_system() {
+        health_bar_transform_system(),
+        a_star_system()
+        {
     init_scene(blackboard);
     reset_scene(blackboard); // idk why??? but this is required
     gl_has_errors();
@@ -66,6 +68,7 @@ void BossScene::update(Blackboard &blackboard) {
     timer_system.update(blackboard, registry_);
     falling_platform_system.update(blackboard, registry_);
     background_transform_system.update(blackboard, registry_);
+    a_star_system.update(blackboard, registry_);
 }
 
 void BossScene::render(Blackboard &blackboard) {
@@ -93,7 +96,7 @@ void BossScene::update_camera(Blackboard &blackboard) {
     auto &panda_transform = registry_.get<Transform>(panda_entity);
     float y_offset = std::min(0.f, panda_transform.y + MAX_CAMERA_Y_DIFF);
 
-    blackboard.camera.set_position(panda_transform.x, y_offset);
+    //blackboard.camera.set_position(panda_transform.x, y_offset);
     blackboard.camera.compose();
 }
 

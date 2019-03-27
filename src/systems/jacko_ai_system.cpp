@@ -39,6 +39,7 @@ public:
     }
 };
 
+
 /***
  * Check if the panda is dead, right now it just resets
  * but in the future we may want the boss to laugh at the
@@ -197,7 +198,31 @@ int JackoAISystem::getPandaHealth(Blackboard& blackboard, entt::DefaultRegistry&
     }
     return 0;
 }
+/*
+int JackoAISystem::getPandaXLocation(Blackboard& blackboard, entt::DefaultRegistry& registry){
+    auto panda_view = registry.view<Panda, Transform>();
+    for(auto panda_entity : panda_view){
+        auto &transform = panda_view.get<Transform>(panda_entity);
+        return transform.x;
+    }
+    return 0;
+}
+int JackoAISystem::getPandaYLocation(Blackboard& blackboard, entt::DefaultRegistry& registry){
+    auto panda_view = registry.view<Panda, Transform>();
+    for(auto panda_entity : panda_view){
+        auto &transform = panda_view.get<Transform>(panda_entity);
+        return transform.y;
+    }
+    return 0;
+}
 
+int JackoAISystem::getPandaXGridLocation(int x){
+
+}
+int JackoAISystem::getPandaYGridLocation(int y){
+
+}
+*/
 int JackoAISystem::getJackoHealth(Blackboard& blackboard, entt::DefaultRegistry& registry){
     auto jacko_view = registry.view<Jacko, Health>();
     for(auto jacko_entity : jacko_view){
