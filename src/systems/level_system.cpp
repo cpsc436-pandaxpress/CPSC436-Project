@@ -14,10 +14,10 @@ void LevelSystem::init() {
     rng_.init(SEED);
 }
 
-void LevelSystem::generateEntity(int value, float x, float y,
+void LevelSystem::generateEntity(char value, float x, float y,
                                  Blackboard &blackboard, entt::DefaultRegistry &registry) {
     switch (value) {
-        case 1: {
+        case '1': {
             auto texture = blackboard.texture_manager.get_texture(
                     (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "platform1" : "platform2");
             auto shader = blackboard.shader_manager.get_shader("sprite");
@@ -33,11 +33,11 @@ void LevelSystem::generateEntity(int value, float x, float y,
                                         texture.height() * scaleY);
         }
             break;
-        case 3: {
+        case '3': {
             generate_bread(true, x, y, blackboard, registry);
         }
             break;
-        case 4: {
+        case '4': {
             auto texture = blackboard.texture_manager.get_texture("ghost");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto mesh = blackboard.mesh_manager.get_mesh("sprite");
@@ -55,7 +55,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
                                         texture.height() * scaleY);
         }
             break;
-        case 5: {
+        case '5': {
             auto texture = blackboard.texture_manager.get_texture("llama");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto mesh = blackboard.mesh_manager.get_mesh("sprite");
@@ -77,7 +77,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
             timer.save_watch(SPIT_TIMER_LABEL, 2.3f);
         }
             break;
-        case 6: {
+        case '6': {
             auto texture = blackboard.texture_manager.get_texture("stalagmite");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto mesh = blackboard.mesh_manager.get_mesh("sprite");
@@ -95,7 +95,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
                                         texture.height() * scale*1.8);
             break;
         }
-        case 7: {
+        case '7': {
             auto texture = blackboard.texture_manager.get_texture("stalagmite");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto mesh = blackboard.mesh_manager.get_mesh("sprite");
@@ -110,7 +110,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
                                         texture.height() * scale);
         }
             break;
-        case 8: {
+        case '8': {
             auto texture = blackboard.texture_manager.get_texture(
                     (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "platform1" : "platform2");
             auto shader = blackboard.shader_manager.get_shader("sprite");
@@ -132,7 +132,7 @@ void LevelSystem::generateEntity(int value, float x, float y,
 
         }
             break;
-        case 10: {
+        case 'a': {
             auto cave = registry.create();
             auto shaderCave = blackboard.shader_manager.get_shader("cave");
             auto meshCave = blackboard.mesh_manager.get_mesh("cave");
@@ -144,13 +144,29 @@ void LevelSystem::generateEntity(int value, float x, float y,
             vec2 scaleCave = {-80, 80};
             auto &caveE = registry.assign<Cave>(cave, meshCave, shaderCave, sizeCave, scaleCave);
             caveE.set_pos(550, -550);
-            printf("Rendering Cave (%f, %f)\n", x, y);
+            //printf("Rendering Cave (%f, %f)\n", x, y);
         }
             break;
-        case 9: {
+        case '9': {
             generate_bread(false, x, y, blackboard, registry);
         }
             break;
+        case 'b': {
+            auto texture = blackboard.texture_manager.get_texture(
+                    (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "platform1" : "platform2");
+            auto shader = blackboard.shader_manager.get_shader("sprite");
+            auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+            auto scaleX = static_cast<float>(CELL_WIDTH / texture.width());
+            auto scaleY = static_cast<float>(CELL_HEIGHT / texture.height());
+            auto platform = registry.create();
+            registry.assign<Platform>(platform, false);
+            registry.assign<Transform>(platform, x, y, 0., scaleX,
+                                       scaleY);
+            registry.assign<Sprite>(platform, texture, shader, mesh);
+            registry.assign<Collidable>(platform, texture.width() * scaleX,
+                                        texture.height() * scaleY);
+        }
+
         default:
             break;
     }
@@ -174,4 +190,24 @@ void LevelSystem::generate_bread(bool move_left, float x, float y, Blackboard &b
     registry.assign<Collidable>(bread, texture.width() * scaleX,
                                 texture.height() * scaleY);
     registry.assign<ObeysGravity>(bread);
+}
+
+/*
+ * Contract to destroy anything created in generate_entity()
+ * For example projectiles created elsewhere wont be destroyed here and have to be done by the
+ * system creating it
+*/
+
+void LevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
+    registry.destroy<Platform>();
+    registry.destroy<Llama>();
+    registry.destroy<Ghost>();
+    registry.destroy<Bread>();
+    registry.destroy<Obstacle>();
+    registry.destroy<Cave>();
+
+    while (!chunks_.empty()) {
+        chunks_.front().clear();
+        chunks_.pop();
+    }
 }

@@ -9,30 +9,26 @@
     std::vector<std::vector<int>> dataList = reader.getData();
  */
 
-std::vector<std::vector<int>> CSVReader::getData() {
+std::vector<std::vector<char>> CSVReader::getData() {
     std::ifstream file(fileName);
 
-    std::vector<std::vector<int>> dataList;
+    std::vector<std::vector<char>> dataList;
 
     std::string line = "";
     // Iterate through each line and split the content using delimeter
     while (getline(file, line)) {
-        std::vector<int> vec;
+        std::vector<char> vec;
         std::stringstream sStream(line);
         std::string tmp = "";
         char delim = ','; // define the delimiter to split by
         while (getline(sStream, tmp, delim)) {
-            int i = 0;
-            try {
-                i = std::stoi(tmp);
+            char c = '\0';
+            if (tmp.length() > 0) {
+                c = tmp[0];
+            } else {
+                std::cout << "Bad input: no chars given\n";
             }
-            catch (std::invalid_argument const &e) {
-                std::cout << "Bad input: std::invalid_argument thrown:" << tmp << '\n';
-            }
-            catch (std::out_of_range const &e) {
-                std::cout << "Integer overflow: std::out_of_range thrown:" << tmp << '\n';
-            }
-            vec.push_back(i);
+            vec.push_back(c);
         }
         dataList.push_back(vec);
     }

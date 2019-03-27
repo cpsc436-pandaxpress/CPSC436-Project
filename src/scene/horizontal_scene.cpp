@@ -40,7 +40,7 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
 {
     init_scene(blackboard);
     create_tutorial(blackboard);
-    gl_has_errors();
+    gl_has_errors("horizontal_scene");
 }
 
 void HorizontalScene::update(Blackboard &blackboard) {

@@ -29,7 +29,7 @@ TestScene::TestScene(Blackboard &blackboard, SceneManager &scene_manager) :
         background_render_system(),
         background_transform_system() {
     init_scene(blackboard);
-    gl_has_errors();
+    gl_has_errors("test_scene");
 }
 
 

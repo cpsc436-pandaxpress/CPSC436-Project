@@ -29,7 +29,7 @@
 class LevelSystem : public System {
 protected:
     Random rng_;
-    std::queue<std::vector<int>> chunks_;
+    std::queue<std::vector<char>> chunks_;
 
     const float BREAD_SPEED = 50.f;
     const float PROJECTILE_SPEED_X = -300.f;
@@ -42,8 +42,10 @@ protected:
 
     virtual void generate_next_chunk(Blackboard &blackboard, entt::DefaultRegistry &registry) = 0;
 
-    void generateEntity(int value, float x, float y,
+    void generateEntity(char value, float x, float y,
                         Blackboard &blackboard, entt::DefaultRegistry &registry);
+
+    void destroy_entities(entt::DefaultRegistry &registry);
 
 public:
 
@@ -52,8 +54,6 @@ public:
     void init();
 
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override = 0;
-
-    virtual void destroy_entities(entt::DefaultRegistry &registry) = 0;
 
     void generate_bread(bool move_left, float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
 

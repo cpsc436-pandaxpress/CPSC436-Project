@@ -111,14 +111,28 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
 
                 auto &sc = static_view.get<Collidable>(s_entity);
                 auto &sp = static_view.get<Transform>(s_entity);
+                auto null_v = Velocity(0, 0);
+                auto& sv = null_v;
+                if (registry.has<Velocity>(s_entity)) {
+                    sv = registry.get<Velocity>(s_entity);
+                }
 
                 //sets time and normals (if applicable) of collision
+
                 swept_collision(
                     dc, dp, dv,
-                    sc, sp,
+                    sc, sp, sv,
                     blackboard.delta_time,
                     time, x_norm, y_norm
                 );
+
+                if (time == 1) {
+                    if (static_collision(dc, dp, sc, sp, 0)) {
+                        time = 0;
+                        x_norm = 0;
+                        y_norm = 0;
+                    }
+                }
 
                 collisions.emplace_back(
                     s_entity,
@@ -144,13 +158,20 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                     }
                 }
                 if (!inserted) {
+
                     sorted_collisions.push_back(entry);
                 }
             }
 
             for (auto entry : sorted_collisions) {
                 if (registry.has<Platform>(entry.entity)) {
+
                     recorded_collisions.insert(uint_pair(d_entity, entry.entity));
+
+                    if (entry.normal.x == 0 && entry.normal.y == 0) {
+                        // static collision; ignore for platforms
+                        continue;
+                    }
 
                     auto& platform = registry.get<Platform>(entry.entity);
 
@@ -175,7 +196,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                     // stop at first blocking collision
                     break;
 
-               }
+                }
                 else {
                     //handle non-blocking collisions
                     recorded_collisions.insert(uint_pair(d_entity, entry.entity));
@@ -188,8 +209,10 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         auto& cd = registry.get<CausesDamage>(entry.entity);
                         auto& health = registry.get<Health>(d_entity);
                         auto& panda = registry.get<Panda>(d_entity);
-
-                        if (cd.normal_matches_mask(entry.normal.x, entry.normal.y)) {
+                        if (entry.normal.x == 0 && entry.normal.y == 0) {
+                            panda.hurt = true;
+                        }
+                        else if (cd.normal_matches_mask(entry.normal.x, entry.normal.y)) {
                             panda.hurt = true;
                         }
                     }
@@ -200,6 +223,9 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         auto& health = registry.get<Health>(entry.entity);
                         auto& panda = registry.get<Panda>(entry.entity);
 
+                        if (entry.normal.x == 0 && entry.normal.y == 0) {
+                            panda.hurt = true;
+                        }
                         if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)) {
                             panda.hurt = true;
                         }
@@ -212,7 +238,8 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         auto& cd = registry.get<CausesDamage>(d_entity);
                         auto& panda = registry.get<Panda>(d_entity);
                         auto& health = registry.get<Health>(entry.entity);
-                        if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)){
+                        if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)
+                        && !panda.invincible){
                             //do damage
                             health.health_points -= cd.hp;
 
@@ -248,9 +275,8 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
 
                     //check for food
                     if ( registry.has<Food>(entry.entity)
-                         && registry.has<Panda>(d_entity)
+                         && (registry.has<Panda>(d_entity) || registry.has<Jacko>(d_entity))
                     ) {
-                        auto& panda = registry.get<Panda>(d_entity);
                         auto& health = registry.get<Health>(d_entity);
 
                         health.health_points ++;
@@ -280,6 +306,7 @@ void PhysicsSystem::swept_collision(
     const Velocity& d_velocity,
     const Collidable& s_collider,
     const Transform& s_position,
+    const Velocity& s_velocity,
     float dt,
     float& time,
     float& x_norm,
@@ -293,14 +320,19 @@ void PhysicsSystem::swept_collision(
     float d_right = d_position.x + d_collider.width / 2;
     float d_top = d_position.y - d_collider.height / 2;
     float d_bot = d_position.y + d_collider.height / 2;
-    float d_vx = d_velocity.x_velocity * dt;
-    float d_vy = d_velocity.y_velocity * dt;
+//    float d_vx = d_velocity.x_velocity * dt;
+//    float d_vy = d_velocity.y_velocity * dt;
+
+
+    float d_vx = (d_velocity.x_velocity - s_velocity.x_velocity) * dt;
+    float d_vy = (d_velocity.y_velocity - s_velocity.y_velocity) * dt;
 
     // s for static; the unmoving box
     float s_left = s_position.x - s_collider.width / 2;
     float s_right = s_position.x + s_collider.width / 2;
     float s_top = s_position.y - s_collider.height / 2;
     float s_bot = s_position.y + s_collider.height / 2;
+
 
 
     //first check broadphase
@@ -440,4 +472,32 @@ void PhysicsSystem::swept_collision(
         time = entry_time;
         return;
     }
+}
+
+bool PhysicsSystem::static_collision(
+    const Collidable &d_collider,
+    const Transform &d_position,
+    const Collidable &s_collider,
+    const Transform &s_position,
+    float buffer
+) {
+    float d_left = d_position.x - d_collider.width / 2;
+    float d_right = d_position.x + d_collider.width / 2;
+    float d_top = d_position.y - d_collider.height / 2;
+    float d_bot = d_position.y + d_collider.height / 2;
+
+
+    float s_left = s_position.x - s_collider.width / 2;
+    float s_right = s_position.x + s_collider.width / 2;
+    float s_top = s_position.y - s_collider.height / 2;
+    float s_bot = s_position.y + s_collider.height / 2;
+
+
+    bool no_collide =
+           d_left > s_right + buffer
+        || s_left > d_right + buffer
+        || d_bot < s_top + buffer
+        || s_bot < d_top + buffer;
+
+    return !no_collide;
 }
