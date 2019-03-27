@@ -13,10 +13,10 @@ class Location{
 public:
     int i;
     int j;
-    float f;
-    float h;
-    bool obstacle;
-    std::vector<Location> neighbours;
+    float f=0.;
+    float h=0.;
+    bool obstacle=false;
+    std::vector<Location*> neighbours;
     Location(){};
     Location(int i, int j){
         this->i = i;
@@ -27,13 +27,13 @@ public:
         int x = i;
         int y = j;
         if(i<cols-1)
-            this->neighbours.push_back(grid[i+1][j]);
+            this->neighbours.push_back(&grid[i+1][j]);
         if(i>0)
-            this->neighbours.push_back(grid[i-1][j]);
+            this->neighbours.push_back(&grid[i-1][j]);
         if (j < rows -1)
-            this->neighbours.push_back(grid[i][j+1]);
+            this->neighbours.push_back(&grid[i][j+1]);
         if (j >0)
-            this->neighbours.push_back(grid[i][j-1]);
+            this->neighbours.push_back(&grid[i][j-1]);
 
     }
 
@@ -65,6 +65,10 @@ void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
         std::vector<Location> row;
         for(int j=0; j<cols; j++){
             row.push_back(Location(i,j));
+            if(dataList[i][j]=='1'){
+                row[row.size()-1].obstacle=true;
+            }
+
         }
         grid.push_back(row);
 
@@ -72,14 +76,14 @@ void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
 
 
 
-    for (int j = 0; j < 9; j++) {
+    for (int j = 0; j < rows; j++) {
 
-        for (int i = 0; i < dataList[0].size(); i++) {
-            std::cout << dataList[j][i];
+        for (int i = 0; i < cols; i++) {
+            grid[j][i].addNeighbours(grid);
+            std::cout << grid[j][i].obstacle;
         }
         std::cout << "\n";
     }
-
 
 
     int x=0;
