@@ -9,6 +9,7 @@ int cols=0;
 int rows=0;
 
 
+
 class Location{
 
 public:
@@ -17,6 +18,7 @@ public:
     float f = 0.;
     float g = 0.;
     float h = 0.;
+    Location* previous = NULL;
     bool obstacle=false;
     std::vector<Location*> neighbours;
     Location(){};
@@ -41,6 +43,19 @@ public:
 
 };
 
+float distance(Location* a, Location* b){
+    //calculate distance then return it
+    return abs(a->i-b->i)+abs(a->j-b->j);
+}
+
+bool contains(std::vector<Location*> list, Location* location){
+    for(int i = 0; i<list.size(); i++){
+        if(list[i]==location){
+            return true;
+        }
+    }
+    return false;
+}
 
 
 AStarSystem::AStarSystem() {}
@@ -48,6 +63,11 @@ AStarSystem::AStarSystem() {}
 void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     // construct a view for all entities with a sprite
     int level = 0;
+    std::vector<Location*> openSet;
+    std::vector<Location*> closedSet;
+    std::vector<Location*> path;
+    Location* start;
+    Location* end;
 
     std::string level_path = levels_path("");
     std::string levelFile = level_path + "boss_level_" + std::to_string(level) + ".csv";
@@ -78,8 +98,7 @@ void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
 
     }
 
-
-
+    // Add neighbours
     for (int i = 0; i < rows; i++) {
 
         for (int j = 0; j < cols; j++) {
@@ -88,7 +107,54 @@ void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
         }
         std::cout << "\n";
     }
+    start = grid[1][15];
+    end = grid[8][15];
+    openSet.push_back(start);
 
 
-    int x=0;
+    while(openSet.size() > 0){
+        int winner = 0;
+        for(int i = 0; i<openSet.size(); i++){
+                if(openSet[i]->f < openSet[winner]->f){
+                    winner = i;
+                }
+        }
+        Location* current = openSet[winner];
+        if(current == end){
+            //Done
+            Location* temp = current;
+            while(temp != NULL){
+                path.insert(path.begin(), temp);
+                temp=temp->previous;
+            }
+            break;
+        }
+        openSet.erase(openSet.begin()+winner);
+        closedSet.push_back(current);
+
+        std::vector<Location*> neighbours = current->neighbours;
+        for(int i=0; i<neighbours.size(); i++){
+            Location* neighbour = neighbours[i];
+            if(!contains(closedSet, neighbour) && !neighbour->obstacle){
+                float tempG = current->g +1.;
+
+                if(contains(openSet, neighbour)){
+                    if(tempG < neighbour->g){
+                        neighbour->g = tempG;
+                    }
+                }else{
+                    neighbour->g = tempG;
+                    openSet.push_back(neighbour);
+                }
+
+                neighbour->h = distance(neighbour, end);
+                neighbour->f = neighbour->g+neighbour->h;
+                neighbour->previous = current;
+            }
+
+        }
+
+    }
+
+    int x=0; // Only here to have breakpoint
 }
