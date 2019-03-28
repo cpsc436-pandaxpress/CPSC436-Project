@@ -79,13 +79,21 @@ void BackgroundTransformSystem::boss_background_transform(Blackboard &blackboard
     if (background.z_pos() == 0) { // follow the camera
         // this is the moon
         Camera camera = blackboard.camera;
-        float displacement = blackboard.delta_time * 1;
-        background.set_pos1(camera.position().x + displacement, camera.position().y);
+        background.set_pos1(camera.position().x, camera.position().y);
     } else if (background.z_pos() == 3) { // follow the camera only in x-direction
         // This is the grass
         Camera camera = blackboard.camera;
-        float displacement = blackboard.delta_time * 1;
-        background.set_pos1(camera.position().x + displacement, background.pos1().y);
+        float halfWidth = camera.size().x / 2.0f;
+        if (camera.position().x <= -halfWidth) {
+            background.set_pos1(-halfWidth, background.pos1().y);
+            background.set_pos2(-camera.size().x - halfWidth, background.pos1().y);
+        } else if(camera.position().x >= halfWidth) {
+            background.set_pos1(halfWidth + camera.size().x, background.pos1().y);
+            background.set_pos2(halfWidth, background.pos1().y);
+        } else {
+            background.set_pos1(-halfWidth, background.pos1().y);
+            background.set_pos2(halfWidth, background.pos1().y);
+        }
     } else {
         // everything else
         float og_pos1 = 0.0;
@@ -101,6 +109,6 @@ void BackgroundTransformSystem::boss_background_transform(Blackboard &blackboard
                 0, maxDist);
         vec2 pos1 = background.pos1();
         background.set_pos1(blackboard.camera.position().x + displacement,
-                blackboard.camera.position().y + displacementY);
+                            blackboard.camera.position().y + displacementY);
     }
 }

@@ -216,7 +216,7 @@ void BossScene::create_background(Blackboard &blackboard) {
     int indices[4] = {3, 1, 2, 0};
     for (Texture t: textures) {
         auto bg_entity = registry_.create();
-        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, indices[i], false);
+        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, indices[i], indices[i] == 3);
         bg.set_pos1(0.0f, 0.0f);
         bg.set_rotation_rad(0.0f);
         bg.set_scale(blackboard.camera.size().x / t.width(),
