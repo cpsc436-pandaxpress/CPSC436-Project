@@ -8,13 +8,15 @@
 int cols=0;
 int rows=0;
 
+
 class Location{
 
 public:
-    int i;
-    int j;
-    float f=0.;
-    float h=0.;
+    int i =0;
+    int j = 0;
+    float f = 0.;
+    float g = 0.;
+    float h = 0.;
     bool obstacle=false;
     std::vector<Location*> neighbours;
     Location(){};
@@ -23,21 +25,23 @@ public:
         this->j = j;
     }
 
-    void addNeighbours(std::vector<std::vector<Location>> grid){
+    void addNeighbours(std::vector<std::vector<Location*>> grid){
         int x = i;
         int y = j;
-        if(i<cols-1)
-            this->neighbours.push_back(&grid[i+1][j]);
+        if(i<rows-1)
+            neighbours.push_back(grid[i+1][j]);
         if(i>0)
-            this->neighbours.push_back(&grid[i-1][j]);
-        if (j < rows -1)
-            this->neighbours.push_back(&grid[i][j+1]);
+            neighbours.push_back(grid[i-1][j]);
+        if (j < cols -1)
+            neighbours.push_back(grid[i][j+1]);
         if (j >0)
-            this->neighbours.push_back(&grid[i][j-1]);
+            neighbours.push_back(grid[i][j-1]);
 
     }
 
 };
+
+
 
 AStarSystem::AStarSystem() {}
 
@@ -59,14 +63,14 @@ void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
     }
     cols = dataList[0].size();
     rows =9;
+    std::vector<std::vector<Location*>> grid;
 
-    std::vector<std::vector<Location>> grid;
     for(int i = 0; i<rows; i++){
-        std::vector<Location> row;
+        std::vector<Location*> row;
         for(int j=0; j<cols; j++){
-            row.push_back(Location(i,j));
+            row.push_back(new Location(i,j));
             if(dataList[i][j]=='1'){
-                row[row.size()-1].obstacle=true;
+                row[row.size()-1]->obstacle=true;
             }
 
         }
@@ -76,11 +80,11 @@ void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
 
 
 
-    for (int j = 0; j < rows; j++) {
+    for (int i = 0; i < rows; i++) {
 
-        for (int i = 0; i < cols; i++) {
-            grid[j][i].addNeighbours(grid);
-            std::cout << grid[j][i].obstacle;
+        for (int j = 0; j < cols; j++) {
+            grid[i][j]->addNeighbours(grid);
+            std::cout << grid[i][j]->obstacle;
         }
         std::cout << "\n";
     }
