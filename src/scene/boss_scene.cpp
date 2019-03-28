@@ -16,6 +16,7 @@
 #include <components/tutorial.h>
 #include <components/timer.h>
 #include <graphics/health_bar.h>
+#include <components/hud_element.h>
 #include "boss_scene.h"
 #include "util/constants.h"
 
@@ -37,7 +38,8 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         falling_platform_system(),
         enemy_animation_system(),
         health_bar_render_system(),
-        health_bar_transform_system()
+        health_bar_transform_system(),
+        hud_transform_system()
 {
     init_scene(blackboard);
     reset_scene(blackboard); // idk why??? but this is required
@@ -68,6 +70,7 @@ void BossScene::update(Blackboard &blackboard) {
     enemy_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
     falling_platform_system.update(blackboard, registry_);
+    hud_transform_system.update(blackboard, registry_); // should run last
 }
 
 void BossScene::update_panda(Blackboard &blackboard) {
@@ -150,6 +153,9 @@ void BossScene::create_panda(Blackboard &blackboard) {
     vec2 scale = {0.5, 0.5};
     auto &healthbar = registry_.assign<HealthBar>(panda_entity,
                                                   meshHealth, shaderHealth, size, scale);
+    registry_.assign<HudElement>(panda_entity,
+                                 vec2{size.x / 2.f * scale.x + 100.f,
+                                      blackboard.camera.size().y - 50.f});
 }
 
 void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {

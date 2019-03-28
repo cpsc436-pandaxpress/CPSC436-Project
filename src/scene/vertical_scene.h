@@ -26,6 +26,7 @@
 #include <systems/text_transform_system.h>
 #include <systems/text_render_system.h>
 #include <systems/score_system.h>
+#include <systems/hud_transform_system.h>
 
 class VerticalScene : public Scene {
 private:
@@ -53,6 +54,7 @@ private:
     TextRenderSystem text_render_system;
     TextTransformSystem text_transform_system;
     ScoreSystem score_system;
+    HudTransformSystem hud_transform_system;
 
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;

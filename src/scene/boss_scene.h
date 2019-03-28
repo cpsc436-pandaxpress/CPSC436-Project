@@ -15,6 +15,7 @@
 #include <systems/timer_system.h>
 #include <systems/health_bar_render_system.h>
 #include <systems/health_bar_transform_system.h>
+#include <systems/hud_transform_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -64,7 +65,7 @@ private:
     EnemyAnimationSystem enemy_animation_system;
     HealthBarRenderSystem health_bar_render_system;
     HealthBarTransformSystem health_bar_transform_system;
-
+    HudTransformSystem hud_transform_system;
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);

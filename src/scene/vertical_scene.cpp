@@ -14,6 +14,7 @@
 #include <graphics/font.h>
 #include <graphics/text.h>
 #include <components/score.h>
+#include <components/hud_element.h>
 #include "vertical_scene.h"
 #include "util/constants.h"
 
@@ -34,7 +35,8 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         enemy_animation_system(),
         text_transform_system(),
         text_render_system(),
-        score_system(VERTICAL_SCENE_ID)
+        score_system(VERTICAL_SCENE_ID),
+        hud_transform_system()
 
 {
     init_scene(blackboard);
@@ -80,6 +82,9 @@ void VerticalScene::create_panda(Blackboard &blackboard) {
     vec2 scale = {0.5, 0.5};
     auto &healthbar = registry_.assign<HealthBar>(panda_entity,
                                                   meshHealth, shaderHealth, size, scale);
+    registry_.assign<HudElement>(panda_entity,
+                                 vec2{size.x / 2.f * scale.x + 100.f,
+                                      blackboard.camera.size().y - 50.f});
 }
 
 void VerticalScene::update(Blackboard &blackboard) {
@@ -124,6 +129,7 @@ void VerticalScene::update(Blackboard &blackboard) {
     enemy_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
     falling_platform_system.update(blackboard, registry_);
+    hud_transform_system.update(blackboard, registry_); // should run last
 }
 
 void VerticalScene::render(Blackboard &blackboard) {
@@ -197,4 +203,7 @@ void VerticalScene::create_score_text(Blackboard &blackboard) {
     auto &text = registry_.assign<Text>(score_entity, shader, mesh, font, textVal);
     registry_.assign<Transform>(score_entity, 0., 0., 0., 1.f, 1.f);
     registry_.assign<Score>(score_entity);
+    registry_.assign<HudElement>(score_entity,
+                                 vec2{blackboard.camera.size().x - 100.f,
+                                      blackboard.camera.size().y - 50.f});
 }
