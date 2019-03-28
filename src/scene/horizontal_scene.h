@@ -19,6 +19,7 @@
 #include <systems/text_render_system.h>
 #include <systems/text_transform_system.h>
 #include <systems/score_system.h>
+#include <systems/hud_transform_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -67,6 +68,7 @@ private:
     TextRenderSystem text_render_system;
     TextTransformSystem text_transform_system;
     ScoreSystem score_system;
+    HudTransformSystem hud_transform_system;
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);

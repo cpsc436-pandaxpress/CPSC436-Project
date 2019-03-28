@@ -14,6 +14,7 @@
 #include <graphics/cave.h>
 #include <graphics/text.h>
 #include <components/score.h>
+#include <components/hud_element.h>
 #include "horizontal_scene.h"
 #include "util/constants.h"
 
@@ -37,7 +38,8 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         health_bar_transform_system(),
         text_render_system(),
         text_transform_system(),
-        score_system(HORIZONTAL_SCENE_ID)
+        score_system(HORIZONTAL_SCENE_ID),
+        hud_transform_system()
 {
     init_scene(blackboard);
     create_tutorial(blackboard);
@@ -71,6 +73,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
     timer_system.update(blackboard, registry_);
     falling_platform_system.update(blackboard, registry_);
     enemy_animation_system.update(blackboard, registry_);
+    hud_transform_system.update(blackboard, registry_);// Must run last
 }
 
 void HorizontalScene::update_panda(Blackboard &blackboard) {
@@ -166,12 +169,12 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
 
     auto shaderHealth = blackboard.shader_manager.get_shader("health");
     auto meshHealth = blackboard.mesh_manager.get_mesh("health");
-    float height = 75.f;
-    float width = 750.f;
-    vec2 size = {width, height};
+    vec2 size = {750.f, 75.f};
     vec2 scale = {0.5, 0.5};
     auto &healthbar = registry_.assign<HealthBar>(panda_entity,
                                                   meshHealth, shaderHealth, size, scale);
+    registry_.assign<HudElement>(panda_entity,
+                                 vec2{size.x / 2.f * scale.x + 100.f, blackboard.camera.size().y - 50.f});
 }
 
 void HorizontalScene::create_background(Blackboard &blackboard) {
