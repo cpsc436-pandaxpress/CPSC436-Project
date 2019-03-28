@@ -62,7 +62,7 @@ void Text::draw(const mat3& projection) {
         mul_in_place(transform, make_translate_mat3(xpos, ypos));
         mul_in_place(transform,
                      make_scale_mat3(scale_ * texture.width(), scale_ * texture.height()));
-
+//        mul_in_place(transform, make_scale_mat3(0.8f, 0.8f));
         shader_.set_uniform_mat3("transform", transform);
         glActiveTexture(GL_TEXTURE0);
         texture.bind();

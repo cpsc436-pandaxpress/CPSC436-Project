@@ -7,6 +7,14 @@ uniform vec3 fcolor;
 
 void main()
 {
-    vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, texcoord).r);
-    color = vec4(fcolor, 1.0) * sampled;
+    vec3 outline_col = vec3(0.0, 0.0, 0.0); // e.g red
+
+    vec2 tex = texture(text, texcoord).rg;
+    float fill    = tex.r;
+    float outline = tex.g;
+
+    float alpha    = max( fill, outline );
+    vec3 mix_color = mix( mix(vec3(0.0), fcolor, fill), outline_col, outline );
+
+    color = vec4(mix_color, alpha);
 }
