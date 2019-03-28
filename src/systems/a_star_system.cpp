@@ -4,44 +4,12 @@
 
 #include "a_star_system.h"
 #include <iostream>
+#include "util/Location.h"
 
 int cols=0;
 int rows=0;
 
 
-
-class Location{
-
-public:
-    int i =0;
-    int j = 0;
-    float f = 0.;
-    float g = 0.;
-    float h = 0.;
-    Location* previous = NULL;
-    bool obstacle=false;
-    std::vector<Location*> neighbours;
-    Location(){};
-    Location(int i, int j){
-        this->i = i;
-        this->j = j;
-    }
-
-    void addNeighbours(std::vector<std::vector<Location*>> grid){
-        int x = i;
-        int y = j;
-        if(i<rows-1)
-            neighbours.push_back(grid[i+1][j]);
-        if(i>0)
-            neighbours.push_back(grid[i-1][j]);
-        if (j < cols -1)
-            neighbours.push_back(grid[i][j+1]);
-        if (j >0)
-            neighbours.push_back(grid[i][j-1]);
-
-    }
-
-};
 
 float distance(Location* a, Location* b){
     //calculate distance then return it
@@ -108,7 +76,9 @@ void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
         std::cout << "\n";
     }
     start = grid[1][15];
+    start->obstacle=false;
     end = grid[8][15];
+    end->obstacle=false;
     openSet.push_back(start);
 
 
@@ -156,5 +126,5 @@ void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
 
     }
 
-    int x=0; // Only here to have breakpoint
+    int u=0; // Only here to have breakpoint
 }
