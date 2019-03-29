@@ -6,6 +6,7 @@
 #include <graphics/text.h>
 #include <components/transform.h>
 #include <sstream>
+#include <iomanip>
 #include "score_system.h"
 #include "util/constants.h"
 
@@ -14,37 +15,26 @@ ScoreSystem::ScoreSystem(SceneID scene_id) : scene_id(scene_id) {
 }
 
 void ScoreSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    auto view = registry.view<Score, Text, Transform>();
+    auto view = registry.view<Score, Text>();
     for (auto entity: view) {
         auto &text = view.get<Text>(entity);
-        auto &transform = view.get<Transform>(entity);
         auto cam = blackboard.camera;
+        std::string score_text;
+        std::stringstream ss;
         switch (scene_id) {
             case HORIZONTAL_SCENE_ID: {
-                std::string score_text;
-                std::stringstream ss;
-//                ss << "SCORE: ";
-                ss << (int) cam.position().x / 50;
-                score_text = ss.str();
-                text.set_text(score_text);
+                ss << std::setfill('0') << std::setw(6) << (int) abs(cam.position().x) / 100;
             }
                 break;
             case VERTICAL_SCENE_ID: {
-                std::string score_text;
-                std::stringstream ss;
-//                ss << "SCORE: ";
-                ss << (int) abs(cam.position().y) / 50;
-                score_text = ss.str();
-                text.set_text(score_text);
-            }
-                break;
-            case BOSS_SCENE_ID: {
-
+                ss << std::setfill('0') << std::setw(6) << (int) abs(cam.position().y) / 100;
             }
                 break;
             default:
                 fprintf(stderr, "Invalid scene ID: %d\n", scene_id);
         }
+        score_text = ss.str();
+        text.set_text(score_text);
     }
 
 }

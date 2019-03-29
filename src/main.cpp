@@ -24,6 +24,7 @@
 #include <scene/boss_scene.h>
 #include <graphics/health_bar.h>
 #include <graphics/cave.h>
+#include <graphics/font_manager.h>
 
 int main(int argc, char** argv) {
 
@@ -40,7 +41,8 @@ int main(int argc, char** argv) {
         TextureManager(),
         window,
         Random(0),
-        SoundManager()
+        SoundManager(),
+        FontManager()
     };
 
 
@@ -110,6 +112,8 @@ int main(int argc, char** argv) {
     blackboard.mesh_manager.load_mesh("cave", 41, Cave::vertices, 168, Cave::indices);
     blackboard.mesh_manager.load_mesh("sprite", 4, Sprite::vertices, 6, Sprite::indices);
     blackboard.soundManager.init();
+
+    blackboard.fontManager.load_font(fonts_path("TitilliumWeb.ttf"), "titillium_72", 72);
 
     auto scene_manager = SceneManager(blackboard);
 

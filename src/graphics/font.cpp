@@ -45,7 +45,7 @@ bool FontType::load(std::string font, GLuint fontSize) {
         FT_Done_Face(face);
         return false;
     }
-    static float outlineWidth = 0.5;
+    static float outlineWidth = 1.1;
     FT_Stroker_Set(stroker,
                    (int) (outlineWidth * 64),
                    FT_STROKER_LINECAP_ROUND,
@@ -53,51 +53,15 @@ bool FontType::load(std::string font, GLuint fontSize) {
                    1);
 
     // Set size to load glyphs as
-    FT_Set_Pixel_Sizes(face, 0, fontSize);
+//    FT_Set_Pixel_Sizes(face, 0, fontSize);
+    FT_Set_Char_Size(face, fontSize << 6, fontSize << 6, 90, 90);
     // Disable byte-alignment restriction
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    // Then for the first 128 ASCII characters, pre-load/compile their characters and store them
-//    for (GLubyte c = 0; c < 128; c++) {
-//        // Load character glyph
-//        if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
-//            std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
-//            continue;
-//        }
-//        // Generate texture
-//        GLuint tex_id;
-//        glGenTextures(1, &tex_id);
-//        glBindTexture(GL_TEXTURE_2D, tex_id);
-//        glTexImage2D(
-//                GL_TEXTURE_2D,
-//                0,
-//                GL_RED,
-//                face->glyph->bitmap.width,
-//                face->glyph->bitmap.rows,
-//                0,
-//                GL_RED,
-//                GL_UNSIGNED_BYTE,
-//                face->glyph->bitmap.buffer
-//        );
-//        // Set texture options
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//
-//        // Now store character for later use
-//        Character character = {
-//                tex_id,
-//                {(float) face->glyph->bitmap.width, (float) face->glyph->bitmap.rows},
-//                {(float) face->glyph->bitmap_left, (float) face->glyph->bitmap_top},
-//                static_cast<GLuint>(face->glyph->advance.x)
-//        };
-//        characters.insert(std::pair<GLchar, Character>(c, character));
-//    }
     for (GLubyte c = 0; c < 128; c++) {
         // Load character glyph
         // Create outline bitmap
-        if (FT_Load_Char(face, c, FT_LOAD_NO_BITMAP | FT_LOAD_TARGET_NORMAL)) {
+        if (FT_Load_Char(face, c, FT_LOAD_NO_BITMAP)) {
             continue;
         }
 
@@ -170,17 +134,6 @@ bool FontType::load(std::string font, GLuint fontSize) {
         GLuint tex_id;
         glGenTextures(1, &tex_id);
         glBindTexture(GL_TEXTURE_2D, tex_id);
-//        glTexImage2D(
-//                GL_TEXTURE_2D,
-//                0,
-//                GL_RED,
-//                face->glyph->bitmap.width,
-//                face->glyph->bitmap.rows,
-//                0,
-//                GL_RED,
-//                GL_UNSIGNED_BYTE,
-//                buffer.data()
-//        );
         glTexImage2D(
                 GL_TEXTURE_2D,
                 0,
@@ -192,24 +145,13 @@ bool FontType::load(std::string font, GLuint fontSize) {
                 GL_UNSIGNED_BYTE,
                 buffer.data()
         );
-//        glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
         // Set texture options
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        // Now store character for later use
-//        Character character = {
-//                tex_id,
-//                {(float) face->glyph->bitmap.width, (float) face->glyph->bitmap.rows},
-//                {(float) face->glyph->bitmap_left, (float) face->glyph->bitmap_top},
-//                static_cast<GLuint>(face->glyph->advance.x)
-//        };
         int displacement = 0;
-        if (c == '1') {
-            displacement = 12 << 6;
-        }
         Character character = {
                 tex_id,
                 vec2{(float) cx, (float) cy},
@@ -228,3 +170,127 @@ bool FontType::load(std::string font, GLuint fontSize) {
     bool result = !gl_has_errors();
     return result;
 }
+
+void FontType::deleteTextures() {
+    for (auto &c: characters) {
+        glDeleteTextures(1, &c.second.tex_id);
+    }
+}
+
+//void WriteGlyphAsTGA(FT_Library &library,
+//                     const std::string &fileName,
+//                     wchar_t ch,
+//                     FT_Face &face,
+//                     int size,
+//                     const Pixel32 &fontCol,
+//                     const Pixel32 outlineCol,
+//                     float outlineWidth) {
+//    // Set the size to use.
+//    if (FT_Set_Char_Size(face, size << 6, size << 6, 90, 90) == 0) {
+//        // Load the glyph we are looking for.
+//        FT_UInt gindex = FT_Get_Char_Index(face, ch);
+//        if (FT_Load_Glyph(face, gindex, FT_LOAD_NO_BITMAP) == 0) {
+//            // Need an outline for this to work.
+//            if (face->glyph->format == FT_GLYPH_FORMAT_OUTLINE) {
+//                // Render the basic glyph to a span list.
+//                Spans spans;
+//                RenderSpans(library, &face->glyph->outline, &spans);
+//
+//                // Next we need the spans for the outline.
+//                Spans outlineSpans;
+//
+//                // Set up a stroker.
+//                FT_Stroker stroker;
+//                FT_Stroker_New(library, &stroker);
+//                FT_Stroker_Set(stroker,
+//                               (int) (outlineWidth * 64),
+//                               FT_STROKER_LINECAP_ROUND,
+//                               FT_STROKER_LINEJOIN_ROUND,
+//                               0);
+//
+//                FT_Glyph glyph;
+//                if (FT_Get_Glyph(face->glyph, &glyph) == 0) {
+//                    FT_Glyph_StrokeBorder(&glyph, stroker, 0, 1);
+//                    // Again, this needs to be an outline to work.
+//                    if (glyph->format == FT_GLYPH_FORMAT_OUTLINE) {
+//                        // Render the outline spans to the span list
+//                        FT_Outline *o =
+//                                &reinterpret_cast<FT_OutlineGlyph>(glyph)->outline;
+//                        RenderSpans(library, o, &outlineSpans);
+//                    }
+//
+//                    // Clean up afterwards.
+//                    FT_Stroker_Done(stroker);
+//                    FT_Done_Glyph(glyph);
+//
+//                    // Now we need to put it all together.
+//                    if (!spans.empty()) {
+//                        // Figure out what the bounding rect is for both the span lists.
+//                        Rect rect(spans.front().x,
+//                                  spans.front().y,
+//                                  spans.front().x,
+//                                  spans.front().y);
+//                        for (Spans::iterator s = spans.begin();
+//                             s != spans.end(); ++s) {
+//                            rect.Include(Vec2(s->x, s->y));
+//                            rect.Include(Vec2(s->x + s->width - 1, s->y));
+//                        }
+//                        for (Spans::iterator s = outlineSpans.begin();
+//                             s != outlineSpans.end(); ++s) {
+//                            rect.Include(Vec2(s->x, s->y));
+//                            rect.Include(Vec2(s->x + s->width - 1, s->y));
+//                        }
+//
+//#if 0
+//                        // This is unused in this test but you would need this to draw
+//            // more than one glyph.
+//            float bearingX = face->glyph->metrics.horiBearingX >> 6;
+//            float bearingY = face->glyph->metrics.horiBearingY >> 6;
+//            float advance = face->glyph->advance.x >> 6;
+//#endif
+//
+//                        // Get some metrics of our image.
+//                        int imgWidth = rect.Width(),
+//                                imgHeight = rect.Height(),
+//                                imgSize = imgWidth * imgHeight;
+//
+//                        // Allocate data for our image and clear it out to transparent.
+//                        Pixel32 *pxl = new Pixel32[imgSize];
+//                        memset(pxl, 0, sizeof(Pixel32) * imgSize);
+//
+//                        // Loop over the outline spans and just draw them into the
+//                        // image.
+//                        for (Spans::iterator s = outlineSpans.begin();
+//                             s != outlineSpans.end(); ++s)
+//                            for (int w = 0; w < s->width; ++w)
+//                                pxl[(int) ((imgHeight - 1 - (s->y - rect.ymin)) * imgWidth
+//                                           + s->x - rect.xmin + w)] =
+//                                        Pixel32(outlineCol.r, outlineCol.g, outlineCol.b,
+//                                                s->coverage);
+//
+//                        // Then loop over the regular glyph spans and blend them into
+//                        // the image.
+//                        for (Spans::iterator s = spans.begin();
+//                             s != spans.end(); ++s)
+//                            for (int w = 0; w < s->width; ++w) {
+//                                Pixel32 &dst =
+//                                        pxl[(int) ((imgHeight - 1 - (s->y - rect.ymin)) * imgWidth
+//                                                   + s->x - rect.xmin + w)];
+//                                Pixel32 src = Pixel32(fontCol.r, fontCol.g, fontCol.b,
+//                                                      s->coverage);
+//                                dst.r = (int) (dst.r + ((src.r - dst.r) * src.a) / 255.0f);
+//                                dst.g = (int) (dst.g + ((src.g - dst.g) * src.a) / 255.0f);
+//                                dst.b = (int) (dst.b + ((src.b - dst.b) * src.a) / 255.0f);
+//                                dst.a = MIN(255, dst.a + src.a);
+//                            }
+//
+//                        // Dump the image to disk.
+//                        WriteTGA(fileName, pxl, imgWidth, imgHeight);
+//
+//                        delete[] pxl;
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}

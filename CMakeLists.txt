@@ -130,7 +130,12 @@ set(SOURCE_FILES
         src/systems/score_system.cpp
         src/systems/score_system.h
         src/components/score.h
-        src/components/hud_element.h src/systems/hud_transform_system.cpp src/systems/hud_transform_system.h)
+        src/components/hud_element.h
+        src/systems/hud_transform_system.cpp
+        src/systems/hud_transform_system.h
+        src/graphics/font_manager.cpp
+        src/graphics/font_manager.h
+        )
 
 
 # Create executable target

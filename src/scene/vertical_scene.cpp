@@ -195,15 +195,13 @@ void VerticalScene::create_score_text(Blackboard &blackboard) {
     auto shader = blackboard.shader_manager.get_shader("text");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
-    FontType font = FontType();
-    font.load(fonts_path("TitilliumWeb-Bold.ttf"), 64);
+    FontType font = blackboard.fontManager.get_font("titillium_72");
 
     score_entity = registry_.create();
-    std::string textVal = "SCORE: 0";
+    std::string textVal = "0";
     auto &text = registry_.assign<Text>(score_entity, shader, mesh, font, textVal);
-    registry_.assign<Transform>(score_entity, 0., 0., 0., 1.f, 1.f);
     registry_.assign<Score>(score_entity);
     registry_.assign<HudElement>(score_entity,
-                                 vec2{blackboard.camera.size().x - 100.f,
+                                 vec2{blackboard.camera.size().x - 350.f,
                                       blackboard.camera.size().y - 50.f});
 }
