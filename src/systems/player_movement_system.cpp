@@ -11,6 +11,7 @@
 #include "components/obeys_gravity.h"
 #include "util/constants.h"
 #include "scene/horizontal_scene.h"
+#include "systems/a_star_system.h"
 
 
 PlayerMovementSystem::PlayerMovementSystem(SceneID scene_id) :

@@ -18,6 +18,7 @@
 #include <graphics/health_bar.h>
 #include "boss_scene.h"
 #include "util/constants.h"
+#include "util/Location.h"
 
 BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         Scene(scene_manager),
@@ -46,9 +47,15 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
 
 void BossScene::update(Blackboard &blackboard) {
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
+        std::vector<Location*> path = a_star_system.getProjectilePath(blackboard, registry_);
+        for(int i=0; i<path.size(); i++){
+            std::cout<< path[i]->i << " " << path[i]->j <<"\n";
+        }
+        /*
         blackboard.camera.set_position(0, 0);
         reset_scene(blackboard);
         change_scene(MAIN_MENU_SCENE_ID);
+         */
         return;
     }
 
@@ -68,7 +75,7 @@ void BossScene::update(Blackboard &blackboard) {
     timer_system.update(blackboard, registry_);
     falling_platform_system.update(blackboard, registry_);
     background_transform_system.update(blackboard, registry_);
-    a_star_system.update(blackboard, registry_);
+
 }
 
 void BossScene::render(Blackboard &blackboard) {
@@ -109,6 +116,7 @@ void BossScene::init_scene(Blackboard &blackboard) {
     create_jacko(blackboard, burger_entity);
     create_panda(blackboard);
     level_system.init();
+   // a_star_system.createGrid(blackboard, registry_);
 }
 
 void BossScene::reset_scene(Blackboard &blackboard) {

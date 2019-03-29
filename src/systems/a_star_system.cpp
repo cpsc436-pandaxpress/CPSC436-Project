@@ -3,11 +3,12 @@
 //
 
 #include "a_star_system.h"
-#include <iostream>
-#include "util/Location.h"
+
 
 int cols=0;
 int rows=0;
+std::vector<std::vector<Location*>> grid;
+bool initialized = false;
 
 
 
@@ -28,15 +29,10 @@ bool contains(std::vector<Location*> list, Location* location){
 
 AStarSystem::AStarSystem() {}
 
-void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    // construct a view for all entities with a sprite
-    int level = 0;
-    std::vector<Location*> openSet;
-    std::vector<Location*> closedSet;
-    std::vector<Location*> path;
-    Location* start;
-    Location* end;
 
+
+void AStarSystem::createGrid(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+    int level = 0;
     std::string level_path = levels_path("");
     std::string levelFile = level_path + "boss_level_" + std::to_string(level) + ".csv";
     CSVReader reader(levelFile);
@@ -51,7 +47,7 @@ void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
     }
     cols = dataList[0].size();
     rows =9;
-    std::vector<std::vector<Location*>> grid;
+
 
     for(int i = 0; i<rows; i++){
         std::vector<Location*> row;
@@ -66,18 +62,60 @@ void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
 
     }
 
-    // Add neighbours
-    for (int i = 0; i < rows; i++) {
 
-        for (int j = 0; j < cols; j++) {
-            grid[i][j]->addNeighbours(grid);
-            std::cout << grid[i][j]->obstacle;
+
+    // Add neighbours
+        for (int i = 0; i < rows; i++) {
+
+            for (int j = 0; j < cols; j++) {
+                grid[i][j]->addNeighbours(grid);
+                std::cout << grid[i][j]->obstacle;
+            }
+            std::cout << "\n";
         }
-        std::cout << "\n";
+
+}
+
+Location* AStarSystem::getGridLocation(float x, float y){
+    int i = (x+800)/100;
+    int j = (y+450)/100;
+
+    int u=0; // Only here to have breakpoint
+    std::cout<<"gridlocation " << i << " " << j << "\n";
+    return grid[j][i];
+}
+
+std::vector<Location*> AStarSystem::getProjectilePath(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+    Location* start;
+    Location* end;
+    createGrid(blackboard, registry);
+
+    auto jacko = registry.view<Jacko, Transform>();
+
+    for (auto entity: jacko) {
+
+        auto& transform = jacko.get<Transform>(entity);
+        start = getGridLocation(transform.x, transform.y);
     }
-    start = grid[1][15];
+
+    auto panda = registry.view<Panda, Transform>();
+
+    for (auto entity: panda) {
+
+        auto& transform = panda.get<Transform>(entity);
+        end = getGridLocation(transform.x, transform.y);
+    }
+
+    return findPath(start, end);
+}
+
+std::vector<Location*> AStarSystem::findPath(Location* start, Location* end){
+    std::vector<Location*> openSet;
+    std::vector<Location*> closedSet;
+    std::vector<Location*> path;
+
     start->obstacle=false;
-    end = grid[8][15];
+
     end->obstacle=false;
     openSet.push_back(start);
 
@@ -85,9 +123,9 @@ void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
     while(openSet.size() > 0){
         int winner = 0;
         for(int i = 0; i<openSet.size(); i++){
-                if(openSet[i]->f < openSet[winner]->f){
-                    winner = i;
-                }
+            if(openSet[i]->f < openSet[winner]->f){
+                winner = i;
+            }
         }
         Location* current = openSet[winner];
         if(current == end){
@@ -97,7 +135,17 @@ void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
                 path.insert(path.begin(), temp);
                 temp=temp->previous;
             }
-            break;
+            //Reset Grid
+            for(int i = 0; i<rows; i++) {
+                for (int j = 0; j < cols; j++) {
+                    grid[i][j]->neighbours.clear();
+                    grid[i][j]->previous=NULL;
+                    grid[i][j]->f=0;
+                    grid[i][j]->g=0;
+                    grid[i][j]->h=0;
+                }
+            }
+            return path;
         }
         openSet.erase(openSet.begin()+winner);
         closedSet.push_back(current);
@@ -126,5 +174,21 @@ void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
 
     }
 
+
+}
+
+void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+    // construct a view for all entities with a sprite
+    /*
+    Location* start;
+    Location* end;
+
+    start = grid[1][15];
+    end = grid[8][15];
+
+    std::vector<Location*> path;
+    path = getProjectilePath(blackboard, registry);
+    //path = findPath(start, end);
     int u=0; // Only here to have breakpoint
+    */
 }
