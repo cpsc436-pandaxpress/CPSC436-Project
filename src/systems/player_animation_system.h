@@ -20,16 +20,14 @@ public:
 
 
 private:
-    float pandawidth = 0.1;
-    float pandaheight = 0.333;
+    float pandawidth = 0.1f;
+    float pandaheight = 0.333f;
     SceneID scene_id;
 
 
     float animationTime = 0.f;
-    bool direction_left = false;
     int death_index = 0;
-
-
+    int counter;
 
     void animate(bool alive, int frames, int index, int row, Sprite &sprite);
 

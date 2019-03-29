@@ -50,12 +50,17 @@ void BossScene::update(Blackboard &blackboard) {
         return;
     }
 
-    update_camera(blackboard);
+    auto &panda = registry_.get<Panda>(panda_entity);
+
+    if (panda.alive && !panda.dead){
+        update_camera(blackboard);
+//        background_transform_system.update(blackboard, registry_);
+        player_movement_system.update(blackboard, registry_);
+    }
     update_panda(blackboard);
 
     level_system.update(blackboard, registry_);
     chase_system.update(blackboard, registry_);
-    player_movement_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
     panda_dmg_system.update(blackboard, registry_);
     health_bar_transform_system.update(blackboard, registry_);
@@ -84,7 +89,7 @@ void BossScene::update_panda(Blackboard &blackboard) {
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &panda_collidable = registry_.get<Collidable>(panda_entity);
 
-    if (transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || !panda.alive) {
+    if (transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || panda.dead) {
         reset_scene(blackboard);
     }
 }

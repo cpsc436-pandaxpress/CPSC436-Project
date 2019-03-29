@@ -65,23 +65,19 @@ void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Inte
         }
     }
 
-    if (panda.alive){
+    if (panda.alive || !walkable.grounded) {
         row = 1;
         animate(true, frames, index, row, sprite);
-//        printf("%d, \n", death_index);
-    } else {
-        int mod = ((int) animationTime % 4);
-        printf("%f, \n", animationTime);
-        if (death_index < frames && mod == 0) {
-            frames = 10;
-            frameRate = 1.f;
+    } else if (!panda.alive && walkable.grounded){
+        frames = 10;
+        frameRate = 15.f;
+        if (death_index < frames && (counter != (int) animationTime)) {
             row = 2;
-//            printf("%d, \n", death_index);
             animate(false, frames, death_index, row, sprite);
         }
     }
-
-    animationTime += frameRate*blackboard.delta_time;
+    counter = (int) animationTime;
+    animationTime += frameRate * blackboard.delta_time;
 
 }
 
@@ -93,11 +89,9 @@ void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, I
     index = 0;
 
     if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
-        direction_left = true;
         transform.x_scale = -abs(transform.x_scale);
         idle = false;
     } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
-        direction_left = false;
         transform.x_scale = abs(transform.x_scale);
         idle = false;
     }
@@ -126,28 +120,34 @@ void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, I
         row = 1;
     }
 
-    if (panda.alive){
+    if (panda.alive) {
         animate(true, frames, index, row, sprite);
-    } else {
+    } else if (!panda.alive && walkable.grounded){
         frames = 10;
-        if (death_index < frames) {
+        frameRate = 15.f;
+        if (death_index < frames && (counter != (int) animationTime)) {
             row = 2;
-            frameRate = 1.f;
             animate(false, frames, death_index, row, sprite);
         }
     }
+    counter = (int) animationTime;
     animationTime += frameRate * blackboard.delta_time;
 
 }
 
 void PlayerAnimationSystem::animate(bool alive, int frames, int index, int row, Sprite &sprite) {
+    float w1, w2, h1, h2;
+    w1 = 0.0095f;
+    w2 = -0.007f;
+    h1 = 0.01f;
+    h2 = 0.12f;
     if (alive) {
         index += ((int) animationTime % frames);
         death_index = 0;
-    } else{
+    } else if (!alive) {
         death_index++;
     }
-    vec2 uv1 = {index * pandawidth - 0.004f, pandaheight * row + 0.03f};
-    vec2 uv2 = {(index + 1) * pandawidth - 0.008f, pandaheight * (1 + row) - 0.09f};
+    vec2 uv1 = {index * pandawidth + w1, pandaheight * row + h1};
+    vec2 uv2 = {(index + 1) * pandawidth + w2, pandaheight * (1 + row) - h2};
     sprite.set_uvs(uv1, uv2);
 }

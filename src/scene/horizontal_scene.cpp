@@ -52,19 +52,15 @@ void HorizontalScene::update(Blackboard &blackboard) {
     }
     auto &panda = registry_.get<Panda>(panda_entity);
 
-    if (panda.alive && !panda.deathAnimation){
+    if (panda.alive && !panda.dead){
         update_camera(blackboard);
-        update_panda(blackboard);
         background_transform_system.update(blackboard, registry_);
         player_movement_system.update(blackboard, registry_);
     }
-//    update_camera(blackboard);
-//    update_panda(blackboard);
+    update_panda(blackboard);
     update_tutorial(blackboard);
 
     level_system.update(blackboard, registry_);
-    //background_transform_system.update(blackboard, registry_);
-    //player_movement_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
     panda_dmg_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
@@ -85,9 +81,10 @@ void HorizontalScene::update_panda(Blackboard &blackboard) {
     auto &transform = registry_.get<Transform>(panda_entity);
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &panda_collidable = registry_.get<Collidable>(panda_entity);
+    auto &panda_timer = registry_.get<Timer>(panda_entity);
 
     if (transform.x + panda_collidable.width < cam_position.x - cam_size.x / 2 ||
-        transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || panda.deathAnimation) {
+        transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || panda.dead) {
         reset_scene(blackboard);
     } else if (transform.x + panda_collidable.width / 2 > cam_position.x + cam_size.x / 2) {
         transform.x = cam_position.x + cam_size.x / 2 - panda_collidable.width / 2;

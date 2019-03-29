@@ -88,19 +88,22 @@ void VerticalScene::update(Blackboard &blackboard) {
         change_scene(MAIN_MENU_SCENE_ID);
         return;
     }
-
     vec2 cam_size = blackboard.camera.size();
     vec2 cam_position = blackboard.camera.position();
-    blackboard.camera.set_position(cam_position.x,
-                                   cam_position.y - CAMERA_SPEED * blackboard.delta_time);
-    blackboard.camera.compose();
 
     auto &transform = registry_.get<Transform>(panda_entity);
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &panda_collidable = registry_.get<Collidable>(panda_entity);
 
+    if (panda.alive && !panda.dead){
+        blackboard.camera.set_position(cam_position.x,
+                                       cam_position.y - CAMERA_SPEED * blackboard.delta_time);
+        blackboard.camera.compose();
+        player_movement_system.update(blackboard, registry_);
+    }
+
     if (transform.y - panda_collidable.height / 2 > cam_position.y + cam_size.y / 2 ||
-        !panda.alive) {
+        panda.dead) {
         reset_scene(blackboard);
     } else if (transform.x + panda_collidable.width / 2 > cam_position.x + cam_size.x / 2) {
         transform.x = cam_position.x + cam_size.x / 2 - panda_collidable.width / 2;
@@ -110,7 +113,6 @@ void VerticalScene::update(Blackboard &blackboard) {
 
     background_transform_system.update(blackboard, registry_);
     level_system.update(blackboard, registry_);
-    player_movement_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
     panda_dmg_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);

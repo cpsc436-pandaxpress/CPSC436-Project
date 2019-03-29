@@ -274,13 +274,20 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                     }
 
                     //check for food
-                    if ( registry.has<Food>(entry.entity)
-                         && (registry.has<Panda>(d_entity) || registry.has<Jacko>(d_entity))
-                    ) {
-                        auto& health = registry.get<Health>(d_entity);
+                    if ( registry.has<Food>(entry.entity)) {
+                        if (registry.has<Panda>(d_entity)) {
+                            auto &panda = registry.get<Panda>(d_entity);
+                            auto &health = registry.get<Health>(d_entity);
+                            if (panda.alive && health.health_points < health.max_health) {
+                                health.health_points++;
+                            }
+                            registry.destroy(entry.entity);
 
-                        health.health_points ++;
-                        registry.destroy(entry.entity);
+                        } else if (registry.has<Food>(entry.entity) && registry.has<Jacko>(d_entity)) {
+                            auto &health = registry.get<Health>(d_entity);
+                            health.health_points++;
+                            registry.destroy(entry.entity);
+                        }
                     }
                 }
             }

@@ -40,8 +40,6 @@ private:
     const float PANDA_START_X = -10.f;
     const float PANDA_START_Y = -200.f;
     const float MAX_CAMERA_Y_DIFF = 250.f;
-//    const float time_since_death = 0.f;
-//    const float death_time = 10.f;
 
     std::vector<uint32_t> bg_entities;
     uint32_t panda_entity;
