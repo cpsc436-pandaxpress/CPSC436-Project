@@ -20,7 +20,7 @@ struct Seeks {
 
     explicit Seeks(std::vector<Coordinates*> seeklist) :
             seekList(seeklist),
-            seek_speed(120.f),
+            seek_speed(720.f),
             alive(true)
 
     {}
