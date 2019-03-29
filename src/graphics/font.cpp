@@ -167,7 +167,7 @@ bool FontType::load(std::string font, GLuint fontSize) {
     FT_Stroker_Done(stroker);
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
-    bool result = !gl_has_errors();
+    bool result = !gl_has_errors("font");
     return result;
 }
 

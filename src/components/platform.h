@@ -9,6 +9,8 @@
  * This component tags an entity as being something that interactable entities can walk on
  */
 struct Platform {
-    Platform(){}
+    bool one_way;
+
+    Platform(bool one_way = true) : one_way(one_way) {}
 };
 #endif //PANDAEXPRESS_PLATFORM_H

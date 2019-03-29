@@ -18,7 +18,11 @@ void gl_flush_errors()
     while (glGetError() != GL_NO_ERROR);
 }
 
-bool gl_has_errors()
+bool gl_has_errors() {
+    return gl_has_errors("untagged");
+}
+
+bool gl_has_errors(char* tag)
 {
     GLenum error = glGetError();
 
@@ -46,7 +50,7 @@ bool gl_has_errors()
                 break;
         }
 
-        fprintf(stderr, "OpenGL: %s\n", error_str);
+        fprintf(stderr, "[%s] OpenGL: %s\n", tag, error_str);
         error = glGetError();
     }
 

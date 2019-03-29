@@ -29,7 +29,7 @@ void HealthBarTransformSystem::update(Blackboard &blackboard, entt::DefaultRegis
             healthBar.set_status(1);
         }
         healthBar.set_rotation_rad(transform.theta);
-        healthBar.set_health(health.healthPoints / (float) health.max_health);
+        healthBar.set_health(health.health_points / (float) health.max_health);
     }
 
     auto viewJacko = registry.view<Jacko, Health, Transform, HealthBar>();
@@ -50,6 +50,6 @@ void HealthBarTransformSystem::update(Blackboard &blackboard, entt::DefaultRegis
         healthBar.set_pos(transform.x,
                           transform.y - 150.f);
         healthBar.set_rotation_rad(transform.theta);
-        healthBar.set_health(health.healthPoints / (float) health.max_health);
+        healthBar.set_health(health.health_points / (float) health.max_health);
     }
 }

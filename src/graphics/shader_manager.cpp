@@ -91,7 +91,7 @@ bool ShaderManager::load_shader(const char *vert_path, const char *frag_path, co
         }
     }
 
-    if (gl_has_errors())
+    if (gl_has_errors("shader_manager"))
     {
         release_shader(vert, frag, program);
         fprintf(stderr, "OpenGL errors occured while compiling Effect");

@@ -8,7 +8,6 @@
 #include "components/platform.h"
 #include "components/velocity.h"
 #include "components/interactable.h"
-#include "collision_system.h"
 #include "components/panda.h"
 #include "components/jacko.h"
 #include "components/chases.h"

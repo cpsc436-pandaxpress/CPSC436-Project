@@ -14,7 +14,6 @@
 #include "../util/blackboard.h"
 #include "../systems/physics_system.h"
 #include "../systems/player_movement_system.h"
-#include "../systems/collision_system.h"
 
 class TestScene : public Scene {
 private:
@@ -29,7 +28,6 @@ private:
     SpriteRenderSystem sprite_render_system;
     PhysicsSystem physics_system;
     PlayerMovementSystem player_movement_system;
-    CollisionSystem collision_system;
     BackgroundRenderSystem background_render_system;
     BackgroundTransformSystem background_transform_system;
 

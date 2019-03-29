@@ -24,21 +24,24 @@ void EnemySystem::generate_projectile(float x, float y, bool spit_left, Blackboa
     auto texture = blackboard.texture_manager.get_texture("spit");
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-    auto scale = static_cast<float>(CELL_WIDTH / texture.width()/ 2);
+    auto scaleY = static_cast<float>(CELL_WIDTH / texture.width() / 2);
+    float scaleX = scaleY;
     auto projectile = registry.create();
-    registry.assign<Transform>(projectile, x - 15.f, y + 25.f, 0., scale,
-                               scale);
+
     registry.assign<Sprite>(projectile, texture, shader, mesh);
     registry.assign<Spit>(projectile);
-    registry.assign<CausesDamage>(projectile, false, true, 1);
-    registry.assign<Health>(projectile,1);
-    if (spit_left)
+    registry.assign<CausesDamage>(projectile, TOP_VULNERABLE_MASK, 1);
+    registry.assign<Health>(projectile, 1);
+    if (spit_left) {
         registry.assign<Velocity>(projectile, PROJECTILE_SPEED_X, PROJECTILE_SPEED_Y);
-    else
+    } else {
+        scaleX = -scaleX; // flip projectile
         registry.assign<Velocity>(projectile, -PROJECTILE_SPEED_X, PROJECTILE_SPEED_Y);
+    }
+    registry.assign<Transform>(projectile, x - 15.f, y + 25.f, 0., scaleX, scaleY);
     registry.assign<Interactable>(projectile);
-    registry.assign<Collidable>(projectile, texture.width() * scale,
-                                texture.height() * scale);
+    registry.assign<Collidable>(projectile, texture.width() * scaleY,
+                                texture.height() * scaleY);
 }
 
 void EnemySystem::handle_bread(vec2 cam_position, vec2 cam_size, SceneID sceneid, Blackboard &blackboard, entt::DefaultRegistry &registry){

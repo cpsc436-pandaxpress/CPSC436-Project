@@ -24,7 +24,6 @@
 #include "../systems/physics_system.h"
 #include "../systems/player_movement_system.h"
 #include "../systems/timer_system.h"
-#include "../systems/collision_system.h"
 #include "../systems/jacko_ai_system.h"
 #include "../systems/falling_platform_system.h"
 #include "../systems/chase_system.h"
@@ -55,7 +54,6 @@ private:
     BackgroundTransformSystem background_transform_system;
     PhysicsSystem physics_system;
     PlayerMovementSystem player_movement_system;
-    CollisionSystem collision_system;
     ChaseSystem chase_system;
     JackoAISystem jacko_ai_system;
     PlayerAnimationSystem player_animation_system;
