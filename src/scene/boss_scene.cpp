@@ -4,6 +4,7 @@
 
 #include <graphics/background.h>
 #include <components/food.h>
+#include <components/seeks.h>
 #include <components/obeys_gravity.h>
 #include <components/health.h>
 #include <components/interactable.h>
@@ -38,7 +39,8 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         enemy_animation_system(),
         health_bar_render_system(),
         health_bar_transform_system(),
-        a_star_system()
+        a_star_system(),
+        seek_system()
         {
     init_scene(blackboard);
     reset_scene(blackboard); // idk why??? but this is required
@@ -47,10 +49,24 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
 
 void BossScene::update(Blackboard &blackboard) {
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
-        std::vector<Location*> path = a_star_system.getProjectilePath(blackboard, registry_);
+        std::vector<Coordinates*> path = a_star_system.getProjectilePath(blackboard, registry_);
         for(int i=0; i<path.size(); i++){
-            std::cout<< path[i]->i << " " << path[i]->j <<"\n";
+            std::cout<< path[i]->x << " " << path[i]->y <<"\n";
         }
+        bat_entity = registry_.create();
+
+        auto texture = blackboard.texture_manager.get_texture("burger");
+        auto shader = blackboard.shader_manager.get_shader("sprite");
+        auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+
+        float scaleY = 50.0 / texture.height();
+        float scaleX = 50.0 / texture.width();
+        registry_.assign<Transform>(bat_entity, path[0]->x, path[0]->y, 0., scaleX, scaleY);
+        registry_.assign<Sprite>(bat_entity, texture, shader, mesh);
+        registry_.assign<Velocity>(bat_entity);
+        registry_.assign<Collidable>(bat_entity, texture.width() * scaleX,
+                                     texture.height() * scaleY);
+        registry_.assign<Seeks>(bat_entity, path);
         /*
         blackboard.camera.set_position(0, 0);
         reset_scene(blackboard);
@@ -75,6 +91,7 @@ void BossScene::update(Blackboard &blackboard) {
     timer_system.update(blackboard, registry_);
     falling_platform_system.update(blackboard, registry_);
     background_transform_system.update(blackboard, registry_);
+    seek_system.update(blackboard, registry_);
 
 }
 

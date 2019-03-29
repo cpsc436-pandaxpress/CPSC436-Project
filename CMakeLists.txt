@@ -129,7 +129,7 @@ set(SOURCE_FILES
         src/systems/score_system.cpp
         src/systems/score_system.h
         src/components/score.h
-        src/systems/a_star_system.cpp src/systems/a_star_system.h src/util/Location.cpp src/util/Location.h)
+        src/systems/a_star_system.cpp src/systems/a_star_system.h src/util/Location.cpp src/util/Location.h src/components/seeks.h src/systems/seek_system.cpp src/systems/seek_system.h src/util/coordinates.cpp src/util/coordinates.h)
 
 
 # Create executable target

@@ -85,10 +85,22 @@ Location* AStarSystem::getGridLocation(float x, float y){
     return grid[j][i];
 }
 
-std::vector<Location*> AStarSystem::getProjectilePath(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+Coordinates* AStarSystem::getScreenLocation(int j, int i){
+    float x = (i*100)-800;
+    float y = (j*100)-450;
+
+    int u=0; // Only here to have breakpoint
+
+    Coordinates* c = new Coordinates(x,y);
+    return c;
+}
+
+std::vector<Coordinates*> AStarSystem::getProjectilePath(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     Location* start;
     Location* end;
     createGrid(blackboard, registry);
+    std::vector<Location*> path;
+    std::vector<Coordinates*> coordinatePath;
 
     auto jacko = registry.view<Jacko, Transform>();
 
@@ -106,7 +118,15 @@ std::vector<Location*> AStarSystem::getProjectilePath(Blackboard &blackboard, en
         end = getGridLocation(transform.x, transform.y);
     }
 
-    return findPath(start, end);
+    path = findPath(start, end);
+
+    for(int i=0; i<path.size(); i++){
+        Coordinates* temp = getScreenLocation(path[i]->i,path[i]->j);
+        coordinatePath.push_back(temp);
+    }
+
+    return coordinatePath;
+
 }
 
 std::vector<Location*> AStarSystem::findPath(Location* start, Location* end){

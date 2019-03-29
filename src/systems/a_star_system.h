@@ -14,6 +14,7 @@
 #include "util/constants.h"
 #include <iostream>
 #include "util/Location.h"
+#include "util/coordinates.h"
 
 class AStarSystem: public System{
 public:
@@ -21,8 +22,9 @@ public:
     virtual void update(Blackboard &blackboard, entt::DefaultRegistry &registry);
     void createGrid(Blackboard &blackboard, entt::DefaultRegistry &registry);
     std::vector<Location*> findPath(Location* start, Location* end);
-    std::vector<Location*> getProjectilePath(Blackboard &blackboard, entt::DefaultRegistry &registry);
+    std::vector<Coordinates*> getProjectilePath(Blackboard &blackboard, entt::DefaultRegistry &registry);
     Location* getGridLocation(float x, float y);
+    Coordinates* getScreenLocation(int i, int j);
 };
 
 
