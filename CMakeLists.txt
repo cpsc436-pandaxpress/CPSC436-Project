@@ -129,7 +129,7 @@ set(SOURCE_FILES
         src/systems/score_system.cpp
         src/systems/score_system.h
         src/components/score.h
-        )
+        src/systems/fade_out_render_system.cpp src/systems/fade_out_render_system.h src/graphics/fade.h src/graphics/fade.cpp)
 
 
 # Create executable target

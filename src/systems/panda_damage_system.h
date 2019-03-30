@@ -15,10 +15,10 @@ private:
     const float DMG_REACTION_X = 200.f;
     const float DMG_REACTION_Y = -1000.f;
     const std::string DMG_TIMER_LABEL = "dmg_invincible";
-    const std::string DEATH_TIMER_LABEL = "death";
+    const std::string DEATH_TIMER_LABEL = "dying";
     const float DEATH_TIMER = 2.f;
 
-    bool death = false;
+    bool dying = false;
 
 public:
     PandaDamageSystem();

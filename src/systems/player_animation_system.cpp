@@ -88,10 +88,10 @@ void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, I
     bool idle = true;
     index = 0;
 
-    if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
+    if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT) && panda.alive) {
         transform.x_scale = -abs(transform.x_scale);
         idle = false;
-    } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
+    } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT) && panda.alive) {
         transform.x_scale = abs(transform.x_scale);
         idle = false;
     }
@@ -137,14 +137,15 @@ void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, I
 
 void PlayerAnimationSystem::animate(bool alive, int frames, int index, int row, Sprite &sprite) {
     float w1, w2, h1, h2;
-    w1 = 0.0095f;
-    w2 = -0.007f;
+    w1 = 0.024f;
+    w2 = -0.0065f;
     h1 = 0.01f;
-    h2 = 0.12f;
+    h2 = 0.115f;
     if (alive) {
         index += ((int) animationTime % frames);
         death_index = 0;
     } else if (!alive) {
+        w1 = 0.012f;
         death_index++;
     }
     vec2 uv1 = {index * pandawidth + w1, pandaheight * row + h1};
