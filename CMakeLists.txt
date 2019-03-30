@@ -137,6 +137,7 @@ set(SOURCE_FILES
         src/components/label.h
         src/systems/label_system.cpp
         src/systems/label_system.h
+        src/util/scene_helper.h
         )
 
 
