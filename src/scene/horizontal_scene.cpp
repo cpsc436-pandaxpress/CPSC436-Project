@@ -232,6 +232,7 @@ void HorizontalScene::create_score_text(Blackboard &blackboard) {
     score_entity = registry_.create();
     std::string textVal = "0";
     auto &text = registry_.assign<Text>(score_entity, shader, mesh, font, textVal);
+    text.set_scale(0.8f);
     registry_.assign<Score>(score_entity);
     registry_.assign<HudElement>(score_entity,
                                  vec2{blackboard.camera.size().x - 350.f,
