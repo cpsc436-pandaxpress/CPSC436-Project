@@ -21,7 +21,7 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
     for (auto entity: seeker_view) {
         float horizontalCenter;
         float verticalCenter;
-        float maxBounceDist = 30;
+        float maxBounceDist = 60;
 
         auto& velocity = seeker_view.get<Velocity>(entity);
         auto& seeks  = seeker_view.get<Seeks>(entity);
@@ -60,9 +60,9 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
                     } else {
                         velocity.x_velocity = seeks.seek_speed;
                     }
-                    velocity.y_velocity= seeks.bounce_speed;
+                    velocity.y_velocity= seeks.bounce_speed_y;
                     if(abs(transform.y-verticalCenter)>maxBounceDist){
-                        seeks.bounce_speed= -seeks.bounce_speed;
+                        seeks.bounce_speed_y= -seeks.bounce_speed_y;
                     }
                 }else if(seeks.goingVertical) {
                     if (target->y < transform.y) {
@@ -70,9 +70,9 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
                     } else {
                         velocity.y_velocity = seeks.seek_speed;
                     }
-                    velocity.x_velocity= seeks.bounce_speed;
+                    velocity.x_velocity= seeks.bounce_speed_x;
                     if(abs(transform.x-horizontalCenter)>maxBounceDist){
-                        seeks.bounce_speed= -seeks.bounce_speed;
+                        seeks.bounce_speed_x= -seeks.bounce_speed_x;
                     }
                 }
 /*
@@ -91,13 +91,16 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
             }
         }else{
             if(timer.watch_exists("batTimer")){
+                velocity.x_velocity=0;
+                velocity.y_velocity= seeks.bounce_speed_y;
+                if(abs(transform.y-verticalCenter)>maxBounceDist){
+                    seeks.bounce_speed_y= -seeks.bounce_speed_y;
+                }
                 if(timer.is_done("batTimer")){
                     registry.destroy(entity);
                 }
             }else{
                 timer.save_watch("batTimer", 1.);
-                velocity.x_velocity=0;
-                velocity.y_velocity=0;
                 seeks.goingHorizontal=false;
                 seeks.goingHorizontal=false;
             }
