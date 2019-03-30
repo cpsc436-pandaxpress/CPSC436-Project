@@ -11,6 +11,8 @@
 #include <components/food.h>
 #include <components/jacko.h>
 #include <components/chases.h>
+#include <components/bread.h>
+#include <components/llama.h>
 #include "components/platform.h"
 
 
@@ -268,6 +270,11 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                 //normal way to kill stuff
                                 if (registry.has<Interactable>(entry.entity)) {
                                     registry.remove<Interactable>(entry.entity);
+                                }
+                                if (registry.has<Bread>(entry.entity)) {
+                                    blackboard.score += BREAD_KILL_POINTS;
+                                } else if (registry.has<Llama>(entry.entity)) {
+                                    blackboard.score += LLAMA_KILL_POINTS;
                                 }
                             }
                         }

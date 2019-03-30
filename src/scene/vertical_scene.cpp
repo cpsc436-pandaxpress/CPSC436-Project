@@ -149,6 +149,7 @@ void VerticalScene::reset_scene(Blackboard &blackboard) {
     }
     bg_entities.clear();
     registry_.destroy(score_entity);
+    blackboard.score = 0;
     init_scene(blackboard);
 }
 

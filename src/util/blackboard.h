@@ -30,4 +30,5 @@ struct Blackboard {
     Random randNumGenerator;
     SoundManager soundManager;
     FontManager fontManager;
+    float score;
 };

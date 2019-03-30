@@ -42,7 +42,8 @@ int main(int argc, char** argv) {
         window,
         Random(0),
         SoundManager(),
-        FontManager()
+        FontManager(),
+        0
     };
 
 

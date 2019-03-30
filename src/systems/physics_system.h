@@ -5,6 +5,10 @@
 #ifndef PANDAEXPRESS_PHYSICS_SYSTEM_H
 #define PANDAEXPRESS_PHYSICS_SYSTEM_H
 
+static const float BREAD_KILL_POINTS = 100.f;
+
+static const float LLAMA_KILL_POINTS = 300.f;
+
 #include "system.h"
 #include "components/obeys_gravity.h"
 #include "components/collidable.h"
