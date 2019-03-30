@@ -98,7 +98,7 @@ Coordinates* AStarSystem::getScreenLocation(int j, int i){
 std::vector<Coordinates*> AStarSystem::getProjectilePath(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     Location* start;
     Location* end;
-    createGrid(blackboard, registry);
+    //createGrid(blackboard, registry);
     std::vector<Location*> path;
     std::vector<Coordinates*> coordinatePath;
 
@@ -158,11 +158,13 @@ std::vector<Location*> AStarSystem::findPath(Location* start, Location* end){
             //Reset Grid
             for(int i = 0; i<rows; i++) {
                 for (int j = 0; j < cols; j++) {
-                    grid[i][j]->neighbours.clear();
+                    //grid[i][j]->neighbours.clear();
                     grid[i][j]->previous=NULL;
                     grid[i][j]->f=0;
                     grid[i][j]->g=0;
                     grid[i][j]->h=0;
+                    openSet.clear();
+                    closedSet.clear();
                 }
             }
             return path;

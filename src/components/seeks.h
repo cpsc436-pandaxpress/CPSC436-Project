@@ -9,19 +9,22 @@
 #include "util/coordinates.h"
 
 /***
- * This component gives the entity the ability to chase whatever entity is passed in as it's target
- * Right now this is done with a simple check on the targets position, but A* will be implemented in
- * the chases_system later
+ * Seeks a series of coordinates
  */
 struct Seeks {
     std::vector<Coordinates*> seekList;
     float seek_speed;
-    bool alive;
+    float bounce_speed;
+    bool goingVertical;
+    bool goingHorizontal;
 
     explicit Seeks(std::vector<Coordinates*> seeklist) :
             seekList(seeklist),
             seek_speed(720.f),
-            alive(true)
+            goingHorizontal(false),
+            goingVertical(false),
+            bounce_speed(800.f)
+
 
     {}
 };

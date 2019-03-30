@@ -64,6 +64,7 @@ void BossScene::update(Blackboard &blackboard) {
         registry_.assign<Transform>(bat_entity, path[0]->x, path[0]->y, 0., scaleX, scaleY);
         registry_.assign<Sprite>(bat_entity, texture, shader, mesh);
         registry_.assign<Velocity>(bat_entity);
+        registry_.assign<Timer>(bat_entity);
         registry_.assign<Collidable>(bat_entity, texture.width() * scaleX,
                                      texture.height() * scaleY);
         registry_.assign<Seeks>(bat_entity, path);
@@ -133,7 +134,7 @@ void BossScene::init_scene(Blackboard &blackboard) {
     create_jacko(blackboard, burger_entity);
     create_panda(blackboard);
     level_system.init();
-   // a_star_system.createGrid(blackboard, registry_);
+   a_star_system.createGrid(blackboard, registry_);
 }
 
 void BossScene::reset_scene(Blackboard &blackboard) {
