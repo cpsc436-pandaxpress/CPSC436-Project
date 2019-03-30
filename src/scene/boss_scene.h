@@ -30,8 +30,6 @@
 #include "../systems/player_animation_system.h"
 #include "../systems/enemy_animation_system.h"
 
-
-
 class BossScene: public Scene {
 private:
     const float CAMERA_START_X = 0.f;
@@ -80,7 +78,6 @@ public:
                     SceneManager &scene_manager);
 
     virtual void update(Blackboard& blackboard) override;
-    void create_platforms(Blackboard &blackboard);
     void create_food(Blackboard &blackboard);
     virtual void render(Blackboard& blackboard) override;
 
