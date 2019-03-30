@@ -5,12 +5,6 @@
 #ifndef PANDAEXPRESS_VERTICAL_SCENE_H
 #define PANDAEXPRESS_VERTICAL_SCENE_H
 
-static const float HUD_Y_OFFSET = 50.f;
-
-static const float HUD_SCORE_X_OFFSET = 350.f;
-
-static const float HUD_HEALTH_X_OFFSET = 100.f;
-
 #include <systems/sprite_render_system.h>
 #include <systems/physics_system.h>
 #include <systems/sprite_transform_system.h>
@@ -66,6 +60,9 @@ private:
     const float PANDA_START_Y = -200.f;
     const float PLATFORM_START_X = -0.f;
     const float PLATFORM_START_Y = 400.f;
+    const float HUD_Y_OFFSET = 50.f;
+    const float HUD_SCORE_X_OFFSET = 350.f;
+    const float HUD_HEALTH_X_OFFSET = 100.f;
 
     void create_panda(Blackboard& blackboard);
     void reset_scene(Blackboard& blackboard);
