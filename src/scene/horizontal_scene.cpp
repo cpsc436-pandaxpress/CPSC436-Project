@@ -172,8 +172,8 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
     auto &healthbar = registry_.assign<HealthBar>(panda_entity,
                                                   meshHealth, shaderHealth, size, scale);
     registry_.assign<HudElement>(panda_entity,
-                                 vec2{size.x / 2.f * scale.x + 100.f,
-                                      blackboard.camera.size().y - 50.f});
+                                 vec2{size.x / 2.f * scale.x + HUD_HEALTH_X_OFFSET,
+                                      blackboard.camera.size().y - HUD_Y_OFFSET});
 }
 
 void HorizontalScene::create_background(Blackboard &blackboard) {
@@ -235,8 +235,8 @@ void HorizontalScene::create_score_text(Blackboard &blackboard) {
     text.set_scale(0.8f);
     registry_.assign<Score>(score_entity);
     registry_.assign<HudElement>(score_entity,
-                                 vec2{blackboard.camera.size().x - 350.f,
-                                      blackboard.camera.size().y - 50.f});
+                                 vec2{blackboard.camera.size().x - HUD_SCORE_X_OFFSET,
+                                      blackboard.camera.size().y - HUD_Y_OFFSET});
 }
 
 

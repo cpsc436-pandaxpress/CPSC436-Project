@@ -5,6 +5,12 @@
 #ifndef PANDAEXPRESS_VERTICAL_SCENE_H
 #define PANDAEXPRESS_VERTICAL_SCENE_H
 
+static const float HUD_Y_OFFSET = 50.f;
+
+static const float HUD_SCORE_X_OFFSET = 350.f;
+
+static const float HUD_HEALTH_X_OFFSET = 100.f;
+
 #include <systems/sprite_render_system.h>
 #include <systems/physics_system.h>
 #include <systems/sprite_transform_system.h>

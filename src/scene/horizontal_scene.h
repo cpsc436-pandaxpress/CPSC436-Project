@@ -6,6 +6,12 @@
 #define PANDAEXPRESS_TEST_SCENE_2_H
 
 
+static const float HUD_Y_OFFSET = 50.f;
+
+static const float HUD_SCORE_X_OFFSET = 350.f;
+
+static const float HUD_HEALTH_X_OFFSET = 100.f;
+
 #include "scene.h"
 #include <queue>
 #include <systems/horizontal_level_system.h>
