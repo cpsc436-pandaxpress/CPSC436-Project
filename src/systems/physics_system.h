@@ -66,6 +66,9 @@ private:
         const Transform &s_position,
         float buffer
     );
+
+    void generate_text(Blackboard &blackboard, entt::DefaultRegistry &registry, vec2 pos,
+                       const char *text);
 };
 
 

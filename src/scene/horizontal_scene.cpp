@@ -15,6 +15,7 @@
 #include <graphics/text.h>
 #include <components/score.h>
 #include <components/hud_element.h>
+#include <components/label.h>
 #include "horizontal_scene.h"
 #include "util/constants.h"
 
@@ -38,7 +39,8 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         text_render_system(),
         text_transform_system(),
         score_system(HORIZONTAL_SCENE_ID),
-        hud_transform_system()
+        hud_transform_system(),
+        label_system()
 {
     init_scene(blackboard);
     create_tutorial(blackboard);
@@ -67,6 +69,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
     health_bar_transform_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
     score_system.update(blackboard, registry_);
+    label_system.update(blackboard, registry_);
     text_transform_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
     falling_platform_system.update(blackboard, registry_);
@@ -130,6 +133,7 @@ void HorizontalScene::reset_scene(Blackboard &blackboard) {
     }
     bg_entities.clear();
     registry_.destroy(score_entity);
+    registry_.destroy<Label>();
     blackboard.score = 0;
     init_scene(blackboard);
 }

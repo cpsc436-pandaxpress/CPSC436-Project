@@ -13,6 +13,8 @@
 #include <components/chases.h>
 #include <components/bread.h>
 #include <components/llama.h>
+#include <graphics/text.h>
+#include <components/label.h>
 #include "components/platform.h"
 
 
@@ -239,6 +241,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                     ) {
                         auto& cd = registry.get<CausesDamage>(d_entity);
                         auto& panda = registry.get<Panda>(d_entity);
+                        auto& transform = registry.get<Transform>(d_entity);
                         auto& health = registry.get<Health>(entry.entity);
                         if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)
                         && !panda.invincible){
@@ -273,8 +276,12 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                 }
                                 if (registry.has<Bread>(entry.entity)) {
                                     blackboard.score += BREAD_KILL_POINTS;
+                                    generate_text(blackboard, registry,
+                                                  vec2{transform.x, transform.y - 150.f}, "+100");
                                 } else if (registry.has<Llama>(entry.entity)) {
                                     blackboard.score += LLAMA_KILL_POINTS;
+                                    generate_text(blackboard, registry,
+                                                  vec2{transform.x, transform.y - 150.f}, "+300");
                                 }
                             }
                         }
@@ -507,4 +514,15 @@ bool PhysicsSystem::static_collision(
         || s_bot < d_top + buffer;
 
     return !no_collide;
+}
+
+void PhysicsSystem::generate_text(Blackboard &blackboard, entt::DefaultRegistry &registry,
+                                  vec2 pos, const char *text) {
+    auto shader = blackboard.shader_manager.get_shader("text");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+    FontType font = blackboard.fontManager.get_font("titillium_72");
+    auto label = registry.create();
+    registry.assign<Text>(label, shader, mesh, font, text);
+    registry.assign<Transform>(label, pos.x, pos.y, 0., 0.5f, 0.5f);
+    registry.assign<Label>(label, 1.0f);
 }

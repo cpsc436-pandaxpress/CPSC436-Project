@@ -5,13 +5,6 @@
 #ifndef PANDAEXPRESS_TEST_SCENE_2_H
 #define PANDAEXPRESS_TEST_SCENE_2_H
 
-
-static const float HUD_Y_OFFSET = 50.f;
-
-static const float HUD_SCORE_X_OFFSET = 350.f;
-
-static const float HUD_HEALTH_X_OFFSET = 100.f;
-
 #include "scene.h"
 #include <queue>
 #include <systems/horizontal_level_system.h>
@@ -26,6 +19,7 @@ static const float HUD_HEALTH_X_OFFSET = 100.f;
 #include <systems/text_transform_system.h>
 #include <systems/score_system.h>
 #include <systems/hud_transform_system.h>
+#include <systems/label_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -38,8 +32,6 @@ static const float HUD_HEALTH_X_OFFSET = 100.f;
 #include "../systems/player_animation_system.h"
 #include "../systems/enemy_animation_system.h"
 
-
-
 class HorizontalScene: public Scene {
 private:
     const float CAMERA_START_X = 0.f;
@@ -47,6 +39,9 @@ private:
     const float PANDA_START_X = -10.f;
     const float PANDA_START_Y = -200.f;
     const float MAX_CAMERA_Y_DIFF = 250.f;
+    const float HUD_Y_OFFSET = 50.f;
+    const float HUD_SCORE_X_OFFSET = 350.f;
+    const float HUD_HEALTH_X_OFFSET = 100.f;
 
     std::vector<uint32_t> bg_entities;
     uint32_t panda_entity;
@@ -73,6 +68,7 @@ private:
     TextTransformSystem text_transform_system;
     ScoreSystem score_system;
     HudTransformSystem hud_transform_system;
+    LabelSystem label_system;
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);
