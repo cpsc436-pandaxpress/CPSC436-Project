@@ -19,7 +19,7 @@ private:
 
 public:
     static Level load_level(int id, LevelType type);
-    static Level load_from_path(std::string path);
+    static Level load_from_path(std::string file_name);
     Level();
 
     char get_tile_at(int x, int y) const;

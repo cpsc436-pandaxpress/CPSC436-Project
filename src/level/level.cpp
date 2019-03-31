@@ -40,8 +40,8 @@ Level Level::load_level(int id, LevelType type) {
     }
 }
 
-Level Level::load_from_path(std::string path) {
-    CSVReader reader(path);
+Level Level::load_from_path(std::string file_name) {
+    CSVReader reader(levels_path("") + file_name);
     auto data = reader.getData();
 
     Level level;

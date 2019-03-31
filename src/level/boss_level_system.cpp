@@ -15,40 +15,18 @@ BossLevelSystem::BossLevelSystem() : LevelSystem() {
 
 void BossLevelSystem::init() {
     LevelSystem::init();
-    last_col_generated_ = last_col_loaded_ = FIRST_COL_X;
+    level_ = Level::load_from_path("jacko_level.csv");
     generated_ = false;
 }
 
 void BossLevelSystem::load_next_chunk(int level) {
-    std::string level_path = levels_path("");
-    std::string levelFile = level_path + "boss_level_" + std::to_string(level) + ".csv";
-    CSVReader reader(levelFile);
-    std::vector<std::vector<char>> dataList = reader.getData();
-    for (int i = 0; i < dataList[0].size(); i++) {
-        std::vector<char> col;
-        col.reserve(9);
-        for (int j = 0; j < 9; j++) {
-            col.push_back(dataList[j][i]);
-        }
-        last_col_loaded_ += CELL_WIDTH;
-        chunks_.push(col);
-    }
+
 }
 
 // y should range from (-400, 400)
 void BossLevelSystem::generate_next_chunk(Blackboard &blackboard,
                                                 entt::DefaultRegistry &registry) {
-    float off_screen = blackboard.camera.position().x + blackboard.camera.size().x;
-    while (last_col_generated_ < off_screen && !chunks_.empty()) { // second condn is safety check
-        std::vector<char> col = chunks_.front();
-        float y = -400.0f;
-        for (int c:col) {
-            generateEntity(c, last_col_generated_, y, blackboard, registry);
-            y += CELL_HEIGHT;
-        }
-        last_col_generated_ += CELL_WIDTH;
-        chunks_.pop();
-    }
+
 }
 
 void BossLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
@@ -57,9 +35,18 @@ void BossLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
 
 void BossLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     if (!generated_) {
-        load_next_chunk(0);
-        load_next_chunk(1);
-        generate_next_chunk(blackboard, registry);
+        generate_level(blackboard, registry);
         generated_ = true;
+    }
+}
+
+void BossLevelSystem::generate_level(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+    for (size_t i = 0; i < level_.width(); i++) {
+        float x = FIRST_COL_X + (float) CELL_WIDTH * i;
+        for (size_t j = 0; j < level_.height(); j++) {
+            float y = FIRST_ROW_Y + (float) CELL_HEIGHT * j;
+
+            generateEntity(level_.get_tile_at(i, j), x, y, blackboard, registry);
+        }
     }
 }
