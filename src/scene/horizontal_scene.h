@@ -41,6 +41,8 @@ private:
     const float HUD_Y_OFFSET = 50.f;
     const float HUD_SCORE_X_OFFSET = 350.f;
     const float HUD_HEALTH_X_OFFSET = 100.f;
+    const float HEALTH_BAR_X_SIZE = 750.f;
+    const float HEALTH_BAR_Y_SIZE = 75.f;
 
     std::vector<uint32_t> bg_entities;
     uint32_t panda_entity;

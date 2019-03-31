@@ -167,7 +167,7 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
 
     auto shaderHealth = blackboard.shader_manager.get_shader("health");
     auto meshHealth = blackboard.mesh_manager.get_mesh("health");
-    vec2 size = {750.f, 75.f};
+    vec2 size = {HEALTH_BAR_X_SIZE, HEALTH_BAR_Y_SIZE};
     vec2 scale = {0.5, 0.5};
     auto &healthbar = registry_.assign<HealthBar>(panda_entity,
                                                   meshHealth, shaderHealth, size, scale);

@@ -75,9 +75,7 @@ void VerticalScene::create_panda(Blackboard &blackboard) {
 
     auto shaderHealth = blackboard.shader_manager.get_shader("health");
     auto meshHealth = blackboard.mesh_manager.get_mesh("health");
-    float height = 75.f;
-    float width = 750.f;
-    vec2 size = {width, height};
+    vec2 size = {HEALTH_BAR_X_SIZE, HEALTH_BAR_Y_SIZE};
     vec2 scale = {0.5, 0.5};
     auto &healthbar = registry_.assign<HealthBar>(panda_entity,
                                                   meshHealth, shaderHealth, size, scale);
