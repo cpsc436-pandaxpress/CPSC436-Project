@@ -176,9 +176,8 @@ void VerticalScene::create_background(Blackboard &blackboard) {
     bg_entities.push_back(bg_entity2);
 
     auto bg_entity0 = registry_.create();
-    auto &bg0 = registry_.assign<Background>(bg_entity0, tex3, shader, mesh, 0);
-    bg0.set_pos1(0.0f, blackboard.camera.size().y);
-    bg0.set_pos2(0.0f, 0.0f);
+    auto &bg0 = registry_.assign<Background>(bg_entity0, tex3, shader, mesh, 0, false);
+    bg0.set_pos1(0.0f, 0.0f);
     bg0.set_rotation_rad(0.0f);
     bg0.set_scale(blackboard.camera.size().x / tex3.width(),
                  blackboard.camera.size().y / tex3.height());
