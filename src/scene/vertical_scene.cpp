@@ -13,6 +13,7 @@
 #include <graphics/health_bar.h>
 #include <graphics/font.h>
 #include <graphics/text.h>
+#include <graphics/fade_overlay.h>
 #include <components/score.h>
 #include "vertical_scene.h"
 #include "util/constants.h"
@@ -48,6 +49,7 @@ void VerticalScene::init_scene(Blackboard &blackboard) {
     create_background(blackboard);
     create_panda(blackboard);
     create_score_text(blackboard);
+    create_fade_overlay(blackboard);
     level_system.init();
 }
 
@@ -101,6 +103,9 @@ void VerticalScene::update(Blackboard &blackboard) {
         blackboard.camera.compose();
         player_movement_system.update(blackboard, registry_);
     }
+    if (!panda.alive) {
+        fade_overlay_system.update(blackboard, registry_);
+    }
 
     if (transform.y - panda_collidable.height / 2 > cam_position.y + cam_size.y / 2 ||
         panda.dead) {
@@ -135,6 +140,11 @@ void VerticalScene::render(Blackboard &blackboard) {
     sprite_render_system.update(blackboard, registry_);
     health_bar_render_system.update(blackboard, registry_);
     text_render_system.update(blackboard, registry_);
+
+    auto &panda = registry_.get<Panda>(panda_entity);
+    if (!panda.alive) {
+        fade_overlay_render_system.update(blackboard, registry_);
+    }
 }
 
 void VerticalScene::reset_scene(Blackboard &blackboard) {
@@ -196,4 +206,17 @@ void VerticalScene::create_score_text(Blackboard &blackboard) {
     auto &text = registry_.assign<Text>(score_entity, shader, mesh, font, textVal);
     registry_.assign<Transform>(score_entity, 0., 0., 0., 1.f, 1.f);
     registry_.assign<Score>(score_entity);
+}
+
+void VerticalScene::create_fade_overlay(Blackboard &blackboard) {
+    fade_overlay_entity = registry_.create();
+    auto shaderFade = blackboard.shader_manager.get_shader("fade");
+    auto meshFade = blackboard.mesh_manager.get_mesh("health");
+    float height = blackboard.camera.size().y;
+    float width = blackboard.camera.size().x;
+    vec2 size = {width, height};
+//    float position_x = blackboard.camera.position().x + 275.f;
+//    float position_y = blackboard.camera.position().y;
+//    fade.set_pos(position_x, position_y);
+    auto &fade = registry_.assign<FadeOverlay>(fade_overlay_entity, meshFade, shaderFade, size);
 }

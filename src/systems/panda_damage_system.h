@@ -16,7 +16,7 @@ private:
     const float DMG_REACTION_Y = -1000.f;
     const std::string DMG_TIMER_LABEL = "dmg_invincible";
     const std::string DEATH_TIMER_LABEL = "dying";
-    const float DEATH_TIMER = 2.f;
+    const float DEATH_TIMER = 3.f;
 
     bool dying = false;
 

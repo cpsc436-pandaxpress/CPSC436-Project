@@ -7,9 +7,9 @@
 
 #include "system.h"
 
-class FadeOutRenderSystem : public System {
+class FadeOverlayRenderSystem : public System {
 public:
-    FadeOutRenderSystem();
+    FadeOverlayRenderSystem();
 
     virtual void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override;
 };
