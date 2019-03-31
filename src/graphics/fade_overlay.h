@@ -38,9 +38,6 @@ public:
 
     void set_alpha(float alpha);
     float alpha();
-
-    void set_pause(bool pause);
-    int pause();
 };
 
 #endif //PANDAEXPRESS_FADE_H

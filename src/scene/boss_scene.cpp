@@ -13,7 +13,7 @@
 #include <components/jacko.h>
 #include <components/chases.h>
 #include <components/timer.h>
-#include <components/tutorial.h>
+#include <components/pause.h>
 #include <components/timer.h>
 #include <graphics/health_bar.h>
 #include <graphics/fade_overlay.h>
@@ -40,45 +40,56 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         health_bar_render_system(),
         health_bar_transform_system(),
         fade_overlay_system(),
-        fade_overlay_render_system()
-{
+        fade_overlay_render_system(),
+        pause_menu_transform_system() {
     init_scene(blackboard);
     reset_scene(blackboard); // idk why??? but this is required
     gl_has_errors();
 }
 
 void BossScene::update(Blackboard &blackboard) {
-    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
-        blackboard.camera.set_position(0, 0);
-        reset_scene(blackboard);
-        change_scene(MAIN_MENU_SCENE_ID);
-        return;
-    }
-
     auto &panda = registry_.get<Panda>(panda_entity);
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
     auto &interactable = registry_.get<Interactable>(panda_entity);
 
-    if (panda.alive && !panda.dead){
-        update_camera(blackboard);
-        player_movement_system.update(blackboard, registry_);
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE) && pause) {
+        blackboard.camera.set_position(0, 0);
+        reset_scene(blackboard);
+        registry_.destroy(pause_menu_entity);
+        change_scene(MAIN_MENU_SCENE_ID);
+        pause = false;
+        return;
+    } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE) && !pause) {
+        pause = true;
+        create_pause_menu(blackboard);
+    } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN) && pause) {
+        pause = false;
+        registry_.destroy(pause_menu_entity);
     }
-    if (!panda.alive && interactable.grounded) {
-        fade_overlay_system.update(blackboard, registry_);
-    }
-    update_panda(blackboard);
+    if (!pause) {
+        if (panda.alive && !panda.dead) {
+            update_camera(blackboard);
+            player_movement_system.update(blackboard, registry_);
+        } else if (!panda.alive && interactable.grounded) {
+            fade_overlay_system.update(blackboard, registry_);
+        }
+        update_panda(blackboard);
 
-    level_system.update(blackboard, registry_);
-    chase_system.update(blackboard, registry_);
-    physics_system.update(blackboard, registry_);
-    panda_dmg_system.update(blackboard, registry_);
-    health_bar_transform_system.update(blackboard, registry_);
-    jacko_ai_system.update(blackboard, registry_);
-    sprite_transform_system.update(blackboard, registry_);
-    player_animation_system.update(blackboard, registry_);
-    enemy_animation_system.update(blackboard, registry_);
-    timer_system.update(blackboard, registry_);
-    falling_platform_system.update(blackboard, registry_);
-    background_transform_system.update(blackboard, registry_);
+        level_system.update(blackboard, registry_);
+        chase_system.update(blackboard, registry_);
+        physics_system.update(blackboard, registry_);
+        panda_dmg_system.update(blackboard, registry_);
+        health_bar_transform_system.update(blackboard, registry_);
+        jacko_ai_system.update(blackboard, registry_);
+        sprite_transform_system.update(blackboard, registry_);
+        player_animation_system.update(blackboard, registry_);
+        enemy_animation_system.update(blackboard, registry_);
+        timer_system.update(blackboard, registry_);
+        falling_platform_system.update(blackboard, registry_);
+        background_transform_system.update(blackboard, registry_);
+    } else {
+        pause_menu_transform_system.update(blackboard, registry_);
+    }
 }
 
 void BossScene::render(Blackboard &blackboard) {
@@ -258,6 +269,19 @@ void BossScene::create_fade_overlay(Blackboard &blackboard) {
     vec2 size = {width, height};
     auto &fade = registry_.assign<FadeOverlay>(fade_overlay_entity, meshFade, shaderFade, size);
 }
+
+void BossScene::create_pause_menu(Blackboard &blackboard) {
+    pause_menu_entity = registry_.create();
+
+    auto texture = blackboard.texture_manager.get_texture("pause_menu");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+
+    registry_.assign<Sprite>(pause_menu_entity, texture, shader, mesh);
+    registry_.assign<Pause>(pause_menu_entity);
+}
+
+
 
 
 

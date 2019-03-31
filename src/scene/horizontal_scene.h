@@ -22,6 +22,7 @@
 #include <systems/fade_overlay_system.h>
 #include <systems/fade_overlay_render_system.h>
 #include <systems/pause_menu_transform_system.h>
+#include <systems/pause_menu_render_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -43,6 +44,7 @@ private:
     const float PANDA_START_X = -10.f;
     const float PANDA_START_Y = -200.f;
     const float MAX_CAMERA_Y_DIFF = 250.f;
+    bool pause = false;
 
     std::vector<uint32_t> bg_entities;
     uint32_t panda_entity;
@@ -71,6 +73,7 @@ private:
     FadeOverlaySystem fade_overlay_system;
     FadeOverlayRenderSystem fade_overlay_render_system;
     PauseMenuTransformSystem pause_menu_transform_system;
+    PauseMenuRenderSystem pause_menu_render_system;
 
 
     void create_background(Blackboard &blackboard);
@@ -83,7 +86,6 @@ private:
     void create_score_text(Blackboard &blackboard);
     void create_fade_overlay(Blackboard &blackboard);
 public:
-    bool pause_horizontal = false;
     HorizontalScene(Blackboard &blackboard,
                     SceneManager &scene_manager);
 

@@ -114,11 +114,3 @@ void FadeOverlay::set_alpha(float alpha) {
 float FadeOverlay::alpha() {
     return alpha_;
 }
-
-void FadeOverlay::set_pause(bool pause) {
-    pause_ = pause;
-}
-
-int FadeOverlay::pause() {
-    return pause_;
-}

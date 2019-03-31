@@ -10,8 +10,6 @@ const int ENEMY_LAYER = 15;
 const int PROJECTILE_LAYER = 20;
 const int ITEM_LAYER = 25;
 const int PANDA_LAYER = 30;
-const int FADE_OVERLAY_LAYER = 35;
-const int PAUSE_MENU_LAYER = 40;
 
 class Layer {
 public:
