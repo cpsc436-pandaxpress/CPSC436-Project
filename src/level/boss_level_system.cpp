@@ -19,20 +19,6 @@ void BossLevelSystem::init() {
     generated_ = false;
 }
 
-void BossLevelSystem::load_next_chunk(int level) {
-
-}
-
-// y should range from (-400, 400)
-void BossLevelSystem::generate_next_chunk(Blackboard &blackboard,
-                                                entt::DefaultRegistry &registry) {
-
-}
-
-void BossLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
-    LevelSystem::destroy_entities(registry);
-}
-
 void BossLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     if (!generated_) {
         generate_level(blackboard, registry);

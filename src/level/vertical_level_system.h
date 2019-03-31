@@ -39,11 +39,11 @@ public:
 
     VerticalLevelSystem();
 
-    void init();
+    void init() override;
 
-    void update(Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override;
 
-    void destroy_entities(entt::DefaultRegistry &registry);
+    void destroy_entities(entt::DefaultRegistry &registry) override;
 };
 
 

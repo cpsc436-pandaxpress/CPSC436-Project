@@ -11,6 +11,7 @@
 #endif //PANDAEXPRESS_HORIZONTAL_LEVEL_SYSTEM_H
 
 class HorizontalLevelSystem : public LevelSystem {
+private:
     void load_next_chunk();
     void load_next_chunk(int id);
 
@@ -36,9 +37,9 @@ public:
 
     HorizontalLevelSystem();
 
-    void init();
+    void init() override;
 
-    void update(Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override;
 
-    void destroy_entities(entt::DefaultRegistry &registry);
+    void destroy_entities(entt::DefaultRegistry &registry) override;
 };

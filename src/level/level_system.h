@@ -38,24 +38,20 @@ protected:
 
     const float PLATFORM_HEIGHT = 20.f;
 
-    virtual void load_next_chunk(int level) = 0;
-
-    virtual void generate_next_chunk(Blackboard &blackboard, entt::DefaultRegistry &registry) = 0;
-
     void generateEntity(char value, float x, float y,
                         Blackboard &blackboard, entt::DefaultRegistry &registry);
 
-    void destroy_entities(entt::DefaultRegistry &registry);
 
 public:
 
     LevelSystem();
 
-    void init();
+    virtual void init();
 
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override = 0;
 
     void generate_bread(bool move_left, float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    virtual void destroy_entities(entt::DefaultRegistry &registry);
 
     const std::string FALLING_PLATFORM_TIMER_LABEL = "fall";
     const std::string SPIT_TIMER_LABEL = "spit";

@@ -10,9 +10,8 @@
 #include "level.h"
 
 class BossLevelSystem : public LevelSystem {
+private:
     void generate_level(Blackboard &blackboard, entt::DefaultRegistry &registry);
-    void load_next_chunk(int level);
-    void generate_next_chunk(Blackboard &blackboard, entt::DefaultRegistry &registry) override;
 
     const float FIRST_COL_X = -800.f;
     const float FIRST_ROW_Y = -400.f;
@@ -23,11 +22,9 @@ public:
 
     BossLevelSystem();
 
-    void init();
+    void init() override;
 
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override;
-
-    void destroy_entities(entt::DefaultRegistry &registry);
 };
 
 #endif //PANDAEXPRESS_BOSS_LEVEL_SYSTEM_H

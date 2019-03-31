@@ -112,6 +112,7 @@ void BossScene::reset_scene(Blackboard &blackboard) {
     level_system.destroy_entities(registry_);
     registry_.destroy(panda_entity);
     registry_.destroy(jacko_entity);
+    registry_.destroy<Food>();
     for (uint32_t e: bg_entities) {
         registry_.destroy(e);
     }
