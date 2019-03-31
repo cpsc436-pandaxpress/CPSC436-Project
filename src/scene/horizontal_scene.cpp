@@ -255,10 +255,7 @@ void HorizontalScene::create_fade_overlay(Blackboard &blackboard) {
     float height = blackboard.camera.size().y;
     float width = blackboard.camera.size().x;
     vec2 size = {width, height};
-    float position_x = blackboard.camera.position().x + 275.f;
-    float position_y = blackboard.camera.position().y;
     auto &fade = registry_.assign<FadeOverlay>(fade_overlay_entity, meshFade, shaderFade, size);
-    fade.set_pos(position_x, position_y);
 }
 
 

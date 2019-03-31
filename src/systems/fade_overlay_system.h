@@ -9,8 +9,7 @@
 
 class FadeOverlaySystem : public System {
 private:
-    const float FADE_OUT_SPEED = 0.23;
-    float alpha;
+    const float FADE_OUT_SPEED = 0.3;
 
 public:
     FadeOverlaySystem();
