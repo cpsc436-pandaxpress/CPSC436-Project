@@ -23,8 +23,10 @@ static const SFXID SFX_JACKO_LAUGH = 1;
 static const SFXID SFX_PANDA_HURT = 2;
 
 static const SceneID MAIN_MENU_SCENE_ID   = 0;
-static const SceneID HORIZONTAL_SCENE_ID  = 1;
-static const SceneID VERTICAL_SCENE_ID    = 2;
+static const SceneID STORY_JUNGLE_SCENE_ID  = 1;
+static const SceneID STORY_SKY_SCENE_ID    = 2;
 static const SceneID BOSS_SCENE_ID    = 3;
+static const SceneID ENDLESS_JUNGLE_SCENE_ID = 4;
+static const SceneID ENDLESS_SKY_SCENE_ID = 5;
 
 #endif //PANDAEXPRESS_CONSTANTS_H

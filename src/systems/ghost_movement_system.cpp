@@ -31,11 +31,11 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
         if (ghost.done)
             break;
         else if (!ghost.onScreen) {
-            if ((sceneid == HORIZONTAL_SCENE_ID) && (gh_transform.x + gh_collidable.width / 2 < cam_position.x + cam_size.x / 2)) {
+            if ((sceneid == STORY_JUNGLE_SCENE_ID) && (gh_transform.x + gh_collidable.width / 2 < cam_position.x + cam_size.x / 2)) {
                 ghost.onScreen = true;
                 ghost.waiting = true;
             }
-            else if ((sceneid == VERTICAL_SCENE_ID) && (gh_transform.y - gh_collidable.height > cam_position.y - cam_size.x / 4)) {
+            else if ((sceneid == STORY_SKY_SCENE_ID) && (gh_transform.y - gh_collidable.height > cam_position.y - cam_size.x / 4)) {
                 ghost.onScreen = true;
                 ghost.waiting = true;
             }
@@ -58,7 +58,7 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
                 ghost.start_pt.y = gh_transform.y;
             }
             else {
-                if (sceneid == HORIZONTAL_SCENE_ID)
+                if (sceneid == STORY_JUNGLE_SCENE_ID)
                     gh_velocity.x_velocity = HorizontalScene::CAMERA_SPEED;
                 else {
                     printf("here\n");

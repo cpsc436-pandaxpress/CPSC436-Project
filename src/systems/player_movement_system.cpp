@@ -41,10 +41,10 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
 
         if (!panda.recovering) {
             switch (scene_id) {
-                case HORIZONTAL_SCENE_ID:
+                case STORY_JUNGLE_SCENE_ID:
                     update_horizontal_scene(blackboard, velocity);
                     break;
-                case VERTICAL_SCENE_ID:
+                case STORY_SKY_SCENE_ID:
                     update_vertical_scene(blackboard, velocity, panda);
                     break;
                 case BOSS_SCENE_ID:

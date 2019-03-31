@@ -16,11 +16,11 @@ void BackgroundTransformSystem::update(Blackboard &blackboard, entt::DefaultRegi
         auto &background = viewBg.get(entity);
         // move the background
         switch (scene_id) {
-            case HORIZONTAL_SCENE_ID: {
+            case STORY_JUNGLE_SCENE_ID: {
                 horizontal_background_transform(blackboard, background);
             }
                 break;
-            case VERTICAL_SCENE_ID: {
+            case STORY_SKY_SCENE_ID: {
                 vertical_background_transform(blackboard, background);
             }
                 break;

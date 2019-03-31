@@ -12,7 +12,7 @@ LevelSystem::LevelSystem() : rng_(Random(4)),
 }
 
 void LevelSystem::init() {
-    rng_.init(SEED);
+    rng_.init(STORY_SEED);
 }
 
 void LevelSystem::generateEntity(char value, float x, float y,

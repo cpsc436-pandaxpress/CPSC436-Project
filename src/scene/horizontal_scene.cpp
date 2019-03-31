@@ -23,12 +23,12 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         level_system(),
         sprite_render_system(),
         sprite_transform_system(),
-        background_transform_system(HORIZONTAL_SCENE_ID),
+        background_transform_system(STORY_JUNGLE_SCENE_ID),
         background_render_system(),
         physics_system(),
-        player_movement_system(HORIZONTAL_SCENE_ID),
+        player_movement_system(STORY_JUNGLE_SCENE_ID),
         enemy_system(),
-        player_animation_system(HORIZONTAL_SCENE_ID),
+        player_animation_system(STORY_JUNGLE_SCENE_ID),
         panda_dmg_system(),
         falling_platform_system(),
         enemy_animation_system(),
@@ -37,7 +37,7 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         health_bar_transform_system(),
         text_render_system(),
         text_transform_system(),
-        score_system(HORIZONTAL_SCENE_ID)
+        score_system(STORY_JUNGLE_SCENE_ID)
 {
     init_scene(blackboard);
     create_tutorial(blackboard);
@@ -62,7 +62,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
     physics_system.update(blackboard, registry_);
     panda_dmg_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
-    enemy_system.update(blackboard, registry_, HORIZONTAL_SCENE_ID);
+    enemy_system.update(blackboard, registry_, STORY_JUNGLE_SCENE_ID);
     health_bar_transform_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
     score_system.update(blackboard, registry_);
@@ -233,6 +233,14 @@ void HorizontalScene::create_score_text(Blackboard &blackboard) {
     auto &text = registry_.assign<Text>(score_entity, shader, mesh, font, textVal);
     registry_.assign<Transform>(score_entity, 0., 0., 0., 1.f, 1.f);
     registry_.assign<Score>(score_entity);
+}
+
+void HorizontalScene::set_mode(SceneMode mode) {
+    if (mode == STORY) {
+        level_system.set_seed(LevelSystem::STORY_SEED);
+    } else if (mode == ENDLESS) {
+        level_system.set_seed((unsigned int) time(nullptr));
+    }
 }
 
 

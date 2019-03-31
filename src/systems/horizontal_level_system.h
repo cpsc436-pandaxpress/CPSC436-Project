@@ -38,4 +38,6 @@ public:
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry);
 
     void destroy_entities(entt::DefaultRegistry &registry);
+
+    void set_seed(unsigned int seed);
 };

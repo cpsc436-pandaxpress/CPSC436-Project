@@ -134,3 +134,7 @@ void HorizontalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, 
         }
     }
 }
+
+void HorizontalLevelSystem::set_seed(unsigned int seed) {
+    rng_.init(seed);
+}

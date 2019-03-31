@@ -83,6 +83,8 @@ public:
 
     virtual void render(Blackboard& blackboard) override;
 
+    void set_mode(SceneMode mode) override;
+
     static constexpr float CAMERA_SPEED = 400.f;
 };
 

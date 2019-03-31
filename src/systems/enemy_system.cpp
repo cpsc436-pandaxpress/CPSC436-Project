@@ -54,7 +54,7 @@ void EnemySystem::handle_bread(vec2 cam_position, vec2 cam_size, SceneID sceneid
         auto &bread_velocity = bread_view.get<Velocity>(enemy_entity);
         auto &bread_collidable = bread_view.get<Collidable>(enemy_entity);
 
-        if (sceneid == HORIZONTAL_SCENE_ID) {
+        if (sceneid == STORY_JUNGLE_SCENE_ID) {
             if (bread_transform.x + bread_collidable.width < cam_position.x - cam_size.x / 2 ||
                 bread_transform.y - bread_collidable.height > cam_position.y + cam_size.y / 2 + VERTICAL_BUFFER) {
                 registry.destroy(enemy_entity);
@@ -66,7 +66,7 @@ void EnemySystem::handle_bread(vec2 cam_position, vec2 cam_size, SceneID sceneid
                 }
             }
         }
-        else if (sceneid == VERTICAL_SCENE_ID) {
+        else if (sceneid == STORY_SKY_SCENE_ID) {
             if (bread_transform.x + bread_collidable.width < cam_position.x - cam_size.x / 2 ||
                 bread_transform.y - bread_collidable.height > cam_position.y + cam_size.y / 2 ||
                 bread_transform.x + bread_collidable.width / 2 > cam_position.x + cam_size.x / 2) {
@@ -92,13 +92,13 @@ void EnemySystem::handle_ghosts(vec2 cam_position, vec2 cam_size, SceneID scenei
         auto &ghost_transform = ghost_view.get<Transform>(enemy_entity);
         auto &ghost_collidable = ghost_view.get<Collidable>(enemy_entity);
 
-        if (sceneid == HORIZONTAL_SCENE_ID) {
+        if (sceneid == STORY_JUNGLE_SCENE_ID) {
             if (ghost_transform.x + ghost_collidable.width < cam_position.x - cam_size.x / 2 ||
                 ghost_transform.y - ghost_collidable.height > cam_position.y + cam_size.y / 2 + VERTICAL_BUFFER) {
                 registry.destroy(enemy_entity);
                 break;
             }
-        } else if (sceneid == VERTICAL_SCENE_ID) {
+        } else if (sceneid == STORY_SKY_SCENE_ID) {
             if (ghost_transform.x + ghost_collidable.width < cam_position.x - cam_size.x / 2 ||
                 ghost_transform.y - ghost_collidable.height > cam_position.y + cam_size.y / 2) {
                 registry.destroy(enemy_entity);
@@ -116,7 +116,7 @@ void EnemySystem::handle_llamas(vec2 cam_position, vec2 cam_size, SceneID scenei
         auto &llama_collidable = llama_view.get<Collidable>(enemy_entity);
         auto &llama_timer = llama_view.get<Timer>(enemy_entity);
 
-        if (sceneid == HORIZONTAL_SCENE_ID) {
+        if (sceneid == STORY_JUNGLE_SCENE_ID) {
             if (llama_transform.x + llama_collidable.width < cam_position.x - cam_size.x / 2 ||
                 llama_transform.y - llama_collidable.height > cam_position.y + cam_size.y / 2 + VERTICAL_BUFFER) {
                 registry.destroy(enemy_entity);
@@ -130,7 +130,7 @@ void EnemySystem::handle_llamas(vec2 cam_position, vec2 cam_size, SceneID scenei
                 generate_projectile(llama_transform.x, llama_transform.y, true, blackboard, registry);
                 llama_timer.reset_watch(SPIT_TIMER_LABEL);
             }
-        } else if (sceneid == VERTICAL_SCENE_ID) {
+        } else if (sceneid == STORY_SKY_SCENE_ID) {
             auto pandas_view = registry.view<Panda, Transform>();
 
             if (llama_transform.x + llama_collidable.width < cam_position.x - cam_size.x / 2 ||
@@ -170,13 +170,13 @@ void EnemySystem::handle_spit(vec2 cam_position, vec2 cam_size, SceneID sceneid,
         auto &spit_transform = spit_view.get<Transform>(enemy_entity);
         auto &spit_collidable = spit_view.get<Collidable>(enemy_entity);
 
-        if (sceneid == HORIZONTAL_SCENE_ID) {
+        if (sceneid == STORY_JUNGLE_SCENE_ID) {
             if (spit_transform.x + spit_collidable.width < cam_position.x - cam_size.x / 2 ||
                 spit_transform.y - spit_collidable.height > cam_position.y + cam_size.y / 2 + VERTICAL_BUFFER) {
                 registry.destroy(enemy_entity);
                 break;
             }
-        } else if (sceneid == VERTICAL_SCENE_ID) {
+        } else if (sceneid == STORY_SKY_SCENE_ID) {
             if (spit_transform.x + spit_collidable.width < cam_position.x - cam_size.x / 2 ||
                 spit_transform.y - spit_collidable.height > cam_position.y + cam_size.y / 2 ||
                 spit_transform.x + spit_collidable.width / 2 > cam_position.x + cam_size.x / 2) {

@@ -20,7 +20,7 @@ void ScoreSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
         auto &transform = view.get<Transform>(entity);
         auto cam = blackboard.camera;
         switch (scene_id) {
-            case HORIZONTAL_SCENE_ID: {
+            case STORY_JUNGLE_SCENE_ID: {
                 std::string score_text;
                 std::stringstream ss;
 //                ss << "SCORE: ";
@@ -31,7 +31,7 @@ void ScoreSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
                 transform.y = cam.position().y - cam.size().y / 2 + Y_OFFSET;
             }
                 break;
-            case VERTICAL_SCENE_ID: {
+            case STORY_SKY_SCENE_ID: {
                 std::string score_text;
                 std::stringstream ss;
 //                ss << "SCORE: ";

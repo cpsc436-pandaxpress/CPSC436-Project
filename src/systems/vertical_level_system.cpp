@@ -107,3 +107,7 @@ void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, fl
         }
     }
 }
+
+void VerticalLevelSystem::set_seed(unsigned int seed) {
+    rng_.init(seed);
+}

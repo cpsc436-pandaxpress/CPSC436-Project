@@ -20,10 +20,10 @@ void PlayerAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry
         auto &sprite = view.get<Sprite>(entity);
 
         switch (scene_id) {
-            case HORIZONTAL_SCENE_ID:
+            case STORY_JUNGLE_SCENE_ID:
                 update_horizontal_scene(blackboard, walkable, sprite);
                 break;
-            case VERTICAL_SCENE_ID:
+            case STORY_SKY_SCENE_ID:
                 update_vertical_boss_scene(blackboard, walkable, sprite);
                 break;
             case BOSS_SCENE_ID:

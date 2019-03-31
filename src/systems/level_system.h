@@ -34,7 +34,6 @@ protected:
     const float BREAD_SPEED = 50.f;
     const float PROJECTILE_SPEED_X = -300.f;
     const float PROJECTILE_SPEED_Y = 10.f;
-    const unsigned int SEED = 1;
 
     const float PLATFORM_HEIGHT = 20.f;
 
@@ -59,6 +58,8 @@ public:
 
     const std::string FALLING_PLATFORM_TIMER_LABEL = "fall";
     const std::string SPIT_TIMER_LABEL = "spit";
+    static const unsigned int STORY_SEED = 1;
+
 };
 
 

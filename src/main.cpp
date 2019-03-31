@@ -121,9 +121,9 @@ int main(int argc, char** argv) {
 
     // initialize scenes here
     MainMenuScene main_menu(blackboard, scene_manager);
-    main_menu.add_item(blackboard, "story_text", HORIZONTAL_SCENE_ID);
-    main_menu.add_item(blackboard, "endless_jungle_text", HORIZONTAL_SCENE_ID);
-    main_menu.add_item(blackboard, "endless_sky_text", VERTICAL_SCENE_ID);
+    main_menu.add_item(blackboard, "story_text", STORY_JUNGLE_SCENE_ID);
+    main_menu.add_item(blackboard, "endless_jungle_text", ENDLESS_JUNGLE_SCENE_ID);
+    main_menu.add_item(blackboard, "endless_sky_text", ENDLESS_SKY_SCENE_ID);
     main_menu.add_item(blackboard, "jacko_text",  BOSS_SCENE_ID);
     scene_manager.add_scene(MAIN_MENU_SCENE_ID, (Scene*)(&main_menu));
 
@@ -137,9 +137,10 @@ int main(int argc, char** argv) {
 
     VerticalScene vertical_scene(blackboard, scene_manager);
 
+    scene_manager.add_scene(STORY_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY);
+    scene_manager.add_scene(ENDLESS_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), ENDLESS);
+    scene_manager.add_scene(ENDLESS_SKY_SCENE_ID, (Scene*)(&vertical_scene), ENDLESS);
     scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene));
-    scene_manager.add_scene(VERTICAL_SCENE_ID, (Scene*)(&vertical_scene));
-    scene_manager.add_scene(HORIZONTAL_SCENE_ID, (Scene*)(&horizontal_scene));
 
     // set the first scene
 
