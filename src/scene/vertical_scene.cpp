@@ -14,6 +14,7 @@
 #include <graphics/font.h>
 #include <graphics/text.h>
 #include <components/score.h>
+#include <components/layer.h>
 #include "vertical_scene.h"
 #include "util/constants.h"
 
@@ -70,6 +71,7 @@ void VerticalScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
     registry_.assign<Timer>(panda_entity);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
+    registry_.assign<Layer>(panda_entity, PANDA_LAYER);
 
     auto shaderHealth = blackboard.shader_manager.get_shader("health");
     auto meshHealth = blackboard.mesh_manager.get_mesh("health");

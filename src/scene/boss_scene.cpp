@@ -16,6 +16,7 @@
 #include <components/tutorial.h>
 #include <components/timer.h>
 #include <graphics/health_bar.h>
+#include <components/layer.h>
 #include "boss_scene.h"
 #include "util/constants.h"
 
@@ -139,6 +140,7 @@ void BossScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
     registry_.assign<Timer>(panda_entity);
+    registry_.assign<Layer>(panda_entity, PANDA_LAYER);
     auto shaderHealth = blackboard.shader_manager.get_shader("health");
     auto meshHealth = blackboard.mesh_manager.get_mesh("health");
     float height = 75.f;
@@ -170,6 +172,7 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
                                  texture.width() * scaleX * 0.75,
                                  texture.height() * scaleY
     );
+    registry_.assign<Layer>(jacko_entity, ENEMY_LAYER);
 
     auto shaderHealth = blackboard.shader_manager.get_shader("health");
     auto meshHealth = blackboard.mesh_manager.get_mesh("health");
@@ -196,8 +199,8 @@ void BossScene::create_food(Blackboard &blackboard) {
     registry_.assign<Interactable>(burger_entity);
     registry_.assign<ObeysGravity>(burger_entity);
     registry_.assign<Velocity>(burger_entity);
-    registry_.assign<Collidable>(burger_entity, texture.width() * scaleX,
-                                 texture.height() * scaleY);
+    registry_.assign<Collidable>(burger_entity, texture.width() * scaleX, texture.height() * scaleY);
+    registry_.assign<Layer>(burger_entity, ITEM_LAYER);
 
 }
 
@@ -227,8 +230,4 @@ void BossScene::create_background(Blackboard &blackboard) {
     }
 
 }
-
-
-
-
 
