@@ -31,5 +31,4 @@ void FadeOverlaySystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
         fadeOverlay.set_pos(position_x, position_y);
         fadeOverlay.set_alpha(alpha);
     }
-
 }

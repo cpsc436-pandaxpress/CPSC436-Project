@@ -71,11 +71,9 @@ private:
     void create_panda(Blackboard& blackboard);
     void create_jacko(Blackboard& blackboard, uint32_t panda);
     void create_fade_overlay(Blackboard& blackboard);
-    void create_tutorial(Blackboard& blackboard);
     void reset_scene(Blackboard& blackboard);
     void init_scene(Blackboard &blackboard);
     void update_panda(Blackboard& blackboard);
-    void update_tutorial(Blackboard& blackboard);
     void update_camera(Blackboard& blackboard);
 
 public:
