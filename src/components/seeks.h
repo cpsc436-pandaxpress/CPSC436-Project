@@ -24,8 +24,8 @@ struct Seeks {
             seek_speed(720.f),
             goingHorizontal(false),
             goingVertical(false),
-            bounce_speed_x(360.f),
-            bounce_speed_y(360.f)
+            bounce_speed_x(30.f),
+            bounce_speed_y(30.f)
 
 
     {}

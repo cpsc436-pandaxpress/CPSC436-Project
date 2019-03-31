@@ -75,19 +75,7 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
                         seeks.bounce_speed_x= -seeks.bounce_speed_x;
                     }
                 }
-/*
-                if(goingHorizontal){
-                    velocity.y_velocity= 800;
-                    if(abs(transform.y-verticalCenter)>maxBounceDist){
-                        velocity.y_velocity= -velocity.y_velocity;
-                    }
-                }else{
-                    velocity.x_velocity= 800;
-                    if(abs(transform.x-horizontalCenter)>maxBounceDist){
-                        velocity.x_velocity= -velocity.x_velocity;
-                    }
-                }
-                */
+
             }
         }else{
             if(timer.watch_exists("batTimer")){
