@@ -21,7 +21,7 @@ void ScoreSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
         blackboard.score += blackboard.delta_time * POINTS_SPEED;
         std::string score_text;
         std::stringstream ss;
-        ss << std::setfill('0') << std::setw(6) << (int) blackboard.score;
+        ss << std::setfill('0') << std::setw(7) << (int) blackboard.score;
         score_text = ss.str();
         text.set_text(score_text);
     }

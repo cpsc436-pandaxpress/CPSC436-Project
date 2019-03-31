@@ -279,14 +279,16 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                 }
                                 if (registry.has<Bread>(entry.entity)) {
                                     blackboard.score += BREAD_KILL_POINTS;
+                                    std::string str = "+" + std::to_string(BREAD_KILL_POINTS);
                                     generate_label_text(blackboard, registry,
                                                         vec2{transform.x, transform.y - 100.f},
-                                                        "+100");
+                                                        str.c_str());
                                 } else if (registry.has<Llama>(entry.entity)) {
                                     blackboard.score += LLAMA_KILL_POINTS;
+                                    std::string str = "+" + std::to_string(LLAMA_KILL_POINTS);
                                     generate_label_text(blackboard, registry,
                                                         vec2{transform.x, transform.y - 100.f},
-                                                        "+300");
+                                                        str.c_str());
                                 }
                             }
                         }
