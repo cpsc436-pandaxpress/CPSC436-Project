@@ -215,7 +215,6 @@ void LevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
     registry.destroy<Bread>();
     registry.destroy<Obstacle>();
     registry.destroy<Cave>();
-    registry.destroy<Spit>();
 
     while (!chunks_.empty()) {
         chunks_.front().clear();
