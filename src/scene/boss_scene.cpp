@@ -17,6 +17,7 @@
 #include <components/timer.h>
 #include <graphics/health_bar.h>
 #include <components/layer.h>
+#include <graphics/fade_overlay.h>
 #include "boss_scene.h"
 #include "util/constants.h"
 
@@ -37,7 +38,10 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         falling_platform_system(),
         enemy_animation_system(),
         health_bar_render_system(),
-        health_bar_transform_system() {
+        health_bar_transform_system(),
+        fade_overlay_system(),
+        fade_overlay_render_system()
+{
     init_scene(blackboard);
     reset_scene(blackboard); // idk why??? but this is required
     gl_has_errors();
@@ -51,12 +55,18 @@ void BossScene::update(Blackboard &blackboard) {
         return;
     }
 
-    update_camera(blackboard);
+    auto &panda = registry_.get<Panda>(panda_entity);
+
+    if (panda.alive && !panda.dead){
+        update_camera(blackboard);
+        player_movement_system.update(blackboard, registry_);
+    } else if (!panda.alive) {
+        fade_overlay_system.update(blackboard, registry_);
+    }
     update_panda(blackboard);
 
     level_system.update(blackboard, registry_);
     chase_system.update(blackboard, registry_);
-    player_movement_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
     panda_dmg_system.update(blackboard, registry_);
     health_bar_transform_system.update(blackboard, registry_);
@@ -75,6 +85,11 @@ void BossScene::render(Blackboard &blackboard) {
     background_render_system.update(blackboard, registry_); // render background first
     sprite_render_system.update(blackboard, registry_);
     health_bar_render_system.update(blackboard, registry_);
+
+    auto &panda = registry_.get<Panda>(panda_entity);
+    if (!panda.alive) {
+        fade_overlay_render_system.update(blackboard, registry_);
+    }
 }
 
 void BossScene::update_panda(Blackboard &blackboard) {
@@ -85,7 +100,7 @@ void BossScene::update_panda(Blackboard &blackboard) {
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &panda_collidable = registry_.get<Collidable>(panda_entity);
 
-    if (transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || !panda.alive) {
+    if (transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || panda.dead) {
         reset_scene(blackboard);
     }
 }
@@ -106,6 +121,7 @@ void BossScene::init_scene(Blackboard &blackboard) {
     create_food(blackboard);
     create_jacko(blackboard, burger_entity);
     create_panda(blackboard);
+    create_fade_overlay(blackboard);
     level_system.init();
 }
 
@@ -113,6 +129,7 @@ void BossScene::reset_scene(Blackboard &blackboard) {
     level_system.destroy_entities(registry_);
     registry_.destroy(panda_entity);
     registry_.destroy(jacko_entity);
+    registry_.destroy(fade_overlay_entity);
     for (uint32_t e: bg_entities) {
         registry_.destroy(e);
     }
@@ -230,3 +247,12 @@ void BossScene::create_background(Blackboard &blackboard) {
 
 }
 
+void BossScene::create_fade_overlay(Blackboard &blackboard) {
+    fade_overlay_entity = registry_.create();
+    auto shaderFade = blackboard.shader_manager.get_shader("fade");
+    auto meshFade = blackboard.mesh_manager.get_mesh("health");
+    float height = blackboard.camera.size().y;
+    float width = blackboard.camera.size().x;
+    vec2 size = {width, height};
+    auto &fade = registry_.assign<FadeOverlay>(fade_overlay_entity, meshFade, shaderFade, size);
+}
