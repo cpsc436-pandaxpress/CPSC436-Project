@@ -15,6 +15,7 @@
 #include <graphics/text.h>
 #include <graphics/fade_overlay.h>
 #include <components/score.h>
+#include <components/layer.h>
 #include "horizontal_scene.h"
 #include "util/constants.h"
 
@@ -176,6 +177,7 @@ void HorizontalScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
     registry_.assign<Timer>(panda_entity);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
+    registry_.assign<Layer>(panda_entity, PANDA_LAYER);
 
     auto shaderHealth = blackboard.shader_manager.get_shader("health");
     auto meshHealth = blackboard.mesh_manager.get_mesh("health");
