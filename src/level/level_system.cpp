@@ -4,6 +4,7 @@
 
 #include <components/timer.h>
 #include <components/layer.h>
+#include <components/food.h>
 #include "level_system.h"
 
 LevelSystem::LevelSystem() : rng_(Random(4)),
@@ -215,6 +216,7 @@ void LevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
     registry.destroy<Bread>();
     registry.destroy<Obstacle>();
     registry.destroy<Cave>();
+    registry.destroy<Food>();
 
     while (!chunks_.empty()) {
         chunks_.front().clear();

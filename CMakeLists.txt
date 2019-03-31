@@ -131,7 +131,13 @@ set(SOURCE_FILES
         src/components/score.h
         src/level/level.cpp
         src/level/level.h
-        src/components/layer.h)
+        src/components/layer.h
+        src/systems/fade_overlay_render_system.cpp
+        src/systems/fade_overlay_render_system.h
+        src/graphics/fade_overlay.h
+        src/graphics/fade_overlay.cpp
+        src/systems/fade_overlay_system.cpp
+        src/systems/fade_overlay_system.h)
 
 
 # Create executable target

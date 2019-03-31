@@ -19,6 +19,8 @@
 #include <systems/text_render_system.h>
 #include <systems/text_transform_system.h>
 #include <systems/score_system.h>
+#include <systems/fade_overlay_system.h>
+#include <systems/fade_overlay_render_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -46,6 +48,7 @@ private:
     uint32_t tutorial_entity;
     uint32_t tutorial2_entity;
     uint32_t score_entity;
+    uint32_t fade_overlay_entity;
     HorizontalLevelSystem level_system;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
@@ -65,6 +68,9 @@ private:
     TextRenderSystem text_render_system;
     TextTransformSystem text_transform_system;
     ScoreSystem score_system;
+    FadeOverlaySystem fade_overlay_system;
+    FadeOverlayRenderSystem fade_overlay_render_system;
+
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);
@@ -75,6 +81,7 @@ private:
     void update_tutorial(Blackboard& blackboard);
     void update_camera(Blackboard& blackboard);
     void create_score_text(Blackboard &blackboard);
+    void create_fade_overlay(Blackboard &blackboard);
 public:
     HorizontalScene(Blackboard &blackboard,
                     SceneManager &scene_manager);

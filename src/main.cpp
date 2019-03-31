@@ -76,6 +76,10 @@ int start() {
             shaders_path("text.vs.glsl"),
             shaders_path("text.fs.glsl"), "text");
 
+    blackboard.shader_manager.load_shader(
+            shaders_path("fade.vs.glsl"),
+            shaders_path("fade.fs.glsl"),"fade");
+
     blackboard.texture_manager.load_texture(textures_path("panda.png"), "panda");
     blackboard.texture_manager.load_texture(textures_path("panda_sprite_sheet.png"), "panda_sprites");
     blackboard.texture_manager.load_texture(textures_path("grass_block_1.png"), "platform1");
