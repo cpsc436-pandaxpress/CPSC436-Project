@@ -23,14 +23,12 @@ char Level::get_tile_at(int x, int y) const {
 Level Level::load_level(int id, LevelType type) {
     switch (type) {
         case HORIZONTAL_LEVEL_TYPE: {
-            std::string level_path = levels_path("");
-            std::string level_file = level_path + "level_" + std::to_string(id) + ".csv";
+            std::string level_file = "level_" + std::to_string(id) + ".csv";
             return load_from_path(level_file);
         }
 
         case VERTICAL_LEVEL_TYPE: {
-            std::string level_path = levels_path("");
-            std::string level_file = level_path + "vlevel_" + std::to_string(id) + ".csv";
+            std::string level_file = "vlevel_" + std::to_string(id) + ".csv";
             return load_from_path(level_file);
         }
 
