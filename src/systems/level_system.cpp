@@ -179,11 +179,11 @@ void LevelSystem::generateEntity(char value, float x, float y,
             auto texture = blackboard.texture_manager.get_texture("burger");
             auto shader = blackboard.shader_manager.get_shader("sprite");
             auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-            auto scaleX = static_cast<float>(CELL_WIDTH * 0.7f / texture.width());
-            auto scaleY = static_cast<float>(CELL_HEIGHT * 0.7f / texture.height());
+            auto scaleX = static_cast<float>(CELL_WIDTH * 0.5f / texture.width());
+            auto scaleY = static_cast<float>(CELL_HEIGHT * 0.5f / texture.height());
             registry.assign<Food>(burger);
             registry.assign<Sprite>(burger, texture, shader, mesh);
-            registry.assign<Transform>(burger, 300, 100, 0., scaleX, scaleY);
+            registry.assign<Transform>(burger, x, y, 0., scaleX, scaleY);
             registry.assign<Interactable>(burger);
             registry.assign<ObeysGravity>(burger);
             registry.assign<Velocity>(burger);
