@@ -38,7 +38,7 @@ protected:
 
     const float PLATFORM_HEIGHT = 20.f;
 
-    virtual void load_next_chunk() = 0;
+    virtual void load_next_chunk(int level) = 0;
 
     virtual void generate_next_chunk(Blackboard &blackboard, entt::DefaultRegistry &registry) = 0;
 
