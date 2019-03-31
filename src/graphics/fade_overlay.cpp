@@ -6,18 +6,6 @@
 #include "util/constants.h"
 #include "../util/blackboard.h"
 
-//vec3 FadeOverlay::vertices[] = {
-//        vec3{-0.5f, 0.5f, 0.0f}, // Top-left
-//        vec3{0.5f, 0.5f, 0.0f}, // Top-right
-//        vec3{0.5f, -0.5f, 0.0f}, // Bottom-right
-//        vec3{-0.5f, -0.5f, 0.0f}, // Bottom-left
-//};
-//
-//uint16_t FadeOverlay::indices[] = {
-//        0, 1, 2,
-//        2, 3, 0
-//};
-
 FadeOverlay::FadeOverlay(Mesh mesh, Shader shader, vec2 size) :
         shader_(shader),
         mesh_(mesh),

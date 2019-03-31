@@ -20,8 +20,8 @@ public:
 
 
 private:
-    float pandawidth = 0.1f;
-    float pandaheight = 0.333f;
+    const float pandawidth = 0.1f;
+    const float pandaheight = 0.333f;
     SceneID scene_id;
 
 

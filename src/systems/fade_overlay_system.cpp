@@ -10,17 +10,13 @@ FadeOverlaySystem::FadeOverlaySystem() {}
 
 void FadeOverlaySystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
 
-    FADE_OUT_SPEED += 0.15*blackboard.delta_time;
-//    auto &panda = registry.get<Panda>(panda_entity);
-//    if (panda.dead) {
-//        FADE_OUT_SPEED = 0.f;
-//    }
+    float change_in_alpha = FADE_OUT_SPEED*blackboard.delta_time;
 
     auto viewFade = registry.view<FadeOverlay>();
 
     for (auto entity: viewFade) {
         auto &fadeOverlay = viewFade.get(entity);
-        float alpha = fmod(FADE_OUT_SPEED, 1.f);
+        alpha += change_in_alpha;
         float position_x = blackboard.camera.position().x;
         float position_y = blackboard.camera.position().y;
         fadeOverlay.set_pos(position_x, position_y);
@@ -32,7 +28,7 @@ void FadeOverlaySystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
     for (auto entity: viewPanda) {
         auto &panda = viewPanda.get(entity);
         if (panda.dead) {
-            FADE_OUT_SPEED = 0.f;
+            alpha = 0.f;
         }
     }
 }

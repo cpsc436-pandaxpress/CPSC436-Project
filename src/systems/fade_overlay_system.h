@@ -9,8 +9,8 @@
 
 class FadeOverlaySystem : public System {
 private:
-    uint32_t panda_entity;
-    float FADE_OUT_SPEED = 0.f;
+    const float FADE_OUT_SPEED = 0.15;
+    float alpha;
 
 public:
     FadeOverlaySystem();
