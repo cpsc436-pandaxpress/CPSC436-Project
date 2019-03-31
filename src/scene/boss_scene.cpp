@@ -16,8 +16,8 @@
 #include <components/pause.h>
 #include <components/timer.h>
 #include <graphics/health_bar.h>
-#include <graphics/fade_overlay.h>
 #include <components/layer.h>
+#include <graphics/fade_overlay.h>
 #include "boss_scene.h"
 #include "util/constants.h"
 

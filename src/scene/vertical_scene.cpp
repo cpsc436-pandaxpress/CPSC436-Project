@@ -147,15 +147,15 @@ void VerticalScene::update(Blackboard &blackboard) {
         }
     }
 
-    void VerticalScene::render(Blackboard &blackboard) {
-        // update the rendering systems
-        glClearColor(74.f / 256.f, 105.f / 256.f, 189.f / 256.f,
-                     1); // same colour as the top of the background
-        glClear(GL_COLOR_BUFFER_BIT);
-        background_render_system.update(blackboard, registry_);
-        sprite_render_system.update(blackboard, registry_);
-        health_bar_render_system.update(blackboard, registry_);
-        text_render_system.update(blackboard, registry_);
+void VerticalScene::render(Blackboard &blackboard) {
+    // update the rendering systems
+    glClearColor(74.f / 256.f, 105.f / 256.f, 189.f / 256.f,
+                 1); // same colour as the top of the background
+    glClear(GL_COLOR_BUFFER_BIT);
+    background_render_system.update(blackboard, registry_);
+    sprite_render_system.update(blackboard, registry_);
+    health_bar_render_system.update(blackboard, registry_);
+    text_render_system.update(blackboard, registry_);
 
         auto &panda = registry_.get<Panda>(panda_entity);
         auto &interactable = registry_.get<Interactable>(panda_entity);
@@ -164,79 +164,76 @@ void VerticalScene::update(Blackboard &blackboard) {
         }
     }
 
-    void VerticalScene::reset_scene(Blackboard &blackboard) {
-        registry_.destroy(panda_entity);
-        level_system.destroy_entities(registry_);
-        for (uint32_t e: bg_entities) {
-            registry_.destroy(e);
-        }
-        bg_entities.clear();
-        registry_.destroy(score_entity);
-        init_scene(blackboard);
+void VerticalScene::reset_scene(Blackboard &blackboard) {
+    registry_.destroy(panda_entity);
+    level_system.destroy_entities(registry_);
+    for (uint32_t e: bg_entities) {
+        registry_.destroy(e);
     }
+    bg_entities.clear();
+    registry_.destroy(score_entity);
+    init_scene(blackboard);
+}
 
-    void VerticalScene::create_background(Blackboard &blackboard) {
-        // This order matters for rendering
-        auto tex1 = blackboard.texture_manager.get_texture("clouds1");
-        auto tex2 = blackboard.texture_manager.get_texture("clouds2");
-        auto tex3 = blackboard.texture_manager.get_texture("horizon");
-        // end order
-        auto shader = blackboard.shader_manager.get_shader("sprite");
-        auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+void VerticalScene::create_background(Blackboard &blackboard) {
+    // This order matters for rendering
+    auto tex1 = blackboard.texture_manager.get_texture("clouds1");
+    auto tex2 = blackboard.texture_manager.get_texture("clouds2");
+    auto tex3 = blackboard.texture_manager.get_texture("horizon");
+    // end order
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
-        auto bg_entity1 = registry_.create();
-        auto &bg = registry_.assign<Background>(bg_entity1, tex1, shader, mesh, -1);
-        bg.set_pos1(200.0f, 0.0f);
-        bg.set_pos2(200.0f, -blackboard.camera.size().y);
-        bg.set_rotation_rad(0.0f);
-        bg.set_scale(blackboard.camera.size().x / tex1.width(),
-                     blackboard.camera.size().y / tex1.height());
-        bg_entities.push_back(bg_entity1);
+    auto bg_entity1 = registry_.create();
+    auto &bg = registry_.assign<Background>(bg_entity1, tex1, shader, mesh, -1);
+    bg.set_pos1(200.0f, 0.0f);
+    bg.set_pos2(200.0f, -blackboard.camera.size().y);
+    bg.set_rotation_rad(0.0f);
+    bg.set_scale(blackboard.camera.size().x / tex1.width(),
+                 blackboard.camera.size().y / tex1.height());
+    bg_entities.push_back(bg_entity1);
 
-        auto bg_entity2 = registry_.create();
-        auto &bg2 = registry_.assign<Background>(bg_entity2, tex2, shader, mesh, 1);
-        bg2.set_pos1(-200.0f, 0.0f);
-        bg2.set_pos2(-200.f, -blackboard.camera.size().y);
-        bg2.set_rotation_rad(0.0f);
-        bg2.set_scale(blackboard.camera.size().x / tex2.width(),
-                      blackboard.camera.size().y / tex2.height());
-        bg_entities.push_back(bg_entity2);
+    auto bg_entity2 = registry_.create();
+    auto &bg2 = registry_.assign<Background>(bg_entity2, tex2, shader, mesh, 1);
+    bg2.set_pos1(-200.0f, 0.0f);
+    bg2.set_pos2(-200.f, -blackboard.camera.size().y);
+    bg2.set_rotation_rad(0.0f);
+    bg2.set_scale(blackboard.camera.size().x / tex2.width(),
+                 blackboard.camera.size().y / tex2.height());
+    bg_entities.push_back(bg_entity2);
 
-        auto bg_entity0 = registry_.create();
-        auto &bg0 = registry_.assign<Background>(bg_entity0, tex3, shader, mesh, 0, false);
-        bg0.set_pos1(0.0f, 0.0f);
-        bg0.set_rotation_rad(0.0f);
-        bg0.set_scale(blackboard.camera.size().x / tex3.width(),
-                      blackboard.camera.size().y / tex3.height());
-        bg_entities.push_back(bg_entity0);
-    }
+    auto bg_entity0 = registry_.create();
+    auto &bg0 = registry_.assign<Background>(bg_entity0, tex3, shader, mesh, 0, false);
+    bg0.set_pos1(0.0f, 0.0f);
+    bg0.set_rotation_rad(0.0f);
+    bg0.set_scale(blackboard.camera.size().x / tex3.width(),
+                 blackboard.camera.size().y / tex3.height());
+    bg_entities.push_back(bg_entity0);
+}
 
-    void VerticalScene::create_score_text(Blackboard &blackboard) {
-        auto shader = blackboard.shader_manager.get_shader("text");
-        auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+void VerticalScene::create_score_text(Blackboard &blackboard) {
+    auto shader = blackboard.shader_manager.get_shader("text");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
-        FontType font = FontType();
-        font.load(fonts_path("TitilliumWeb-Bold.ttf"), 64);
+    FontType font = FontType();
+    font.load(fonts_path("TitilliumWeb-Bold.ttf"), 64);
 
-        score_entity = registry_.create();
-        std::string textVal = "SCORE: 0";
-        auto &text = registry_.assign<Text>(score_entity, shader, mesh, font, textVal);
-        registry_.assign<Transform>(score_entity, 0., 0., 0., 1.f, 1.f);
-        registry_.assign<Score>(score_entity);
-    }
+    score_entity = registry_.create();
+    std::string textVal = "SCORE: 0";
+    auto &text = registry_.assign<Text>(score_entity, shader, mesh, font, textVal);
+    registry_.assign<Transform>(score_entity, 0., 0., 0., 1.f, 1.f);
+    registry_.assign<Score>(score_entity);
+}
 
-    void VerticalScene::create_fade_overlay(Blackboard &blackboard) {
-        fade_overlay_entity = registry_.create();
-        auto shaderFade = blackboard.shader_manager.get_shader("fade");
-        auto meshFade = blackboard.mesh_manager.get_mesh("health");
-        float height = blackboard.camera.size().y;
-        float width = blackboard.camera.size().x;
-        vec2 size = {width, height};
-//    float position_x = blackboard.camera.position().x + 275.f;
-//    float position_y = blackboard.camera.position().y;
-//    fade.set_pos(position_x, position_y);
-        auto &fade = registry_.assign<FadeOverlay>(fade_overlay_entity, meshFade, shaderFade, size);
-    }
+void VerticalScene::create_fade_overlay(Blackboard &blackboard) {
+    fade_overlay_entity = registry_.create();
+    auto shaderFade = blackboard.shader_manager.get_shader("fade");
+    auto meshFade = blackboard.mesh_manager.get_mesh("health");
+    float height = blackboard.camera.size().y;
+    float width = blackboard.camera.size().x;
+    vec2 size = {width, height};
+    auto &fade = registry_.assign<FadeOverlay>(fade_overlay_entity, meshFade, shaderFade, size);
+}
 
     void VerticalScene::create_pause_menu(Blackboard &blackboard) {
         pause_menu_entity = registry_.create();
