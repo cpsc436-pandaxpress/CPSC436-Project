@@ -13,6 +13,7 @@ FadeOverlay::FadeOverlay(Mesh mesh, Shader shader, vec2 size) :
         position_ = {0.f, 0.f};
         scale_ = {1.f, 1.f};
         alpha_ = 0.f;
+        pause_ = false;
 }
 
 
@@ -21,7 +22,8 @@ FadeOverlay::FadeOverlay(const FadeOverlay &other) :
         mesh_(other.mesh_),
         position_(other.position_),
         scale_(other.scale_),
-        alpha_(other.alpha_)
+        alpha_(other.alpha_),
+        pause_(other.pause_)
 {}
 //
 void FadeOverlay::draw(const mat3 &projection) {
@@ -111,4 +113,12 @@ void FadeOverlay::set_alpha(float alpha) {
 
 float FadeOverlay::alpha() {
     return alpha_;
+}
+
+void FadeOverlay::set_pause(bool pause) {
+    pause_ = pause;
+}
+
+int FadeOverlay::pause() {
+    return pause_;
 }

@@ -144,7 +144,8 @@ void VerticalScene::render(Blackboard &blackboard) {
     text_render_system.update(blackboard, registry_);
 
     auto &panda = registry_.get<Panda>(panda_entity);
-    if (!panda.alive) {
+    auto &interactable = registry_.get<Interactable>(panda_entity);
+    if (!panda.alive && interactable.grounded) {
         fade_overlay_render_system.update(blackboard, registry_);
     }
 }

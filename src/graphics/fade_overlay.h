@@ -17,6 +17,7 @@ private:
     Mesh mesh_;
     vec2 position_, size_, scale_;
     float alpha_;
+    bool pause_;
 public:
 
     FadeOverlay(Mesh mesh, Shader shader, vec2 size);
@@ -37,6 +38,9 @@ public:
 
     void set_alpha(float alpha);
     float alpha();
+
+    void set_pause(bool pause);
+    int pause();
 };
 
 #endif //PANDAEXPRESS_FADE_H

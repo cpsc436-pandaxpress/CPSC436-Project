@@ -56,12 +56,13 @@ void BossScene::update(Blackboard &blackboard) {
     }
 
     auto &panda = registry_.get<Panda>(panda_entity);
+    auto &interactable = registry_.get<Interactable>(panda_entity);
 
     if (panda.alive && !panda.dead){
         update_camera(blackboard);
         player_movement_system.update(blackboard, registry_);
     }
-    if (!panda.alive) {
+    if (!panda.alive && interactable.grounded) {
         fade_overlay_system.update(blackboard, registry_);
     }
     update_panda(blackboard);

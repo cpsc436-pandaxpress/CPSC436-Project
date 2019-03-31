@@ -136,8 +136,7 @@ set(SOURCE_FILES
         src/graphics/fade_overlay.cpp
         src/systems/fade_overlay_system.cpp
         src/systems/fade_overlay_system.h
-        src/systems/pause_system.cpp
-        src/systems/pause_system.h)
+        src/systems/pause_menu_transform_system.cpp src/systems/pause_menu_transform_system.h)
 
 
 # Create executable target

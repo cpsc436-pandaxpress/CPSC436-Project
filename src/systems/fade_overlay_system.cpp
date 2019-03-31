@@ -13,10 +13,9 @@ void FadeOverlaySystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
     float change_in_alpha = FADE_OUT_SPEED*blackboard.delta_time;
 
     auto viewFade = registry.view<FadeOverlay>();
-
     for (auto entity: viewFade) {
         auto &fadeOverlay = viewFade.get(entity);
-        alpha += change_in_alpha;
+        (fadeOverlay.pause()) ? alpha = 0.f: (alpha += change_in_alpha);
         float position_x = blackboard.camera.position().x;
         float position_y = blackboard.camera.position().y;
         fadeOverlay.set_pos(position_x, position_y);

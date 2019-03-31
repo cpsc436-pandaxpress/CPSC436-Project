@@ -7,14 +7,14 @@
 
 #include "system.h"
 
+
 class FadeOverlaySystem : public System {
 private:
-    const float FADE_OUT_SPEED = 0.23;
+    const float FADE_OUT_SPEED = 0.24;
     float alpha;
 
 public:
     FadeOverlaySystem();
-
     virtual void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override;
 };
 
