@@ -117,7 +117,7 @@ int main(int argc, char** argv) {
     blackboard.mesh_manager.load_mesh("health", 4, HealthBar::vertices, 6, HealthBar::indices);
     blackboard.mesh_manager.load_mesh("cave", 41, Cave::vertices, 168, Cave::indices);
     blackboard.mesh_manager.load_mesh("sprite", 4, Sprite::vertices, 6, Sprite::indices);
-//    blackboard.soundManager.init();
+    blackboard.soundManager.init();
 
     auto scene_manager = SceneManager(blackboard);
 
