@@ -41,7 +41,6 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         score_system(HORIZONTAL_SCENE_ID)
 {
     init_scene(blackboard);
-    create_tutorial(blackboard);
     gl_has_errors("horizontal_scene");
 }
 
@@ -63,7 +62,6 @@ void HorizontalScene::update(Blackboard &blackboard) {
         fade_overlay_system.update(blackboard, registry_);
     }
     update_panda(blackboard);
-    update_tutorial(blackboard);
 
     level_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
@@ -105,17 +103,6 @@ void HorizontalScene::update_camera(Blackboard &blackboard) {
     blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time,
                                    y_offset);
     blackboard.camera.compose();
-}
-
-void HorizontalScene::update_tutorial(Blackboard &blackboard) {
-    float scaleY = 0.25;
-    float scaleX = 0.25;
-    auto &tutorial_trans = registry_.get<Transform>(tutorial2_entity);
-
-    if (tutorial_trans.x + 100.f < blackboard.camera.position().x - blackboard.camera.size().x / 2.0 ){
-        auto &tutorial_trans = registry_.replace<Transform>(tutorial_entity, -1500.f, -200.f, 0.f, scaleX, scaleY);
-        auto &tutorial2_trans = registry_.replace<Transform>(tutorial2_entity, -1500.f,  -200.f, 0.f, scaleX, scaleY);
-    }
 }
 
 void HorizontalScene::render(Blackboard &blackboard) {
@@ -212,28 +199,6 @@ void HorizontalScene::create_background(Blackboard &blackboard) {
         bg_entities.push_back(bg_entity);
         i++;
     }
-}
-
-void HorizontalScene::create_tutorial(Blackboard &blackboard) {
-    tutorial_entity = registry_.create();
-    tutorial2_entity = registry_.create();
-
-    auto texture = blackboard.texture_manager.get_texture("tutorial");
-    auto texture2 = blackboard.texture_manager.get_texture("tutorial_bread");
-
-    auto shader = blackboard.shader_manager.get_shader("sprite");
-    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-
-    float scaleY = 0.25;
-    float scaleX = 0.25;
-    registry_.assign<Sprite>(tutorial_entity, texture, shader, mesh);
-    registry_.assign<Tutorial>(tutorial_entity);
-    registry_.assign<Transform>(tutorial_entity, 400.f, -200.f, 0., scaleX, scaleY);
-
-    registry_.assign<Sprite>(tutorial2_entity, texture2, shader, mesh);
-    registry_.assign<Tutorial>(tutorial2_entity);
-    registry_.assign<Transform>(tutorial2_entity, 900.f, -200.f, 0., scaleX, scaleY);
-
 }
 
 void HorizontalScene::create_score_text(Blackboard &blackboard) {
