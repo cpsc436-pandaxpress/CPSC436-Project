@@ -129,6 +129,13 @@ set(SOURCE_FILES
         src/systems/score_system.cpp
         src/systems/score_system.h
         src/components/score.h
+        src/components/layer.h
+        src/systems/fade_overlay_render_system.cpp
+        src/systems/fade_overlay_render_system.h
+        src/graphics/fade_overlay.h
+        src/graphics/fade_overlay.cpp
+        src/systems/fade_overlay_system.cpp
+        src/systems/fade_overlay_system.h
         src/components/hud_element.h
         src/systems/hud_transform_system.cpp
         src/systems/hud_transform_system.h

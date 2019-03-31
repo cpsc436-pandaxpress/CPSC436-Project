@@ -26,7 +26,7 @@ void PandaDamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
         if(panda.recovering && interactable.grounded){
             panda.recovering = false;
         }
-        if (panda.hurt && !panda.invincible) {
+        if (panda.hurt && !panda.invincible && panda.alive || health.health_points == 0) {
             // Do all damage calcs here
             health.health_points--;
             blackboard.soundManager.playSFX(SFX_PANDA_HURT);
@@ -42,7 +42,7 @@ void PandaDamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
             // Prevent Player control until hit ground
             panda.recovering = true;
 
-            // Make invincible
+            // Make invincibleh
             panda.invincible = true;
             timer.save_watch(DMG_TIMER_LABEL, DMG_INVINCIBLE_TIMER);
         }
@@ -51,9 +51,24 @@ void PandaDamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
             panda.invincible = false;
             timer.remove(DMG_TIMER_LABEL);
         }
-
-        if (health.health_points <= 0) {
+        if (health.health_points == 0){
+            dying = true;
             panda.alive = false;
+        }
+        // start of dying animation
+        if (dying && interactable.grounded) {
+            timer.save_watch(DEATH_TIMER_LABEL, DEATH_TIMER);
+            dying = false;
+        }
+
+        if (health.health_points < 0 && !panda.hurt && interactable.grounded) {
+            velocity.x_velocity = 0.f;
+            velocity.y_velocity = 0.f;
+        }
+        //end of dying animation
+        if (timer.exists(DEATH_TIMER_LABEL) && timer.is_done(DEATH_TIMER_LABEL)) {
+            panda.dead = true;
+            timer.remove(DEATH_TIMER_LABEL);
         }
         panda.hurt = false; // Clear DMG flag
     }
