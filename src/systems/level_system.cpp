@@ -3,6 +3,7 @@
 //
 
 #include <components/timer.h>
+#include <components/layer.h>
 #include <components/food.h>
 #include "level_system.h"
 
@@ -34,6 +35,7 @@ void LevelSystem::generateEntity(char value, float x, float y,
             registry.assign<Sprite>(platform, texture, shader, mesh);
             registry.assign<Collidable>(platform, texture.width() * scaleX,
                                         texture.height() * scaleY);
+            registry.assign<Layer>(platform, TERRAIN_LAYER);
         }
             break;
         case '3': {
@@ -56,6 +58,7 @@ void LevelSystem::generateEntity(char value, float x, float y,
             registry.assign<Velocity>(ghost, -0.f, 0.f);
             registry.assign<Collidable>(ghost, texture.width() * scaleX,
                                         texture.height() * scaleY);
+            registry.assign<Layer>(ghost, ENEMY_LAYER);
         }
             break;
         case '5': {
@@ -76,7 +79,8 @@ void LevelSystem::generateEntity(char value, float x, float y,
             registry.assign<Collidable>(llama, texture.width() * scaleX - 150.f,
                                         texture.height() * scaleY - 10.f);
             registry.assign<ObeysGravity>(llama);
-            auto &timer = registry.assign<Timer>(llama);
+            registry.assign<Layer>(llama, ENEMY_LAYER);
+            auto& timer = registry.assign<Timer>(llama);
             timer.save_watch(SPIT_TIMER_LABEL, 2.3f);
         }
             break;
@@ -95,7 +99,9 @@ void LevelSystem::generateEntity(char value, float x, float y,
                                        scale * 1.8f);
             registry.assign<Sprite>(stalagmite2, texture, shader, mesh);
             registry.assign<Collidable>(stalagmite2, texture.width() * scale,
-                                        texture.height() * scale * 1.8);
+                                        texture.height() * scale*1.8);
+            registry.assign<Layer>(stalagmite2, TERRAIN_LAYER);
+
             break;
         }
         case '7': {
@@ -112,6 +118,8 @@ void LevelSystem::generateEntity(char value, float x, float y,
             registry.assign<Sprite>(stalagmite, texture, shader, mesh);
             registry.assign<Collidable>(stalagmite, texture.width() * scale * 2.f,
                                         texture.height() * scale);
+            registry.assign<Layer>(stalagmite, TERRAIN_LAYER);
+
         }
             break;
         case '8': {
@@ -134,7 +142,8 @@ void LevelSystem::generateEntity(char value, float x, float y,
 
             registry.assign<FallingPlatform>(falling_platform);
             registry.assign<Velocity>(falling_platform, 0.f, 0.f);
-            auto &timer = registry.assign<Timer>(falling_platform);
+            registry.assign<Timer>(falling_platform);
+            registry.assign<Layer>(falling_platform, TERRAIN_LAYER);
 
         }
             break;
@@ -215,6 +224,7 @@ void LevelSystem::generate_bread(bool move_left, float x, float y, Blackboard &b
     registry.assign<Collidable>(bread, texture.width() * scaleX,
                                 texture.height() * scaleY);
     registry.assign<ObeysGravity>(bread);
+    registry.assign<Layer>(bread, ENEMY_LAYER);
 }
 
 /*

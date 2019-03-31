@@ -2,6 +2,7 @@
 // Created by Rebecca Roth on 2019-03-03.
 //
 
+#include <components/layer.h>
 #include "enemy_system.h"
 
 EnemySystem::EnemySystem():
@@ -42,6 +43,7 @@ void EnemySystem::generate_projectile(float x, float y, bool spit_left, Blackboa
     registry.assign<Interactable>(projectile);
     registry.assign<Collidable>(projectile, texture.width() * scaleY,
                                 texture.height() * scaleY);
+    registry.assign<Layer>(projectile, PROJECTILE_LAYER);
 }
 
 void EnemySystem::handle_bread(vec2 cam_position, vec2 cam_size, SceneID sceneid, Blackboard &blackboard, entt::DefaultRegistry &registry){
