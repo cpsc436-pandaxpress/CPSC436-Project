@@ -251,11 +251,7 @@ void HorizontalScene::create_score_text(Blackboard &blackboard) {
 }
 
 void HorizontalScene::set_mode(SceneMode mode) {
-    if (mode == STORY) {
-        level_system.set_seed(LevelSystem::STORY_SEED);
-    } else if (mode == ENDLESS) {
-        level_system.set_seed((unsigned int) time(nullptr));
-    }
+    level_system.set_mode(mode);
 }
 
 void HorizontalScene::create_fade_overlay(Blackboard &blackboard) {

@@ -9,6 +9,7 @@
 #include <util/blackboard.h>
 #include <entt/entity/registry.hpp>
 #include <components/timer.h>
+#include <scene/scene_mode.h>
 #include "level_system.h"
 
 class VerticalLevelSystem : public LevelSystem {
@@ -32,6 +33,8 @@ private:
 
     Timer difficulty_timer;
 
+    SceneMode mode_;
+
 public:
 
     VerticalLevelSystem();
@@ -42,7 +45,7 @@ public:
 
     void destroy_entities(entt::DefaultRegistry &registry);
 
-    void set_seed(unsigned int seed);
+    void set_mode(SceneMode mode);
 };
 
 

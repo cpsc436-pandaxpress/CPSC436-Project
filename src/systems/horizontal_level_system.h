@@ -29,6 +29,8 @@ class HorizontalLevelSystem : public LevelSystem {
 
     Timer difficulty_timer;
 
+    SceneMode mode_;
+
 public:
 
     HorizontalLevelSystem();
@@ -39,5 +41,5 @@ public:
 
     void destroy_entities(entt::DefaultRegistry &registry);
 
-    void set_seed(unsigned int seed);
+    void set_mode(SceneMode mode);
 };
