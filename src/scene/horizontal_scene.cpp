@@ -8,7 +8,7 @@
 #include <components/interactable.h>
 #include <components/causes_damage.h>
 #include <components/velocity.h>
-#include <components/pause.h>
+#include <components/pause_menu.h>
 #include <components/timer.h>
 #include <graphics/health_bar.h>
 #include <graphics/cave.h>
@@ -39,7 +39,8 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         text_render_system(),
         text_transform_system(),
         score_system(HORIZONTAL_SCENE_ID),
-        pause_menu_transform_system() {
+        pause_menu_transform_system(),
+        pause_menu_render_system() {
     init_scene(blackboard);
     gl_has_errors("horizontal_scene");
 }
@@ -134,6 +135,9 @@ void HorizontalScene::render(Blackboard &blackboard) {
     auto &interactable = registry_.get<Interactable>(panda_entity);
     if ((!panda.alive && interactable.grounded) || pause) {
         fade_overlay_render_system.update(blackboard, registry_);
+    }
+    if (pause){
+        pause_menu_render_system.update(blackboard, registry_);
     }
 }
 
@@ -250,7 +254,7 @@ void HorizontalScene::create_pause_menu(Blackboard &blackboard) {
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
     registry_.assign<Sprite>(pause_menu_entity, texture, shader, mesh);
-    registry_.assign<Pause>(pause_menu_entity);
+    registry_.assign<PauseMenu>(pause_menu_entity);
 }
 
 

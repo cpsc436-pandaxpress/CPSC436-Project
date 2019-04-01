@@ -13,7 +13,7 @@
 #include <components/jacko.h>
 #include <components/chases.h>
 #include <components/timer.h>
-#include <components/pause.h>
+#include <components/pause_menu.h>
 #include <components/timer.h>
 #include <graphics/health_bar.h>
 #include <components/layer.h>
@@ -41,7 +41,8 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         health_bar_transform_system(),
         fade_overlay_system(),
         fade_overlay_render_system(),
-        pause_menu_transform_system() {
+        pause_menu_transform_system(),
+        pause_menu_render_system() {
     init_scene(blackboard);
     reset_scene(blackboard); // idk why??? but this is required
     gl_has_errors();
@@ -105,6 +106,9 @@ void BossScene::render(Blackboard &blackboard) {
     auto &panda = registry_.get<Panda>(panda_entity);
     if (!panda.alive) {
         fade_overlay_render_system.update(blackboard, registry_);
+    }
+    if (pause) {
+        pause_menu_render_system.update(blackboard, registry_);
     }
 }
 
@@ -281,7 +285,7 @@ void BossScene::create_pause_menu(Blackboard &blackboard) {
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
     registry_.assign<Sprite>(pause_menu_entity, texture, shader, mesh);
-    registry_.assign<Pause>(pause_menu_entity);
+    registry_.assign<PauseMenu>(pause_menu_entity);
 }
 
 

@@ -16,7 +16,7 @@
 #include <graphics/fade_overlay.h>
 #include <components/score.h>
 #include <components/layer.h>
-#include <components/pause.h>
+#include <components/pause_menu.h>
 #include "vertical_scene.h"
 #include "util/constants.h"
 
@@ -37,7 +37,8 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         text_transform_system(),
         text_render_system(),
         score_system(VERTICAL_SCENE_ID),
-        pause_menu_transform_system() {
+        pause_menu_transform_system(),
+        pause_menu_render_system() {
     init_scene(blackboard);
     gl_has_errors("vertical_scene");
 }
@@ -164,6 +165,9 @@ void VerticalScene::render(Blackboard &blackboard) {
     if (!panda.alive && interactable.grounded) {
         fade_overlay_render_system.update(blackboard, registry_);
     }
+    if (pause) {
+        pause_menu_render_system.update(blackboard, registry_);
+    }
 }
 
 void VerticalScene::reset_scene(Blackboard &blackboard) {
@@ -245,6 +249,6 @@ void VerticalScene::create_pause_menu(Blackboard &blackboard) {
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
     registry_.assign<Sprite>(pause_menu_entity, texture, shader, mesh);
-    registry_.assign<Pause>(pause_menu_entity);
+    registry_.assign<PauseMenu>(pause_menu_entity);
 }
 
