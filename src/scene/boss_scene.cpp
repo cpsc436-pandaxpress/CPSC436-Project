@@ -55,19 +55,18 @@ void BossScene::update(Blackboard &blackboard) {
 
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
         if (pause) {
-            blackboard.camera.set_position(0, 0);
-            reset_scene(blackboard);
-            registry_.destroy(pause_menu_entity);
-            change_scene(MAIN_MENU_SCENE_ID);
             pause = false;
-            return;
+            registry_.destroy(pause_menu_entity);
         } else {
             pause = true;
             create_pause_menu(blackboard);
         }
     } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN) && pause) {
-        pause = false;
+        blackboard.camera.set_position(0, 0);
+        reset_scene(blackboard);
         registry_.destroy(pause_menu_entity);
+        change_scene(MAIN_MENU_SCENE_ID);
+        pause = false;
     }
 
     if (!pause) {
