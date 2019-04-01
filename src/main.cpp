@@ -25,8 +25,9 @@
 #include <graphics/health_bar.h>
 #include <graphics/cave.h>
 
-int main(int argc, char** argv) {
 
+
+int start() {
     auto window = Window();
 
     window.initialize("Express Panda", 800, 450);
@@ -54,6 +55,10 @@ int main(int argc, char** argv) {
     blackboard.input_manager.track(SDL_SCANCODE_SPACE);
     blackboard.input_manager.track(SDL_SCANCODE_RETURN);
     blackboard.input_manager.track(SDL_SCANCODE_ESCAPE);
+    blackboard.input_manager.track(SDL_SCANCODE_A);
+    blackboard.input_manager.track(SDL_SCANCODE_D);
+    blackboard.input_manager.track(SDL_SCANCODE_W);
+
 
     blackboard.shader_manager.load_shader(
             shaders_path("sprite.vs.glsl"),
@@ -75,15 +80,21 @@ int main(int argc, char** argv) {
             shaders_path("text.vs.glsl"),
             shaders_path("text.fs.glsl"), "text");
 
+    blackboard.shader_manager.load_shader(
+            shaders_path("fade.vs.glsl"),
+            shaders_path("fade.fs.glsl"),"fade");
+
     blackboard.texture_manager.load_texture(textures_path("panda.png"), "panda");
     blackboard.texture_manager.load_texture(textures_path("panda_sprite_sheet.png"), "panda_sprites");
     blackboard.texture_manager.load_texture(textures_path("grass_block_1.png"), "platform1");
     blackboard.texture_manager.load_texture(textures_path("platform_center_grass.png"), "platform_center_grass");
     blackboard.texture_manager.load_texture(textures_path("grass_block_2.png"), "platform2");
     blackboard.texture_manager.load_texture(textures_path("bread_sprite_sheet.png"), "bread");
-    blackboard.texture_manager.load_texture(textures_path("play_text.png"), "play_text");
-    blackboard.texture_manager.load_texture(textures_path("levels_text.png"), "levels_text");
-    blackboard.texture_manager.load_texture(textures_path("config_text.png"), "config_text");
+
+    blackboard.texture_manager.load_texture(textures_path("story_text.png"), "story_text");
+    blackboard.texture_manager.load_texture(textures_path("endless_jungle_text.png"), "endless_jungle_text");
+    blackboard.texture_manager.load_texture(textures_path("endless_sky_text.png"), "endless_sky_text");
+    blackboard.texture_manager.load_texture(textures_path("jacko_text.png"), "jacko_text");
     blackboard.texture_manager.load_texture(textures_path("pixel.png"), "pixel");
     blackboard.texture_manager.load_texture(textures_path("menu_full.png"), "splash");
     blackboard.texture_manager.load_texture(textures_path("ghost_sprite_sheet.png"), "ghost");
@@ -93,8 +104,7 @@ int main(int argc, char** argv) {
     blackboard.texture_manager.load_texture(textures_path("bg_front.png"), "bg_front");
     blackboard.texture_manager.load_texture(textures_path("bg_middle.png"), "bg_middle");
     blackboard.texture_manager.load_texture(textures_path("bg_top.png"), "bg_top");
-    blackboard.texture_manager.load_texture(textures_path("tutorial.png"), "tutorial");
-    blackboard.texture_manager.load_texture(textures_path("tutorial2.png"), "tutorial_bread");
+    blackboard.texture_manager.load_texture(textures_path("pause_menu.png"), "pause_menu");
 
     blackboard.texture_manager.load_texture(textures_path("jacko_sprite_sheet.png"), "jacko");
     blackboard.texture_manager.load_texture(textures_path("burger.png"), "burger");
@@ -119,11 +129,10 @@ int main(int argc, char** argv) {
 
     // initialize scenes here
     MainMenuScene main_menu(blackboard, scene_manager);
-    main_menu.add_item(blackboard, "play_text", HORIZONTAL_SCENE_ID);
-
-    //TODO: implement level select and config scenes
-    main_menu.add_item(blackboard, "levels_text", VERTICAL_SCENE_ID);
-    main_menu.add_item(blackboard, "config_text",  BOSS_SCENE_ID);
+    main_menu.add_item(blackboard, "story_text", STORY_JUNGLE_SCENE_ID);
+    main_menu.add_item(blackboard, "endless_jungle_text", ENDLESS_JUNGLE_SCENE_ID);
+    main_menu.add_item(blackboard, "endless_sky_text", ENDLESS_SKY_SCENE_ID);
+    main_menu.add_item(blackboard, "jacko_text",  BOSS_SCENE_ID);
     scene_manager.add_scene(MAIN_MENU_SCENE_ID, (Scene*)(&main_menu));
 
 
@@ -136,9 +145,10 @@ int main(int argc, char** argv) {
 
     VerticalScene vertical_scene(blackboard, scene_manager);
 
+    scene_manager.add_scene(STORY_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY);
+    scene_manager.add_scene(ENDLESS_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), ENDLESS);
+    scene_manager.add_scene(ENDLESS_SKY_SCENE_ID, (Scene*)(&vertical_scene), ENDLESS);
     scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene));
-    scene_manager.add_scene(VERTICAL_SCENE_ID, (Scene*)(&vertical_scene));
-    scene_manager.add_scene(HORIZONTAL_SCENE_ID, (Scene*)(&horizontal_scene));
 
     // set the first scene
 
@@ -164,4 +174,17 @@ int main(int argc, char** argv) {
 
     window.destroy();
     return 0;
+}
+
+int main(int argc, char** argv) {
+    int init = !SDL_Init(0);
+
+    if (init) {
+        int result = start();
+        SDL_Quit();
+
+        return result;
+    } else {
+        return EXIT_FAILURE;
+    }
 }

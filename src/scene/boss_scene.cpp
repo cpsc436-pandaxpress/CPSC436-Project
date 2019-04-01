@@ -13,10 +13,11 @@
 #include <components/jacko.h>
 #include <components/chases.h>
 #include <components/timer.h>
-#include <components/tutorial.h>
+#include <components/pause_menu.h>
 #include <components/timer.h>
 #include <graphics/health_bar.h>
 #include <components/layer.h>
+#include <graphics/fade_overlay.h>
 #include "boss_scene.h"
 #include "util/constants.h"
 
@@ -25,48 +26,73 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         level_system(),
         sprite_render_system(),
         sprite_transform_system(),
-        background_transform_system(BOSS_SCENE_ID),
+        background_transform_system(BOSS_TYPE),
         background_render_system(),
         physics_system(),
-        player_movement_system(BOSS_SCENE_ID),
+        player_movement_system(BOSS_TYPE),
         chase_system(),
         jacko_ai_system(blackboard, registry_),
-        player_animation_system(BOSS_SCENE_ID),
+        player_animation_system(BOSS_TYPE),
         timer_system(),
         panda_dmg_system(),
         falling_platform_system(),
         enemy_animation_system(),
         health_bar_render_system(),
-        health_bar_transform_system() {
+        health_bar_transform_system(),
+        fade_overlay_system(),
+        fade_overlay_render_system(),
+        pause_menu_transform_system(),
+        pause_menu_render_system() {
     init_scene(blackboard);
     reset_scene(blackboard); // idk why??? but this is required
     gl_has_errors();
 }
 
 void BossScene::update(Blackboard &blackboard) {
+    auto &panda = registry_.get<Panda>(panda_entity);
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+    auto &interactable = registry_.get<Interactable>(panda_entity);
+
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
+        if (pause) {
+            pause = false;
+            registry_.destroy(pause_menu_entity);
+        } else {
+            pause = true;
+            create_pause_menu(blackboard);
+        }
+    } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN) && pause) {
         blackboard.camera.set_position(0, 0);
         reset_scene(blackboard);
+        registry_.destroy(pause_menu_entity);
         change_scene(MAIN_MENU_SCENE_ID);
-        return;
+        pause = false;
     }
 
-    update_camera(blackboard);
-    update_panda(blackboard);
+    if (!pause) {
+        if (panda.alive && !panda.dead) {
+            update_camera(blackboard);
+            player_movement_system.update(blackboard, registry_);
+        } else if (!panda.alive && interactable.grounded) {
+            fade_overlay_system.update(blackboard, registry_);
+        }
+        update_panda(blackboard);
 
-    level_system.update(blackboard, registry_);
-    chase_system.update(blackboard, registry_);
-    player_movement_system.update(blackboard, registry_);
-    physics_system.update(blackboard, registry_);
-    panda_dmg_system.update(blackboard, registry_);
-    health_bar_transform_system.update(blackboard, registry_);
-    jacko_ai_system.update(blackboard, registry_);
-    sprite_transform_system.update(blackboard, registry_);
-    player_animation_system.update(blackboard, registry_);
-    enemy_animation_system.update(blackboard, registry_);
-    timer_system.update(blackboard, registry_);
-    falling_platform_system.update(blackboard, registry_);
-    background_transform_system.update(blackboard, registry_);
+        level_system.update(blackboard, registry_);
+        chase_system.update(blackboard, registry_);
+        physics_system.update(blackboard, registry_);
+        panda_dmg_system.update(blackboard, registry_);
+        health_bar_transform_system.update(blackboard, registry_);
+        jacko_ai_system.update(blackboard, registry_);
+        sprite_transform_system.update(blackboard, registry_);
+        player_animation_system.update(blackboard, registry_);
+        enemy_animation_system.update(blackboard, registry_);
+        timer_system.update(blackboard, registry_);
+        falling_platform_system.update(blackboard, registry_);
+        background_transform_system.update(blackboard, registry_);
+    } else {
+        pause_menu_transform_system.update(blackboard, registry_);
+    }
 }
 
 void BossScene::render(Blackboard &blackboard) {
@@ -75,6 +101,14 @@ void BossScene::render(Blackboard &blackboard) {
     background_render_system.update(blackboard, registry_); // render background first
     sprite_render_system.update(blackboard, registry_);
     health_bar_render_system.update(blackboard, registry_);
+
+    auto &panda = registry_.get<Panda>(panda_entity);
+    if (!panda.alive) {
+        fade_overlay_render_system.update(blackboard, registry_);
+    }
+    if (pause) {
+        pause_menu_render_system.update(blackboard, registry_);
+    }
 }
 
 void BossScene::update_panda(Blackboard &blackboard) {
@@ -85,7 +119,7 @@ void BossScene::update_panda(Blackboard &blackboard) {
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &panda_collidable = registry_.get<Collidable>(panda_entity);
 
-    if (transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || !panda.alive) {
+    if (transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || panda.dead) {
         reset_scene(blackboard);
     }
 }
@@ -103,9 +137,9 @@ void BossScene::init_scene(Blackboard &blackboard) {
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
     create_background(blackboard);
-    create_food(blackboard);
-    create_jacko(blackboard, burger_entity);
     create_panda(blackboard);
+    create_jacko(blackboard, panda_entity);
+    create_fade_overlay(blackboard);
     level_system.init();
 }
 
@@ -113,6 +147,7 @@ void BossScene::reset_scene(Blackboard &blackboard) {
     level_system.destroy_entities(registry_);
     registry_.destroy(panda_entity);
     registry_.destroy(jacko_entity);
+    registry_.destroy(fade_overlay_entity);
     for (uint32_t e: bg_entities) {
         registry_.destroy(e);
     }
@@ -183,26 +218,6 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
                                                   meshHealth, shaderHealth, size, scale);
 }
 
-void BossScene::create_food(Blackboard &blackboard) {
-    burger_entity = registry_.create();
-
-    auto texture = blackboard.texture_manager.get_texture("burger");
-    auto shader = blackboard.shader_manager.get_shader("sprite");
-    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-
-    float scaleY = 50.0 / texture.height();
-    float scaleX = 50.0 / texture.width();
-    registry_.assign<Transform>(burger_entity, 300, 100, 0., scaleX, scaleY);
-    registry_.assign<Sprite>(burger_entity, texture, shader, mesh);
-    registry_.assign<Food>(burger_entity);
-    registry_.assign<Interactable>(burger_entity);
-    registry_.assign<ObeysGravity>(burger_entity);
-    registry_.assign<Velocity>(burger_entity);
-    registry_.assign<Collidable>(burger_entity, texture.width() * scaleX, texture.height() * scaleY);
-    registry_.assign<Layer>(burger_entity, ITEM_LAYER);
-
-}
-
 void BossScene::create_background(Blackboard &blackboard) {
     std::vector<Texture> textures;
     textures.reserve(4);
@@ -229,4 +244,30 @@ void BossScene::create_background(Blackboard &blackboard) {
     }
 
 }
+
+void BossScene::create_fade_overlay(Blackboard &blackboard) {
+    fade_overlay_entity = registry_.create();
+    auto shaderFade = blackboard.shader_manager.get_shader("fade");
+    auto meshFade = blackboard.mesh_manager.get_mesh("health");
+    float height = blackboard.camera.size().y;
+    float width = blackboard.camera.size().x;
+    vec2 size = {width, height};
+    auto &fade = registry_.assign<FadeOverlay>(fade_overlay_entity, meshFade, shaderFade, size);
+}
+
+void BossScene::create_pause_menu(Blackboard &blackboard) {
+    pause_menu_entity = registry_.create();
+
+    auto texture = blackboard.texture_manager.get_texture("pause_menu");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+
+    registry_.assign<Sprite>(pause_menu_entity, texture, shader, mesh);
+    registry_.assign<PauseMenu>(pause_menu_entity);
+}
+
+
+
+
+
 
