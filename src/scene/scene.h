@@ -9,6 +9,7 @@
 #include "../util/blackboard.h"
 #include "../util/input_manager.h"
 #include "../util/constants.h"
+#include "scene_mode.h"
 
 // Simple int ID
 
@@ -34,6 +35,8 @@ public:
 
     // render the scene
     virtual void render(Blackboard& blackboard) = 0;
+
+    virtual void set_mode(SceneMode mode);
 
 
 protected:

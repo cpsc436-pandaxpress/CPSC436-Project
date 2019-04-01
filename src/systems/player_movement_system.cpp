@@ -13,10 +13,10 @@
 #include "scene/horizontal_scene.h"
 
 
-PlayerMovementSystem::PlayerMovementSystem(SceneID scene_id) :
-        scene_id(scene_id) {}
+PlayerMovementSystem::PlayerMovementSystem(SceneType scene_type) :
+    scene_type(scene_type) {}
 
-void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry) {
     auto view = registry.view<Panda, Transform, Velocity, Interactable, ObeysGravity>();
     for (auto entity: view) {
         auto &panda = view.get<Panda>(entity);
@@ -50,18 +50,18 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
         }
 
         if (!panda.recovering) {
-            switch (scene_id) {
-                case HORIZONTAL_SCENE_ID:
+            switch (scene_type) {
+                case JUNGLE_TYPE:
                     update_horizontal_scene(blackboard, velocity);
                     break;
-                case VERTICAL_SCENE_ID:
+                case SKY_TYPE:
                     update_vertical_scene(blackboard, velocity, panda);
                     break;
-                case BOSS_SCENE_ID:
+                case BOSS_TYPE:
                     update_boss_scene(blackboard, velocity, panda);
                     break;
                 default:
-                    fprintf(stderr, "Invalid scene ID: %d\n", scene_id);
+                    fprintf(stderr, "Invalid scene ID: %d\n", scene_type);
             }
         }
 
@@ -76,6 +76,7 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
             blackboard.soundManager.playSFX(SFX_JUMP);
             holding_jump = true;
         }
+
 
     }
 }

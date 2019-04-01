@@ -11,16 +11,18 @@
 #include <SDL_mixer.h>
 #include <sstream>
 #include "util/constants.h"
+#include <unordered_map>
 
 class SoundManager {
 public:
     SoundManager();
+    ~SoundManager();
     void init();
     void changeBackgroundMusic(SceneID id);
     void playSFX(SFXID id);
 private:
-    Mix_Music* m_background_music;
-    Mix_Chunk* m_sfx;
+    std::unordered_map<SceneID, Mix_Music*> m_background_music;
+    std::unordered_map<SFXID, Mix_Chunk*> m_sfx;
 };
 
 

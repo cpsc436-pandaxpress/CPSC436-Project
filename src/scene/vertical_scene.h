@@ -13,7 +13,7 @@
 #include <systems/player_movement_system.h>
 #include <systems/player_animation_system.h>
 #include <systems/falling_platform_system.h>
-#include <systems/vertical_level_system.h>
+#include <level/vertical_level_system.h>
 #include <systems/timer_system.h>
 #include <systems/panda_damage_system.h>
 #include <systems/background_render_system.h>
@@ -89,6 +89,8 @@ public:
     virtual void render(Blackboard& blackboard) override;
 
     void create_background(Blackboard &blackboard);
+
+    void set_mode(SceneMode mode) override;
 
     static constexpr float CAMERA_SPEED = 250.f;
 };

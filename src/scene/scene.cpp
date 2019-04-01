@@ -13,3 +13,7 @@ Scene::Scene(SceneManager &scene_manager) :
 bool Scene::change_scene(SceneID id) {
     return scene_manager_.change_scene(id);
 }
+
+void Scene::set_mode(SceneMode mode) {
+
+}

@@ -17,7 +17,7 @@
 
 GhostMovementSystem::GhostMovementSystem() {}
 
-void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry, SceneID sceneid) {
+void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry, SceneType scene_type) {
     vec2 cam_position = blackboard.camera.position();
     vec2 cam_size = blackboard.camera.size();
 
@@ -31,11 +31,11 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
         if (ghost.done)
             break;
         else if (!ghost.onScreen) {
-            if ((sceneid == HORIZONTAL_SCENE_ID) && (gh_transform.x + gh_collidable.width / 2 < cam_position.x + cam_size.x / 2)) {
+            if ((scene_type == JUNGLE_TYPE) && (gh_transform.x + gh_collidable.width / 2 < cam_position.x + cam_size.x / 2)) {
                 ghost.onScreen = true;
                 ghost.waiting = true;
             }
-            else if ((sceneid == VERTICAL_SCENE_ID) && (gh_transform.y - gh_collidable.height > cam_position.y - cam_size.x / 4)) {
+            else if ((scene_type == SKY_TYPE) && (gh_transform.y - gh_collidable.height > cam_position.y - cam_size.x / 4)) {
                 ghost.onScreen = true;
                 ghost.waiting = true;
             }
@@ -58,10 +58,9 @@ void GhostMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& 
                 ghost.start_pt.y = gh_transform.y;
             }
             else {
-                if (sceneid == HORIZONTAL_SCENE_ID)
+                if (scene_type == JUNGLE_TYPE)
                     gh_velocity.x_velocity = HorizontalScene::CAMERA_SPEED;
                 else {
-                    printf("here\n");
                     gh_velocity.y_velocity = -VerticalScene::CAMERA_SPEED;
                 }
                 if (int(llround(floor(ghost.waittime))) % 2 == 0) {

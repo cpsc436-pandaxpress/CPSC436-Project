@@ -8,7 +8,7 @@
 
 #include "scene.h"
 #include <queue>
-#include <systems/horizontal_level_system.h>
+#include <level/horizontal_level_system.h>
 #include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
 #include <systems/timer_system.h>
@@ -92,6 +92,8 @@ public:
     virtual void update(Blackboard& blackboard) override;
 
     virtual void render(Blackboard& blackboard) override;
+
+    void set_mode(SceneMode mode) override;
 
     static constexpr float CAMERA_SPEED = 400.f;
 };

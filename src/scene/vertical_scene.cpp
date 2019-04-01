@@ -26,19 +26,20 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         sprite_transform_system(),
         sprite_render_system(),
         physics_system(),
-        player_movement_system(VERTICAL_SCENE_ID),
-        player_animation_system(VERTICAL_SCENE_ID),
+        player_movement_system(SKY_TYPE),
+        player_animation_system(SKY_TYPE),
         panda_dmg_system(),
         background_render_system(),
         falling_platform_system(),
-        background_transform_system(VERTICAL_SCENE_ID),
+        background_transform_system(SKY_TYPE),
         enemy_system(),
         enemy_animation_system(),
         text_transform_system(),
         text_render_system(),
-        score_system(VERTICAL_SCENE_ID),
+        score_system(SKY_TYPE),
         pause_menu_transform_system(),
-        pause_menu_render_system() {
+        pause_menu_render_system()
+{
     init_scene(blackboard);
     gl_has_errors("vertical_scene");
 }
@@ -90,6 +91,8 @@ void VerticalScene::update(Blackboard &blackboard) {
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
     auto &interactable = registry_.get<Interactable>(panda_entity);
+    auto &transform = registry_.get<Transform>(panda_entity);
+    auto &panda_collidable = registry_.get<Collidable>(panda_entity);
 
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
         if (pause) {
@@ -107,12 +110,9 @@ void VerticalScene::update(Blackboard &blackboard) {
         pause = false;
         return;
     }
-
     vec2 cam_size = blackboard.camera.size();
     vec2 cam_position = blackboard.camera.position();
 
-    auto &transform = registry_.get<Transform>(panda_entity);
-    auto &panda_collidable = registry_.get<Collidable>(panda_entity);
     if (!pause) {
         if (panda.alive && !panda.dead) {
             blackboard.camera.set_position(cam_position.x,
@@ -229,6 +229,10 @@ void VerticalScene::create_score_text(Blackboard &blackboard) {
     auto &text = registry_.assign<Text>(score_entity, shader, mesh, font, textVal);
     registry_.assign<Transform>(score_entity, 0., 0., 0., 1.f, 1.f);
     registry_.assign<Score>(score_entity);
+}
+
+void VerticalScene::set_mode(SceneMode mode) {
+    level_system.set_mode(mode);
 }
 
 void VerticalScene::create_fade_overlay(Blackboard &blackboard) {

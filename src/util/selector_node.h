@@ -17,6 +17,7 @@ public:
     std::vector<Node*> getChildren();
     void addChild (Node* child);
     SelectorNode();
+    ~SelectorNode() override;
 };
 
 

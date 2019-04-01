@@ -6,9 +6,22 @@
 
 SoundManager::SoundManager() {}
 
+SoundManager::~SoundManager() {
+    for (auto music : m_background_music) {
+        Mix_FreeMusic(music.second);
+    }
+
+    for (auto sfx : m_sfx) {
+        Mix_FreeChunk(sfx.second);
+    }
+
+    SDL_QuitSubSystem(SDL_INIT_AUDIO);
+    Mix_Quit();
+    Mix_CloseAudio();
+}
 
 void SoundManager::init() {
-    if (SDL_Init(SDL_INIT_AUDIO) < 0)
+    if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
     {
         fprintf(stderr, "Failed to initialize SDL Audio");
 
@@ -19,34 +32,25 @@ void SoundManager::init() {
         fprintf(stderr, "Failed to open audio device");
 
     }
-    m_background_music =  Mix_LoadMUS(audio_path("PE.ogg"));
-    Mix_PlayMusic(m_background_music, -1);
+
+    m_sfx[SFX_JUMP] = Mix_LoadWAV(audio_path("jump.wav"));
+    m_sfx[SFX_JACKO_LAUGH] = Mix_LoadWAV(audio_path("JackoLaugh.wav"));
+    m_sfx[SFX_PANDA_HURT] = Mix_LoadWAV(audio_path("PandaHurt.wav"));
+
+    m_background_music[MAIN_MENU_SCENE_ID] = Mix_LoadMUS(audio_path("PE.ogg"));
+    m_background_music[STORY_JUNGLE_SCENE_ID] = Mix_LoadMUS(audio_path("PE.ogg"));
+    m_background_music[ENDLESS_JUNGLE_SCENE_ID] = Mix_LoadMUS(audio_path("PE.ogg"));
+    m_background_music[STORY_SKY_SCENE_ID] = Mix_LoadMUS(audio_path("vertical2.ogg"));
+    m_background_music[ENDLESS_SKY_SCENE_ID] = Mix_LoadMUS(audio_path("vertical2.ogg"));
+    m_background_music[BOSS_SCENE_ID] = Mix_LoadMUS(audio_path("graveyard.ogg"));
+
+    Mix_PlayMusic(m_background_music[MAIN_MENU_SCENE_ID], -1);
 }
 
 void SoundManager::changeBackgroundMusic(SceneID id) {
-if(id==BOSS_SCENE_ID){
-        m_background_music = Mix_LoadMUS(audio_path("graveyard.ogg"));
-    }else if(id==VERTICAL_SCENE_ID){
-        m_background_music = Mix_LoadMUS(audio_path("vertical2.ogg"));
-    }
-    else{
-        m_background_music = Mix_LoadMUS(audio_path("PE.ogg"));
-    }
-    Mix_PlayMusic(m_background_music, -1);
+    Mix_PlayMusic(m_background_music[id], -1);
 }
 
 void SoundManager::playSFX(SFXID id) {
-    if(id==SFX_JUMP){
-        m_sfx = Mix_LoadWAV(audio_path("jump.wav"));
-        Mix_PlayChannel(1, m_sfx,0);
-    }
-    if(id==SFX_JACKO_LAUGH){
-        m_sfx = Mix_LoadWAV(audio_path("JackoLaugh.wav"));
-        Mix_PlayChannel(2, m_sfx,0);
-    }
-    if(id==SFX_PANDA_HURT){
-        m_sfx = Mix_LoadWAV(audio_path("PandaHurt.wav"));
-        Mix_PlayChannel(3, m_sfx,0);
-    }
-
+    Mix_PlayChannel(id, m_sfx[id], 0);
 }

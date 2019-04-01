@@ -13,6 +13,7 @@
 class Node {
     public:
         virtual bool run();
+        virtual ~Node() = default;
 
 };
 

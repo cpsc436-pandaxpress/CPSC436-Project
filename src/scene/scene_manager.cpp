@@ -33,6 +33,11 @@ bool SceneManager::change_scene(SceneID id) {
         current_scene_ = id;
         current_scene_set_ = true;
         blackboard.soundManager.changeBackgroundMusic(id);
+
+        if (scene_modes_.count(id) > 0) {
+            scenes_[id]->set_mode(scene_modes_[id]);
+        }
+
         return true;
     }
 }
@@ -48,5 +53,16 @@ void SceneManager::update(Blackboard& blackboard) {
 void SceneManager::render(Blackboard& blackboard) {
     if (current_scene_set_) {
         scenes_[current_scene_]->render(blackboard);
+    }
+}
+
+bool SceneManager::add_scene(SceneID id, Scene* scene, SceneMode mode) {
+    if (scenes_.count(id) > 0 || scene_modes_.count(id) > 0) {
+        return false;
+    }
+    else {
+        scenes_[id] = scene;
+        scene_modes_[id] = mode;
+        return true;
     }
 }

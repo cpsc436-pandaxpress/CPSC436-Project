@@ -6,6 +6,12 @@
 
 SelectorNode::SelectorNode(){}
 
+SelectorNode::~SelectorNode() {
+    for (auto child : children) {
+        delete child;
+    }
+}
+
 /***
  * If any of the children return true the whole node returns true
  * Idea for implementation from http://www.cplusplus.com/forum/general/141582/

@@ -8,7 +8,7 @@
 
 #include "scene.h"
 #include <queue>
-#include <systems/boss_level_system.h>
+#include <level/boss_level_system.h>
 #include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
 #include <systems/panda_damage_system.h>
@@ -86,7 +86,6 @@ public:
                     SceneManager &scene_manager);
 
     virtual void update(Blackboard& blackboard) override;
-    void create_food(Blackboard &blackboard);
     virtual void render(Blackboard& blackboard) override;
 
 };
