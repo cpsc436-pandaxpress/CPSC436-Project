@@ -5,9 +5,9 @@
 #ifndef PANDAEXPRESS_TUTORIAL_H
 #define PANDAEXPRESS_TUTORIAL_H
 
-struct Tutorial {
+struct PauseMenu {
 
-    Tutorial(){}
+    PauseMenu(){}
 };
 #endif //PANDAEXPRESS_TUTORIAL_H
 

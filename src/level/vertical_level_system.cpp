@@ -2,18 +2,24 @@
 // Created by cowan on 17/02/19.
 //
 
-#include <util/csv_reader.h>
 #include <util/constants.h>
 #include "vertical_level_system.h"
 #include <components/timer.h>
 #include <algorithm>
 
 VerticalLevelSystem::VerticalLevelSystem() : LevelSystem() {
-
+    for (int i = 0; i <= MAX_DIFFICULTY; i++) {
+        levels[i] = Level::load_level(i, VERTICAL_LEVEL_TYPE);
+    }
 }
 
 void VerticalLevelSystem::init() {
     LevelSystem::init();
+
+    if (mode_ == ENDLESS) {
+        rng_.init((unsigned int) rand());
+    }
+
     last_row_generated_ = last_row_loaded_ = FIRST_ROW_Y;
     difficulty = MIN_DIFFICULTY;
     difficulty_timer.save_watch(LEVEL_UP_LABEL, LEVEL_UP_INTERVAL);
@@ -25,17 +31,13 @@ void VerticalLevelSystem::load_next_chunk() {
     load_next_chunk(level);
 }
 
-void VerticalLevelSystem::load_next_chunk(int level) {
-    std::string level_path = levels_path("");
-    std::string levelFile = level_path + "vlevel_" + std::to_string(level) + ".csv";
-    CSVReader reader(levelFile);
-    std::vector<std::vector<char>> dataList = reader.getData();
-    for (int i = dataList.size() - 1; i >= 0; i--) {
-        auto line = dataList[i];
+void VerticalLevelSystem::load_next_chunk(int id) {
+    Level lvl = levels[id];
+    for (int y = (int) lvl.height() - 1; y >= 0; y--) {
         std::vector<char> row;
-        row.reserve(line.size());
-        for (int j = 0; j < line.size(); j++) {
-            row.push_back(dataList[i][j]);
+        row.reserve(lvl.width());
+        for (int x = 0; x < lvl.width(); x++) {
+            row.push_back(lvl.get_tile_at(x, y));
         }
         last_row_loaded_ -= CELL_HEIGHT;
         chunks_.push(row);
@@ -105,5 +107,14 @@ void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, fl
         if (transform.y > max_y) {
             registry.destroy(entity);
         }
+    }
+}
+
+void VerticalLevelSystem::set_mode(SceneMode mode) {
+    mode_ = mode;
+    if (mode_ == ENDLESS) {
+        rng_.init((unsigned int) rand());
+    } else if (mode_ == STORY) {
+        rng_.init(STORY_SEED);
     }
 }

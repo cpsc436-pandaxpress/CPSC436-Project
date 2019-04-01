@@ -4,8 +4,9 @@
 #include "scene/horizontal_scene.h"
 
 
-PlayerAnimationSystem::PlayerAnimationSystem(SceneID scene_id) :
-        scene_id(scene_id) {}
+
+PlayerAnimationSystem::PlayerAnimationSystem(SceneType scene_type) :
+        scene_type(scene_type) {}
 
 void PlayerAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
 
@@ -17,18 +18,18 @@ void PlayerAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry
         auto &walkable = view.get<Interactable>(entity);
         auto &sprite = view.get<Sprite>(entity);
 
-        switch (scene_id) {
-            case HORIZONTAL_SCENE_ID:
+        switch (scene_type) {
+            case JUNGLE_TYPE:
                 update_horizontal_scene(blackboard, walkable, sprite, panda);
                 break;
-            case VERTICAL_SCENE_ID:
+            case SKY_TYPE:
                 update_vertical_boss_scene(blackboard, walkable, sprite, panda, transform);
                 break;
-            case BOSS_SCENE_ID:
+            case BOSS_TYPE:
                 update_vertical_boss_scene(blackboard, walkable, sprite, panda, transform);
                 break;
             default:
-                fprintf(stderr, "Invalid scene ID: %d\n", scene_id);
+                fprintf(stderr, "Invalid scene ID: %d\n", scene_type);
         }
 
     }
@@ -68,7 +69,7 @@ void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Inte
     if (panda.alive || !walkable.grounded) {
         row = 1;
         animate(true, frames, index, row, sprite);
-    } else if (!panda.alive && walkable.grounded){
+    } else if (!panda.alive && walkable.grounded) {
         frames = 10;
         frameRate = 15.f;
         if (death_index < frames && (counter != (int) animationTime)) {
@@ -88,10 +89,12 @@ void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, I
     bool idle = true;
     index = 0;
 
-    if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT) && panda.alive) {
+    if (panda.alive && (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT) ||
+                        blackboard.input_manager.key_pressed(SDL_SCANCODE_A))) {
         transform.x_scale = -abs(transform.x_scale);
         idle = false;
-    } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT) && panda.alive) {
+    } else if (panda.alive && (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT) ||
+                               blackboard.input_manager.key_pressed(SDL_SCANCODE_D))) {
         transform.x_scale = abs(transform.x_scale);
         idle = false;
     }
@@ -122,7 +125,7 @@ void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, I
 
     if (panda.alive) {
         animate(true, frames, index, row, sprite);
-    } else if (!panda.alive && walkable.grounded){
+    } else if (!panda.alive && walkable.grounded) {
         frames = 10;
         frameRate = 15.f;
         if (death_index < frames && (counter != (int) animationTime)) {

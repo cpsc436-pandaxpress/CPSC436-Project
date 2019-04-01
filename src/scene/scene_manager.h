@@ -10,11 +10,13 @@
 #include <sstream>
 #include "scene.h"
 #include "../util/blackboard.h"
+#include "scene_mode.h"
 
 
 class SceneManager {
 private:
     std::unordered_map<SceneID, Scene*> scenes_;
+    std::unordered_map<SceneID, SceneMode> scene_modes_;
     Blackboard& blackboard;
     bool current_scene_set_ = false;
 
@@ -26,6 +28,8 @@ public:
     // fails and returns false if another scene exists with the given ID
     // returns true otherwise
     bool add_scene(SceneID id, Scene* scene);
+
+    bool add_scene(SceneID id, Scene* scene, SceneMode mode);
 
     // attempts to change current scene to one with given id
     // if called during update(), will switch scenes after current update()

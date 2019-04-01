@@ -28,6 +28,12 @@ private:
     std::vector<SceneID> button_targets_;
     int selected_button_ = -1;
 
+    const int BUTTON_WIDTH = 625;
+    const int BUTTON_HEIGHT = 140;
+    const int BUTTON_PADDING = 40;
+    const int BUTTON_X =  450;
+    const int BUTTON_Y = -250;
+
 public:
     MainMenuScene(Blackboard& blackboard, SceneManager& scene_manager);
 

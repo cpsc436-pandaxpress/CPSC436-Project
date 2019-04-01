@@ -10,7 +10,7 @@
 #include "score_system.h"
 #include "util/constants.h"
 
-ScoreSystem::ScoreSystem(SceneID scene_id) : scene_id(scene_id) {
+ScoreSystem::ScoreSystem(SceneType scene_type) : scene_type(scene_type) {
 
 }
 
@@ -21,17 +21,17 @@ void ScoreSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
         auto cam = blackboard.camera;
         std::string score_text;
         std::stringstream ss;
-        switch (scene_id) {
-            case HORIZONTAL_SCENE_ID: {
+        switch (scene_type) {
+            case JUNGLE_TYPE: {
                 ss << std::setfill('0') << std::setw(6) << (int) abs(cam.position().x) / 100;
             }
                 break;
-            case VERTICAL_SCENE_ID: {
+            case SKY_TYPE: {
                 ss << std::setfill('0') << std::setw(6) << (int) abs(cam.position().y) / 100;
             }
                 break;
             default:
-                fprintf(stderr, "Invalid scene ID: %d\n", scene_id);
+                fprintf(stderr, "Invalid scene ID: %d\n", scene_type);
         }
         score_text = ss.str();
         text.set_text(score_text);
