@@ -25,8 +25,9 @@
 #include <graphics/health_bar.h>
 #include <graphics/cave.h>
 
-int main(int argc, char** argv) {
 
+
+int start() {
     auto window = Window();
 
     window.initialize("Express Panda", 800, 450);
@@ -170,4 +171,17 @@ int main(int argc, char** argv) {
 
     window.destroy();
     return 0;
+}
+
+int main(int argc, char** argv) {
+    int init = !SDL_Init(0);
+
+    if (init) {
+        int result = start();
+        SDL_Quit();
+
+        return result;
+    } else {
+        return EXIT_FAILURE;
+    }
 }

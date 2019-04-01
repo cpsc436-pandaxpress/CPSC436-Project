@@ -11,6 +11,7 @@
 #include <components/timer.h>
 #include <scene/scene_mode.h>
 #include "level_system.h"
+#include "level.h"
 
 class VerticalLevelSystem : public LevelSystem {
 private:
@@ -35,15 +36,17 @@ private:
 
     SceneMode mode_;
 
+    std::unordered_map<int, Level> levels;
+
 public:
 
     VerticalLevelSystem();
 
-    void init();
+    void init() override;
 
-    void update(Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override;
 
-    void destroy_entities(entt::DefaultRegistry &registry);
+    void destroy_entities(entt::DefaultRegistry &registry) override;
 
     void set_mode(SceneMode mode);
 };

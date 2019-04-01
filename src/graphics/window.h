@@ -21,6 +21,8 @@ private:
 public:
     Window(): sdl_window_(nullptr), gl_context_() {}
 
+    ~Window();
+
     // Initialize the window
     // returns false if some part of initialization fails
     // otherwise returns true

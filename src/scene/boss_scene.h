@@ -8,7 +8,7 @@
 
 #include "scene.h"
 #include <queue>
-#include <systems/boss_level_system.h>
+#include <level/boss_level_system.h>
 #include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
 #include <systems/panda_damage_system.h>
@@ -43,7 +43,6 @@ private:
     std::vector<uint32_t> bg_entities;
     uint32_t panda_entity;
     uint32_t jacko_entity;
-    uint32_t burger_entity;
     uint32_t tutorial_entity;
     uint32_t tutorial2_entity;
     uint32_t fade_overlay_entity;
@@ -81,7 +80,6 @@ public:
                     SceneManager &scene_manager);
 
     virtual void update(Blackboard& blackboard) override;
-    void create_food(Blackboard &blackboard);
     virtual void render(Blackboard& blackboard) override;
 
 };

@@ -19,7 +19,7 @@
 
 class JackoAISystem: public System {
     private:
-        SelectorNode *root;
+        SelectorNode root;
 
     public:
     JackoAISystem(Blackboard& blackboard, entt::DefaultRegistry& registry);
