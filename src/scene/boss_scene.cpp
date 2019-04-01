@@ -44,7 +44,6 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         fade_overlay_render_system(),
         pause_menu_transform_system(),
         pause_menu_render_system(),
-        fade_overlay_render_system(),
         hud_transform_system()
 {
     init_scene(blackboard);
