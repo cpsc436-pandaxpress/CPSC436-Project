@@ -35,8 +35,8 @@ bool Window::initialize(const char* title) {
         width_ = DM.w;
         height_ = DM.h;
     } else {
-        width_ = 1600;
-        height_ = 900;
+        width_ = WINDOWED_WIDTH;
+        height_ = WINDOWED_HEIGHT;
     }
 
 

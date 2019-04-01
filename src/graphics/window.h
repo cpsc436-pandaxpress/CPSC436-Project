@@ -17,6 +17,8 @@ private:
     uint64_t last_time_, recent_time_;
     int width_, height_;
     float delta_time_ = 0;
+    int WINDOWED_WIDTH = 1600;
+    int WINDOWED_HEIGHT = 900;
 
 public:
     Window(): sdl_window_(nullptr), gl_context_() {}
