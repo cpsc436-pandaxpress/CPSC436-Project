@@ -23,12 +23,12 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         level_system(),
         sprite_render_system(),
         sprite_transform_system(),
-        background_transform_system(STORY_JUNGLE_SCENE_ID),
+        background_transform_system(JUNGLE_TYPE),
         background_render_system(),
         physics_system(),
-        player_movement_system(STORY_JUNGLE_SCENE_ID),
+        player_movement_system(JUNGLE_TYPE),
         enemy_system(),
-        player_animation_system(STORY_JUNGLE_SCENE_ID),
+        player_animation_system(JUNGLE_TYPE),
         panda_dmg_system(),
         falling_platform_system(),
         enemy_animation_system(),
@@ -37,7 +37,7 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         health_bar_transform_system(),
         text_render_system(),
         text_transform_system(),
-        score_system(STORY_JUNGLE_SCENE_ID)
+        score_system(JUNGLE_TYPE)
 {
     init_scene(blackboard);
     create_tutorial(blackboard);
@@ -62,7 +62,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
     physics_system.update(blackboard, registry_);
     panda_dmg_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
-    enemy_system.update(blackboard, registry_, STORY_JUNGLE_SCENE_ID);
+    enemy_system.update(blackboard, registry_, JUNGLE_TYPE);
     health_bar_transform_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
     score_system.update(blackboard, registry_);

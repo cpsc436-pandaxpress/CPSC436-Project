@@ -24,9 +24,9 @@ void SoundManager::init() {
 }
 
 void SoundManager::changeBackgroundMusic(SceneID id) {
-if(id==BOSS_SCENE_ID){
+    if(id == BOSS_SCENE_ID){
         m_background_music = Mix_LoadMUS(audio_path("graveyard.ogg"));
-    }else if(id==STORY_SKY_SCENE_ID){
+    }else if(id==STORY_SKY_SCENE_ID || id == ENDLESS_SKY_SCENE_ID){
         m_background_music = Mix_LoadMUS(audio_path("vertical2.ogg"));
     }
     else{

@@ -28,15 +28,19 @@ private:
     const float VERTICAL_BUFFER = 300.f;
 
     void generate_projectile(float x, float y, bool spit_left, Blackboard &blackboard, entt::DefaultRegistry &registry);
-    void handle_bread(vec2 cam_position, vec2 cam_size, SceneID sceneid, Blackboard &blackboard, entt::DefaultRegistry &registry);
-    void handle_ghosts(vec2 cam_position, vec2 cam_size, SceneID sceneid, Blackboard &blackboard, entt::DefaultRegistry &registry);
-    void handle_llamas(vec2 cam_position, vec2 cam_size, SceneID sceneid, Blackboard &blackboard, entt::DefaultRegistry &registry);
-    void handle_spit(vec2 cam_position, vec2 cam_size, SceneID sceneid, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void handle_bread(vec2 cam_position, vec2 cam_size, SceneType scene_type, Blackboard &blackboard,
+                      entt::DefaultRegistry &registry);
+    void handle_ghosts(vec2 cam_position, vec2 cam_size, SceneType scene_type, Blackboard &blackboard,
+                       entt::DefaultRegistry &registry);
+    void handle_llamas(vec2 cam_position, vec2 cam_size, SceneType scene_type, Blackboard &blackboard,
+                       entt::DefaultRegistry &registry);
+    void handle_spit(vec2 cam_position, vec2 cam_size, SceneType scene_type, Blackboard &blackboard,
+                     entt::DefaultRegistry &registry);
 
 
 public:
     EnemySystem();
-    virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry, SceneID sceneid);
+    virtual void update(Blackboard &blackboard, entt::DefaultRegistry &registry, SceneType scene_type);
 };
 
 

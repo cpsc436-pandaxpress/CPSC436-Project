@@ -9,7 +9,7 @@
 #include "score_system.h"
 #include "util/constants.h"
 
-ScoreSystem::ScoreSystem(SceneID scene_id) : scene_id(scene_id) {
+ScoreSystem::ScoreSystem(SceneType scene_type) : scene_type(scene_type) {
 
 }
 
@@ -19,8 +19,8 @@ void ScoreSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
         auto &text = view.get<Text>(entity);
         auto &transform = view.get<Transform>(entity);
         auto cam = blackboard.camera;
-        switch (scene_id) {
-            case STORY_JUNGLE_SCENE_ID: {
+        switch (scene_type) {
+            case JUNGLE_TYPE: {
                 std::string score_text;
                 std::stringstream ss;
 //                ss << "SCORE: ";
@@ -31,7 +31,7 @@ void ScoreSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
                 transform.y = cam.position().y - cam.size().y / 2 + Y_OFFSET;
             }
                 break;
-            case STORY_SKY_SCENE_ID: {
+            case SKY_TYPE: {
                 std::string score_text;
                 std::stringstream ss;
 //                ss << "SCORE: ";
@@ -42,12 +42,12 @@ void ScoreSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
                 transform.y = cam.position().y + cam.size().y / 2 - Y_OFFSET;
             }
                 break;
-            case BOSS_SCENE_ID: {
+            case BOSS_TYPE: {
 
             }
                 break;
             default:
-                fprintf(stderr, "Invalid scene ID: %d\n", scene_id);
+                fprintf(stderr, "Invalid scene ID: %d\n", scene_type);
         }
     }
 

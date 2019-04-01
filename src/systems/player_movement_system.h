@@ -12,7 +12,7 @@
 
 class PlayerMovementSystem : public System {
 public:
-    PlayerMovementSystem(SceneID scene_id);
+    PlayerMovementSystem(SceneType scene_type);
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;
 
 private:
@@ -25,7 +25,7 @@ private:
 
     float time_since_jump = 0.f;
     bool holding_jump = false;
-    SceneID scene_id;
+    SceneType scene_type;
 
     void update_horizontal_scene(Blackboard &blackboard, Velocity &velocity);
     void update_vertical_scene(Blackboard &blackboard, Velocity &velocity, Panda &panda);
