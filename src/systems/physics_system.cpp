@@ -271,7 +271,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                     chases.evading = true;
                                 }
                             }
-                            //else if to exclude jacko from normal death stuff
+                            //else if to exclude jacko from normal dying stuff
                             else if (health.health_points <= 0) {
                                 //normal way to kill stuff
                                 if (registry.has<Interactable>(entry.entity)) {
@@ -295,13 +295,22 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                     }
 
                     //check for food
-                    if ( registry.has<Food>(entry.entity)
-                         && (registry.has<Panda>(d_entity) || registry.has<Jacko>(d_entity))
-                    ) {
-                        auto& health = registry.get<Health>(d_entity);
+                    if ( registry.has<Food>(entry.entity)) {
+                        if (registry.has<Panda>(d_entity)) {
+                            auto &panda = registry.get<Panda>(d_entity);
+                            auto &health = registry.get<Health>(d_entity);
+                            if (panda.alive && health.health_points < health.max_health) {
+                                health.health_points++;
+                            }
+                            registry.destroy(entry.entity);
 
-                        health.health_points ++;
-                        registry.destroy(entry.entity);
+                        } else if (registry.has<Food>(entry.entity) && registry.has<Jacko>(d_entity)) {
+                            auto &health = registry.get<Health>(d_entity);
+                            if (health.health_points < health.max_health) {
+                                health.health_points++;
+                            }
+                            registry.destroy(entry.entity);
+                        }
                     }
                 }
             }

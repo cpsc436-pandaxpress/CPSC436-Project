@@ -65,19 +65,19 @@ set(SOURCE_FILES
         src/scene/vertical_scene.h
         src/util/csv_reader.cpp
         src/util/csv_reader.h
-        src/systems/level_system.cpp
-        src/systems/level_system.h
+        src/level/level_system.cpp
+        src/level/level_system.h
         src/scene/horizontal_scene.cpp
         src/scene/horizontal_scene.h
         src/scene/boss_scene.cpp
         src/scene/boss_scene.h
-        src/systems/horizontal_level_system.h
-        src/systems/horizontal_level_system.cpp
+        src/level/horizontal_level_system.h
+        src/level/horizontal_level_system.cpp
         src/components/ghost.h
         src/components/llama.h src/components/spit.h
-        src/components/tutorial.h
-        src/systems/vertical_level_system.cpp
-        src/systems/vertical_level_system.h
+        src/components/pause_menu.h
+        src/level/vertical_level_system.cpp
+        src/level/vertical_level_system.h
         src/components/chases.h
         src/systems/chase_system.cpp
         src/systems/chase_system.h
@@ -89,8 +89,8 @@ set(SOURCE_FILES
         src/systems/jacko_ai_system.cpp
         src/systems/jacko_ai_system.h
         src/components/evades.h
-        src/systems/boss_level_system.h
-        src/systems/boss_level_system.cpp
+        src/level/boss_level_system.h
+        src/level/boss_level_system.cpp
         src/systems/ghost_movement_system.cpp
         src/systems/ghost_movement_system.h
         src/graphics/mesh_manager.cpp
@@ -129,6 +129,20 @@ set(SOURCE_FILES
         src/systems/score_system.cpp
         src/systems/score_system.h
         src/components/score.h
+        src/level/level.cpp
+        src/level/level.h
+        src/components/layer.h
+        src/systems/fade_overlay_render_system.cpp
+        src/systems/fade_overlay_render_system.h
+        src/graphics/fade_overlay.h
+        src/graphics/fade_overlay.cpp
+        src/systems/fade_overlay_system.cpp
+        src/systems/fade_overlay_system.h
+        src/scene/scene_mode.h
+        src/systems/pause_menu_transform_system.cpp
+        src/systems/pause_menu_transform_system.h
+        src/systems/pause_menu_render_system.cpp
+        src/systems/pause_menu_render_system.h
         src/components/hud_element.h
         src/systems/hud_transform_system.cpp
         src/systems/hud_transform_system.h

@@ -5,7 +5,7 @@
 #include "background_transform_system.h"
 #include <util/constants.h>
 
-BackgroundTransformSystem::BackgroundTransformSystem(SceneID scene_id) : scene_id(scene_id) {
+BackgroundTransformSystem::BackgroundTransformSystem(SceneType scene_type) : scene_type(scene_type) {
 
 }
 
@@ -15,16 +15,16 @@ void BackgroundTransformSystem::update(Blackboard &blackboard, entt::DefaultRegi
         //get the background
         auto &background = viewBg.get(entity);
         // move the background
-        switch (scene_id) {
-            case HORIZONTAL_SCENE_ID: {
+        switch (scene_type) {
+            case JUNGLE_TYPE: {
                 horizontal_background_transform(blackboard, background);
             }
                 break;
-            case VERTICAL_SCENE_ID: {
+            case SKY_TYPE: {
                 vertical_background_transform(blackboard, background);
             }
                 break;
-            case BOSS_SCENE_ID: {
+            case BOSS_TYPE: {
                 boss_background_transform(blackboard, background);
             }
                 break;

@@ -2,21 +2,22 @@
 // Created by Rebecca Roth on 2019-03-03.
 //
 
+#include <components/layer.h>
 #include "enemy_system.h"
 
 EnemySystem::EnemySystem():
         ghost_movement_system()
 {};
 
-void EnemySystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry, SceneID sceneid) {
+void EnemySystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry, SceneType scene_type) {
     vec2 cam_position = blackboard.camera.position();
     vec2 cam_size = blackboard.camera.size();
 
-    ghost_movement_system.update(blackboard, registry, sceneid);
-    handle_bread(cam_position, cam_size, sceneid, blackboard, registry);
-    handle_ghosts(cam_position, cam_size, sceneid, blackboard, registry);
-    handle_llamas(cam_position, cam_size, sceneid, blackboard, registry);
-    handle_spit(cam_position, cam_size, sceneid, blackboard, registry);
+    ghost_movement_system.update(blackboard, registry, scene_type);
+    handle_bread(cam_position, cam_size, scene_type, blackboard, registry);
+    handle_ghosts(cam_position, cam_size, scene_type, blackboard, registry);
+    handle_llamas(cam_position, cam_size, scene_type, blackboard, registry);
+    handle_spit(cam_position, cam_size, scene_type, blackboard, registry);
 }
 
 void EnemySystem::generate_projectile(float x, float y, bool spit_left, Blackboard &blackboard,
@@ -42,9 +43,11 @@ void EnemySystem::generate_projectile(float x, float y, bool spit_left, Blackboa
     registry.assign<Interactable>(projectile);
     registry.assign<Collidable>(projectile, texture.width() * scaleY,
                                 texture.height() * scaleY);
+    registry.assign<Layer>(projectile, PROJECTILE_LAYER);
 }
 
-void EnemySystem::handle_bread(vec2 cam_position, vec2 cam_size, SceneID sceneid, Blackboard &blackboard, entt::DefaultRegistry &registry){
+void EnemySystem::handle_bread(vec2 cam_position, vec2 cam_size, SceneType scene_type, Blackboard &blackboard,
+                               entt::DefaultRegistry &registry){
     auto bread_view = registry.view<Bread, Transform, Velocity, Collidable>();
     for (auto enemy_entity : bread_view) {
         auto &bread = bread_view.get<Bread>(enemy_entity);
@@ -52,7 +55,7 @@ void EnemySystem::handle_bread(vec2 cam_position, vec2 cam_size, SceneID sceneid
         auto &bread_velocity = bread_view.get<Velocity>(enemy_entity);
         auto &bread_collidable = bread_view.get<Collidable>(enemy_entity);
 
-        if (sceneid == HORIZONTAL_SCENE_ID) {
+        if (scene_type == JUNGLE_TYPE) {
             if (bread_transform.x + bread_collidable.width < cam_position.x - cam_size.x / 2 ||
                 bread_transform.y - bread_collidable.height > cam_position.y + cam_size.y / 2 + VERTICAL_BUFFER) {
                 registry.destroy(enemy_entity);
@@ -64,7 +67,7 @@ void EnemySystem::handle_bread(vec2 cam_position, vec2 cam_size, SceneID sceneid
                 }
             }
         }
-        else if (sceneid == VERTICAL_SCENE_ID) {
+        else if (scene_type == SKY_TYPE) {
             if (bread_transform.x + bread_collidable.width < cam_position.x - cam_size.x / 2 ||
                 bread_transform.y - bread_collidable.height > cam_position.y + cam_size.y / 2 ||
                 bread_transform.x + bread_collidable.width / 2 > cam_position.x + cam_size.x / 2) {
@@ -83,20 +86,21 @@ void EnemySystem::handle_bread(vec2 cam_position, vec2 cam_size, SceneID sceneid
     }
 }
 
-void EnemySystem::handle_ghosts(vec2 cam_position, vec2 cam_size, SceneID sceneid, Blackboard &blackboard, entt::DefaultRegistry &registry){
+void EnemySystem::handle_ghosts(vec2 cam_position, vec2 cam_size, SceneType scene_type, Blackboard &blackboard,
+                                entt::DefaultRegistry &registry){
     auto ghost_view = registry.view<Ghost, Transform, Collidable>();
     for (auto enemy_entity : ghost_view) {
         auto &ghost = ghost_view.get<Ghost>(enemy_entity);
         auto &ghost_transform = ghost_view.get<Transform>(enemy_entity);
         auto &ghost_collidable = ghost_view.get<Collidable>(enemy_entity);
 
-        if (sceneid == HORIZONTAL_SCENE_ID) {
+        if (scene_type == JUNGLE_TYPE) {
             if (ghost_transform.x + ghost_collidable.width < cam_position.x - cam_size.x / 2 ||
                 ghost_transform.y - ghost_collidable.height > cam_position.y + cam_size.y / 2 + VERTICAL_BUFFER) {
                 registry.destroy(enemy_entity);
                 break;
             }
-        } else if (sceneid == VERTICAL_SCENE_ID) {
+        } else if (scene_type == SKY_TYPE) {
             if (ghost_transform.x + ghost_collidable.width < cam_position.x - cam_size.x / 2 ||
                 ghost_transform.y - ghost_collidable.height > cam_position.y + cam_size.y / 2) {
                 registry.destroy(enemy_entity);
@@ -106,7 +110,8 @@ void EnemySystem::handle_ghosts(vec2 cam_position, vec2 cam_size, SceneID scenei
     }
 }
 
-void EnemySystem::handle_llamas(vec2 cam_position, vec2 cam_size, SceneID sceneid, Blackboard &blackboard, entt::DefaultRegistry &registry) {
+void EnemySystem::handle_llamas(vec2 cam_position, vec2 cam_size, SceneType scene_type, Blackboard &blackboard,
+                                entt::DefaultRegistry &registry) {
     auto llama_view = registry.view<Llama, Transform, Collidable, Timer>();
     for (auto enemy_entity : llama_view) {
         auto &llama = llama_view.get<Llama>(enemy_entity);
@@ -114,7 +119,7 @@ void EnemySystem::handle_llamas(vec2 cam_position, vec2 cam_size, SceneID scenei
         auto &llama_collidable = llama_view.get<Collidable>(enemy_entity);
         auto &llama_timer = llama_view.get<Timer>(enemy_entity);
 
-        if (sceneid == HORIZONTAL_SCENE_ID) {
+        if (scene_type == JUNGLE_TYPE) {
             if (llama_transform.x + llama_collidable.width < cam_position.x - cam_size.x / 2 ||
                 llama_transform.y - llama_collidable.height > cam_position.y + cam_size.y / 2 + VERTICAL_BUFFER) {
                 registry.destroy(enemy_entity);
@@ -128,7 +133,7 @@ void EnemySystem::handle_llamas(vec2 cam_position, vec2 cam_size, SceneID scenei
                 generate_projectile(llama_transform.x, llama_transform.y, true, blackboard, registry);
                 llama_timer.reset_watch(SPIT_TIMER_LABEL);
             }
-        } else if (sceneid == VERTICAL_SCENE_ID) {
+        } else if (scene_type == SKY_TYPE) {
             auto pandas_view = registry.view<Panda, Transform>();
 
             if (llama_transform.x + llama_collidable.width < cam_position.x - cam_size.x / 2 ||
@@ -161,20 +166,21 @@ void EnemySystem::handle_llamas(vec2 cam_position, vec2 cam_size, SceneID scenei
     }
 }
 
-void EnemySystem::handle_spit(vec2 cam_position, vec2 cam_size, SceneID sceneid, Blackboard &blackboard, entt::DefaultRegistry &registry){
+void EnemySystem::handle_spit(vec2 cam_position, vec2 cam_size, SceneType scene_type, Blackboard &blackboard,
+                              entt::DefaultRegistry &registry){
     auto spit_view = registry.view<Spit, Transform, Collidable>();
     for (auto enemy_entity : spit_view) {
         auto &spit = spit_view.get<Spit>(enemy_entity);
         auto &spit_transform = spit_view.get<Transform>(enemy_entity);
         auto &spit_collidable = spit_view.get<Collidable>(enemy_entity);
 
-        if (sceneid == HORIZONTAL_SCENE_ID) {
+        if (scene_type == JUNGLE_TYPE) {
             if (spit_transform.x + spit_collidable.width < cam_position.x - cam_size.x / 2 ||
                 spit_transform.y - spit_collidable.height > cam_position.y + cam_size.y / 2 + VERTICAL_BUFFER) {
                 registry.destroy(enemy_entity);
                 break;
             }
-        } else if (sceneid == VERTICAL_SCENE_ID) {
+        } else if (scene_type == SKY_TYPE) {
             if (spit_transform.x + spit_collidable.width < cam_position.x - cam_size.x / 2 ||
                 spit_transform.y - spit_collidable.height > cam_position.y + cam_size.y / 2 ||
                 spit_transform.x + spit_collidable.width / 2 > cam_position.x + cam_size.x / 2) {

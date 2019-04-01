@@ -13,7 +13,7 @@
 #include <systems/player_movement_system.h>
 #include <systems/player_animation_system.h>
 #include <systems/falling_platform_system.h>
-#include <systems/vertical_level_system.h>
+#include <level/vertical_level_system.h>
 #include <systems/timer_system.h>
 #include <systems/panda_damage_system.h>
 #include <systems/background_render_system.h>
@@ -25,6 +25,10 @@
 #include <systems/text_transform_system.h>
 #include <systems/text_render_system.h>
 #include <systems/score_system.h>
+#include <systems/fade_overlay_render_system.h>
+#include <systems/fade_overlay_system.h>
+#include <systems/pause_menu_transform_system.h>
+#include <systems/pause_menu_render_system.h>
 #include <systems/hud_transform_system.h>
 #include <systems/label_system.h>
 
@@ -33,6 +37,9 @@ private:
 
     uint32_t panda_entity;
     uint32_t score_entity;
+    uint32_t fade_overlay_entity;
+    uint32_t pause_menu_entity;
+
     std::vector<uint32_t> bg_entities;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
@@ -53,6 +60,10 @@ private:
     TextRenderSystem text_render_system;
     TextTransformSystem text_transform_system;
     ScoreSystem score_system;
+    FadeOverlaySystem fade_overlay_system;
+    FadeOverlayRenderSystem fade_overlay_render_system;
+    PauseMenuTransformSystem pause_menu_transform_system;
+    PauseMenuRenderSystem pause_menu_render_system;
     HudTransformSystem hud_transform_system;
     LabelSystem label_system;
 
@@ -65,11 +76,17 @@ private:
     const float HUD_Y_OFFSET = 50.f;
     const float HUD_SCORE_X_OFFSET = 350.f;
     const float HUD_HEALTH_X_OFFSET = 100.f;
+    const float HEALTH_BAR_X_SIZE = 750.f;
+    const float HEALTH_BAR_Y_SIZE = 75.f;
+    bool pause = false;
 
     void create_panda(Blackboard& blackboard);
     void reset_scene(Blackboard& blackboard);
     void init_scene(Blackboard &blackboard);
     void create_score_text(Blackboard &blackboard);
+    void create_fade_overlay(Blackboard& blackboard);
+    void create_pause_menu(Blackboard& blackboard);
+
 public:
     VerticalScene(Blackboard& blackboard, SceneManager& scene_manager);
 
@@ -78,6 +95,8 @@ public:
     virtual void render(Blackboard& blackboard) override;
 
     void create_background(Blackboard &blackboard);
+
+    void set_mode(SceneMode mode) override;
 
     static constexpr float CAMERA_SPEED = 250.f;
 };

@@ -12,11 +12,11 @@ static const float POINTS_SPEED = 15.0f;
 
 class ScoreSystem : public System {
 private:
-    SceneID scene_id;
+    SceneType scene_type;
 public:
     const float X_OFFSET = 100.f;
     const float Y_OFFSET = 50.f;
-    ScoreSystem(SceneID scene);
+    ScoreSystem(SceneType scene_type);
 
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;
 };

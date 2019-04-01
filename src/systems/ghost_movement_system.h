@@ -12,7 +12,7 @@
 class GhostMovementSystem{
 public:
     GhostMovementSystem();
-    virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry, SceneID sceneid);
+    virtual void update(Blackboard &blackboard, entt::DefaultRegistry &registry, SceneType scene_type);
 };
 
 

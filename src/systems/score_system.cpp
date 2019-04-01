@@ -10,7 +10,7 @@
 #include "score_system.h"
 #include "util/constants.h"
 
-ScoreSystem::ScoreSystem(SceneID scene_id) : scene_id(scene_id) {
+ScoreSystem::ScoreSystem(SceneType scene_type) : scene_type(scene_type) {
 
 }
 
