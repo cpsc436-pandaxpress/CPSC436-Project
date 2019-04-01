@@ -3,6 +3,7 @@
 //
 
 #include "seek_system.h"
+#include <math.h>
 #include <iostream>
 #include "components/collidable.h"
 #include "components/velocity.h"
@@ -19,9 +20,6 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
     auto seeker_view = registry.view<Seeks, Velocity, Transform, Timer>();
 
     for (auto entity: seeker_view) {
-        float horizontalCenter;
-        float verticalCenter;
-        float maxBounceDist = 60;
 
         auto& velocity = seeker_view.get<Velocity>(entity);
         auto& seeks  = seeker_view.get<Seeks>(entity);
@@ -34,11 +32,9 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
                 if(abs(target->x-transform.x) > abs(target->y-transform.y) ){
                     seeks.goingHorizontal=true;
                     seeks.goingVertical=false;
-                    verticalCenter=transform.y;
                 }else{
                     seeks.goingVertical=true;
                     seeks.goingHorizontal=false;
-                    horizontalCenter=transform.x;
                 }
             }
 
@@ -60,30 +56,24 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
                     } else {
                         velocity.x_velocity = seeks.seek_speed;
                     }
-                    velocity.y_velocity= seeks.bounce_speed_y;
-                    if(abs(transform.y-verticalCenter)>maxBounceDist){
-                        seeks.bounce_speed_y= -seeks.bounce_speed_y;
-                    }
+                    velocity.y_velocity=0;
+                    transform.y = transform.y + sin(transform.x/50)*0.3;
                 }else if(seeks.goingVertical) {
                     if (target->y < transform.y) {
                         velocity.y_velocity = -seeks.seek_speed;
                     } else {
                         velocity.y_velocity = seeks.seek_speed;
                     }
-                    velocity.x_velocity= seeks.bounce_speed_x;
-                    if(abs(transform.x-horizontalCenter)>maxBounceDist){
-                        seeks.bounce_speed_x= -seeks.bounce_speed_x;
-                    }
+                    velocity.x_velocity=0;
+                    transform.x= transform.x + sin(transform.y/50)*0.3;
                 }
 
             }
         }else{
             if(timer.watch_exists("batTimer")){
                 velocity.x_velocity=0;
-                velocity.y_velocity= seeks.bounce_speed_y;
-                if(abs(transform.y-verticalCenter)>maxBounceDist){
-                    seeks.bounce_speed_y= -seeks.bounce_speed_y;
-                }
+                velocity.y_velocity=0;
+
                 if(timer.is_done("batTimer")){
                     registry.destroy(entity);
                 }
