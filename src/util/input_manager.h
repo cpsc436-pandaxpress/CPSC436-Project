@@ -44,6 +44,8 @@ public:
     bool key_pressed(SDL_Scancode key);
     bool key_released(SDL_Scancode key);
 
+    void signal_exit();
+
 private:
 
     void set_key_status_from_event(SDL_Event& event);

@@ -31,7 +31,7 @@
 int start() {
     auto window = Window();
 
-    window.initialize("Express Panda", 800, 450);
+    window.initialize("Express Panda");
 
     Blackboard blackboard = {
         Camera(1600, 900, 0, 0),

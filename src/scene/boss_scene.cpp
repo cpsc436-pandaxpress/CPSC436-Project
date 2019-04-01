@@ -70,6 +70,7 @@ void BossScene::update(Blackboard &blackboard) {
         registry_.destroy(pause_menu_entity);
         change_scene(MAIN_MENU_SCENE_ID);
         pause = false;
+        return;
     }
 
     if (!pause) {
