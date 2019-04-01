@@ -23,7 +23,7 @@ FadeOverlay::FadeOverlay(const FadeOverlay &other) :
         scale_(other.scale_),
         alpha_(other.alpha_)
 {}
-//
+
 void FadeOverlay::draw(const mat3 &projection) {
 
     // transform

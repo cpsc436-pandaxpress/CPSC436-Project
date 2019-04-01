@@ -25,6 +25,7 @@ private:
 
     float time_since_jump = 0.f;
     bool holding_jump = false;
+    int jump = 0;
     SceneType scene_type;
 
     void update_horizontal_scene(Blackboard &blackboard, Velocity &velocity);

@@ -75,7 +75,7 @@ set(SOURCE_FILES
         src/level/horizontal_level_system.cpp
         src/components/ghost.h
         src/components/llama.h src/components/spit.h
-        src/components/tutorial.h
+        src/components/pause_menu.h
         src/level/vertical_level_system.cpp
         src/level/vertical_level_system.h
         src/components/chases.h
@@ -138,7 +138,11 @@ set(SOURCE_FILES
         src/graphics/fade_overlay.cpp
         src/systems/fade_overlay_system.cpp
         src/systems/fade_overlay_system.h
-        src/scene/scene_mode.h)
+        src/scene/scene_mode.h
+        src/systems/pause_menu_transform_system.cpp
+        src/systems/pause_menu_transform_system.h
+        src/systems/pause_menu_render_system.cpp
+        src/systems/pause_menu_render_system.h)
 
 
 # Create executable target

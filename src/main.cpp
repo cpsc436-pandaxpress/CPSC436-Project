@@ -55,6 +55,10 @@ int start() {
     blackboard.input_manager.track(SDL_SCANCODE_SPACE);
     blackboard.input_manager.track(SDL_SCANCODE_RETURN);
     blackboard.input_manager.track(SDL_SCANCODE_ESCAPE);
+    blackboard.input_manager.track(SDL_SCANCODE_A);
+    blackboard.input_manager.track(SDL_SCANCODE_D);
+    blackboard.input_manager.track(SDL_SCANCODE_W);
+
 
     blackboard.shader_manager.load_shader(
             shaders_path("sprite.vs.glsl"),
@@ -100,8 +104,7 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("bg_front.png"), "bg_front");
     blackboard.texture_manager.load_texture(textures_path("bg_middle.png"), "bg_middle");
     blackboard.texture_manager.load_texture(textures_path("bg_top.png"), "bg_top");
-    blackboard.texture_manager.load_texture(textures_path("tutorial.png"), "tutorial");
-    blackboard.texture_manager.load_texture(textures_path("tutorial2.png"), "tutorial_bread");
+    blackboard.texture_manager.load_texture(textures_path("pause_menu.png"), "pause_menu");
 
     blackboard.texture_manager.load_texture(textures_path("jacko_sprite_sheet.png"), "jacko");
     blackboard.texture_manager.load_texture(textures_path("burger.png"), "burger");

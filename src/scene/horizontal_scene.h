@@ -21,6 +21,8 @@
 #include <systems/score_system.h>
 #include <systems/fade_overlay_system.h>
 #include <systems/fade_overlay_render_system.h>
+#include <systems/pause_menu_transform_system.h>
+#include <systems/pause_menu_render_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -42,13 +44,13 @@ private:
     const float PANDA_START_X = -10.f;
     const float PANDA_START_Y = -200.f;
     const float MAX_CAMERA_Y_DIFF = 250.f;
+    bool pause = false;
 
     std::vector<uint32_t> bg_entities;
     uint32_t panda_entity;
-    uint32_t tutorial_entity;
-    uint32_t tutorial2_entity;
     uint32_t score_entity;
     uint32_t fade_overlay_entity;
+    uint32_t pause_menu_entity;
     HorizontalLevelSystem level_system;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
@@ -70,15 +72,16 @@ private:
     ScoreSystem score_system;
     FadeOverlaySystem fade_overlay_system;
     FadeOverlayRenderSystem fade_overlay_render_system;
+    PauseMenuTransformSystem pause_menu_transform_system;
+    PauseMenuRenderSystem pause_menu_render_system;
 
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);
-    void create_tutorial(Blackboard& blackboard);
+    void create_pause_menu(Blackboard& blackboard);
     void reset_scene(Blackboard& blackboard);
     void init_scene(Blackboard &blackboard);
     void update_panda(Blackboard& blackboard);
-    void update_tutorial(Blackboard& blackboard);
     void update_camera(Blackboard& blackboard);
     void create_score_text(Blackboard &blackboard);
     void create_fade_overlay(Blackboard &blackboard);

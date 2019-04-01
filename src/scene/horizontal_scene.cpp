@@ -8,7 +8,7 @@
 #include <components/interactable.h>
 #include <components/causes_damage.h>
 #include <components/velocity.h>
-#include <components/tutorial.h>
+#include <components/pause_menu.h>
 #include <components/timer.h>
 #include <graphics/health_bar.h>
 #include <graphics/cave.h>
@@ -38,45 +38,60 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         health_bar_transform_system(),
         text_render_system(),
         text_transform_system(),
-        score_system(JUNGLE_TYPE)
-{
+        score_system(JUNGLE_TYPE),
+        pause_menu_transform_system(),
+        pause_menu_render_system() {
     init_scene(blackboard);
-    create_tutorial(blackboard);
     gl_has_errors("horizontal_scene");
 }
 
 void HorizontalScene::update(Blackboard &blackboard) {
+    auto &panda = registry_.get<Panda>(panda_entity);
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+    auto &interactable = registry_.get<Interactable>(panda_entity);
+
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
+        if (pause) {
+            pause = false;
+            registry_.destroy(pause_menu_entity);
+        } else {
+            pause = true;
+            create_pause_menu(blackboard);
+        }
+    } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN) && pause) {
         blackboard.camera.set_position(0, 0);
         reset_scene(blackboard);
+        registry_.destroy(pause_menu_entity);
         change_scene(MAIN_MENU_SCENE_ID);
+        pause = false;
         return;
     }
-    auto &panda = registry_.get<Panda>(panda_entity);
 
-    if (panda.alive && !panda.dead){
-        update_camera(blackboard);
-        background_transform_system.update(blackboard, registry_);
-        player_movement_system.update(blackboard, registry_);
-    }
-    if (!panda.alive) {
-        fade_overlay_system.update(blackboard, registry_);
-    }
-    update_panda(blackboard);
-    update_tutorial(blackboard);
+    if (!pause) {
+        if (panda.alive && !panda.dead) {
+            update_camera(blackboard);
+            background_transform_system.update(blackboard, registry_);
+            player_movement_system.update(blackboard, registry_);
+        } else if (!panda.alive && interactable.grounded) {
+            fade_overlay_system.update(blackboard, registry_);
+        }
+        update_panda(blackboard);
 
-    level_system.update(blackboard, registry_);
-    physics_system.update(blackboard, registry_);
-    panda_dmg_system.update(blackboard, registry_);
-    sprite_transform_system.update(blackboard, registry_);
-    enemy_system.update(blackboard, registry_, JUNGLE_TYPE);
-    health_bar_transform_system.update(blackboard, registry_);
-    player_animation_system.update(blackboard, registry_);
-    score_system.update(blackboard, registry_);
-    text_transform_system.update(blackboard, registry_);
-    timer_system.update(blackboard, registry_);
-    falling_platform_system.update(blackboard, registry_);
-    enemy_animation_system.update(blackboard, registry_);
+        level_system.update(blackboard, registry_);
+        physics_system.update(blackboard, registry_);
+        panda_dmg_system.update(blackboard, registry_);
+        sprite_transform_system.update(blackboard, registry_);
+        enemy_system.update(blackboard, registry_, JUNGLE_TYPE);
+        health_bar_transform_system.update(blackboard, registry_);
+        player_animation_system.update(blackboard, registry_);
+        score_system.update(blackboard, registry_);
+        text_transform_system.update(blackboard, registry_);
+        timer_system.update(blackboard, registry_);
+        falling_platform_system.update(blackboard, registry_);
+        enemy_animation_system.update(blackboard, registry_);
+    } else {
+        pause_menu_transform_system.update(blackboard, registry_);
+    }
 }
 
 void HorizontalScene::update_panda(Blackboard &blackboard) {
@@ -107,17 +122,6 @@ void HorizontalScene::update_camera(Blackboard &blackboard) {
     blackboard.camera.compose();
 }
 
-void HorizontalScene::update_tutorial(Blackboard &blackboard) {
-    float scaleY = 0.25;
-    float scaleX = 0.25;
-    auto &tutorial_trans = registry_.get<Transform>(tutorial2_entity);
-
-    if (tutorial_trans.x + 100.f < blackboard.camera.position().x - blackboard.camera.size().x / 2.0 ){
-        auto &tutorial_trans = registry_.replace<Transform>(tutorial_entity, -1500.f, -200.f, 0.f, scaleX, scaleY);
-        auto &tutorial2_trans = registry_.replace<Transform>(tutorial2_entity, -1500.f,  -200.f, 0.f, scaleX, scaleY);
-    }
-}
-
 void HorizontalScene::render(Blackboard &blackboard) {
     glClearColor(19.f / 256.f, 136.f / 256.f, 126.f / 256.f, 1); // same colour as the top of the background
     glClear(GL_COLOR_BUFFER_BIT);
@@ -128,8 +132,12 @@ void HorizontalScene::render(Blackboard &blackboard) {
     text_render_system.update(blackboard, registry_);
 
     auto &panda = registry_.get<Panda>(panda_entity);
-    if (!panda.alive) {
+    auto &interactable = registry_.get<Interactable>(panda_entity);
+    if ((!panda.alive && interactable.grounded) || pause) {
         fade_overlay_render_system.update(blackboard, registry_);
+    }
+    if (pause){
+        pause_menu_render_system.update(blackboard, registry_);
     }
 }
 
@@ -214,28 +222,6 @@ void HorizontalScene::create_background(Blackboard &blackboard) {
     }
 }
 
-void HorizontalScene::create_tutorial(Blackboard &blackboard) {
-    tutorial_entity = registry_.create();
-    tutorial2_entity = registry_.create();
-
-    auto texture = blackboard.texture_manager.get_texture("tutorial");
-    auto texture2 = blackboard.texture_manager.get_texture("tutorial_bread");
-
-    auto shader = blackboard.shader_manager.get_shader("sprite");
-    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-
-    float scaleY = 0.25;
-    float scaleX = 0.25;
-    registry_.assign<Sprite>(tutorial_entity, texture, shader, mesh);
-    registry_.assign<Tutorial>(tutorial_entity);
-    registry_.assign<Transform>(tutorial_entity, 400.f, -200.f, 0., scaleX, scaleY);
-
-    registry_.assign<Sprite>(tutorial2_entity, texture2, shader, mesh);
-    registry_.assign<Tutorial>(tutorial2_entity);
-    registry_.assign<Transform>(tutorial2_entity, 900.f, -200.f, 0., scaleX, scaleY);
-
-}
-
 void HorizontalScene::create_score_text(Blackboard &blackboard) {
     auto shader = blackboard.shader_manager.get_shader("text");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
@@ -263,6 +249,18 @@ void HorizontalScene::create_fade_overlay(Blackboard &blackboard) {
     vec2 size = {width, height};
     auto &fade = registry_.assign<FadeOverlay>(fade_overlay_entity, meshFade, shaderFade, size);
 }
+
+void HorizontalScene::create_pause_menu(Blackboard &blackboard) {
+    pause_menu_entity = registry_.create();
+
+    auto texture = blackboard.texture_manager.get_texture("pause_menu");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+
+    registry_.assign<Sprite>(pause_menu_entity, texture, shader, mesh);
+    registry_.assign<PauseMenu>(pause_menu_entity);
+}
+
 
 
 
