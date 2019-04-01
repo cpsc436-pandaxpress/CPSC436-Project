@@ -134,7 +134,7 @@ void BossScene::init_scene(Blackboard &blackboard) {
     create_food(blackboard);
     create_jacko(blackboard, burger_entity);
     create_panda(blackboard);
-    //a_star_system.createGrid(blackboard,registry_);
+
     level_system.init();
 }
 

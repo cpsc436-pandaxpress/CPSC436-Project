@@ -58,7 +58,6 @@ void BossLevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
 void BossLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     if (!generated_) {
         load_next_chunk(0);
-        load_next_chunk(1);
         generate_next_chunk(blackboard, registry);
         generated_ = true;
     }

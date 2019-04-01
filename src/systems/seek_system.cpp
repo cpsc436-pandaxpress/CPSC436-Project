@@ -51,7 +51,7 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
             }else{
 
                 if(seeks.goingHorizontal){
-                    if (target->x < transform.x) {
+                    if (target->x -blackboard.camera.position().x < transform.x - blackboard.camera.position().x) {
                         velocity.x_velocity = -seeks.seek_speed;
                     } else {
                         velocity.x_velocity = seeks.seek_speed;

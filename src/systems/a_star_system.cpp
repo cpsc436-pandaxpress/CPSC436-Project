@@ -8,7 +8,6 @@
 int cols=0;
 int rows=0;
 std::vector<std::vector<Location*>> grid;
-bool initialized = false;
 
 
 
