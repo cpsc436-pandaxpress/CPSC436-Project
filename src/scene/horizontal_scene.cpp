@@ -81,7 +81,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
         physics_system.update(blackboard, registry_);
         panda_dmg_system.update(blackboard, registry_);
         sprite_transform_system.update(blackboard, registry_);
-        enemy_system.update(blackboard, registry_, HORIZONTAL_SCENE_ID);
+        enemy_system.update(blackboard, registry_, JUNGLE_TYPE);
         health_bar_transform_system.update(blackboard, registry_);
         player_animation_system.update(blackboard, registry_);
         score_system.update(blackboard, registry_);

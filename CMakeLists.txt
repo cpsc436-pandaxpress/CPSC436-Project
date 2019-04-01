@@ -76,8 +76,8 @@ set(SOURCE_FILES
         src/components/ghost.h
         src/components/llama.h src/components/spit.h
         src/components/pause_menu.h
-        src/systems/vertical_level_system.cpp
-        src/systems/vertical_level_system.h
+        src/level/vertical_level_system.cpp
+        src/level/vertical_level_system.h
         src/components/chases.h
         src/systems/chase_system.cpp
         src/systems/chase_system.h
@@ -141,7 +141,8 @@ set(SOURCE_FILES
         src/scene/scene_mode.h
         src/systems/pause_menu_transform_system.cpp
         src/systems/pause_menu_transform_system.h
-        src/systems/pause_menu_render_system.cpp src/systems/pause_menu_render_system.h)
+        src/systems/pause_menu_render_system.cpp
+        src/systems/pause_menu_render_system.h)
 
 
 # Create executable target

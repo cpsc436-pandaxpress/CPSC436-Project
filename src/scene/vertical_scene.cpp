@@ -141,7 +141,7 @@ void VerticalScene::update(Blackboard &blackboard) {
         score_system.update(blackboard, registry_);
         text_transform_system.update(blackboard, registry_);
         player_animation_system.update(blackboard, registry_);
-        enemy_system.update(blackboard, registry_, VERTICAL_SCENE_ID);
+        enemy_system.update(blackboard, registry_, SKY_TYPE);
         enemy_animation_system.update(blackboard, registry_);
         timer_system.update(blackboard, registry_);
         falling_platform_system.update(blackboard, registry_);
