@@ -10,7 +10,7 @@ Window::~Window() {
     SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
-bool Window::initialize(const char* title, uint32_t width, uint32_t height) {
+bool Window::initialize(const char* title) {
     if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0) {
         // Could not initialize video!
         printf("SDL could not initialize video subsystems! ERROR: %s\n", SDL_GetError());
@@ -26,6 +26,11 @@ bool Window::initialize(const char* title, uint32_t width, uint32_t height) {
     SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
 
+    SDL_DisplayMode DM;
+    SDL_GetCurrentDisplayMode(0, &DM);
+    int width = DM.w;
+    int height = DM.h;
+
     sdl_window_ = SDL_CreateWindow(
         title,
         SDL_WINDOWPOS_CENTERED,
@@ -34,6 +39,8 @@ bool Window::initialize(const char* title, uint32_t width, uint32_t height) {
         height,
         SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL
     );
+
+    SDL_SetWindowFullscreen(sdl_window_, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
     gl_context_ = SDL_GL_CreateContext(sdl_window_);
 
