@@ -21,9 +21,9 @@ FadeOverlay::FadeOverlay(const FadeOverlay &other) :
         mesh_(other.mesh_),
         position_(other.position_),
         scale_(other.scale_),
-        alpha_(other.alpha_),
+        alpha_(other.alpha_)
 {}
-//
+
 void FadeOverlay::draw(const mat3 &projection) {
 
     // transform
