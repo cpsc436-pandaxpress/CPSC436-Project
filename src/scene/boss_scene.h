@@ -19,6 +19,7 @@
 #include <systems/fade_overlay_render_system.h>
 #include <systems/pause_menu_transform_system.h>
 #include <systems/pause_menu_render_system.h>
+#include <systems/hud_transform_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -41,8 +42,10 @@ private:
     const float PANDA_START_X = -10.f;
     const float PANDA_START_Y = -200.f;
     const float MAX_CAMERA_Y_DIFF = 200.f;
-    bool pause = false;
+    const float HEALTH_BAR_X_SIZE = 750.f;
+    const float HEALTH_BAR_Y_SIZE = 75.f;
 
+    bool pause = false;
     std::vector<uint32_t> bg_entities;
     uint32_t panda_entity;
     uint32_t jacko_entity;
@@ -69,7 +72,7 @@ private:
     FadeOverlayRenderSystem fade_overlay_render_system;
     PauseMenuTransformSystem pause_menu_transform_system;
     PauseMenuRenderSystem pause_menu_render_system;
-
+    HudTransformSystem hud_transform_system;
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);

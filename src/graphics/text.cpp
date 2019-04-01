@@ -14,6 +14,7 @@ Text::Text(Shader shader, Mesh mesh, FontType font, std::string text) :
     position_ = {0.f, 0.f};
     color_ = {1.0f, 1.0f, 1.0f};
     scale_ = 1.f;
+    opacity_ = 1.0f;
 }
 
 Text::Text(const Text& other) :
@@ -22,7 +23,8 @@ Text::Text(const Text& other) :
         font_(other.font_),
         position_(other.position_),
         scale_(other.scale_),
-        color_(other.color_)
+        color_(other.color_),
+        opacity_(other.opacity_)
 {}
 
 void Text::draw(const mat3& projection) {
@@ -44,6 +46,7 @@ void Text::draw(const mat3& projection) {
     //setup uniforms
     shader_.set_uniform_vec3("fcolor", color_);
     shader_.set_uniform_mat3("projection", projection);
+    shader_.set_uniform_float("opacity", opacity_);
 
     float x = position_.x;
     std::string::const_iterator i;
@@ -62,7 +65,6 @@ void Text::draw(const mat3& projection) {
         mul_in_place(transform, make_translate_mat3(xpos, ypos));
         mul_in_place(transform,
                      make_scale_mat3(scale_ * texture.width(), scale_ * texture.height()));
-
         shader_.set_uniform_mat3("transform", transform);
         glActiveTexture(GL_TEXTURE0);
         texture.bind();
@@ -123,4 +125,12 @@ std::string Text::text() {
 
 void Text::set_text(std::string text) {
     text_ = text;
+}
+
+float Text::opacity() {
+    return opacity_;
+}
+
+void Text::set_opacity(float opacity) {
+    opacity_ = opacity;
 }

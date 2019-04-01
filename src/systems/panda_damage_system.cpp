@@ -23,7 +23,7 @@ void PandaDamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
         auto &health = view.get<Health>(entity);
         auto &velocity = view.get<Velocity>(entity);
         auto &interactable = view.get<Interactable>(entity);
-        if(panda.recovering && interactable.grounded){
+        if (panda.recovering && interactable.grounded) {
             panda.recovering = false;
         }
         if (panda.hurt && !panda.invincible && panda.alive || health.health_points == 0) {
