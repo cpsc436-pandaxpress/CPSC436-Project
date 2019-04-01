@@ -23,6 +23,7 @@
 #include <systems/pause_menu_transform_system.h>
 #include <systems/pause_menu_render_system.h>
 #include <systems/hud_transform_system.h>
+#include <systems/label_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -78,6 +79,7 @@ private:
     PauseMenuTransformSystem pause_menu_transform_system;
     PauseMenuRenderSystem pause_menu_render_system;
     HudTransformSystem hud_transform_system;
+    LabelSystem label_system;
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);

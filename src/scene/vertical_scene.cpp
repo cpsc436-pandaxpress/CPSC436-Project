@@ -40,7 +40,8 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         score_system(SKY_TYPE),
         pause_menu_transform_system(),
         pause_menu_render_system(),
-        hud_transform_system()
+        hud_transform_system(),
+        label_system()
 
 {
     init_scene(blackboard);
@@ -143,6 +144,7 @@ void VerticalScene::update(Blackboard &blackboard) {
         sprite_transform_system.update(blackboard, registry_);
         health_bar_transform_system.update(blackboard, registry_);
         score_system.update(blackboard, registry_);
+        label_system.update(blackboard, registry_);
         text_transform_system.update(blackboard, registry_);
         player_animation_system.update(blackboard, registry_);
         enemy_system.update(blackboard, registry_, SKY_TYPE);
@@ -183,6 +185,7 @@ void VerticalScene::reset_scene(Blackboard &blackboard) {
     }
     bg_entities.clear();
     registry_.destroy(score_entity);
+    blackboard.score = 0;
     init_scene(blackboard);
 }
 

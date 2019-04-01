@@ -148,6 +148,10 @@ set(SOURCE_FILES
         src/systems/hud_transform_system.h
         src/graphics/font_manager.cpp
         src/graphics/font_manager.h
+        src/components/label.h
+        src/systems/label_system.cpp
+        src/systems/label_system.h
+        src/util/scene_helper.h
         )
 
 

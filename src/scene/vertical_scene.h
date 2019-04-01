@@ -30,6 +30,7 @@
 #include <systems/pause_menu_transform_system.h>
 #include <systems/pause_menu_render_system.h>
 #include <systems/hud_transform_system.h>
+#include <systems/label_system.h>
 
 class VerticalScene : public Scene {
 private:
@@ -64,6 +65,7 @@ private:
     PauseMenuTransformSystem pause_menu_transform_system;
     PauseMenuRenderSystem pause_menu_render_system;
     HudTransformSystem hud_transform_system;
+    LabelSystem label_system;
 
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;

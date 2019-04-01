@@ -5,6 +5,8 @@
 #ifndef PANDAEXPRESS_SCORE_SYSTEM_H
 #define PANDAEXPRESS_SCORE_SYSTEM_H
 
+static const float POINTS_SPEED = 15.0f;
+
 #include "system.h"
 #include "scene/scene.h"
 

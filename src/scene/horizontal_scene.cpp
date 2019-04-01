@@ -17,6 +17,7 @@
 #include <components/score.h>
 #include <components/layer.h>
 #include <components/hud_element.h>
+#include <components/label.h>
 #include "horizontal_scene.h"
 #include "util/constants.h"
 
@@ -42,7 +43,9 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         score_system(JUNGLE_TYPE),
         pause_menu_transform_system(),
         pause_menu_render_system(),
-        hud_transform_system() {
+        hud_transform_system(),
+        label_system()
+{
     init_scene(blackboard);
     gl_has_errors("horizontal_scene");
 }
@@ -88,6 +91,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
         player_animation_system.update(blackboard, registry_);
         score_system.update(blackboard, registry_);
         text_transform_system.update(blackboard, registry_);
+        label_system.update(blackboard, registry_);
         timer_system.update(blackboard, registry_);
         falling_platform_system.update(blackboard, registry_);
         enemy_animation_system.update(blackboard, registry_);
@@ -153,6 +157,8 @@ void HorizontalScene::reset_scene(Blackboard &blackboard) {
     bg_entities.clear();
     registry_.destroy(score_entity);
     registry_.destroy(fade_overlay_entity);
+    registry_.destroy<Label>();
+    blackboard.score = 0;
     init_scene(blackboard);
 }
 

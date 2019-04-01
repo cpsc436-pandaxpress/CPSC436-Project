@@ -20,6 +20,7 @@ private:
     vec2 position_;
     vec3 color_;
     float scale_;
+    float opacity_;
     std::string text_;
 
 public:
@@ -43,6 +44,9 @@ public:
 
     std::string text();
     void set_text(std::string text);
+
+    float opacity();
+    void set_opacity(float opacity);
 };
 
 

@@ -43,7 +43,8 @@ int start() {
         window,
         Random(0),
         SoundManager(),
-        FontManager()
+        FontManager(),
+        0
     };
 
 

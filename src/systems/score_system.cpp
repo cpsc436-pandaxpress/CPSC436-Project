@@ -18,21 +18,10 @@ void ScoreSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
     auto view = registry.view<Score, Text>();
     for (auto entity: view) {
         auto &text = view.get<Text>(entity);
-        auto cam = blackboard.camera;
+        blackboard.score += blackboard.delta_time * POINTS_SPEED;
         std::string score_text;
         std::stringstream ss;
-        switch (scene_type) {
-            case JUNGLE_TYPE: {
-                ss << std::setfill('0') << std::setw(6) << (int) abs(cam.position().x) / 100;
-            }
-                break;
-            case SKY_TYPE: {
-                ss << std::setfill('0') << std::setw(6) << (int) abs(cam.position().y) / 100;
-            }
-                break;
-            default:
-                fprintf(stderr, "Invalid scene ID: %d\n", scene_type);
-        }
+        ss << std::setfill('0') << std::setw(7) << (int) blackboard.score;
         score_text = ss.str();
         text.set_text(score_text);
     }
