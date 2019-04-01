@@ -27,7 +27,9 @@ bool contains(std::vector<Location*> list, Location* location){
 }
 
 
-AStarSystem::AStarSystem() {}
+AStarSystem::AStarSystem(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+    createGrid(blackboard, registry);
+}
 
 
 
@@ -199,18 +201,15 @@ std::vector<Location*> AStarSystem::findPath(Location* start, Location* end){
 
 }
 
+void AStarSystem::destroyGrid() {
+    for(int i = 0; i<rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            delete(grid[i][j]);
+        }
+    }
+    std::cout<<"Destroyed";
+}
+
 void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    // construct a view for all entities with a sprite
-    /*
-    Location* start;
-    Location* end;
 
-    start = grid[1][15];
-    end = grid[8][15];
-
-    std::vector<Location*> path;
-    path = getProjectilePath(blackboard, registry);
-    //path = findPath(start, end);
-    int u=0; // Only here to have breakpoint
-    */
 }

@@ -39,7 +39,7 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         enemy_animation_system(),
         health_bar_render_system(),
         health_bar_transform_system(),
-        a_star_system(),
+        a_star_system(blackboard, registry_),
         seek_system()
         {
     init_scene(blackboard);
@@ -94,6 +94,7 @@ void BossScene::update(Blackboard &blackboard) {
     background_transform_system.update(blackboard, registry_);
     seek_system.update(blackboard, registry_);
 
+
 }
 
 void BossScene::render(Blackboard &blackboard) {
@@ -133,8 +134,8 @@ void BossScene::init_scene(Blackboard &blackboard) {
     create_food(blackboard);
     create_jacko(blackboard, burger_entity);
     create_panda(blackboard);
+    //a_star_system.createGrid(blackboard,registry_);
     level_system.init();
-   a_star_system.createGrid(blackboard, registry_);
 }
 
 void BossScene::reset_scene(Blackboard &blackboard) {
@@ -145,6 +146,7 @@ void BossScene::reset_scene(Blackboard &blackboard) {
         registry_.destroy(e);
     }
     bg_entities.clear();
+    //a_star_system.destroyGrid();
     init_scene(blackboard);
 }
 

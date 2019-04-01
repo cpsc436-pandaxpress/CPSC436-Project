@@ -18,7 +18,8 @@
 
 class AStarSystem: public System{
 public:
-    AStarSystem();
+    AStarSystem(Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void destroyGrid();
     virtual void update(Blackboard &blackboard, entt::DefaultRegistry &registry);
     void createGrid(Blackboard &blackboard, entt::DefaultRegistry &registry);
     std::vector<Location*> findPath(Location* start, Location* end);

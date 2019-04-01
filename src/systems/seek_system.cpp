@@ -57,7 +57,7 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
                         velocity.x_velocity = seeks.seek_speed;
                     }
                     velocity.y_velocity=0;
-                    transform.y = transform.y + sin(transform.x/50)*0.3;
+                    transform.y = transform.y + sin(transform.x/50)*0.3f;
                 }else if(seeks.goingVertical) {
                     if (target->y < transform.y) {
                         velocity.y_velocity = -seeks.seek_speed;
@@ -65,7 +65,7 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
                         velocity.y_velocity = seeks.seek_speed;
                     }
                     velocity.x_velocity=0;
-                    transform.x= transform.x + sin(transform.y/50)*0.3;
+                    transform.x= transform.x + sin(transform.y/50)*0.3f;
                 }
 
             }
@@ -78,7 +78,7 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
                     registry.destroy(entity);
                 }
             }else{
-                timer.save_watch("batTimer", 1.);
+                timer.save_watch("batTimer", 1.f);
                 seeks.goingHorizontal=false;
                 seeks.goingHorizontal=false;
             }
