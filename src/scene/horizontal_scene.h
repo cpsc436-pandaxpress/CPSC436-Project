@@ -8,7 +8,7 @@
 
 #include "scene.h"
 #include <queue>
-#include <systems/horizontal_level_system.h>
+#include <level/horizontal_level_system.h>
 #include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
 #include <systems/timer_system.h>

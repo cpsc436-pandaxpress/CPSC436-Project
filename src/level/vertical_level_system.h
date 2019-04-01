@@ -10,6 +10,7 @@
 #include <entt/entity/registry.hpp>
 #include <components/timer.h>
 #include "level_system.h"
+#include "level.h"
 
 class VerticalLevelSystem : public LevelSystem {
 private:
@@ -32,15 +33,17 @@ private:
 
     Timer difficulty_timer;
 
+    std::unordered_map<int, Level> levels;
+
 public:
 
     VerticalLevelSystem();
 
-    void init();
+    void init() override;
 
-    void update(Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override;
 
-    void destroy_entities(entt::DefaultRegistry &registry);
+    void destroy_entities(entt::DefaultRegistry &registry) override;
 };
 
 
