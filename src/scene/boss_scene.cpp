@@ -52,20 +52,23 @@ void BossScene::update(Blackboard &blackboard) {
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
     auto &interactable = registry_.get<Interactable>(panda_entity);
 
-    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE) && pause) {
-        blackboard.camera.set_position(0, 0);
-        reset_scene(blackboard);
-        registry_.destroy(pause_menu_entity);
-        change_scene(MAIN_MENU_SCENE_ID);
-        pause = false;
-        return;
-    } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE) && !pause) {
-        pause = true;
-        create_pause_menu(blackboard);
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
+        if (pause) {
+            blackboard.camera.set_position(0, 0);
+            reset_scene(blackboard);
+            registry_.destroy(pause_menu_entity);
+            change_scene(MAIN_MENU_SCENE_ID);
+            pause = false;
+            return;
+        } else {
+            pause = true;
+            create_pause_menu(blackboard);
+        }
     } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN) && pause) {
         pause = false;
         registry_.destroy(pause_menu_entity);
     }
+
     if (!pause) {
         if (panda.alive && !panda.dead) {
             update_camera(blackboard);

@@ -22,7 +22,6 @@
 #include <systems/fade_overlay_system.h>
 #include <systems/fade_overlay_render_system.h>
 #include <systems/pause_menu_transform_system.h>
-#include <systems/pause_menu_render_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -73,7 +72,6 @@ private:
     FadeOverlaySystem fade_overlay_system;
     FadeOverlayRenderSystem fade_overlay_render_system;
     PauseMenuTransformSystem pause_menu_transform_system;
-    PauseMenuRenderSystem pause_menu_render_system;
 
 
     void create_background(Blackboard &blackboard);

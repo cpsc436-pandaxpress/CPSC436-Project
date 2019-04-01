@@ -39,8 +39,7 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         text_render_system(),
         text_transform_system(),
         score_system(HORIZONTAL_SCENE_ID),
-        pause_menu_transform_system(),
-        pause_menu_render_system() {
+        pause_menu_transform_system() {
     init_scene(blackboard);
     gl_has_errors("horizontal_scene");
 }
@@ -49,20 +48,19 @@ void HorizontalScene::update(Blackboard &blackboard) {
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
     auto &interactable = registry_.get<Interactable>(panda_entity);
-    auto &interactable = registry_.get<Interactable>(pause_menu_entity);
 
-
-    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE) && pause) {
-        blackboard.camera.set_position(0, 0);
-        reset_scene(blackboard);
-        registry_.destroy(pause_menu_entity);
-        change_scene(MAIN_MENU_SCENE_ID);
-        pause = false;
-        return;
-    } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE) && !pause) {
-        pause = true;
-        pause_menu_render_system.update(blackboard, registry_);
-//        create_pause_menu(blackboard);
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
+        if (pause) {
+            blackboard.camera.set_position(0, 0);
+            reset_scene(blackboard);
+            registry_.destroy(pause_menu_entity);
+            change_scene(MAIN_MENU_SCENE_ID);
+            pause = false;
+            return;
+        } else {
+            pause = true;
+            create_pause_menu(blackboard);
+        }
     } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN) && pause) {
         pause = false;
         registry_.destroy(pause_menu_entity);
@@ -244,16 +242,16 @@ void HorizontalScene::create_fade_overlay(Blackboard &blackboard) {
     auto &fade = registry_.assign<FadeOverlay>(fade_overlay_entity, meshFade, shaderFade, size);
 }
 
-//void HorizontalScene::create_pause_menu(Blackboard &blackboard) {
-//    pause_menu_entity = registry_.create();
-//
-//    auto texture = blackboard.texture_manager.get_texture("pause_menu");
-//    auto shader = blackboard.shader_manager.get_shader("sprite");
-//    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-//
-//    registry_.assign<Sprite>(pause_menu_entity, texture, shader, mesh);
-//    registry_.assign<Pause>(pause_menu_entity);
-//}
+void HorizontalScene::create_pause_menu(Blackboard &blackboard) {
+    pause_menu_entity = registry_.create();
+
+    auto texture = blackboard.texture_manager.get_texture("pause_menu");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+
+    registry_.assign<Sprite>(pause_menu_entity, texture, shader, mesh);
+    registry_.assign<Pause>(pause_menu_entity);
+}
 
 
 
