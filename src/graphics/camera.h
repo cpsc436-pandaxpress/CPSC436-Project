@@ -26,6 +26,6 @@ public:
     void compose();
 
     const mat3& get_projection();
-
+    const vec2 get_relative_pos(vec2 pos);
 
 };

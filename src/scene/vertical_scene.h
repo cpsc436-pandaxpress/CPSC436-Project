@@ -29,8 +29,8 @@
 #include <systems/fade_overlay_system.h>
 #include <systems/pause_menu_transform_system.h>
 #include <systems/pause_menu_render_system.h>
-
-
+#include <systems/hud_transform_system.h>
+#include <systems/label_system.h>
 
 class VerticalScene : public Scene {
 private:
@@ -64,7 +64,8 @@ private:
     FadeOverlayRenderSystem fade_overlay_render_system;
     PauseMenuTransformSystem pause_menu_transform_system;
     PauseMenuRenderSystem pause_menu_render_system;
-
+    HudTransformSystem hud_transform_system;
+    LabelSystem label_system;
 
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;
@@ -72,6 +73,11 @@ private:
     const float PANDA_START_Y = -200.f;
     const float PLATFORM_START_X = -0.f;
     const float PLATFORM_START_Y = 400.f;
+    const float HUD_Y_OFFSET = 50.f;
+    const float HUD_SCORE_X_OFFSET = 350.f;
+    const float HUD_HEALTH_X_OFFSET = 100.f;
+    const float HEALTH_BAR_X_SIZE = 750.f;
+    const float HEALTH_BAR_Y_SIZE = 75.f;
     bool pause = false;
 
     void create_panda(Blackboard& blackboard);

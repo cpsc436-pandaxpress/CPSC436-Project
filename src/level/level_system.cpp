@@ -159,7 +159,6 @@ void LevelSystem::generateEntity(char value, float x, float y,
             vec2 scaleCave = {-80, 80};
             auto &caveE = registry.assign<Cave>(cave, meshCave, shaderCave, sizeCave, scaleCave);
             caveE.set_pos(550, -550);
-            //printf("Rendering Cave (%f, %f)\n", x, y);
         }
             break;
         case '9': {
