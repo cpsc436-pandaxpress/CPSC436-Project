@@ -37,7 +37,8 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         health_bar_transform_system(),
         text_render_system(),
         text_transform_system(),
-        score_system(HORIZONTAL_SCENE_ID)
+        score_system(HORIZONTAL_SCENE_ID),
+        transition_system()
 {
     init_scene(blackboard);
     create_tutorial(blackboard);
@@ -70,6 +71,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
     timer_system.update(blackboard, registry_);
     falling_platform_system.update(blackboard, registry_);
     enemy_animation_system.update(blackboard, registry_);
+    transition_system.update(blackboard, registry_);
 }
 
 void HorizontalScene::update_panda(Blackboard &blackboard) {
@@ -89,14 +91,17 @@ void HorizontalScene::update_panda(Blackboard &blackboard) {
 }
 
 void HorizontalScene::update_camera(Blackboard &blackboard) {
-    vec2 cam_position = blackboard.camera.position();
+    if (!blackboard.camera.in_transition) {
+        vec2 cam_position = blackboard.camera.position();
 
-    auto &panda_transform = registry_.get<Transform>(panda_entity);
-    float y_offset = std::min(0.f, panda_transform.y + MAX_CAMERA_Y_DIFF);
+        auto &panda_transform = registry_.get<Transform>(panda_entity);
+        float y_offset = std::min(0.f, panda_transform.y + MAX_CAMERA_Y_DIFF);
 
-    blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time,
-                                   y_offset);
-    blackboard.camera.compose();
+        blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time,
+                                       y_offset);
+        blackboard.camera.compose();
+    }
+
 }
 
 void HorizontalScene::update_tutorial(Blackboard &blackboard) {

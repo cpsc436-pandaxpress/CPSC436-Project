@@ -74,30 +74,32 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
 void PlayerMovementSystem::update_horizontal_scene(Blackboard &blackboard, Velocity &velocity) {
     const float dvx = PANDA_HS_ACCELERATION * blackboard.delta_time;
     const float camera_vx = HorizontalScene::CAMERA_SPEED;
-    if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
-        // First if for quick turn around, otherwise it felt too slidey when switching movement direction
-        if (velocity.x_velocity > camera_vx) {
-            velocity.x_velocity = camera_vx - dvx;
-        } else if (velocity.x_velocity - dvx > camera_vx - PANDA_BACK_OFFSET_SPEED) {
-            velocity.x_velocity -= dvx;
+    if (!blackboard.camera.in_transition) {
+        if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
+            // First if for quick turn around, otherwise it felt too slidey when switching movement direction
+            if (velocity.x_velocity > camera_vx) {
+                velocity.x_velocity = camera_vx - dvx;
+            } else if (velocity.x_velocity - dvx > camera_vx - PANDA_BACK_OFFSET_SPEED) {
+                velocity.x_velocity -= dvx;
+            } else {
+                velocity.x_velocity = camera_vx - PANDA_BACK_OFFSET_SPEED;
+            }
+        } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
+            if (velocity.x_velocity < camera_vx) {
+                velocity.x_velocity = camera_vx + dvx;
+            } else if (velocity.x_velocity + dvx < camera_vx + PANDA_OFFSET_SPEED) {
+                velocity.x_velocity += dvx;
+            } else {
+                velocity.x_velocity = camera_vx + PANDA_OFFSET_SPEED;
+            }
         } else {
-            velocity.x_velocity = camera_vx - PANDA_BACK_OFFSET_SPEED;
-        }
-    } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
-        if (velocity.x_velocity < camera_vx) {
-            velocity.x_velocity = camera_vx + dvx;
-        } else if (velocity.x_velocity + dvx < camera_vx + PANDA_OFFSET_SPEED) {
-            velocity.x_velocity += dvx;
-        } else {
-            velocity.x_velocity = camera_vx + PANDA_OFFSET_SPEED;
-        }
-    } else {
-        if (velocity.x_velocity - dvx > camera_vx) {
-            velocity.x_velocity -= dvx;
-        } else if (velocity.x_velocity + dvx < camera_vx) {
-            velocity.x_velocity += dvx;
-        } else {
-            velocity.x_velocity = camera_vx;
+            if (velocity.x_velocity - dvx > camera_vx) {
+                velocity.x_velocity -= dvx;
+            } else if (velocity.x_velocity + dvx < camera_vx) {
+                velocity.x_velocity += dvx;
+            } else {
+                velocity.x_velocity = camera_vx;
+            }
         }
     }
 }

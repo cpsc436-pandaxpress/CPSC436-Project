@@ -28,6 +28,7 @@
 #include "../systems/physics_system.h"
 #include "../systems/player_movement_system.h"
 #include "../systems/enemy_system.h"
+#include "../systems/transition_system.h"
 #include "../systems/player_animation_system.h"
 #include "../systems/enemy_animation_system.h"
 
@@ -65,6 +66,7 @@ private:
     TextRenderSystem text_render_system;
     TextTransformSystem text_transform_system;
     ScoreSystem score_system;
+    TransitionSystem transition_system;
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);

@@ -258,9 +258,7 @@ void Cave::draw(const mat3 &projection) {
 
     mul_in_place(transform, make_translate_mat3(position_.x, position_.y));
     mul_in_place(transform, make_rotate_mat3(rotation_));
-//    mul_in_place(transform, make_scale_mat3(size_.x, size_.y));
     mul_in_place(transform, make_scale_mat3(scale_.x, scale_.y));
-    vec2 scale = {scale_.x * size_.x, scale_.y * size_.y};
 
     // bind shader
     shader_.bind();
@@ -279,11 +277,10 @@ void Cave::draw(const mat3 &projection) {
             sizeof(Vertex), // No values between vertices
             0  // offset = 0
     );
-
     shader_.set_input_vec3(
             "in_color",
             sizeof(Vertex), // No values between vertices
-            sizeof(vec3)  // offset = sizeOf(vec3)
+            0  // offset = sizeOf(vec3)
     );
 
     shader_.set_uniform_mat3("transform", transform);
