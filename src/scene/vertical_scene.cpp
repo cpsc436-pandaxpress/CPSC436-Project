@@ -17,6 +17,7 @@
 #include <components/score.h>
 #include <components/layer.h>
 #include <components/pause_menu.h>
+#include <components/hud_element.h>
 #include "vertical_scene.h"
 #include "util/constants.h"
 
@@ -38,7 +39,9 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         text_render_system(),
         score_system(SKY_TYPE),
         pause_menu_transform_system(),
-        pause_menu_render_system()
+        pause_menu_render_system(),
+        hud_transform_system()
+
 {
     init_scene(blackboard);
     gl_has_errors("vertical_scene");
@@ -79,12 +82,13 @@ void VerticalScene::create_panda(Blackboard &blackboard) {
 
     auto shaderHealth = blackboard.shader_manager.get_shader("health");
     auto meshHealth = blackboard.mesh_manager.get_mesh("health");
-    float height = 75.f;
-    float width = 750.f;
-    vec2 size = {width, height};
+    vec2 size = {HEALTH_BAR_X_SIZE, HEALTH_BAR_Y_SIZE};
     vec2 scale = {0.5, 0.5};
     auto &healthbar = registry_.assign<HealthBar>(panda_entity,
                                                   meshHealth, shaderHealth, size, scale);
+    registry_.assign<HudElement>(panda_entity,
+                                 vec2{size.x / 2.f * scale.x + HUD_HEALTH_X_OFFSET,
+                                      blackboard.camera.size().y - HUD_Y_OFFSET});
 }
 
 void VerticalScene::update(Blackboard &blackboard) {
@@ -145,6 +149,7 @@ void VerticalScene::update(Blackboard &blackboard) {
         enemy_animation_system.update(blackboard, registry_);
         timer_system.update(blackboard, registry_);
         falling_platform_system.update(blackboard, registry_);
+        hud_transform_system.update(blackboard, registry_); // should run last
     } else {
         pause_menu_transform_system.update(blackboard, registry_);
     }
@@ -221,14 +226,16 @@ void VerticalScene::create_score_text(Blackboard &blackboard) {
     auto shader = blackboard.shader_manager.get_shader("text");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
-    FontType font = FontType();
-    font.load(fonts_path("TitilliumWeb-Bold.ttf"), 64);
+    FontType font = blackboard.fontManager.get_font("titillium_72");
 
     score_entity = registry_.create();
-    std::string textVal = "SCORE: 0";
+    std::string textVal = "0";
     auto &text = registry_.assign<Text>(score_entity, shader, mesh, font, textVal);
-    registry_.assign<Transform>(score_entity, 0., 0., 0., 1.f, 1.f);
+    text.set_scale(0.8f);
     registry_.assign<Score>(score_entity);
+    registry_.assign<HudElement>(score_entity,
+                                 vec2{blackboard.camera.size().x - HUD_SCORE_X_OFFSET,
+                                      blackboard.camera.size().y - HUD_Y_OFFSET});
 }
 
 void VerticalScene::set_mode(SceneMode mode) {
