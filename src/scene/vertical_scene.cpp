@@ -13,6 +13,7 @@
 #include <graphics/health_bar.h>
 #include <graphics/font.h>
 #include <graphics/text.h>
+#include <graphics/fade_overlay.h>
 #include <components/score.h>
 #include <components/layer.h>
 #include "vertical_scene.h"
@@ -49,6 +50,7 @@ void VerticalScene::init_scene(Blackboard &blackboard) {
     create_background(blackboard);
     create_panda(blackboard);
     create_score_text(blackboard);
+    create_fade_overlay(blackboard);
     level_system.init();
 }
 
@@ -90,19 +92,25 @@ void VerticalScene::update(Blackboard &blackboard) {
         change_scene(MAIN_MENU_SCENE_ID);
         return;
     }
-
     vec2 cam_size = blackboard.camera.size();
     vec2 cam_position = blackboard.camera.position();
-    blackboard.camera.set_position(cam_position.x,
-                                   cam_position.y - CAMERA_SPEED * blackboard.delta_time);
-    blackboard.camera.compose();
 
     auto &transform = registry_.get<Transform>(panda_entity);
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &panda_collidable = registry_.get<Collidable>(panda_entity);
 
+    if (panda.alive && !panda.dead){
+        blackboard.camera.set_position(cam_position.x,
+                                       cam_position.y - CAMERA_SPEED * blackboard.delta_time);
+        blackboard.camera.compose();
+        player_movement_system.update(blackboard, registry_);
+    }
+    if (!panda.alive) {
+        fade_overlay_system.update(blackboard, registry_);
+    }
+
     if (transform.y - panda_collidable.height / 2 > cam_position.y + cam_size.y / 2 ||
-        !panda.alive) {
+        panda.dead) {
         reset_scene(blackboard);
     } else if (transform.x + panda_collidable.width / 2 > cam_position.x + cam_size.x / 2) {
         transform.x = cam_position.x + cam_size.x / 2 - panda_collidable.width / 2;
@@ -112,7 +120,6 @@ void VerticalScene::update(Blackboard &blackboard) {
 
     background_transform_system.update(blackboard, registry_);
     level_system.update(blackboard, registry_);
-    player_movement_system.update(blackboard, registry_);
     physics_system.update(blackboard, registry_);
     panda_dmg_system.update(blackboard, registry_);
     sprite_transform_system.update(blackboard, registry_);
@@ -135,6 +142,11 @@ void VerticalScene::render(Blackboard &blackboard) {
     sprite_render_system.update(blackboard, registry_);
     health_bar_render_system.update(blackboard, registry_);
     text_render_system.update(blackboard, registry_);
+
+    auto &panda = registry_.get<Panda>(panda_entity);
+    if (!panda.alive) {
+        fade_overlay_render_system.update(blackboard, registry_);
+    }
 }
 
 void VerticalScene::reset_scene(Blackboard &blackboard) {
@@ -204,4 +216,14 @@ void VerticalScene::set_mode(SceneMode mode) {
     } else if (mode == ENDLESS) {
         level_system.set_seed((unsigned int) time(nullptr));
     }
+}
+
+void VerticalScene::create_fade_overlay(Blackboard &blackboard) {
+    fade_overlay_entity = registry_.create();
+    auto shaderFade = blackboard.shader_manager.get_shader("fade");
+    auto meshFade = blackboard.mesh_manager.get_mesh("health");
+    float height = blackboard.camera.size().y;
+    float width = blackboard.camera.size().x;
+    vec2 size = {width, height};
+    auto &fade = registry_.assign<FadeOverlay>(fade_overlay_entity, meshFade, shaderFade, size);
 }

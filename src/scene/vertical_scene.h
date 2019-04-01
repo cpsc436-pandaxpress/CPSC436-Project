@@ -25,12 +25,16 @@
 #include <systems/text_transform_system.h>
 #include <systems/text_render_system.h>
 #include <systems/score_system.h>
+#include <systems/fade_overlay_render_system.h>
+#include <systems/fade_overlay_system.h>
+
 
 class VerticalScene : public Scene {
 private:
 
     uint32_t panda_entity;
     uint32_t score_entity;
+    uint32_t fade_overlay_entity;
     std::vector<uint32_t> bg_entities;
     SpriteTransformSystem sprite_transform_system;
     SpriteRenderSystem sprite_render_system;
@@ -51,6 +55,9 @@ private:
     TextRenderSystem text_render_system;
     TextTransformSystem text_transform_system;
     ScoreSystem score_system;
+    FadeOverlaySystem fade_overlay_system;
+    FadeOverlayRenderSystem fade_overlay_render_system;
+
 
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;
@@ -63,6 +70,7 @@ private:
     void reset_scene(Blackboard& blackboard);
     void init_scene(Blackboard &blackboard);
     void create_score_text(Blackboard &blackboard);
+    void create_fade_overlay(Blackboard& blackboard);
 public:
     VerticalScene(Blackboard& blackboard, SceneManager& scene_manager);
 
