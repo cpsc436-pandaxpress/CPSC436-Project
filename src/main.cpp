@@ -86,9 +86,11 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("platform_center_grass.png"), "platform_center_grass");
     blackboard.texture_manager.load_texture(textures_path("grass_block_2.png"), "platform2");
     blackboard.texture_manager.load_texture(textures_path("bread_sprite_sheet.png"), "bread");
-    blackboard.texture_manager.load_texture(textures_path("play_text.png"), "play_text");
-    blackboard.texture_manager.load_texture(textures_path("levels_text.png"), "levels_text");
-    blackboard.texture_manager.load_texture(textures_path("config_text.png"), "config_text");
+
+    blackboard.texture_manager.load_texture(textures_path("story_text.png"), "story_text");
+    blackboard.texture_manager.load_texture(textures_path("endless_jungle_text.png"), "endless_jungle_text");
+    blackboard.texture_manager.load_texture(textures_path("endless_sky_text.png"), "endless_sky_text");
+    blackboard.texture_manager.load_texture(textures_path("jacko_text.png"), "jacko_text");
     blackboard.texture_manager.load_texture(textures_path("pixel.png"), "pixel");
     blackboard.texture_manager.load_texture(textures_path("menu_full.png"), "splash");
     blackboard.texture_manager.load_texture(textures_path("ghost_sprite_sheet.png"), "ghost");
@@ -124,11 +126,10 @@ int start() {
 
     // initialize scenes here
     MainMenuScene main_menu(blackboard, scene_manager);
-    main_menu.add_item(blackboard, "play_text", HORIZONTAL_SCENE_ID);
-
-    //TODO: implement level select and config scenes
-    main_menu.add_item(blackboard, "levels_text", VERTICAL_SCENE_ID);
-    main_menu.add_item(blackboard, "config_text",  BOSS_SCENE_ID);
+    main_menu.add_item(blackboard, "story_text", STORY_JUNGLE_SCENE_ID);
+    main_menu.add_item(blackboard, "endless_jungle_text", ENDLESS_JUNGLE_SCENE_ID);
+    main_menu.add_item(blackboard, "endless_sky_text", ENDLESS_SKY_SCENE_ID);
+    main_menu.add_item(blackboard, "jacko_text",  BOSS_SCENE_ID);
     scene_manager.add_scene(MAIN_MENU_SCENE_ID, (Scene*)(&main_menu));
 
 
@@ -141,9 +142,10 @@ int start() {
 
     VerticalScene vertical_scene(blackboard, scene_manager);
 
+    scene_manager.add_scene(STORY_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY);
+    scene_manager.add_scene(ENDLESS_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), ENDLESS);
+    scene_manager.add_scene(ENDLESS_SKY_SCENE_ID, (Scene*)(&vertical_scene), ENDLESS);
     scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene));
-    scene_manager.add_scene(VERTICAL_SCENE_ID, (Scene*)(&vertical_scene));
-    scene_manager.add_scene(HORIZONTAL_SCENE_ID, (Scene*)(&horizontal_scene));
 
     // set the first scene
 

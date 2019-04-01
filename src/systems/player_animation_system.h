@@ -14,7 +14,7 @@
 
 class PlayerAnimationSystem : public System {
 public:
-    PlayerAnimationSystem(SceneID scene_id);
+    PlayerAnimationSystem(SceneType scene_type);
 
     virtual void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override;
 
@@ -22,8 +22,7 @@ public:
 private:
     const float pandawidth = 0.1f;
     const float pandaheight = 0.333f;
-    SceneID scene_id;
-
+    SceneType scene_type;
 
     float animationTime = 0.f;
     int death_index = 0;

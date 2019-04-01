@@ -15,6 +15,11 @@ VerticalLevelSystem::VerticalLevelSystem() : LevelSystem() {
 
 void VerticalLevelSystem::init() {
     LevelSystem::init();
+
+    if (mode_ == ENDLESS) {
+        rng_.init((unsigned int) rand());
+    }
+
     last_row_generated_ = last_row_loaded_ = FIRST_ROW_Y;
     difficulty = MIN_DIFFICULTY;
     difficulty_timer.save_watch(LEVEL_UP_LABEL, LEVEL_UP_INTERVAL);
@@ -102,5 +107,14 @@ void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, fl
         if (transform.y > max_y) {
             registry.destroy(entity);
         }
+    }
+}
+
+void VerticalLevelSystem::set_mode(SceneMode mode) {
+    mode_ = mode;
+    if (mode_ == ENDLESS) {
+        rng_.init((unsigned int) rand());
+    } else if (mode_ == STORY) {
+        rng_.init(STORY_SEED);
     }
 }

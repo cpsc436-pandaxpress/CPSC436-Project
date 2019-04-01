@@ -6,6 +6,7 @@
 #include <components/transform.h>
 #include <components/collidable.h>
 #include <components/timer.h>
+#include <scene/scene_mode.h>
 #include "horizontal_level_system.h"
 
 HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem() {
@@ -16,6 +17,11 @@ HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem() {
 
 void HorizontalLevelSystem::init(){
     LevelSystem::init();
+
+    if (mode_ == ENDLESS) {
+        rng_.init((unsigned int) rand());
+    }
+
     last_col_generated_ = last_col_loaded_ = FIRST_COL_X;
     difficulty = MIN_DIFFICULTY;
     difficulty_timer.save_watch(LEVEL_UP_LABEL, LEVEL_UP_INTERVAL);
@@ -129,5 +135,14 @@ void HorizontalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, 
         if (transform.x < x) {
             registry.destroy(entity);
         }
+    }
+}
+
+void HorizontalLevelSystem::set_mode(SceneMode mode) {
+    mode_ = mode;
+    if (mode_ == ENDLESS) {
+        rng_.init((unsigned int) rand());
+    } else if (mode_ == STORY) {
+        rng_.init(STORY_SEED);
     }
 }

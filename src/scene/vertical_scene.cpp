@@ -25,17 +25,17 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         sprite_transform_system(),
         sprite_render_system(),
         physics_system(),
-        player_movement_system(VERTICAL_SCENE_ID),
-        player_animation_system(VERTICAL_SCENE_ID),
+        player_movement_system(SKY_TYPE),
+        player_animation_system(SKY_TYPE),
         panda_dmg_system(),
         background_render_system(),
         falling_platform_system(),
-        background_transform_system(VERTICAL_SCENE_ID),
+        background_transform_system(SKY_TYPE),
         enemy_system(),
         enemy_animation_system(),
         text_transform_system(),
         text_render_system(),
-        score_system(VERTICAL_SCENE_ID)
+        score_system(SKY_TYPE)
 
 {
     init_scene(blackboard);
@@ -127,7 +127,7 @@ void VerticalScene::update(Blackboard &blackboard) {
     score_system.update(blackboard, registry_);
     text_transform_system.update(blackboard, registry_);
     player_animation_system.update(blackboard, registry_);
-    enemy_system.update(blackboard, registry_, VERTICAL_SCENE_ID);
+    enemy_system.update(blackboard, registry_, SKY_TYPE);
     enemy_animation_system.update(blackboard, registry_);
     timer_system.update(blackboard, registry_);
     falling_platform_system.update(blackboard, registry_);
@@ -208,6 +208,10 @@ void VerticalScene::create_score_text(Blackboard &blackboard) {
     auto &text = registry_.assign<Text>(score_entity, shader, mesh, font, textVal);
     registry_.assign<Transform>(score_entity, 0., 0., 0., 1.f, 1.f);
     registry_.assign<Score>(score_entity);
+}
+
+void VerticalScene::set_mode(SceneMode mode) {
+    level_system.set_mode(mode);
 }
 
 void VerticalScene::create_fade_overlay(Blackboard &blackboard) {

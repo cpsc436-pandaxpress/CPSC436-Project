@@ -80,6 +80,8 @@ public:
 
     void create_background(Blackboard &blackboard);
 
+    void set_mode(SceneMode mode) override;
+
     static constexpr float CAMERA_SPEED = 250.f;
 };
 

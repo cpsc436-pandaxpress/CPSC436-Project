@@ -31,6 +31,7 @@ private:
 
     Timer difficulty_timer;
 
+    SceneMode mode_;
     std::unordered_map<int, Level> levels;
 
 public:
@@ -42,4 +43,6 @@ public:
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override;
 
     void destroy_entities(entt::DefaultRegistry &registry) override;
+
+    void set_mode(SceneMode mode);
 };
