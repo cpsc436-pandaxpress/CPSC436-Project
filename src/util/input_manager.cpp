@@ -127,3 +127,7 @@ void InputManager::set_key_status_from_event(SDL_Event& event) {
     }
 }
 
+void InputManager::signal_exit() {
+    should_exit_ = true;
+}
+
