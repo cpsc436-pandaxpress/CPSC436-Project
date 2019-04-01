@@ -118,9 +118,8 @@ void BossScene::init_scene(Blackboard &blackboard) {
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
     create_background(blackboard);
-    create_food(blackboard);
-    create_jacko(blackboard, burger_entity);
     create_panda(blackboard);
+    create_jacko(blackboard, panda_entity);
     create_fade_overlay(blackboard);
     level_system.init();
 }
@@ -198,26 +197,6 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
     vec2 scale = {0.3, 0.3};
     auto &healthbar = registry_.assign<HealthBar>(jacko_entity,
                                                   meshHealth, shaderHealth, size, scale);
-}
-
-void BossScene::create_food(Blackboard &blackboard) {
-    burger_entity = registry_.create();
-
-    auto texture = blackboard.texture_manager.get_texture("burger");
-    auto shader = blackboard.shader_manager.get_shader("sprite");
-    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-
-    float scaleY = 50.0 / texture.height();
-    float scaleX = 50.0 / texture.width();
-    registry_.assign<Transform>(burger_entity, 300, 100, 0., scaleX, scaleY);
-    registry_.assign<Sprite>(burger_entity, texture, shader, mesh);
-    registry_.assign<Food>(burger_entity);
-    registry_.assign<Interactable>(burger_entity);
-    registry_.assign<ObeysGravity>(burger_entity);
-    registry_.assign<Velocity>(burger_entity);
-    registry_.assign<Collidable>(burger_entity, texture.width() * scaleX, texture.height() * scaleY);
-    registry_.assign<Layer>(burger_entity, ITEM_LAYER);
-
 }
 
 void BossScene::create_background(Blackboard &blackboard) {
