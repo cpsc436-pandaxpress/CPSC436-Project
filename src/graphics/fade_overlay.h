@@ -17,7 +17,6 @@ private:
     Mesh mesh_;
     vec2 position_, size_, scale_;
     float alpha_;
-    bool pause_;
 public:
 
     FadeOverlay(Mesh mesh, Shader shader, vec2 size);
