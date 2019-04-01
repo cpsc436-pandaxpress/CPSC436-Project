@@ -55,7 +55,7 @@ void AStarSystem::createGrid(Blackboard &blackboard, entt::DefaultRegistry &regi
         std::vector<Location*> row;
         for(int j=0; j<cols; j++){
             row.push_back(new Location(i,j));
-            if(dataList[i][j]=='1'){
+            if(dataList[i][j]=='1' || dataList[i][j]=='b'){
                 row[row.size()-1]->obstacle=true;
             }
 
@@ -79,8 +79,8 @@ void AStarSystem::createGrid(Blackboard &blackboard, entt::DefaultRegistry &regi
 }
 
 Location* AStarSystem::getGridLocation(float x, float y){
-    int i = (x+800)/100;
-    int j = (y+450)/100;
+    int i = (x+800-X_OFFSET)/100;
+    int j = (y+450-Y_OFFSET)/100;
 
     int u=0; // Only here to have breakpoint
     std::cout<<"gridlocation " << i << " " << j << "\n";
@@ -89,7 +89,7 @@ Location* AStarSystem::getGridLocation(float x, float y){
 
 Coordinates* AStarSystem::getScreenLocation(int j, int i){
     float x = (i*100)-800;
-    float y = (j*100)-450;
+    float y = (j*100)-450+Y_OFFSET;
 
     int u=0; // Only here to have breakpoint
 
@@ -145,7 +145,7 @@ std::vector<Location*> AStarSystem::findPath(Location* start, Location* end){
     while(openSet.size() > 0){
         int winner = 0;
         for(int i = 0; i<openSet.size(); i++){
-            if(openSet[i]->f < openSet[winner]->f){
+            if(openSet[i]->f < openSet[winner]->f && !openSet[winner]->obstacle){
                 winner = i;
             }
         }
@@ -160,7 +160,6 @@ std::vector<Location*> AStarSystem::findPath(Location* start, Location* end){
             //Reset Grid
             for(int i = 0; i<rows; i++) {
                 for (int j = 0; j < cols; j++) {
-                    //grid[i][j]->neighbours.clear();
                     grid[i][j]->previous=NULL;
                     grid[i][j]->f=0;
                     grid[i][j]->g=0;

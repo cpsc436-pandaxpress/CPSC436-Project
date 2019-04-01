@@ -97,6 +97,7 @@ int main(int argc, char** argv) {
     blackboard.texture_manager.load_texture(textures_path("tutorial2.png"), "tutorial_bread");
 
     blackboard.texture_manager.load_texture(textures_path("jacko_sprite_sheet.png"), "jacko");
+    blackboard.texture_manager.load_texture(textures_path("jacko_small_sprite_sheet.png"), "jacko_small");
     blackboard.texture_manager.load_texture(textures_path("burger.png"), "burger");
 
     blackboard.texture_manager.load_texture(textures_path("stalagmite.png"), "stalagmite");

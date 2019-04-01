@@ -55,7 +55,7 @@ void BossScene::update(Blackboard &blackboard) {
         }
         bat_entity = registry_.create();
 
-        auto texture = blackboard.texture_manager.get_texture("burger");
+        auto texture = blackboard.texture_manager.get_texture("jacko_small");
         auto shader = blackboard.shader_manager.get_shader("sprite");
         auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
