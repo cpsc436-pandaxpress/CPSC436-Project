@@ -254,6 +254,7 @@ void LevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
     registry.destroy<Bread>();
     registry.destroy<Obstacle>();
     registry.destroy<Cave>();
+    registry.destroy<CaveEntrance>();
     registry.destroy<Food>();
 
     while (!chunks_.empty()) {
