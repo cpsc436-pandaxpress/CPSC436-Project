@@ -32,6 +32,8 @@ public:
     void put(std::string key, std::string value);
     void put(const char* key, std::string value);
 
+    bool has(const char* key);
+
     bool load();
 
     bool save();

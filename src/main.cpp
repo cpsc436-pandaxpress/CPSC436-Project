@@ -51,7 +51,11 @@ int start() {
 
     //load assets and configure
     PropertyReader scores(data_path "/score.ini");
-    scores.load();
+    if (!scores.load()) {
+        scores.put("jungle", "0");
+        scores.put("sky", "0");
+    }
+
 
     blackboard.input_manager.track(SDL_SCANCODE_UP);
     blackboard.input_manager.track(SDL_SCANCODE_DOWN);

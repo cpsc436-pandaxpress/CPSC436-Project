@@ -57,3 +57,7 @@ bool PropertyReader::save() {
     file.close();
     return true;
 }
+
+bool PropertyReader::has(const char *key) {
+    return config_.count(key) > 0;
+}
