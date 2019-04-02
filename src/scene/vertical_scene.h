@@ -67,6 +67,9 @@ private:
     HudTransformSystem hud_transform_system;
     LabelSystem label_system;
 
+    uint32_t high_score_entity;
+    int high_score_;
+
     const float CAMERA_START_X = 0.f;
     const float CAMERA_START_Y = 0.f;
     const float PANDA_START_X = -10.f;
@@ -97,6 +100,9 @@ public:
     void create_background(Blackboard &blackboard);
 
     void set_mode(SceneMode mode) override;
+
+    void set_high_score(int value);
+    int get_high_score();
 
     static constexpr float CAMERA_SPEED = 250.f;
 };

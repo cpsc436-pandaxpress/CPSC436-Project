@@ -152,6 +152,8 @@ set(SOURCE_FILES
         src/systems/label_system.cpp
         src/systems/label_system.h
         src/util/scene_helper.h
+        src/util/property_reader.cpp
+        src/util/property_reader.h
         )
 
 

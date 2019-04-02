@@ -18,8 +18,11 @@
 #include <components/layer.h>
 #include <components/pause_menu.h>
 #include <components/hud_element.h>
+#include <iomanip>
 #include "vertical_scene.h"
 #include "util/constants.h"
+#include <algorithm>
+#include <components/label.h>
 
 VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager) :
         Scene(scene_manager),
@@ -44,6 +47,7 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         label_system()
 
 {
+    high_score_ = 0;
     init_scene(blackboard);
     gl_has_errors("vertical_scene");
 }
@@ -152,6 +156,7 @@ void VerticalScene::update(Blackboard &blackboard) {
         timer_system.update(blackboard, registry_);
         falling_platform_system.update(blackboard, registry_);
         hud_transform_system.update(blackboard, registry_); // should run last
+        high_score_ = std::max<int>(high_score_, (int)blackboard.score);
     } else {
         pause_menu_transform_system.update(blackboard, registry_);
     }
@@ -185,6 +190,7 @@ void VerticalScene::reset_scene(Blackboard &blackboard) {
     }
     bg_entities.clear();
     registry_.destroy(score_entity);
+    registry_.destroy(high_score_entity);
     blackboard.score = 0;
     init_scene(blackboard);
 }
@@ -239,6 +245,15 @@ void VerticalScene::create_score_text(Blackboard &blackboard) {
     registry_.assign<HudElement>(score_entity,
                                  vec2{blackboard.camera.size().x - HUD_SCORE_X_OFFSET,
                                       blackboard.camera.size().y - HUD_Y_OFFSET});
+
+    high_score_entity = registry_.create();
+    std::stringstream ss;
+    ss << ". " << std::setfill('0') << std::setw(7) << high_score_ << ".";
+    auto &text2 = registry_.assign<Text>(high_score_entity, shader, mesh, font, ss.str());
+    text2.set_scale(0.8f);
+    registry_.assign<HudElement>(high_score_entity,
+                                 vec2{blackboard.camera.size().x / 2.0f - HUD_HEALTH_X_OFFSET,
+                                      blackboard.camera.size().y - HUD_Y_OFFSET});
 }
 
 void VerticalScene::set_mode(SceneMode mode) {
@@ -266,3 +281,11 @@ void VerticalScene::create_pause_menu(Blackboard &blackboard) {
     registry_.assign<PauseMenu>(pause_menu_entity);
 }
 
+
+void VerticalScene::set_high_score(int value) {
+    high_score_ = value;
+}
+
+int VerticalScene::get_high_score() {
+    return high_score_;
+}
