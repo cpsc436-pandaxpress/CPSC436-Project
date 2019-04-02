@@ -73,11 +73,9 @@ private:
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);
-    void create_jacko(Blackboard& blackboard, uint32_t panda);
     void create_fade_overlay(Blackboard& blackboard);
     void create_pause_menu(Blackboard& blackboard);
     void reset_scene(Blackboard& blackboard);
-    void init_scene(Blackboard &blackboard);
     void update_panda(Blackboard& blackboard);
     void update_camera(Blackboard& blackboard);
 
@@ -87,6 +85,8 @@ public:
 
     virtual void update(Blackboard& blackboard) override;
     virtual void render(Blackboard& blackboard) override;
+    void init_scene(Blackboard &blackboard);
+    void create_jacko(Blackboard& blackboard, uint32_t panda);
 
 };
 

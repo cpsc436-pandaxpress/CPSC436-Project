@@ -40,7 +40,8 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         pause_menu_transform_system(),
         pause_menu_render_system(),
         cave_render_system(),
-        transition_system(SKY_TYPE)
+        transition_system(SKY_TYPE),
+        boss_scene(blackboard, scene_manager)
 {
     init_scene(blackboard);
     gl_has_errors("vertical_scene");
@@ -120,8 +121,8 @@ void VerticalScene::update(Blackboard &blackboard) {
             if (!blackboard.camera.in_transition){
                 blackboard.camera.set_position(cam_position.x,
                                                cam_position.y - CAMERA_SPEED * blackboard.delta_time);
-                blackboard.camera.compose();
             }
+            blackboard.camera.compose();
             player_movement_system.update(blackboard, registry_);
         } else if (!panda.alive && interactable.grounded) {
             fade_overlay_system.update(blackboard, registry_);
@@ -174,6 +175,10 @@ void VerticalScene::render(Blackboard &blackboard) {
     if (pause) {
         pause_menu_render_system.update(blackboard, registry_);
     }
+    if (blackboard.camera.transition_ready) {
+        fade_overlay_render_system.update(blackboard, registry_);
+        go_to_next_scene(blackboard);
+    }
 }
 
 void VerticalScene::reset_scene(Blackboard &blackboard) {
@@ -184,6 +189,22 @@ void VerticalScene::reset_scene(Blackboard &blackboard) {
     }
     bg_entities.clear();
     registry_.destroy(score_entity);
+    blackboard.camera.in_transition = false;
+    blackboard.camera.transition_ready = false;
+    init_scene(blackboard);
+}
+
+void VerticalScene::go_to_next_scene(Blackboard &blackboard) {
+    level_system.destroy_entities(registry_);
+    registry_.destroy(panda_entity);
+    for (uint32_t e: bg_entities) {
+        registry_.destroy(e);
+    }
+    bg_entities.clear();
+    registry_.destroy(fade_overlay_entity);
+    blackboard.camera.in_transition = false;
+    blackboard.camera.transition_ready = false;
+    change_scene(BOSS_SCENE_ID);
     init_scene(blackboard);
 }
 

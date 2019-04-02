@@ -31,6 +31,7 @@
 #include <systems/pause_menu_render_system.h>
 #include <systems/cave_render_system.h>
 #include <systems/transition_system.h>
+#include <scene/boss_scene.h>
 
 
 
@@ -69,6 +70,7 @@ private:
     PauseMenuRenderSystem pause_menu_render_system;
     CaveRenderSystem cave_render_system;
     TransitionSystem transition_system;
+    BossScene boss_scene;
 
 
     const float CAMERA_START_X = 0.f;
@@ -98,6 +100,8 @@ public:
     void set_mode(SceneMode mode) override;
 
     static constexpr float CAMERA_SPEED = 250.f;
+
+    void go_to_next_scene(Blackboard &blackboard);
 };
 
 #endif //PANDAEXPRESS_VERTICAL_SCENE_H

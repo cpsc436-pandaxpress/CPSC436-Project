@@ -39,17 +39,17 @@ void TransitionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& reg
                     auto &panda = panda_view.get<Panda>(panda_entity);
                     auto &panda_transform = panda_view.get<Transform>(panda_entity);
                     auto &panda_velocity = panda_view.get<Velocity>(panda_entity);
-                    if (cave.pos().y + cave.size().y*2 > cam_position.y - cam_size.y) {
+                    if (cave_transform.y < panda_transform.y &&
+                            cave_transform.y + 200 > panda_transform.y &&
+                            cave.pos().x + cave.size().x / 2 < cam_position.x + cam_size.x / 2 &&
+                            cave.pos().x + cave.size().x / 2 <= panda_transform.x) {
                         blackboard.camera.transition_ready = true;
                     }
-                    printf("%f\n", cave.pos().y);
-                    printf("%f\n", cave.size().y);
-                    printf("%f\n", cam_position.y);
-                    printf("%f\n", cam_size.y);
-                    printf("%f\n", cave.pos().y + cave.size().y*2);
-                    printf("%f\n", cam_position.y - cam_size.y);
+                    printf("%f\n", cave.pos().x + cave.size().x / 2);
+                    printf("%f\n", cam_position.x + cam_size.x / 2);
+                    printf("%f\n\n", panda_transform.x);
                 }
-                if (cave.pos().y - cave.size().y > cam_position.y - cam_size.y / 2 + cave_offset) {
+                if (cave_transform.y > cam_position.y + cave_offset) {
                     blackboard.camera.in_transition = true;
                 }
             }

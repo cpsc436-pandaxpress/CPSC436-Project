@@ -158,6 +158,8 @@ void HorizontalScene::reset_scene(Blackboard &blackboard) {
     bg_entities.clear();
     registry_.destroy(score_entity);
     registry_.destroy(fade_overlay_entity);
+    blackboard.camera.in_transition = false;
+    blackboard.camera.transition_ready = false;
     init_scene(blackboard);
 }
 

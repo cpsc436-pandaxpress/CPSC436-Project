@@ -17,7 +17,7 @@ PlayerMovementSystem::PlayerMovementSystem(SceneType scene_type) :
         scene_type(scene_type) {}
 
 void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry) {
-    if(!blackboard.camera.in_transition) {
+
         auto view = registry.view<Panda, Transform, Velocity, Interactable, ObeysGravity>();
         for (auto entity: view) {
             auto &panda = view.get<Panda>(entity);
@@ -80,7 +80,6 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
 
 
         }
-    }
 }
 
 void PlayerMovementSystem::update_horizontal_scene(Blackboard &blackboard, Velocity &velocity) {
@@ -121,36 +120,36 @@ void PlayerMovementSystem::update_horizontal_scene(Blackboard &blackboard, Veloc
 void PlayerMovementSystem::update_vertical_scene(Blackboard &blackboard,
                                                  Velocity &velocity, Panda &panda) {
     const float dvx = PANDA_ACCELERATION * blackboard.delta_time;
-    if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT) ||
-        blackboard.input_manager.key_pressed(SDL_SCANCODE_A)) {
-        // First if for quick turn around, otherwise it felt too slidey when switching movement direction
-        if (velocity.x_velocity > 0) {
-            velocity.x_velocity = -dvx;
-        } else if (velocity.x_velocity - dvx > -PANDA_SPEED) {
-            velocity.x_velocity -= dvx;
+        if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT) ||
+            blackboard.input_manager.key_pressed(SDL_SCANCODE_A)) {
+            // First if for quick turn around, otherwise it felt too slidey when switching movement direction
+            if (velocity.x_velocity > 0) {
+                velocity.x_velocity = -dvx;
+            } else if (velocity.x_velocity - dvx > -PANDA_SPEED) {
+                velocity.x_velocity -= dvx;
+            } else {
+                velocity.x_velocity = -PANDA_SPEED;
+            }
+            panda.facingRight = false;
+        } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT) ||
+                   blackboard.input_manager.key_pressed(SDL_SCANCODE_D)) {
+            if (velocity.x_velocity < 0) {
+                velocity.x_velocity = dvx;
+            } else if (velocity.x_velocity + dvx < PANDA_SPEED) {
+                velocity.x_velocity += dvx;
+            } else {
+                velocity.x_velocity = PANDA_SPEED;
+            }
+            panda.facingRight = true;
         } else {
-            velocity.x_velocity = -PANDA_SPEED;
+            if (velocity.x_velocity - dvx > 0) {
+                velocity.x_velocity -= dvx;
+            } else if (velocity.x_velocity + dvx < 0) {
+                velocity.x_velocity += dvx;
+            } else {
+                velocity.x_velocity = 0;
+            }
         }
-        panda.facingRight = false;
-    } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT) ||
-               blackboard.input_manager.key_pressed(SDL_SCANCODE_D)) {
-        if (velocity.x_velocity < 0) {
-            velocity.x_velocity = dvx;
-        } else if (velocity.x_velocity + dvx < PANDA_SPEED) {
-            velocity.x_velocity += dvx;
-        } else {
-            velocity.x_velocity = PANDA_SPEED;
-        }
-        panda.facingRight = true;
-    } else {
-        if (velocity.x_velocity - dvx > 0) {
-            velocity.x_velocity -= dvx;
-        } else if (velocity.x_velocity + dvx < 0) {
-            velocity.x_velocity += dvx;
-        } else {
-            velocity.x_velocity = 0;
-        }
-    }
 }
 
 void PlayerMovementSystem::update_boss_scene(Blackboard &blackboard,
