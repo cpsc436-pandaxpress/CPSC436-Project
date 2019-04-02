@@ -41,7 +41,7 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         score_system(JUNGLE_TYPE),
         pause_menu_transform_system(),
         pause_menu_render_system(),
-        transition_system(){
+        transition_system(JUNGLE_TYPE){
     init_scene(blackboard);
     gl_has_errors("horizontal_scene");
 }
@@ -143,6 +143,10 @@ void HorizontalScene::render(Blackboard &blackboard) {
     if (pause){
         pause_menu_render_system.update(blackboard, registry_);
     }
+    if (blackboard.camera.transition_ready) {
+        fade_overlay_render_system.update(blackboard, registry_);
+        go_to_next_scene(blackboard);
+    }
 }
 
 void HorizontalScene::reset_scene(Blackboard &blackboard) {
@@ -154,6 +158,20 @@ void HorizontalScene::reset_scene(Blackboard &blackboard) {
     bg_entities.clear();
     registry_.destroy(score_entity);
     registry_.destroy(fade_overlay_entity);
+    init_scene(blackboard);
+}
+
+void HorizontalScene::go_to_next_scene(Blackboard &blackboard) {
+    level_system.destroy_entities(registry_);
+    registry_.destroy(panda_entity);
+    for (uint32_t e: bg_entities) {
+        registry_.destroy(e);
+    }
+    bg_entities.clear();
+    registry_.destroy(fade_overlay_entity);
+    blackboard.camera.in_transition = false;
+    blackboard.camera.transition_ready = false;
+    change_scene(STORY_SKY_SCENE_ID);
     init_scene(blackboard);
 }
 

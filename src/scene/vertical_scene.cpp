@@ -38,7 +38,9 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         text_render_system(),
         score_system(SKY_TYPE),
         pause_menu_transform_system(),
-        pause_menu_render_system()
+        pause_menu_render_system(),
+        cave_render_system(),
+        transition_system(SKY_TYPE)
 {
     init_scene(blackboard);
     gl_has_errors("vertical_scene");
@@ -115,9 +117,11 @@ void VerticalScene::update(Blackboard &blackboard) {
 
     if (!pause) {
         if (panda.alive && !panda.dead) {
-            blackboard.camera.set_position(cam_position.x,
-                                           cam_position.y - CAMERA_SPEED * blackboard.delta_time);
-            blackboard.camera.compose();
+            if (!blackboard.camera.in_transition){
+                blackboard.camera.set_position(cam_position.x,
+                                               cam_position.y - CAMERA_SPEED * blackboard.delta_time);
+                blackboard.camera.compose();
+            }
             player_movement_system.update(blackboard, registry_);
         } else if (!panda.alive && interactable.grounded) {
             fade_overlay_system.update(blackboard, registry_);
@@ -145,6 +149,7 @@ void VerticalScene::update(Blackboard &blackboard) {
         enemy_animation_system.update(blackboard, registry_);
         timer_system.update(blackboard, registry_);
         falling_platform_system.update(blackboard, registry_);
+        transition_system.update(blackboard, registry_);
     } else {
         pause_menu_transform_system.update(blackboard, registry_);
     }
@@ -156,6 +161,7 @@ void VerticalScene::render(Blackboard &blackboard) {
                  1); // same colour as the top of the background
     glClear(GL_COLOR_BUFFER_BIT);
     background_render_system.update(blackboard, registry_);
+    cave_render_system.update(blackboard, registry_);
     sprite_render_system.update(blackboard, registry_);
     health_bar_render_system.update(blackboard, registry_);
     text_render_system.update(blackboard, registry_);

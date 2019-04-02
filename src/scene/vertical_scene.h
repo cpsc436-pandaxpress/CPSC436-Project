@@ -29,6 +29,9 @@
 #include <systems/fade_overlay_system.h>
 #include <systems/pause_menu_transform_system.h>
 #include <systems/pause_menu_render_system.h>
+#include <systems/cave_render_system.h>
+#include <systems/transition_system.h>
+
 
 
 
@@ -64,6 +67,8 @@ private:
     FadeOverlayRenderSystem fade_overlay_render_system;
     PauseMenuTransformSystem pause_menu_transform_system;
     PauseMenuRenderSystem pause_menu_render_system;
+    CaveRenderSystem cave_render_system;
+    TransitionSystem transition_system;
 
 
     const float CAMERA_START_X = 0.f;

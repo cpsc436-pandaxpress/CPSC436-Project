@@ -97,6 +97,8 @@ public:
     void set_mode(SceneMode mode) override;
 
     static constexpr float CAMERA_SPEED = 400.f;
+
+    void go_to_next_scene(Blackboard &blackboard);
 };
 
 

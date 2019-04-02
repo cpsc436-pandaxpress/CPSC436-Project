@@ -8,7 +8,7 @@ Camera::Camera(float width, float height, float center_x, float center_y) {
     dimensions_ = {width, height};
     position_ = {center_x, center_y};
     in_transition = false;
-    pre_transition = false;
+    transition_ready = false;
     compose();
 }
 

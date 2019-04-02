@@ -12,12 +12,14 @@
 #include "components/transform.h"
 #include "components/velocity.h"
 #include "components/panda.h"
+#include "scene/scene.h"
 
 class TransitionSystem {
 private:
     float cave_offset = 100.f;
+    SceneType scene_type;
 public:
-    TransitionSystem();
+    TransitionSystem(SceneType scene_type);
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry);
 };
 
