@@ -33,6 +33,7 @@
 #include "../systems/physics_system.h"
 #include "../systems/player_movement_system.h"
 #include "../systems/enemy_system.h"
+#include "../systems/transition_system.h"
 #include "../systems/player_animation_system.h"
 #include "../systems/enemy_animation_system.h"
 
@@ -74,6 +75,7 @@ private:
     TextRenderSystem text_render_system;
     TextTransformSystem text_transform_system;
     ScoreSystem score_system;
+    TransitionSystem transition_system;
     FadeOverlaySystem fade_overlay_system;
     FadeOverlayRenderSystem fade_overlay_render_system;
     PauseMenuTransformSystem pause_menu_transform_system;
@@ -101,6 +103,8 @@ public:
     void set_mode(SceneMode mode) override;
 
     static constexpr float CAMERA_SPEED = 400.f;
+
+    void go_to_next_scene(Blackboard &blackboard);
 };
 
 

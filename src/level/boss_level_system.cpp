@@ -32,7 +32,7 @@ void BossLevelSystem::generate_level(Blackboard &blackboard, entt::DefaultRegist
         for (size_t j = 0; j < level_.height(); j++) {
             float y = FIRST_ROW_Y + (float) CELL_HEIGHT * j;
 
-            generateEntity(level_.get_tile_at(i, j), x, y, blackboard, registry);
+            generateEntity(level_.get_tile_at(i, j), x, y, blackboard, registry, STORY);
         }
     }
 }

@@ -14,9 +14,10 @@
 
 
 PlayerMovementSystem::PlayerMovementSystem(SceneType scene_type) :
-    scene_type(scene_type) {}
+        scene_type(scene_type) {}
 
 void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry) {
+
     auto view = registry.view<Panda, Transform, Velocity, Interactable, ObeysGravity>();
     for (auto entity: view) {
         auto &panda = view.get<Panda>(entity);

@@ -16,6 +16,7 @@
 #include <graphics/text.h>
 #include <components/label.h>
 #include "components/platform.h"
+#include <graphics/cave_entrance.h>
 
 
 #include "util/entity_pairs.h"
@@ -312,6 +313,12 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                             registry.destroy(entry.entity);
                         }
                     }
+
+                    /*if ( registry.has<CaveEntrance>(entry.entity)) {
+                        if (registry.has<Panda>(d_entity)) {
+                            blackboard.camera.transition_ready = true;
+                        }
+                    }*/
                 }
             }
 

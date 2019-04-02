@@ -143,6 +143,10 @@ set(SOURCE_FILES
         src/systems/pause_menu_transform_system.h
         src/systems/pause_menu_render_system.cpp
         src/systems/pause_menu_render_system.h
+        src/systems/transition_system.cpp
+        src/systems/transition_system.h
+        src/graphics/cave_entrance.h
+        src/graphics/cave_entrance.cpp
         src/components/hud_element.h
         src/systems/hud_transform_system.cpp
         src/systems/hud_transform_system.h

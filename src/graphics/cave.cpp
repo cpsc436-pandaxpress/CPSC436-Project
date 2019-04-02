@@ -166,6 +166,30 @@ Vertex Cave::vertices[] = {
         }
 };
 
+Vertex Cave::entrance_vertices[] = {
+        Vertex{
+                {-2.8,10.0f,0.0f},
+                {0,0,0}
+        },
+        Vertex{
+                {-2.8,8.0f,0.0f},
+                {0,0,0}
+        },
+        Vertex{
+                {-5.2,10.0f,0.0f},
+                {0,0,0}
+        },
+        Vertex{
+                {-5.2,8.0f,0.0f},
+                {0,0,0}
+        }
+};
+
+uint16_t Cave::entrance_indices[] = {
+        0,1,2,
+        0,2,3
+};
+
 uint16_t Cave::indices[] = {
         37,39,38,
         38,39,40,
@@ -231,8 +255,6 @@ Cave::Cave(Mesh mesh, Shader shader, vec2 size, vec2 scale) :
         size_(size),
         scale_(scale) {
     position_ = {0.f, 0.f};
-    color_start_ = {1.f, 1.f, 1.f};
-    color_end_ = {1.f, 1.f, 1.f};
     rotation_ = 0.f;
     status_ = 0;
 }
@@ -242,8 +264,6 @@ Cave::Cave(const Cave &other) :
         mesh_(other.mesh_),
         position_(other.position_),
         scale_(other.scale_),
-        color_start_(other.color_start_),
-        color_end_(other.color_end_),
         rotation_(other.rotation_),
         status_(other.status_)
 {}
@@ -259,9 +279,7 @@ void Cave::draw(const mat3 &projection) {
 
     mul_in_place(transform, make_translate_mat3(position_.x, position_.y));
     mul_in_place(transform, make_rotate_mat3(rotation_));
-//    mul_in_place(transform, make_scale_mat3(size_.x, size_.y));
     mul_in_place(transform, make_scale_mat3(scale_.x, scale_.y));
-    vec2 scale = {scale_.x * size_.x, scale_.y * size_.y};
 
     // bind shader
     shader_.bind();
@@ -280,11 +298,10 @@ void Cave::draw(const mat3 &projection) {
             sizeof(Vertex), // No values between vertices
             0  // offset = 0
     );
-
     shader_.set_input_vec3(
             "in_color",
             sizeof(Vertex), // No values between vertices
-            sizeof(vec3)  // offset = sizeOf(vec3)
+            0  // offset = sizeOf(vec3)
     );
 
     shader_.set_uniform_mat3("transform", transform);
