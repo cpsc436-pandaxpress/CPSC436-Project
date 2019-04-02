@@ -17,7 +17,7 @@ void LevelSystem::init() {
 }
 
 void LevelSystem::generateEntity(char value, float x, float y,
-                                 Blackboard &blackboard, entt::DefaultRegistry &registry) {
+                                 Blackboard &blackboard, entt::DefaultRegistry &registry, SceneMode mode) {
     switch (value) {
         case '1': {
             auto texture = blackboard.texture_manager.get_texture(
@@ -148,29 +148,32 @@ void LevelSystem::generateEntity(char value, float x, float y,
         }
             break;
         case 'a': {
-            auto cave = registry.create();
-            auto shaderCave = blackboard.shader_manager.get_shader("cave");
-            auto meshCave = blackboard.mesh_manager.get_mesh("cave");
-            registry.assign<Transform>(cave, x, y, 0., 80, 80);
-            registry.assign<Interactable>(cave);
-            float heightCave = 750.f;
-            float widthCave = 750.f;
-            vec2 sizeCave = {widthCave, heightCave};
-            vec2 scaleCave = {-80, 80};
-            auto &caveE = registry.assign<Cave>(cave, meshCave, shaderCave, sizeCave, scaleCave);
-            caveE.set_pos(x, y-heightCave);
-            auto caveEntrance = registry.create();
-            auto shaderCaveEntrance = blackboard.shader_manager.get_shader("caveEntrance");
-            auto meshCaveEntrance = blackboard.mesh_manager.get_mesh("caveEntrance");
-            registry.assign<Transform>(caveEntrance, x, y, 0.f, 80, 80);
-            registry.assign<Interactable>(caveEntrance);
-            float heightCave_entrance = 2*80;
-            float widthCave_entrance = 2*80;
-            vec2 sizeCave_entrance = {widthCave_entrance, heightCave_entrance};
-            vec2 scaleCave_entrance = {80, 80};
-            registry.assign<Collidable>(caveEntrance, heightCave_entrance, widthCave_entrance);
-            auto &caveEntranceE = registry.assign<CaveEntrance>(caveEntrance, meshCaveEntrance, shaderCaveEntrance, sizeCave_entrance, scaleCave_entrance);
-            caveEntranceE.set_pos(x+700, y-heightCave);
+            if (mode == STORY) {
+                auto cave = registry.create();
+                auto shaderCave = blackboard.shader_manager.get_shader("cave");
+                auto meshCave = blackboard.mesh_manager.get_mesh("cave");
+                registry.assign<Transform>(cave, x, y, 0., 80, 80);
+                registry.assign<Interactable>(cave);
+                float heightCave = 750.f;
+                float widthCave = 750.f;
+                vec2 sizeCave = {widthCave, heightCave};
+                vec2 scaleCave = {-80, 80};
+                auto &caveE = registry.assign<Cave>(cave, meshCave, shaderCave, sizeCave, scaleCave);
+                caveE.set_pos(x, y - heightCave);
+                auto caveEntrance = registry.create();
+                auto shaderCaveEntrance = blackboard.shader_manager.get_shader("caveEntrance");
+                auto meshCaveEntrance = blackboard.mesh_manager.get_mesh("caveEntrance");
+                registry.assign<Transform>(caveEntrance, x, y, 0.f, 80, 80);
+                registry.assign<Interactable>(caveEntrance);
+                float heightCave_entrance = 2 * 80;
+                float widthCave_entrance = 2 * 80;
+                vec2 sizeCave_entrance = {widthCave_entrance, heightCave_entrance};
+                vec2 scaleCave_entrance = {80, 80};
+                registry.assign<Collidable>(caveEntrance, heightCave_entrance, widthCave_entrance);
+                auto &caveEntranceE = registry.assign<CaveEntrance>(caveEntrance, meshCaveEntrance, shaderCaveEntrance,
+                                                                    sizeCave_entrance, scaleCave_entrance);
+                caveEntranceE.set_pos(x + 700, y - heightCave);
+            }
 
         }
             break;
