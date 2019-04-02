@@ -146,7 +146,17 @@ set(SOURCE_FILES
         src/systems/transition_system.cpp
         src/systems/transition_system.h
         src/graphics/cave_entrance.h
-        src/graphics/cave_entrance.cpp)
+        src/graphics/cave_entrance.cpp
+        src/components/hud_element.h
+        src/systems/hud_transform_system.cpp
+        src/systems/hud_transform_system.h
+        src/graphics/font_manager.cpp
+        src/graphics/font_manager.h
+        src/components/label.h
+        src/systems/label_system.cpp
+        src/systems/label_system.h
+        src/util/scene_helper.h
+        )
 
 
 # Create executable target

@@ -5,7 +5,6 @@
 #ifndef PANDAEXPRESS_TEST_SCENE_2_H
 #define PANDAEXPRESS_TEST_SCENE_2_H
 
-
 #include "scene.h"
 #include <queue>
 #include <level/horizontal_level_system.h>
@@ -23,6 +22,8 @@
 #include <systems/fade_overlay_render_system.h>
 #include <systems/pause_menu_transform_system.h>
 #include <systems/pause_menu_render_system.h>
+#include <systems/hud_transform_system.h>
+#include <systems/label_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -36,8 +37,6 @@
 #include "../systems/player_animation_system.h"
 #include "../systems/enemy_animation_system.h"
 
-
-
 class HorizontalScene: public Scene {
 private:
     const float CAMERA_START_X = 0.f;
@@ -45,6 +44,11 @@ private:
     const float PANDA_START_X = -10.f;
     const float PANDA_START_Y = -200.f;
     const float MAX_CAMERA_Y_DIFF = 250.f;
+    const float HUD_Y_OFFSET = 50.f;
+    const float HUD_SCORE_X_OFFSET = 350.f;
+    const float HUD_HEALTH_X_OFFSET = 100.f;
+    const float HEALTH_BAR_X_SIZE = 750.f;
+    const float HEALTH_BAR_Y_SIZE = 75.f;
     bool pause = false;
 
     std::vector<uint32_t> bg_entities;
@@ -76,6 +80,8 @@ private:
     FadeOverlayRenderSystem fade_overlay_render_system;
     PauseMenuTransformSystem pause_menu_transform_system;
     PauseMenuRenderSystem pause_menu_render_system;
+    HudTransformSystem hud_transform_system;
+    LabelSystem label_system;
 
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);

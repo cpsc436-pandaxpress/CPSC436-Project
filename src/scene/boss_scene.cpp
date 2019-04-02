@@ -18,6 +18,7 @@
 #include <graphics/health_bar.h>
 #include <components/layer.h>
 #include <graphics/fade_overlay.h>
+#include <components/hud_element.h>
 #include "boss_scene.h"
 #include "util/constants.h"
 
@@ -42,7 +43,9 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         fade_overlay_system(),
         fade_overlay_render_system(),
         pause_menu_transform_system(),
-        pause_menu_render_system() {
+        pause_menu_render_system(),
+        hud_transform_system()
+{
     init_scene(blackboard);
     reset_scene(blackboard); // idk why??? but this is required
     gl_has_errors();
@@ -67,6 +70,7 @@ void BossScene::update(Blackboard &blackboard) {
         registry_.destroy(pause_menu_entity);
         change_scene(MAIN_MENU_SCENE_ID);
         pause = false;
+        return;
     }
 
     if (!pause) {
@@ -90,6 +94,7 @@ void BossScene::update(Blackboard &blackboard) {
         timer_system.update(blackboard, registry_);
         falling_platform_system.update(blackboard, registry_);
         background_transform_system.update(blackboard, registry_);
+        hud_transform_system.update(blackboard, registry_); // should run last
     } else {
         pause_menu_transform_system.update(blackboard, registry_);
     }
@@ -162,8 +167,8 @@ void BossScene::create_panda(Blackboard &blackboard) {
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
-    float scaleY = 75.0 / texture.height();
-    float scaleX = 75.0 / texture.width();
+    float scaleY = 75.0f / texture.height();
+    float scaleX = 75.0f / texture.width();
     registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scaleX, scaleY);
     registry_.assign<Sprite>(panda_entity, texture, shader, mesh);
     registry_.assign<Panda>(panda_entity);
@@ -177,12 +182,13 @@ void BossScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Layer>(panda_entity, PANDA_LAYER);
     auto shaderHealth = blackboard.shader_manager.get_shader("health");
     auto meshHealth = blackboard.mesh_manager.get_mesh("health");
-    float height = 75.f;
-    float width = 750.f;
-    vec2 size = {width, height};
+    vec2 size = {HEALTH_BAR_X_SIZE, HEALTH_BAR_Y_SIZE};
     vec2 scale = {0.5, 0.5};
     auto &healthbar = registry_.assign<HealthBar>(panda_entity,
                                                   meshHealth, shaderHealth, size, scale);
+    registry_.assign<HudElement>(panda_entity,
+                                 vec2{size.x / 2.f * scale.x + 100.f,
+                                      blackboard.camera.size().y - 50.f});
 }
 
 void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
@@ -192,8 +198,8 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
-    float scaleY = 200.0 / texture.height();
-    float scaleX = 200.0 / texture.width();
+    float scaleY = 200.0f / texture.height();
+    float scaleX = 200.0f / texture.width();
     registry_.assign<Transform>(jacko_entity, -300, -300, 0., scaleX, scaleY);
     registry_.assign<Sprite>(jacko_entity, texture, shader, mesh);
     registry_.assign<Jacko>(jacko_entity);
@@ -210,9 +216,7 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
 
     auto shaderHealth = blackboard.shader_manager.get_shader("health");
     auto meshHealth = blackboard.mesh_manager.get_mesh("health");
-    float height = 75.f;
-    float width = 750.f;
-    vec2 size = {width, height};
+    vec2 size = {HEALTH_BAR_X_SIZE, HEALTH_BAR_Y_SIZE};
     vec2 scale = {0.3, 0.3};
     auto &healthbar = registry_.assign<HealthBar>(jacko_entity,
                                                   meshHealth, shaderHealth, size, scale);

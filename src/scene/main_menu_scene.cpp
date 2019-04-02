@@ -54,8 +54,9 @@ void MainMenuScene::update(Blackboard& blackboard) {
         selected_button_ %= count;
     }
 
-
-
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
+        blackboard.input_manager.signal_exit();
+    }
 
 
     for (auto i = 0; i < count; i++) {

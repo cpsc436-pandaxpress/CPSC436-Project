@@ -24,13 +24,14 @@
 #include <scene/boss_scene.h>
 #include <graphics/health_bar.h>
 #include <graphics/cave.h>
+#include <graphics/font_manager.h>
 
 
 
 int start() {
     auto window = Window();
 
-    window.initialize("Express Panda", 800, 450);
+    window.initialize("Express Panda");
 
     Blackboard blackboard = {
         Camera(1600, 900, 0, 0),
@@ -41,7 +42,9 @@ int start() {
         TextureManager(),
         window,
         Random(0),
-        SoundManager()
+        SoundManager(),
+        FontManager(),
+        0
     };
 
 
@@ -129,6 +132,8 @@ int start() {
     blackboard.mesh_manager.load_mesh("caveEntrance", 4, CaveEntrance::vertices, 9, CaveEntrance::indices);
     blackboard.mesh_manager.load_mesh("sprite", 4, Sprite::vertices, 6, Sprite::indices);
     blackboard.soundManager.init();
+
+    blackboard.fontManager.load_font(fonts_path("TitilliumWeb.ttf"), "titillium_72", 72);
 
     auto scene_manager = SceneManager(blackboard);
 

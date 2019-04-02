@@ -174,7 +174,6 @@ void LevelSystem::generateEntity(char value, float x, float y,
                                                                     sizeCave_entrance, scaleCave_entrance);
                 caveEntranceE.set_pos(x + 700, y - heightCave);
             }
-
         }
             break;
         case '9': {

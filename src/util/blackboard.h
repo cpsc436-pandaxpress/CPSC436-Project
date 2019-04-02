@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <graphics/font_manager.h>
 #include "input_manager.h"
 
 #include "../graphics/camera.h"
@@ -28,4 +29,6 @@ struct Blackboard {
     Window& window;
     Random randNumGenerator;
     SoundManager soundManager;
+    FontManager fontManager;
+    float score;
 };
