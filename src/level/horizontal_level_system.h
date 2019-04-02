@@ -8,8 +8,6 @@
 #ifndef PANDAEXPRESS_HORIZONTAL_LEVEL_SYSTEM_H
 #define PANDAEXPRESS_HORIZONTAL_LEVEL_SYSTEM_H
 
-#endif //PANDAEXPRESS_HORIZONTAL_LEVEL_SYSTEM_H
-
 class HorizontalLevelSystem : public LevelSystem {
 private:
     void load_next_chunk();
@@ -46,3 +44,5 @@ public:
 
     void set_mode(SceneMode mode);
 };
+
+#endif //PANDAEXPRESS_HORIZONTAL_LEVEL_SYSTEM_H

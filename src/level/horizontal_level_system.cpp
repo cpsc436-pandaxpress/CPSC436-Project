@@ -55,7 +55,7 @@ void HorizontalLevelSystem::generate_next_chunk(Blackboard &blackboard,
         std::vector<char> col = chunks_.front();
         float y = -400.0f;
         for (int c:col) {
-            generateEntity(c, last_col_generated_, y, blackboard, registry);
+            generateEntity(c, last_col_generated_, y, blackboard, registry, mode_);
             y += CELL_HEIGHT;
         }
         last_col_generated_ += CELL_WIDTH;

@@ -45,6 +45,7 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         score_system(JUNGLE_TYPE),
         pause_menu_transform_system(),
         pause_menu_render_system(),
+        transition_system(JUNGLE_TYPE),
         hud_transform_system(),
         label_system()
 {
@@ -98,6 +99,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
         timer_system.update(blackboard, registry_);
         falling_platform_system.update(blackboard, registry_);
         enemy_animation_system.update(blackboard, registry_);
+        transition_system.update(blackboard, registry_);
         hud_transform_system.update(blackboard, registry_);// Must run last
         high_score_ = std::max<int>(high_score_, (int) blackboard.score);
     } else {
@@ -127,10 +129,11 @@ void HorizontalScene::update_camera(Blackboard &blackboard) {
 
     auto &panda_transform = registry_.get<Transform>(panda_entity);
     float y_offset = std::min(0.f, panda_transform.y + MAX_CAMERA_Y_DIFF);
-
-    blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time,
-                                   y_offset);
-    blackboard.camera.compose();
+    if (!blackboard.camera.in_transition) {
+        blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time,
+                                       y_offset);
+        blackboard.camera.compose();
+    }
 }
 
 void HorizontalScene::render(Blackboard &blackboard) {
@@ -140,7 +143,11 @@ void HorizontalScene::render(Blackboard &blackboard) {
     cave_render_system.update(blackboard, registry_);
     sprite_render_system.update(blackboard, registry_);
     health_bar_render_system.update(blackboard, registry_);
-    text_render_system.update(blackboard, registry_);
+
+    // This if is for hiding the score in STORY mode
+    // TODO: Remove this hackiness, especially if we need some other text in story mode
+    if (mode_ == ENDLESS)
+        text_render_system.update(blackboard, registry_);
 
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &interactable = registry_.get<Interactable>(panda_entity);
@@ -149,6 +156,10 @@ void HorizontalScene::render(Blackboard &blackboard) {
     }
     if (pause){
         pause_menu_render_system.update(blackboard, registry_);
+    }
+    if (blackboard.camera.transition_ready) {
+        fade_overlay_render_system.update(blackboard, registry_);
+        go_to_next_scene(blackboard);
     }
 }
 
@@ -162,7 +173,24 @@ void HorizontalScene::reset_scene(Blackboard &blackboard) {
     registry_.destroy(score_entity);
     registry_.destroy(high_score_entity);
     registry_.destroy(fade_overlay_entity);
+    blackboard.camera.in_transition = false;
+    blackboard.camera.transition_ready = false;
+    registry_.destroy<Label>();
     blackboard.score = 0;
+    init_scene(blackboard);
+}
+
+void HorizontalScene::go_to_next_scene(Blackboard &blackboard) {
+    level_system.destroy_entities(registry_);
+    registry_.destroy(panda_entity);
+    for (uint32_t e: bg_entities) {
+        registry_.destroy(e);
+    }
+    bg_entities.clear();
+    registry_.destroy(fade_overlay_entity);
+    blackboard.camera.in_transition = false;
+    blackboard.camera.transition_ready = false;
+    change_scene(STORY_SKY_SCENE_ID);
     init_scene(blackboard);
 }
 
@@ -262,6 +290,7 @@ void HorizontalScene::create_score_text(Blackboard &blackboard) {
 }
 
 void HorizontalScene::set_mode(SceneMode mode) {
+    Scene::set_mode(mode);
     level_system.set_mode(mode);
 }
 

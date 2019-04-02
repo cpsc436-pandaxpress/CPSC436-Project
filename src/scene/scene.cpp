@@ -15,5 +15,5 @@ bool Scene::change_scene(SceneID id) {
 }
 
 void Scene::set_mode(SceneMode mode) {
-
+    mode_ = mode;
 }

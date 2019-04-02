@@ -84,6 +84,10 @@ int start() {
     blackboard.shader_manager.load_shader(
             shaders_path("cave.vs.glsl"),
             shaders_path("cave.fs.glsl"),"cave");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("caveEntrance.vs.glsl"),
+            shaders_path("caveEntrance.fs.glsl"),"caveEntrance");
   
      blackboard.shader_manager.load_shader(
             shaders_path("text.vs.glsl"),
@@ -131,6 +135,7 @@ int start() {
 
     blackboard.mesh_manager.load_mesh("health", 4, HealthBar::vertices, 6, HealthBar::indices);
     blackboard.mesh_manager.load_mesh("cave", 41, Cave::vertices, 168, Cave::indices);
+    blackboard.mesh_manager.load_mesh("caveEntrance", 4, CaveEntrance::vertices, 9, CaveEntrance::indices);
     blackboard.mesh_manager.load_mesh("sprite", 4, Sprite::vertices, 6, Sprite::indices);
     blackboard.soundManager.init();
 
@@ -162,6 +167,7 @@ int start() {
     scene_manager.add_scene(ENDLESS_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), ENDLESS);
     scene_manager.add_scene(ENDLESS_SKY_SCENE_ID, (Scene*)(&vertical_scene), ENDLESS);
     scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene));
+    scene_manager.add_scene(STORY_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY);
 
     // set the first scene
 

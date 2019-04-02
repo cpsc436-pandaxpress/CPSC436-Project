@@ -29,6 +29,8 @@
 #include <systems/fade_overlay_system.h>
 #include <systems/pause_menu_transform_system.h>
 #include <systems/pause_menu_render_system.h>
+#include <systems/cave_render_system.h>
+#include <systems/transition_system.h>
 #include <systems/hud_transform_system.h>
 #include <systems/label_system.h>
 
@@ -64,6 +66,8 @@ private:
     FadeOverlayRenderSystem fade_overlay_render_system;
     PauseMenuTransformSystem pause_menu_transform_system;
     PauseMenuRenderSystem pause_menu_render_system;
+    CaveRenderSystem cave_render_system;
+    TransitionSystem transition_system;
     HudTransformSystem hud_transform_system;
     LabelSystem label_system;
 
@@ -105,6 +109,8 @@ public:
     int get_high_score();
 
     static constexpr float CAMERA_SPEED = 250.f;
+
+    void go_to_next_scene(Blackboard &blackboard);
 };
 
 #endif //PANDAEXPRESS_VERTICAL_SCENE_H

@@ -43,9 +43,10 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         score_system(SKY_TYPE),
         pause_menu_transform_system(),
         pause_menu_render_system(),
+        cave_render_system(),
+        transition_system(SKY_TYPE),
         hud_transform_system(),
         label_system()
-
 {
     high_score_ = 0;
     init_scene(blackboard);
@@ -124,8 +125,10 @@ void VerticalScene::update(Blackboard &blackboard) {
 
     if (!pause) {
         if (panda.alive && !panda.dead) {
-            blackboard.camera.set_position(cam_position.x,
-                                           cam_position.y - CAMERA_SPEED * blackboard.delta_time);
+            if (!blackboard.camera.in_transition){
+                blackboard.camera.set_position(cam_position.x,
+                                               cam_position.y - CAMERA_SPEED * blackboard.delta_time);
+            }
             blackboard.camera.compose();
             player_movement_system.update(blackboard, registry_);
         } else if (!panda.alive && interactable.grounded) {
@@ -155,6 +158,7 @@ void VerticalScene::update(Blackboard &blackboard) {
         enemy_animation_system.update(blackboard, registry_);
         timer_system.update(blackboard, registry_);
         falling_platform_system.update(blackboard, registry_);
+        transition_system.update(blackboard, registry_);
         hud_transform_system.update(blackboard, registry_); // should run last
         high_score_ = std::max<int>(high_score_, (int)blackboard.score);
     } else {
@@ -168,9 +172,14 @@ void VerticalScene::render(Blackboard &blackboard) {
                  1); // same colour as the top of the background
     glClear(GL_COLOR_BUFFER_BIT);
     background_render_system.update(blackboard, registry_);
+    cave_render_system.update(blackboard, registry_);
     sprite_render_system.update(blackboard, registry_);
     health_bar_render_system.update(blackboard, registry_);
-    text_render_system.update(blackboard, registry_);
+
+    // This if is for hiding the score in STORY mode
+    // TODO: Remove this hackiness, especially if we need some other text in story mode
+    if (mode_ == ENDLESS)
+        text_render_system.update(blackboard, registry_);
 
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &interactable = registry_.get<Interactable>(panda_entity);
@@ -179,6 +188,10 @@ void VerticalScene::render(Blackboard &blackboard) {
     }
     if (pause) {
         pause_menu_render_system.update(blackboard, registry_);
+    }
+    if (blackboard.camera.transition_ready) {
+        fade_overlay_render_system.update(blackboard, registry_);
+        go_to_next_scene(blackboard);
     }
 }
 
@@ -192,6 +205,22 @@ void VerticalScene::reset_scene(Blackboard &blackboard) {
     registry_.destroy(score_entity);
     registry_.destroy(high_score_entity);
     blackboard.score = 0;
+    blackboard.camera.in_transition = false;
+    blackboard.camera.transition_ready = false;
+    init_scene(blackboard);
+}
+
+void VerticalScene::go_to_next_scene(Blackboard &blackboard) {
+    level_system.destroy_entities(registry_);
+    registry_.destroy(panda_entity);
+    for (uint32_t e: bg_entities) {
+        registry_.destroy(e);
+    }
+    bg_entities.clear();
+    registry_.destroy(fade_overlay_entity);
+    blackboard.camera.in_transition = false;
+    blackboard.camera.transition_ready = false;
+    change_scene(BOSS_SCENE_ID);
     init_scene(blackboard);
 }
 
@@ -257,6 +286,7 @@ void VerticalScene::create_score_text(Blackboard &blackboard) {
 }
 
 void VerticalScene::set_mode(SceneMode mode) {
+    Scene::set_mode(mode);
     level_system.set_mode(mode);
 }
 
