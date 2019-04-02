@@ -136,7 +136,11 @@ void HorizontalScene::render(Blackboard &blackboard) {
     cave_render_system.update(blackboard, registry_);
     sprite_render_system.update(blackboard, registry_);
     health_bar_render_system.update(blackboard, registry_);
-    text_render_system.update(blackboard, registry_);
+
+    // This if is for hiding the score in STORY mode
+    // TODO: Remove this hackiness, especially if we need some other text in story mode
+    if (mode_ == ENDLESS)
+        text_render_system.update(blackboard, registry_);
 
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &interactable = registry_.get<Interactable>(panda_entity);
@@ -249,6 +253,7 @@ void HorizontalScene::create_score_text(Blackboard &blackboard) {
 }
 
 void HorizontalScene::set_mode(SceneMode mode) {
+    Scene::set_mode(mode);
     level_system.set_mode(mode);
 }
 

@@ -23,6 +23,7 @@ private:
 
 protected:
     entt::DefaultRegistry registry_;
+    SceneMode mode_;
 
 public:
     Scene(SceneManager& scene_manager);
