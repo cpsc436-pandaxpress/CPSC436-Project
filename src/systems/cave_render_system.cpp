@@ -4,6 +4,7 @@
 
 #include "cave_render_system.h"
 #include <graphics/cave.h>
+#include <graphics/cave_entrance.h>
 
 CaveRenderSystem::CaveRenderSystem() {}
 
@@ -17,5 +18,13 @@ void CaveRenderSystem::update(Blackboard &blackboard, entt::DefaultRegistry &reg
 
         //draw to the window
         blackboard.window.draw((Renderable*)(&cave), blackboard.camera.get_projection());
+    }
+    auto view_entrance = registry.view<CaveEntrance>();
+
+    for (auto entity: view_entrance) {
+        auto& cave_entrance = view_entrance.get(entity);
+
+        //draw to the window
+        blackboard.window.draw((Renderable*)(&cave_entrance), blackboard.camera.get_projection());
     }
 }

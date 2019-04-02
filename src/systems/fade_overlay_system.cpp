@@ -9,8 +9,10 @@
 FadeOverlaySystem::FadeOverlaySystem() {}
 
 void FadeOverlaySystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-
     float change_in_alpha = FADE_OUT_SPEED*blackboard.delta_time;
+    /*if (blackboard.camera.transition_ready){
+        change_in_alpha = FADE_OUT_SPEED_TRANSITION*blackboard.delta_time;
+    }*/
     float alpha;
 
     auto viewPanda = registry.view<Panda>();
@@ -19,6 +21,9 @@ void FadeOverlaySystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
         if (panda.dead) {
             alpha = 0.f;
         }
+    }
+    if(blackboard.camera.transition_ready) {
+        alpha = 0.f;
     }
     auto viewFade = registry.view<FadeOverlay>();
     for (auto entity: viewFade) {
