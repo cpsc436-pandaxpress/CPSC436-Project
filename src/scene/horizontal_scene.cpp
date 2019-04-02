@@ -120,12 +120,11 @@ void HorizontalScene::update_panda(Blackboard &blackboard) {
 }
 
 void HorizontalScene::update_camera(Blackboard &blackboard) {
+    vec2 cam_position = blackboard.camera.position();
+
+    auto &panda_transform = registry_.get<Transform>(panda_entity);
+    float y_offset = std::min(0.f, panda_transform.y + MAX_CAMERA_Y_DIFF);
     if (!blackboard.camera.in_transition) {
-        vec2 cam_position = blackboard.camera.position();
-
-        auto &panda_transform = registry_.get<Transform>(panda_entity);
-        float y_offset = std::min(0.f, panda_transform.y + MAX_CAMERA_Y_DIFF);
-
         blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time,
                                        y_offset);
         blackboard.camera.compose();

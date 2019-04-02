@@ -23,9 +23,10 @@ void TransitionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& reg
                     auto &panda_velocity = panda_view.get<Velocity>(panda_entity);
                     if (cave.pos().x + cave.size().x / 2 < cam_position.x + cam_size.x / 2 &&
                         cave.pos().x + cave.size().x / 2 <= panda_transform.x) {
-                        panda_velocity.x_velocity = 0.f;
                         if (panda_transform.y >= cave.pos().y + cave.size().y) {
                             blackboard.camera.transition_ready = true;
+                        } else {
+                            panda_velocity.x_velocity = 0.f;
                         }
                     }
                 }
