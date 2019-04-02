@@ -25,7 +25,7 @@
 #include <graphics/health_bar.h>
 #include <graphics/cave.h>
 #include <graphics/font_manager.h>
-
+#include <util/property_reader.h>
 
 
 int start() {
@@ -50,6 +50,12 @@ int start() {
 
 
     //load assets and configure
+    PropertyReader scores(data_path "/score.ini");
+    if (!scores.load()) {
+        scores.put("jungle", "0");
+        scores.put("sky", "0");
+    }
+
 
     blackboard.input_manager.track(SDL_SCANCODE_UP);
     blackboard.input_manager.track(SDL_SCANCODE_DOWN);
@@ -150,10 +156,12 @@ int start() {
 
 
     HorizontalScene horizontal_scene(blackboard, scene_manager);
+    horizontal_scene.set_high_score(std::stoi(scores.get("jungle")));
 
     BossScene boss_scene(blackboard, scene_manager);
 
     VerticalScene vertical_scene(blackboard, scene_manager);
+    vertical_scene.set_high_score(std::stoi(scores.get("sky")));
 
     scene_manager.add_scene(STORY_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY);
     scene_manager.add_scene(ENDLESS_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), ENDLESS);
@@ -182,7 +190,9 @@ int start() {
 
         quit = blackboard.input_manager.should_exit();
     }
-
+    scores.put("jungle", std::to_string(horizontal_scene.get_high_score()));
+    scores.put("sky", std::to_string(vertical_scene.get_high_score()));
+    scores.save();
     window.destroy();
     return 0;
 }
