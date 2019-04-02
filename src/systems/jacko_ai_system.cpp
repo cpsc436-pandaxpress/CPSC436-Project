@@ -89,12 +89,12 @@ public:
     }
 };
 
-class StompPanda: public Node{
+class ShootBats: public Node{
 private:
     Blackboard& blackboard;
     entt::DefaultRegistry& registry;
 public:
-    StompPanda(Blackboard& blackboard, entt::DefaultRegistry& registry) :
+    ShootBats(Blackboard& blackboard, entt::DefaultRegistry& registry) :
             blackboard(blackboard),
             registry(registry){}
     virtual bool run() override {
@@ -168,7 +168,7 @@ JackoAISystem::JackoAISystem(Blackboard& blackboard, entt::DefaultRegistry& regi
     checkHealth = new CheckHealth(getJackoHealth(blackboard,registry));
     ChasePanda* chasePanda = new ChasePanda(blackboard, registry);
     ChaseFood* chaseFood = new ChaseFood(blackboard, registry);
-    StompPanda* stompPanda = new StompPanda(blackboard, registry);
+    ShootBats* stompPanda = new ShootBats(blackboard, registry);
 
 
 

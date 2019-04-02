@@ -69,11 +69,12 @@ set(SOURCE_FILES
         src/systems/level_system.h
         src/scene/horizontal_scene.cpp
         src/scene/horizontal_scene.h
-        src/scene/boss_scene.cpp
-        src/scene/boss_scene.h
+        src/scene/boss_scene_dracula.cpp
+        src/scene/boss_scene_dracula.h
         src/systems/horizontal_level_system.h
         src/systems/horizontal_level_system.cpp
         src/components/ghost.h
+        src/components/dracula.h
         src/components/llama.h src/components/spit.h
         src/components/tutorial.h
         src/systems/vertical_level_system.cpp
@@ -88,6 +89,8 @@ set(SOURCE_FILES
         src/util/selector_node.cpp
         src/systems/jacko_ai_system.cpp
         src/systems/jacko_ai_system.h
+        src/systems/dracula_ai_system.cpp
+        src/systems/dracula_ai_system.h
         src/components/evades.h
         src/systems/boss_level_system.h
         src/systems/boss_level_system.cpp
@@ -129,7 +132,7 @@ set(SOURCE_FILES
         src/systems/score_system.cpp
         src/systems/score_system.h
         src/components/score.h
-        src/systems/a_star_system.cpp src/systems/a_star_system.h src/util/Location.cpp src/util/Location.h src/components/seeks.h src/systems/seek_system.cpp src/systems/seek_system.h src/util/coordinates.cpp src/util/coordinates.h)
+        src/systems/a_star_system.cpp src/systems/a_star_system.h src/util/location.cpp src/util/location.h src/components/seeks.h src/systems/seek_system.cpp src/systems/seek_system.h src/util/coordinates.cpp src/util/coordinates.h)
 
 
 # Create executable target

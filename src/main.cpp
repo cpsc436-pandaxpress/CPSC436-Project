@@ -21,7 +21,7 @@
 #include <scene/vertical_scene.h>
 #include <util/csv_reader.h>
 #include <iostream>
-#include <scene/boss_scene.h>
+#include <scene/boss_scene_dracula.h>
 #include <graphics/health_bar.h>
 #include <graphics/cave.h>
 
@@ -98,6 +98,8 @@ int main(int argc, char** argv) {
 
     blackboard.texture_manager.load_texture(textures_path("jacko_sprite_sheet.png"), "jacko");
     blackboard.texture_manager.load_texture(textures_path("jacko_small_sprite_sheet.png"), "jacko_small");
+    blackboard.texture_manager.load_texture(textures_path("dracula.png"), "dracula");
+    blackboard.texture_manager.load_texture(textures_path("bat.png"), "bat");
     blackboard.texture_manager.load_texture(textures_path("burger.png"), "burger");
 
     blackboard.texture_manager.load_texture(textures_path("stalagmite.png"), "stalagmite");

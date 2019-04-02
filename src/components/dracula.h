@@ -2,16 +2,16 @@
 // Created by Rebecca on 2019-02-02.
 //
 
-#ifndef PANDAEXPRESS_JACKO_H
-#define PANDAEXPRESS_JACKO_H
+#ifndef PANDAEXPRESS_DRACULA_H
+#define PANDAEXPRESS_DRACULA_H
 
-struct Jacko {
+struct Dracula {
     bool alive;
     bool evading;
     int invincibility_timer;
 
-    Jacko() : alive(true),
+    Dracula() : alive(true),
     invincibility_timer(0){}
 };
 
-#endif //PANDAEXPRESS_JACKO_H
+#endif //PANDAEXPRESS_DRACULA_H

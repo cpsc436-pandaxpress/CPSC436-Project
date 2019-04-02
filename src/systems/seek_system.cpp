@@ -26,6 +26,9 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
         auto& timer  = seeker_view.get<Timer>(entity);
         auto& transform  = seeker_view.get<Transform>(entity);
 
+        if(seeks.seeking){
+
+        }
         if(seeks.seekList.size()>0){
             Coordinates* target = seeks.seekList[0];
             if(!seeks.goingVertical && !seeks.goingHorizontal){

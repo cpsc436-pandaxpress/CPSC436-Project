@@ -7,13 +7,13 @@
 
 #include "system.h"
 #include "components/panda.h"
-#include "components/jacko.h"
+#include "components/dracula.h"
 #include "components/transform.h"
 #include "components/collidable.h"
 #include "util/csv_reader.h"
 #include "util/constants.h"
 #include <iostream>
-#include "util/Location.h"
+#include "util/location.h"
 #include "util/coordinates.h"
 
 class AStarSystem: public System{
@@ -22,9 +22,9 @@ public:
     void destroyGrid();
     virtual void update(Blackboard &blackboard, entt::DefaultRegistry &registry);
     void createGrid(Blackboard &blackboard, entt::DefaultRegistry &registry);
-    std::vector<Location*> findPath(Location* start, Location* end);
+    std::vector<location*> findPath(location* start, location* end);
     std::vector<Coordinates*> getProjectilePath(Blackboard &blackboard, entt::DefaultRegistry &registry);
-    Location* getGridLocation(float x, float y);
+    location* getGridLocation(float x, float y);
     Coordinates* getScreenLocation(int i, int j);
 
 private:

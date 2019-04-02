@@ -18,6 +18,7 @@ struct Seeks {
     float bounce_speed_y;
     bool goingVertical;
     bool goingHorizontal;
+    bool seeking;
 
     explicit Seeks(std::vector<Coordinates*> seeklist) :
             seekList(seeklist),
@@ -25,7 +26,8 @@ struct Seeks {
             goingHorizontal(false),
             goingVertical(false),
             bounce_speed_x(30.f),
-            bounce_speed_y(30.f)
+            bounce_speed_y(30.f),
+            seeking(true)
 
 
     {}
