@@ -5,7 +5,7 @@
 #include "background_transform_system.h"
 #include <util/constants.h>
 
-BackgroundTransformSystem::BackgroundTransformSystem(SceneID scene_id) : scene_id(scene_id) {
+BackgroundTransformSystem::BackgroundTransformSystem(SceneType scene_type) : scene_type(scene_type) {
 
 }
 
@@ -15,13 +15,17 @@ void BackgroundTransformSystem::update(Blackboard &blackboard, entt::DefaultRegi
         //get the background
         auto &background = viewBg.get(entity);
         // move the background
-        switch (scene_id) {
-            case HORIZONTAL_SCENE_ID: {
+        switch (scene_type) {
+            case JUNGLE_TYPE: {
                 horizontal_background_transform(blackboard, background);
             }
                 break;
-            case VERTICAL_SCENE_ID: {
+            case SKY_TYPE: {
                 vertical_background_transform(blackboard, background);
+            }
+                break;
+            case BOSS_TYPE: {
+                boss_background_transform(blackboard, background);
             }
                 break;
         }
@@ -57,5 +61,54 @@ void BackgroundTransformSystem::vertical_background_transform(Blackboard &blackb
             background.set_pos2(background.pos2().x, background.pos2().y - camera.size().y * 2);
             background.set_z_pos(background.z_pos() * -1);
         }
+    }
+}
+
+float BackgroundTransformSystem::clamp(float val, float from, float to) {
+    if (val > from) {
+        return std::min(val, to);
+    } else if (val < to) {
+        return std::max(val, from);
+    } else {
+        return val;
+    }
+}
+
+void BackgroundTransformSystem::boss_background_transform(Blackboard &blackboard,
+                                                          Background &background) {
+    if (background.z_pos() == 0) { // follow the camera
+        // this is the moon
+        Camera camera = blackboard.camera;
+        background.set_pos1(camera.position().x, camera.position().y);
+    } else if (background.z_pos() == 3) { // follow the camera only in x-direction
+        // This is the grass
+        Camera camera = blackboard.camera;
+        float halfWidth = camera.size().x / 2.0f;
+        if (camera.position().x <= -halfWidth) {
+            background.set_pos1(-halfWidth, background.pos1().y);
+            background.set_pos2(-camera.size().x - halfWidth, background.pos1().y);
+        } else if(camera.position().x >= halfWidth) {
+            background.set_pos1(halfWidth + camera.size().x, background.pos1().y);
+            background.set_pos2(halfWidth, background.pos1().y);
+        } else {
+            background.set_pos1(-halfWidth, background.pos1().y);
+            background.set_pos2(halfWidth, background.pos1().y);
+        }
+    } else {
+        // everything else
+        float og_pos1 = 0.0;
+        float clampValue = blackboard.camera.size().x / 0.5f;
+        float displacement = clamp(
+                (og_pos1 - blackboard.camera.position().x) * (background.z_pos() / 10.0f),
+                -clampValue,
+                clampValue
+        );
+        float maxDist = blackboard.camera.size().y / 0.8f;
+        float displacementY = clamp(
+                (og_pos1 - blackboard.camera.position().y) * (background.z_pos() / 2.0f),
+                0, maxDist);
+        vec2 pos1 = background.pos1();
+        background.set_pos1(blackboard.camera.position().x + displacement,
+                            blackboard.camera.position().y + displacementY);
     }
 }

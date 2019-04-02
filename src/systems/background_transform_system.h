@@ -11,17 +11,20 @@
 
 class BackgroundTransformSystem: public System {
 private:
-    SceneID scene_id;
+    SceneType scene_type;
+    float clamp(float value, float from, float to);
 public:
     const float HORIZONTAL_LAYER_SPEED = 37.5f;
     const float VERTICAL_LAYER_SPEED = 15.0f;
-    BackgroundTransformSystem(SceneID scene_id);
+    BackgroundTransformSystem(SceneType scene_type);
 
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;
 
     void horizontal_background_transform(Blackboard &blackboard, Background &background);
 
     void vertical_background_transform(Blackboard &blackboard, Background &background);
+
+    void boss_background_transform(Blackboard &blackboard, Background &background);
 };
 
 

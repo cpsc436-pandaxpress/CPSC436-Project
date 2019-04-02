@@ -23,7 +23,7 @@
 #include <components/obeys_gravity.h>
 #include <graphics/cave.h>
 #include "util/random.h"
-#include "system.h"
+#include "systems/system.h"
 #include <queue>
 
 class LevelSystem : public System {
@@ -34,31 +34,28 @@ protected:
     const float BREAD_SPEED = 50.f;
     const float PROJECTILE_SPEED_X = -300.f;
     const float PROJECTILE_SPEED_Y = 10.f;
-    const unsigned int SEED = 1;
 
     const float PLATFORM_HEIGHT = 20.f;
-
-    virtual void load_next_chunk() = 0;
-
-    virtual void generate_next_chunk(Blackboard &blackboard, entt::DefaultRegistry &registry) = 0;
 
     void generateEntity(char value, float x, float y,
                         Blackboard &blackboard, entt::DefaultRegistry &registry);
 
-    void destroy_entities(entt::DefaultRegistry &registry);
 
 public:
 
     LevelSystem();
 
-    void init();
+    virtual void init();
 
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override = 0;
 
     void generate_bread(bool move_left, float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    virtual void destroy_entities(entt::DefaultRegistry &registry);
 
     const std::string FALLING_PLATFORM_TIMER_LABEL = "fall";
     const std::string SPIT_TIMER_LABEL = "spit";
+    static const unsigned int STORY_SEED = 1;
+
 };
 
 

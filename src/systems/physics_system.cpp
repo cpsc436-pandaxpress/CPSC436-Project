@@ -11,10 +11,15 @@
 #include <components/food.h>
 #include <components/jacko.h>
 #include <components/chases.h>
+#include <components/bread.h>
+#include <components/llama.h>
+#include <graphics/text.h>
+#include <components/label.h>
 #include "components/platform.h"
 
 
 #include "util/entity_pairs.h"
+#include "util/scene_helper.h"
 
 PhysicsSystem::PhysicsSystem() {}
 
@@ -209,6 +214,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         auto& cd = registry.get<CausesDamage>(entry.entity);
                         auto& health = registry.get<Health>(d_entity);
                         auto& panda = registry.get<Panda>(d_entity);
+                        auto& transform = registry.get<Transform>(d_entity);
                         if (entry.normal.x == 0 && entry.normal.y == 0) {
                             panda.hurt = true;
                         }
@@ -222,6 +228,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         auto& cd = registry.get<CausesDamage>(d_entity);
                         auto& health = registry.get<Health>(entry.entity);
                         auto& panda = registry.get<Panda>(entry.entity);
+                        auto& transform = registry.get<Transform>(entry.entity);
 
                         if (entry.normal.x == 0 && entry.normal.y == 0) {
                             panda.hurt = true;
@@ -237,6 +244,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                     ) {
                         auto& cd = registry.get<CausesDamage>(d_entity);
                         auto& panda = registry.get<Panda>(d_entity);
+                        auto& transform = registry.get<Transform>(d_entity);
                         auto& health = registry.get<Health>(entry.entity);
                         if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)
                         && !panda.invincible){
@@ -263,24 +271,46 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                     chases.evading = true;
                                 }
                             }
-                            //else if to exclude jacko from normal death stuff
+                            //else if to exclude jacko from normal dying stuff
                             else if (health.health_points <= 0) {
                                 //normal way to kill stuff
                                 if (registry.has<Interactable>(entry.entity)) {
                                     registry.remove<Interactable>(entry.entity);
+                                }
+                                if (registry.has<Bread>(entry.entity)) {
+                                    blackboard.score += BREAD_KILL_POINTS;
+                                    std::string str = "+" + std::to_string(BREAD_KILL_POINTS);
+                                    generate_label_text(blackboard, registry,
+                                                        vec2{transform.x, transform.y - 100.f},
+                                                        str.c_str());
+                                } else if (registry.has<Llama>(entry.entity)) {
+                                    blackboard.score += LLAMA_KILL_POINTS;
+                                    std::string str = "+" + std::to_string(LLAMA_KILL_POINTS);
+                                    generate_label_text(blackboard, registry,
+                                                        vec2{transform.x, transform.y - 100.f},
+                                                        str.c_str());
                                 }
                             }
                         }
                     }
 
                     //check for food
-                    if ( registry.has<Food>(entry.entity)
-                         && (registry.has<Panda>(d_entity) || registry.has<Jacko>(d_entity))
-                    ) {
-                        auto& health = registry.get<Health>(d_entity);
+                    if ( registry.has<Food>(entry.entity)) {
+                        if (registry.has<Panda>(d_entity)) {
+                            auto &panda = registry.get<Panda>(d_entity);
+                            auto &health = registry.get<Health>(d_entity);
+                            if (panda.alive && health.health_points < health.max_health) {
+                                health.health_points++;
+                            }
+                            registry.destroy(entry.entity);
 
-                        health.health_points ++;
-                        registry.destroy(entry.entity);
+                        } else if (registry.has<Food>(entry.entity) && registry.has<Jacko>(d_entity)) {
+                            auto &health = registry.get<Health>(d_entity);
+                            if (health.health_points < health.max_health) {
+                                health.health_points++;
+                            }
+                            registry.destroy(entry.entity);
+                        }
                     }
                 }
             }

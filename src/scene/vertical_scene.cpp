@@ -13,7 +13,11 @@
 #include <graphics/health_bar.h>
 #include <graphics/font.h>
 #include <graphics/text.h>
+#include <graphics/fade_overlay.h>
 #include <components/score.h>
+#include <components/layer.h>
+#include <components/pause_menu.h>
+#include <components/hud_element.h>
 #include "vertical_scene.h"
 #include "util/constants.h"
 
@@ -23,17 +27,21 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         sprite_transform_system(),
         sprite_render_system(),
         physics_system(),
-        player_movement_system(VERTICAL_SCENE_ID),
-        player_animation_system(VERTICAL_SCENE_ID),
+        player_movement_system(SKY_TYPE),
+        player_animation_system(SKY_TYPE),
         panda_dmg_system(),
         background_render_system(),
         falling_platform_system(),
-        background_transform_system(VERTICAL_SCENE_ID),
+        background_transform_system(SKY_TYPE),
         enemy_system(),
         enemy_animation_system(),
         text_transform_system(),
         text_render_system(),
-        score_system(VERTICAL_SCENE_ID)
+        score_system(SKY_TYPE),
+        pause_menu_transform_system(),
+        pause_menu_render_system(),
+        hud_transform_system(),
+        label_system()
 
 {
     init_scene(blackboard);
@@ -48,6 +56,7 @@ void VerticalScene::init_scene(Blackboard &blackboard) {
     create_background(blackboard);
     create_panda(blackboard);
     create_score_text(blackboard);
+    create_fade_overlay(blackboard);
     level_system.init();
 }
 
@@ -70,58 +79,82 @@ void VerticalScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
     registry_.assign<Timer>(panda_entity);
     registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
+    registry_.assign<Layer>(panda_entity, PANDA_LAYER);
 
     auto shaderHealth = blackboard.shader_manager.get_shader("health");
     auto meshHealth = blackboard.mesh_manager.get_mesh("health");
-    float height = 75.f;
-    float width = 750.f;
-    vec2 size = {width, height};
+    vec2 size = {HEALTH_BAR_X_SIZE, HEALTH_BAR_Y_SIZE};
     vec2 scale = {0.5, 0.5};
     auto &healthbar = registry_.assign<HealthBar>(panda_entity,
                                                   meshHealth, shaderHealth, size, scale);
+    registry_.assign<HudElement>(panda_entity,
+                                 vec2{size.x / 2.f * scale.x + HUD_HEALTH_X_OFFSET,
+                                      blackboard.camera.size().y - HUD_Y_OFFSET});
 }
 
 void VerticalScene::update(Blackboard &blackboard) {
-    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
-        blackboard.camera.set_position(0, 0);
-        reset_scene(blackboard);
-        change_scene(MAIN_MENU_SCENE_ID);
-        return;
-    }
-
-    vec2 cam_size = blackboard.camera.size();
-    vec2 cam_position = blackboard.camera.position();
-    blackboard.camera.set_position(cam_position.x,
-                                   cam_position.y - CAMERA_SPEED * blackboard.delta_time);
-    blackboard.camera.compose();
-
-    auto &transform = registry_.get<Transform>(panda_entity);
     auto &panda = registry_.get<Panda>(panda_entity);
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+    auto &interactable = registry_.get<Interactable>(panda_entity);
+    auto &transform = registry_.get<Transform>(panda_entity);
     auto &panda_collidable = registry_.get<Collidable>(panda_entity);
 
-    if (transform.y - panda_collidable.height / 2 > cam_position.y + cam_size.y / 2 ||
-        !panda.alive) {
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
+        if (pause) {
+            pause = false;
+            registry_.destroy(pause_menu_entity);
+        } else {
+            pause = true;
+            create_pause_menu(blackboard);
+        }
+    } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN) && pause) {
+        blackboard.camera.set_position(0, 0);
         reset_scene(blackboard);
-    } else if (transform.x + panda_collidable.width / 2 > cam_position.x + cam_size.x / 2) {
-        transform.x = cam_position.x + cam_size.x / 2 - panda_collidable.width / 2;
-    } else if (transform.x - panda_collidable.width / 2 < cam_position.x - cam_size.x / 2) {
-        transform.x = cam_position.x - cam_size.x / 2 + panda_collidable.width / 2;
+        registry_.destroy(pause_menu_entity);
+        change_scene(MAIN_MENU_SCENE_ID);
+        pause = false;
+        return;
     }
+    vec2 cam_size = blackboard.camera.size();
+    vec2 cam_position = blackboard.camera.position();
 
-    background_transform_system.update(blackboard, registry_);
-    level_system.update(blackboard, registry_);
-    player_movement_system.update(blackboard, registry_);
-    physics_system.update(blackboard, registry_);
-    panda_dmg_system.update(blackboard, registry_);
-    sprite_transform_system.update(blackboard, registry_);
-    health_bar_transform_system.update(blackboard, registry_);
-    score_system.update(blackboard, registry_);
-    text_transform_system.update(blackboard, registry_);
-    player_animation_system.update(blackboard, registry_);
-    enemy_system.update(blackboard, registry_, VERTICAL_SCENE_ID);
-    enemy_animation_system.update(blackboard, registry_);
-    timer_system.update(blackboard, registry_);
-    falling_platform_system.update(blackboard, registry_);
+    if (!pause) {
+        if (panda.alive && !panda.dead) {
+            blackboard.camera.set_position(cam_position.x,
+                                           cam_position.y - CAMERA_SPEED * blackboard.delta_time);
+            blackboard.camera.compose();
+            player_movement_system.update(blackboard, registry_);
+        } else if (!panda.alive && interactable.grounded) {
+            fade_overlay_system.update(blackboard, registry_);
+        }
+
+        if (transform.y - panda_collidable.height / 2 > cam_position.y + cam_size.y / 2 ||
+            panda.dead) {
+            reset_scene(blackboard);
+        } else if (transform.x + panda_collidable.width / 2 > cam_position.x + cam_size.x / 2) {
+            transform.x = cam_position.x + cam_size.x / 2 - panda_collidable.width / 2;
+        } else if (transform.x - panda_collidable.width / 2 < cam_position.x - cam_size.x / 2) {
+            transform.x = cam_position.x - cam_size.x / 2 + panda_collidable.width / 2;
+        }
+
+        background_transform_system.update(blackboard, registry_);
+        level_system.update(blackboard, registry_);
+        physics_system.update(blackboard, registry_);
+        panda_dmg_system.update(blackboard, registry_);
+        sprite_transform_system.update(blackboard, registry_);
+        health_bar_transform_system.update(blackboard, registry_);
+        score_system.update(blackboard, registry_);
+        label_system.update(blackboard, registry_);
+        text_transform_system.update(blackboard, registry_);
+        player_animation_system.update(blackboard, registry_);
+        enemy_system.update(blackboard, registry_, SKY_TYPE);
+        enemy_animation_system.update(blackboard, registry_);
+        timer_system.update(blackboard, registry_);
+        falling_platform_system.update(blackboard, registry_);
+        hud_transform_system.update(blackboard, registry_); // should run last
+    } else {
+        pause_menu_transform_system.update(blackboard, registry_);
+    }
 }
 
 void VerticalScene::render(Blackboard &blackboard) {
@@ -133,6 +166,15 @@ void VerticalScene::render(Blackboard &blackboard) {
     sprite_render_system.update(blackboard, registry_);
     health_bar_render_system.update(blackboard, registry_);
     text_render_system.update(blackboard, registry_);
+
+    auto &panda = registry_.get<Panda>(panda_entity);
+    auto &interactable = registry_.get<Interactable>(panda_entity);
+    if (!panda.alive && interactable.grounded) {
+        fade_overlay_render_system.update(blackboard, registry_);
+    }
+    if (pause) {
+        pause_menu_render_system.update(blackboard, registry_);
+    }
 }
 
 void VerticalScene::reset_scene(Blackboard &blackboard) {
@@ -143,6 +185,7 @@ void VerticalScene::reset_scene(Blackboard &blackboard) {
     }
     bg_entities.clear();
     registry_.destroy(score_entity);
+    blackboard.score = 0;
     init_scene(blackboard);
 }
 
@@ -170,16 +213,15 @@ void VerticalScene::create_background(Blackboard &blackboard) {
     bg2.set_pos2(-200.f, -blackboard.camera.size().y);
     bg2.set_rotation_rad(0.0f);
     bg2.set_scale(blackboard.camera.size().x / tex2.width(),
-                 blackboard.camera.size().y / tex2.height());
+                  blackboard.camera.size().y / tex2.height());
     bg_entities.push_back(bg_entity2);
 
     auto bg_entity0 = registry_.create();
-    auto &bg0 = registry_.assign<Background>(bg_entity0, tex3, shader, mesh, 0);
-    bg0.set_pos1(0.0f, blackboard.camera.size().y);
-    bg0.set_pos2(0.0f, 0.0f);
+    auto &bg0 = registry_.assign<Background>(bg_entity0, tex3, shader, mesh, 0, false);
+    bg0.set_pos1(0.0f, 0.0f);
     bg0.set_rotation_rad(0.0f);
     bg0.set_scale(blackboard.camera.size().x / tex3.width(),
-                 blackboard.camera.size().y / tex3.height());
+                  blackboard.camera.size().y / tex3.height());
     bg_entities.push_back(bg_entity0);
 }
 
@@ -187,12 +229,40 @@ void VerticalScene::create_score_text(Blackboard &blackboard) {
     auto shader = blackboard.shader_manager.get_shader("text");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
-    FontType font = FontType();
-    font.load(fonts_path("TitilliumWeb-Bold.ttf"), 64);
+    FontType font = blackboard.fontManager.get_font("titillium_72");
 
     score_entity = registry_.create();
-    std::string textVal = "SCORE: 0";
+    std::string textVal = "0";
     auto &text = registry_.assign<Text>(score_entity, shader, mesh, font, textVal);
-    registry_.assign<Transform>(score_entity, 0., 0., 0., 1.f, 1.f);
+    text.set_scale(0.8f);
     registry_.assign<Score>(score_entity);
+    registry_.assign<HudElement>(score_entity,
+                                 vec2{blackboard.camera.size().x - HUD_SCORE_X_OFFSET,
+                                      blackboard.camera.size().y - HUD_Y_OFFSET});
 }
+
+void VerticalScene::set_mode(SceneMode mode) {
+    level_system.set_mode(mode);
+}
+
+void VerticalScene::create_fade_overlay(Blackboard &blackboard) {
+    fade_overlay_entity = registry_.create();
+    auto shaderFade = blackboard.shader_manager.get_shader("fade");
+    auto meshFade = blackboard.mesh_manager.get_mesh("health");
+    float height = blackboard.camera.size().y;
+    float width = blackboard.camera.size().x;
+    vec2 size = {width, height};
+    auto &fade = registry_.assign<FadeOverlay>(fade_overlay_entity, meshFade, shaderFade, size);
+}
+
+void VerticalScene::create_pause_menu(Blackboard &blackboard) {
+    pause_menu_entity = registry_.create();
+
+    auto texture = blackboard.texture_manager.get_texture("pause_menu");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+
+    registry_.assign<Sprite>(pause_menu_entity, texture, shader, mesh);
+    registry_.assign<PauseMenu>(pause_menu_entity);
+}
+

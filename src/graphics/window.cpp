@@ -6,8 +6,12 @@
 
 #include "window.h"
 
-bool Window::initialize(const char* title, uint32_t width, uint32_t height) {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+Window::~Window() {
+    SDL_QuitSubSystem(SDL_INIT_VIDEO);
+}
+
+bool Window::initialize(const char* title) {
+    if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0) {
         // Could not initialize video!
         printf("SDL could not initialize video subsystems! ERROR: %s\n", SDL_GetError());
         return false;
@@ -22,20 +26,35 @@ bool Window::initialize(const char* title, uint32_t width, uint32_t height) {
     SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
 
+    char* windowed = std::getenv("WINDOWED");
+    bool is_windowed = windowed != nullptr && strcmp(windowed, "1") == 0;
+
+    if (!is_windowed) {
+        SDL_DisplayMode DM;
+        SDL_GetCurrentDisplayMode(0, &DM);
+        width_ = DM.w;
+        height_ = DM.h;
+    } else {
+        width_ = WINDOWED_WIDTH;
+        height_ = WINDOWED_HEIGHT;
+    }
+
+
     sdl_window_ = SDL_CreateWindow(
         title,
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        width,
-        height,
+        width_,
+        height_,
         SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL
     );
 
+    if (!is_windowed)
+        SDL_SetWindowFullscreen(sdl_window_, SDL_WINDOW_FULLSCREEN_DESKTOP);
+
     gl_context_ = SDL_GL_CreateContext(sdl_window_);
 
-    glViewport(0, 0, width, height);
-    width_ = width;
-    height_ = height;
+    glViewport(0, 0, width_, height_);
 
     SDL_GL_SetSwapInterval(-1); // -1 for Vsync
 
