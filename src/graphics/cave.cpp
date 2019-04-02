@@ -255,6 +255,7 @@ void Cave::draw(const mat3 &projection) {
             {0.f, 1.f, 0.f},
             {0.f, 0.f, 1.f}
     };
+    printf("Drawing cave\n");
 
     mul_in_place(transform, make_translate_mat3(position_.x, position_.y));
     mul_in_place(transform, make_rotate_mat3(rotation_));
@@ -288,7 +289,6 @@ void Cave::draw(const mat3 &projection) {
 
     shader_.set_uniform_mat3("transform", transform);
     shader_.set_uniform_mat3("projection", projection);
-
 
     // draw!
     glDrawElements(GL_TRIANGLES, 168, GL_UNSIGNED_SHORT, nullptr);
