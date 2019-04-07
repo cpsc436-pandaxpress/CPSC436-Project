@@ -24,6 +24,7 @@
 #include <systems/pause_menu_render_system.h>
 #include <systems/hud_transform_system.h>
 #include <systems/label_system.h>
+#include <systems/render_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_render_system.h"
@@ -82,6 +83,7 @@ private:
     PauseMenuRenderSystem pause_menu_render_system;
     HudTransformSystem hud_transform_system;
     LabelSystem label_system;
+    RenderSystem render_system;
 
     uint32_t high_score_entity;
     int high_score_;

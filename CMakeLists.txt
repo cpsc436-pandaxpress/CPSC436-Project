@@ -158,6 +158,8 @@ set(SOURCE_FILES
         src/util/scene_helper.h
         src/util/property_reader.cpp
         src/util/property_reader.h
+        src/systems/render_system.cpp
+        src/systems/render_system.h
         )
 
 

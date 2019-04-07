@@ -47,7 +47,8 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         pause_menu_render_system(),
         transition_system(JUNGLE_TYPE),
         hud_transform_system(),
-        label_system()
+        label_system(),
+        render_system()
 {
     high_score_ = 0;
     init_scene(blackboard);
@@ -139,28 +140,7 @@ void HorizontalScene::update_camera(Blackboard &blackboard) {
 void HorizontalScene::render(Blackboard &blackboard) {
     glClearColor(19.f / 256.f, 136.f / 256.f, 126.f / 256.f, 1); // same colour as the top of the background
     glClear(GL_COLOR_BUFFER_BIT);
-    background_render_system.update(blackboard, registry_); // render background first
-    cave_render_system.update(blackboard, registry_);
-    sprite_render_system.update(blackboard, registry_);
-    health_bar_render_system.update(blackboard, registry_);
-
-    // This if is for hiding the score in STORY mode
-    // TODO: Remove this hackiness, especially if we need some other text in story mode
-    if (mode_ == ENDLESS)
-        text_render_system.update(blackboard, registry_);
-
-    auto &panda = registry_.get<Panda>(panda_entity);
-    auto &interactable = registry_.get<Interactable>(panda_entity);
-    if ((!panda.alive && interactable.grounded) || pause) {
-        fade_overlay_render_system.update(blackboard, registry_);
-    }
-    if (pause){
-        pause_menu_render_system.update(blackboard, registry_);
-    }
-    if (blackboard.camera.transition_ready) {
-        fade_overlay_render_system.update(blackboard, registry_);
-        go_to_next_scene(blackboard);
-    }
+    render_system.update(blackboard, registry_);
 }
 
 void HorizontalScene::reset_scene(Blackboard &blackboard) {
@@ -254,6 +234,7 @@ void HorizontalScene::create_background(Blackboard &blackboard) {
     for (Texture t: textures) {
         auto bg_entity = registry_.create();
         auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, i);
+        registry_.assign<Layer>(bg_entity, BACKGROUND_LAYER - i);
         bg.set_pos1(0.0f, 0.0f);
         bg.set_pos2(blackboard.camera.size().x, 0.0f);
         bg.set_rotation_rad(0.0f);
@@ -278,6 +259,7 @@ void HorizontalScene::create_score_text(Blackboard &blackboard) {
     registry_.assign<HudElement>(score_entity,
                                  vec2{blackboard.camera.size().x - HUD_SCORE_X_OFFSET,
                                       blackboard.camera.size().y - HUD_Y_OFFSET});
+    registry_.assign<Layer>(score_entity, TEXT_LAYER);
 
     high_score_entity = registry_.create();
     std::stringstream ss;
@@ -287,6 +269,7 @@ void HorizontalScene::create_score_text(Blackboard &blackboard) {
     registry_.assign<HudElement>(high_score_entity,
                                  vec2{blackboard.camera.size().x / 2.0f - HUD_HEALTH_X_OFFSET,
                                       blackboard.camera.size().y - HUD_Y_OFFSET});
+    registry_.assign<Layer>(high_score_entity, TEXT_LAYER);
 }
 
 void HorizontalScene::set_mode(SceneMode mode) {
@@ -302,6 +285,7 @@ void HorizontalScene::create_fade_overlay(Blackboard &blackboard) {
     float width = blackboard.camera.size().x;
     vec2 size = {width, height};
     auto &fade = registry_.assign<FadeOverlay>(fade_overlay_entity, meshFade, shaderFade, size);
+    registry_.assign<Layer>(fade_overlay_entity, OVERLAY_LAYER);
 }
 
 void HorizontalScene::create_pause_menu(Blackboard &blackboard) {
@@ -313,6 +297,7 @@ void HorizontalScene::create_pause_menu(Blackboard &blackboard) {
 
     registry_.assign<Sprite>(pause_menu_entity, texture, shader, mesh);
     registry_.assign<PauseMenu>(pause_menu_entity);
+    registry_.assign<Layer>(pause_menu_entity, OVERLAY_LAYER);
 }
 
 void HorizontalScene::set_high_score(int value) {
