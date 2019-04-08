@@ -62,12 +62,10 @@ private:
     bool pause = false;
     int high_score_;
 
-    void reset_scene(Blackboard& blackboard);
     void init_scene(Blackboard &blackboard);
-
 public:
-    VerticalScene(Blackboard& blackboard, SceneManager& scene_manager);
 
+    VerticalScene(Blackboard& blackboard, SceneManager& scene_manager);
     virtual void update(Blackboard& blackboard) override;
 
     virtual void render(Blackboard& blackboard) override;
@@ -77,8 +75,8 @@ public:
     void set_mode(SceneMode mode) override;
 
     void set_high_score(int value);
-    int get_high_score();
 
+    int get_high_score();
     static constexpr float CAMERA_SPEED = 250.f;
 
     void go_to_next_scene(Blackboard &blackboard);
@@ -88,6 +86,8 @@ public:
     void update_camera(Blackboard &blackboard);
 
     void update_panda(Blackboard &blackboard);
+
+    void reset_scene(Blackboard& blackboard) override;
 };
 
 #endif //PANDAEXPRESS_VERTICAL_SCENE_H

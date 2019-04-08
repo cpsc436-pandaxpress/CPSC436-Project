@@ -61,14 +61,12 @@ private:
     RenderSystem render_system;
 
     void create_background(Blackboard &blackboard);
-    void reset_scene(Blackboard& blackboard);
     void init_scene(Blackboard &blackboard);
     void update_panda(Blackboard& blackboard);
     void update_camera(Blackboard& blackboard);
 public:
     HorizontalScene(Blackboard &blackboard,
                     SceneManager &scene_manager);
-
     virtual void update(Blackboard& blackboard) override;
 
     virtual void render(Blackboard& blackboard) override;
@@ -76,7 +74,9 @@ public:
     void set_mode(SceneMode mode) override;
 
     void set_high_score(int value);
+
     int get_high_score();
+    void reset_scene(Blackboard& blackboard) override;
 
     static constexpr float CAMERA_SPEED = 400.f;
 

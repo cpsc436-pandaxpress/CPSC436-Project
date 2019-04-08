@@ -76,7 +76,7 @@ void MainMenuScene::update(Blackboard& blackboard) {
     }
 
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN)) {
-        change_scene(button_targets_[selected_button_]);
+        change_scene(button_targets_[selected_button_], true);
     }
 
 }
@@ -105,4 +105,8 @@ void MainMenuScene::add_item(Blackboard& blackboard, const char* texture_name, S
     button_bg_sprites_.push_back(bg_sprite);
     button_y_positions_.push_back(0);
     button_targets_.push_back(sceneID);
+}
+
+void MainMenuScene::reset_scene(Blackboard &blackboard) {
+
 }

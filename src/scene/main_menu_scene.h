@@ -42,6 +42,8 @@ public:
     virtual void render(Blackboard& blackboard) override;
 
     void add_item(Blackboard& blackboard, const char* texture_name, SceneID sceneID);
+
+    void reset_scene(Blackboard& blackboard) override;
 };
 
 #endif //PANDAEXPRESS_MAIN_MENU_SCENE_H

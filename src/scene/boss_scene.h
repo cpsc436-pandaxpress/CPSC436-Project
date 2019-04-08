@@ -61,17 +61,17 @@ private:
 
     void create_background(Blackboard &blackboard);
     void create_jacko(Blackboard& blackboard, uint32_t panda);
-    void reset_scene(Blackboard& blackboard);
     void update_panda(Blackboard& blackboard);
     void update_camera(Blackboard& blackboard);
-
 public:
+
     BossScene(Blackboard &blackboard,
                     SceneManager &scene_manager);
-
     virtual void update(Blackboard& blackboard) override;
+
     virtual void render(Blackboard& blackboard) override;
     void init_scene(Blackboard &blackboard);
+    void reset_scene(Blackboard& blackboard) override;
 
     void cleanup();
 };
