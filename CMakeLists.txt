@@ -160,7 +160,7 @@ set(SOURCE_FILES
         src/util/property_reader.h
         src/systems/render_system.cpp
         src/systems/render_system.h
-        )
+        src/scene/game_scene.cpp src/scene/game_scene.h)
 
 
 # Create executable target

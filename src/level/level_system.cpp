@@ -160,6 +160,8 @@ void LevelSystem::generateEntity(char value, float x, float y,
                 vec2 scaleCave = {-80, 80};
                 auto &caveE = registry.assign<Cave>(cave, meshCave, shaderCave, sizeCave, scaleCave);
                 caveE.set_pos(x, y - heightCave);
+                registry.assign<Layer>(cave, TERRAIN_LAYER);
+
                 auto caveEntrance = registry.create();
                 auto shaderCaveEntrance = blackboard.shader_manager.get_shader("caveEntrance");
                 auto meshCaveEntrance = blackboard.mesh_manager.get_mesh("caveEntrance");
@@ -173,7 +175,7 @@ void LevelSystem::generateEntity(char value, float x, float y,
                 auto &caveEntranceE = registry.assign<CaveEntrance>(caveEntrance, meshCaveEntrance, shaderCaveEntrance,
                                                                     sizeCave_entrance, scaleCave_entrance);
                 caveEntranceE.set_pos(x + 700, y - heightCave);
-                registry.assign<Layer>(cave, TERRAIN_LAYER);
+                registry.assign<Layer>(caveEntrance, TERRAIN_LAYER + 1);
             }
         }
             break;
