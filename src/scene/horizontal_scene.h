@@ -34,10 +34,9 @@
 
 class HorizontalScene: public GameScene {
 private:
-    const float CAMERA_START_X = 0.f;
-    const float CAMERA_START_Y = 0.f;
     const float MAX_CAMERA_Y_DIFF = 250.f;
     bool pause = false;
+    int high_score_;
 
     std::vector<uint32_t> bg_entities;
     HorizontalLevelSystem level_system;
@@ -60,8 +59,6 @@ private:
     HudTransformSystem hud_transform_system;
     LabelSystem label_system;
     RenderSystem render_system;
-
-    int high_score_;
 
     void create_background(Blackboard &blackboard);
     void reset_scene(Blackboard& blackboard);

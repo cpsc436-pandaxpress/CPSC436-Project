@@ -66,6 +66,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
             if (!blackboard.camera.in_transition) {
                 update_camera(blackboard);
                 background_transform_system.update(blackboard, registry_);
+                score_system.update(blackboard, registry_);
             }
             player_movement_system.update(blackboard, registry_);
         } else if (!panda.alive && interactable.grounded) {
@@ -80,7 +81,6 @@ void HorizontalScene::update(Blackboard &blackboard) {
         enemy_system.update(blackboard, registry_, JUNGLE_TYPE);
         health_bar_transform_system.update(blackboard, registry_);
         player_animation_system.update(blackboard, registry_);
-        score_system.update(blackboard, registry_);
         text_transform_system.update(blackboard, registry_);
         label_system.update(blackboard, registry_);
         timer_system.update(blackboard, registry_);
@@ -101,7 +101,6 @@ void HorizontalScene::update_panda(Blackboard &blackboard) {
     auto &transform = registry_.get<Transform>(panda_entity);
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &panda_collidable = registry_.get<Collidable>(panda_entity);
-    auto &panda_timer = registry_.get<Timer>(panda_entity);
 
     if (transform.x + panda_collidable.width < cam_position.x - cam_size.x / 2 ||
         transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || panda.dead) {
@@ -204,8 +203,3 @@ void HorizontalScene::set_high_score(int value) {
 int HorizontalScene::get_high_score() {
     return high_score_;
 }
-
-
-
-
-

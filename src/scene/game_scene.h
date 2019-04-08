@@ -24,16 +24,19 @@
 #include "scene.h"
 
 class GameScene : public Scene {
+protected:
     const float PANDA_START_X = -10.f;
     const float PANDA_START_Y = -200.f;
     const float HEALTH_BAR_X_SIZE = 750.f;
     const float HEALTH_BAR_Y_SIZE = 75.f;
 
+    const float CAMERA_START_X = 0.f;
+    const float CAMERA_START_Y = 0.f;
+
     const float HUD_Y_OFFSET = 50.f;
     const float HUD_SCORE_X_OFFSET = 350.f;
     const float HUD_HEALTH_X_OFFSET = 100.f;
 
-protected:
     uint32_t panda_entity;
     uint32_t pause_menu_entity;
 

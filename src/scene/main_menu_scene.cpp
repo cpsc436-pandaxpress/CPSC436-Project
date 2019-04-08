@@ -91,7 +91,7 @@ void MainMenuScene::render(Blackboard& blackboard) {
     }
 }
 
-void MainMenuScene::add_item(Blackboard& blackboard, char* texture_name, SceneID sceneID) {
+void MainMenuScene::add_item(Blackboard& blackboard, const char* texture_name, SceneID sceneID) {
     auto texture = blackboard.texture_manager.get_texture(texture_name);
     auto bg_texture = blackboard.texture_manager.get_texture("pixel");
     auto shader = blackboard.shader_manager.get_shader("sprite");
