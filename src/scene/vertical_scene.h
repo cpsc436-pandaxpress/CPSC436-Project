@@ -5,7 +5,6 @@
 #ifndef PANDAEXPRESS_VERTICAL_SCENE_H
 #define PANDAEXPRESS_VERTICAL_SCENE_H
 
-#include <systems/sprite_render_system.h>
 #include <systems/physics_system.h>
 #include <systems/sprite_transform_system.h>
 #include "game_scene.h"
@@ -16,20 +15,14 @@
 #include <level/vertical_level_system.h>
 #include <systems/timer_system.h>
 #include <systems/panda_damage_system.h>
-#include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
 #include <systems/enemy_system.h>
 #include <systems/enemy_animation_system.h>
-#include <systems/health_bar_render_system.h>
 #include <systems/health_bar_transform_system.h>
 #include <systems/text_transform_system.h>
-#include <systems/text_render_system.h>
 #include <systems/score_system.h>
-#include <systems/fade_overlay_render_system.h>
 #include <systems/fade_overlay_system.h>
 #include <systems/pause_menu_transform_system.h>
-#include <systems/pause_menu_render_system.h>
-#include <systems/cave_render_system.h>
 #include <systems/transition_system.h>
 #include <systems/hud_transform_system.h>
 #include <systems/label_system.h>

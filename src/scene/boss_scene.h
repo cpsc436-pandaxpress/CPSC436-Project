@@ -8,19 +8,14 @@
 
 #include <queue>
 #include <level/boss_level_system.h>
-#include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
 #include <systems/panda_damage_system.h>
 #include <systems/timer_system.h>
-#include <systems/health_bar_render_system.h>
 #include <systems/health_bar_transform_system.h>
 #include <systems/fade_overlay_system.h>
-#include <systems/fade_overlay_render_system.h>
 #include <systems/pause_menu_transform_system.h>
-#include <systems/pause_menu_render_system.h>
 #include <systems/hud_transform_system.h>
 #include <systems/render_system.h>
-#include "../systems/sprite_render_system.h"
 #include "../systems/sprite_transform_system.h"
 #include "../util/blackboard.h"
 #include "../systems/physics_system.h"

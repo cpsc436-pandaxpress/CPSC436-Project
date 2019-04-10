@@ -7,9 +7,7 @@
 
 #include <cinttypes>
 #include <vector>
-#include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
-#include "../systems/sprite_render_system.h"
 #include "../systems/sprite_transform_system.h"
 #include "../util/blackboard.h"
 #include "../systems/player_animation_system.h"
