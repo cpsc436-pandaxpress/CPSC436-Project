@@ -18,8 +18,6 @@ private:
     const std::string DEATH_TIMER_LABEL = "dying";
     const float DEATH_TIMER = 2.3f;
 
-    bool dying = false;
-
 public:
     PandaDamageSystem();
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;
