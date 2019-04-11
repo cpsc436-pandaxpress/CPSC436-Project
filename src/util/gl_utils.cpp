@@ -22,7 +22,7 @@ bool gl_has_errors() {
     return gl_has_errors("untagged");
 }
 
-bool gl_has_errors(char* tag)
+bool gl_has_errors(const char* tag)
 {
     GLenum error = glGetError();
 

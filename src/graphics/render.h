@@ -5,10 +5,12 @@
 #pragma once
 
 
+#include <components/layer.h>
 #include "../util/gl_utils.h"
 
 class Renderable {
 public:
+    int depth = DEFAULT_LAYER;
     virtual void draw(const mat3& projection) = 0;
 };
 

@@ -35,7 +35,7 @@ public:
     // if called during update(), will switch scenes after current update()
     // fails and returns false if no such scene exists
     // returns true otherwise
-    bool change_scene(SceneID id);
+    bool change_scene(SceneID id, bool reset = false);
 
     // attempts to update the current scene, if one exists
     void update(Blackboard& blackboard);

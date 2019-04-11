@@ -10,8 +10,8 @@ Scene::Scene(SceneManager &scene_manager) :
     registry_()
 {}
 
-bool Scene::change_scene(SceneID id) {
-    return scene_manager_.change_scene(id);
+bool Scene::change_scene(SceneID id, bool reset) {
+    return scene_manager_.change_scene(id, reset);
 }
 
 void Scene::set_mode(SceneMode mode) {
