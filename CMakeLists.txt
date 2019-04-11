@@ -158,7 +158,7 @@ set(SOURCE_FILES
         src/util/scene_helper.h
         src/util/property_reader.cpp
         src/util/property_reader.h
-        )
+        src/scene/story_intro.cpp src/scene/story_intro.h src/systems/story_animation_system.cpp src/systems/story_animation_system.h src/components/kelly.h src/components/hearts.h)
 
 
 # Create executable target
