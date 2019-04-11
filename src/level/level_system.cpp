@@ -160,6 +160,8 @@ void LevelSystem::generateEntity(char value, float x, float y,
                 vec2 scaleCave = {-80, 80};
                 auto &caveE = registry.assign<Cave>(cave, meshCave, shaderCave, sizeCave, scaleCave);
                 caveE.set_pos(x, y - heightCave);
+                registry.assign<Layer>(cave, TERRAIN_LAYER);
+
                 auto caveEntrance = registry.create();
                 auto shaderCaveEntrance = blackboard.shader_manager.get_shader("caveEntrance");
                 auto meshCaveEntrance = blackboard.mesh_manager.get_mesh("caveEntrance");
@@ -173,6 +175,7 @@ void LevelSystem::generateEntity(char value, float x, float y,
                 auto &caveEntranceE = registry.assign<CaveEntrance>(caveEntrance, meshCaveEntrance, shaderCaveEntrance,
                                                                     sizeCave_entrance, scaleCave_entrance);
                 caveEntranceE.set_pos(x + 700, y - heightCave);
+                registry.assign<Layer>(caveEntrance, TERRAIN_LAYER + 1);
             }
         }
             break;
@@ -195,6 +198,7 @@ void LevelSystem::generateEntity(char value, float x, float y,
             registry.assign<Sprite>(platform, texture, shader, mesh);
             registry.assign<Collidable>(platform, texture.width() * scaleX,
                                         texture.height() * scaleY);
+            registry.assign<Layer>(platform, TERRAIN_LAYER);
         }
             break;
         case 'f': {
@@ -212,6 +216,7 @@ void LevelSystem::generateEntity(char value, float x, float y,
             registry.assign<Velocity>(burger);
             registry.assign<Collidable>(burger, texture.width() * scaleX,
                                          texture.height() * scaleY);
+            registry.assign<Layer>(burger, ITEM_LAYER);
         }
             break;
 

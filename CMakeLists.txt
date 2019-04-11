@@ -45,7 +45,6 @@ set(SOURCE_FILES
         src/graphics/mesh.cpp
         src/graphics/camera.cpp
         src/systems/player_movement_system.cpp
-        src/systems/sprite_render_system.cpp
         src/systems/sprite_transform_system.cpp
         src/util/constants.h
         src/systems/physics_system.cpp
@@ -57,8 +56,6 @@ set(SOURCE_FILES
         src/scene/main_menu_scene.cpp
         src/components/obstacle.h
         src/graphics/background.cpp
-        src/systems/background_render_system.cpp
-        src/systems/background_render_system.h
         src/systems/background_transform_system.cpp
         src/systems/background_transform_system.h
         src/scene/vertical_scene.cpp
@@ -113,17 +110,11 @@ set(SOURCE_FILES
         src/graphics/health_bar.h
         src/systems/health_bar_transform_system.cpp
         src/systems/health_bar_transform_system.h
-        src/systems/health_bar_render_system.cpp
-        src/systems/health_bar_render_system.h
-        src/graphics/cave.cpp src/graphics/cave.h 
-        src/systems/cave_render_system.cpp 
-        src/systems/cave_render_system.h
+        src/graphics/cave.cpp src/graphics/cave.h
         src/graphics/text.cpp
         src/graphics/text.h
         src/graphics/font.cpp
         src/graphics/font.h
-        src/systems/text_render_system.cpp
-        src/systems/text_render_system.h
         src/systems/text_transform_system.cpp
         src/systems/text_transform_system.h
         src/systems/score_system.cpp
@@ -132,8 +123,6 @@ set(SOURCE_FILES
         src/level/level.cpp
         src/level/level.h
         src/components/layer.h
-        src/systems/fade_overlay_render_system.cpp
-        src/systems/fade_overlay_render_system.h
         src/graphics/fade_overlay.h
         src/graphics/fade_overlay.cpp
         src/systems/fade_overlay_system.cpp
@@ -141,8 +130,6 @@ set(SOURCE_FILES
         src/scene/scene_mode.h
         src/systems/pause_menu_transform_system.cpp
         src/systems/pause_menu_transform_system.h
-        src/systems/pause_menu_render_system.cpp
-        src/systems/pause_menu_render_system.h
         src/systems/transition_system.cpp
         src/systems/transition_system.h
         src/graphics/cave_entrance.h
@@ -158,7 +145,17 @@ set(SOURCE_FILES
         src/util/scene_helper.h
         src/util/property_reader.cpp
         src/util/property_reader.h
-        src/scene/story_intro.cpp src/scene/story_intro.h src/systems/story_animation_system.cpp src/systems/story_animation_system.h src/components/kelly.h src/components/hearts.h)
+        src/systems/render_system.cpp
+        src/systems/render_system.h
+        src/scene/game_scene.cpp
+        src/scene/game_scene.h
+        src/scene/story_intro.cpp
+        src/scene/story_intro.h
+        src/systems/story_animation_system.cpp
+        src/systems/story_animation_system.h
+        src/components/kelly.h
+        src/components/hearts.h
+)
 
 
 # Create executable target
