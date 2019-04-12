@@ -30,11 +30,6 @@ void Camera::compose() {
     float h_width = dimensions_.x * 0.5f;
     float h_height = dimensions_.y * 0.5f;
 
-//    float left = position_.x - h_width;
-//    float top = position_.y - h_height;
-//    float right = position_.x + h_width;
-//    float bottom = position_.y + h_height;
-
     float left = (int)(position_.x - h_width);
     float top = (int)(position_.y - h_height);
     float right = (int)(position_.x + h_width);
