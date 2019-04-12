@@ -4,6 +4,7 @@
 
 #include <graphics/fade_overlay.h>
 #include <components/panda.h>
+#include <components/timer.h>
 #include "fade_overlay_system.h"
 
 FadeOverlaySystem::FadeOverlaySystem() {}
@@ -15,11 +16,16 @@ void FadeOverlaySystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
     }*/
     float alpha;
 
-    auto viewPanda = registry.view<Panda>();
+    auto viewPanda = registry.view<Panda, Timer>();
     for (auto entity: viewPanda) {
-        auto &panda = viewPanda.get(entity);
+        auto &panda = viewPanda.get<Panda>(entity);
         if (panda.dead) {
             alpha = 0.f;
+        }
+        auto &timer = viewPanda.get<Timer>(entity);
+        float curr_time = timer.get_curr_time("end_scene");
+        if ((int) curr_time == 0){
+            fadeIn = true;
         }
     }
     if(blackboard.camera.transition_ready) {
@@ -28,7 +34,12 @@ void FadeOverlaySystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
     auto viewFade = registry.view<FadeOverlay>();
     for (auto entity: viewFade) {
         auto &fadeOverlay = viewFade.get(entity);
-        if (alpha != 0.f) {
+        if (fadeIn) {
+            alpha = fadeOverlay.alpha() - change_in_alpha;
+            if ((int) alpha < 0) {
+                fadeIn = false;
+            }
+        } else if ((int) alpha < 0) {
             alpha = fadeOverlay.alpha() + change_in_alpha;
         }
         float position_x = blackboard.camera.position().x;
