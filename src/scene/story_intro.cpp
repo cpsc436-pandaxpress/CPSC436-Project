@@ -68,9 +68,8 @@ void StoryIntroScene::update(Blackboard &blackboard) {
     }
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
 
-    if ((endScene && !pause) || (fadeOverlay.alpha() > 0.f && !pause)) {
+    if ((endScene && !pause) || (!endScene && fadeOverlay.alpha() > 0.f && !pause)) {
         fade_overlay_system.update(blackboard, registry_);
-
     }
 
     if (fadeOverlay.alpha() > 1.6f) {
@@ -85,6 +84,8 @@ void StoryIntroScene::render(Blackboard &blackboard) {
 }
 
 void StoryIntroScene::init_scene(Blackboard &blackboard) {
+    endScene = false;
+
     create_background(blackboard);
     create_panda(blackboard);
     create_kelly(blackboard);
