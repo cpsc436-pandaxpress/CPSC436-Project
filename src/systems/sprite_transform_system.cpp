@@ -20,10 +20,6 @@ void SpriteTransformSystem::update(Blackboard &blackboard, entt::DefaultRegistry
         auto& sprite = view.get<Sprite>(entity);
 
         //transform the sprite
-//        sprite.set_pos(transform.x, transform.y);
-//        sprite.set_rotation_rad(transform.theta);
-//        sprite.set_scale(transform.x_scale, transform.y_scale);
-
         sprite.set_pos((int)transform.x, (int)transform.y);
         sprite.set_rotation_rad(transform.theta);
         sprite.set_scale_int(transform.x_scale, transform.y_scale);
