@@ -26,7 +26,7 @@ private:
     const float HEARTSWIDTH = 0.1667f;
     const float HEARTSHEIGHT = 1.f;
     const float FRAMERATE = 3.f;
-    const float JACKOSPEED = 170.f;
+    const float JACKOSPEED = 160.f;
     const int PANDAFRAMES = 13;
     const int KELLYFRAMES = 10;
     const int JACKOFRAMES = 8;
@@ -45,6 +45,7 @@ private:
     void animatePanda(int index, int row, Sprite &sprite);
     void animateKelly(Sprite &sprite);
     void animateHearts(Sprite &sprite);
+    void resetScene();
 
 };
 

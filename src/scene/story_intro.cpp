@@ -25,6 +25,7 @@ StoryIntroScene::StoryIntroScene(Blackboard &blackboard, SceneManager &scene_man
         timer_system(),
         physics_system(),
         fade_overlay_system(),
+        pause_menu_transform_system(),
         render_system()
 {
     init_scene(blackboard);
@@ -57,17 +58,20 @@ void StoryIntroScene::update(Blackboard &blackboard) {
         timer_system.update(blackboard, registry_);
         scene_timer.update(blackboard.delta_time);
         physics_system.update(blackboard, registry_);
+    } else {
+        pause_menu_transform_system.update(blackboard, registry_);
     }
 
     if (scene_timer.exists(BEACH_SCENE_END_LABEL) && scene_timer.is_done(BEACH_SCENE_END_LABEL)) {
         scene_timer.remove(BEACH_SCENE_END_LABEL);
         endScene = true;
     }
-
-    if ((endScene && !pause) || ((int) scene_timer.get_curr_time(BEACH_SCENE_END_LABEL) < 4 && !pause)) {
-        fade_overlay_system.update(blackboard, registry_);
-    }
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+
+    if ((endScene && !pause) || (fadeOverlay.alpha() > 0.f && !pause)) {
+        fade_overlay_system.update(blackboard, registry_);
+
+    }
 
     if (fadeOverlay.alpha() > 1.6f) {
         reset_scene(blackboard);
@@ -88,7 +92,7 @@ void StoryIntroScene::init_scene(Blackboard &blackboard) {
     create_jacko(blackboard);
     create_fade_overlay(blackboard);
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
-    fadeOverlay.set_alpha(1.f);
+    fadeOverlay.set_alpha(1.0);
 
     if (!scene_timer.exists(BEACH_SCENE_END_LABEL)) {
         scene_timer.save_watch(BEACH_SCENE_END_LABEL, BEACH_SCENE_END);
@@ -160,7 +164,7 @@ void StoryIntroScene::create_jacko(Blackboard &blackboard) {
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
     float scaleY = 500.0f / texture.height();
-    float scaleX = 560.0f / texture.width();
+    float scaleX = 700.0f / texture.width();
     registry_.assign<Transform>(jacko_entity, JACKO_START_X, JACKO_START_Y, 0., scaleX, scaleY);
     registry_.assign<Sprite>(jacko_entity, texture, shader, mesh);
     registry_.assign<Jacko>(jacko_entity);

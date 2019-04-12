@@ -44,6 +44,7 @@ private:
     StoryAnimationSystem story_animation_system;
     TimerSystem timer_system;
     FadeOverlaySystem fade_overlay_system;
+    PauseMenuTransformSystem pause_menu_transform_system;
     RenderSystem render_system;
     PhysicsSystem physics_system;
     Timer scene_timer;

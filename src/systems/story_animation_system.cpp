@@ -27,14 +27,7 @@ void StoryAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
         float curr_time = timer.get_curr_time("end_scene");
 
         if (curr_time == 0.f) {
-            animationTime = 0.f;
-            counter = 0;
-            pandaIndex = 0;
-            jackoIndex = 0;
-            pandaSunscreen = 0;
-            pandaHeartPumping = 0;
-            jackoEnters = 0;
-            brokenHearted = 0;
+            resetScene();
         } else if ((int) animationTime == 0){
             animatePanda(0, row, sprite);
         } else if (counter != (int) animationTime) {
@@ -164,5 +157,17 @@ void StoryAnimationSystem::animateHearts(Sprite &sprite){
     vec2 uv1 = {index*HEARTSWIDTH, 0.f};
     vec2 uv2 = {(index+1)*HEARTSWIDTH, HEARTSHEIGHT};
     sprite.set_uvs(uv1, uv2);
+}
+
+void StoryAnimationSystem::resetScene() {
+    animationTime = 0.f;
+    counter = 0;
+    pandaIndex = 0;
+    jackoIndex = 0;
+    pandaSunscreen = 0;
+    pandaHeartPumping = 0;
+    jackoEnters = 0;
+    brokenHearted = 0;
+    jackoGrabsKelly = false;
 }
 
