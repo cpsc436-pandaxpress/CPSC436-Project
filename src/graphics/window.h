@@ -48,4 +48,6 @@ public:
 
     void draw(Renderable* renderable, const mat3& projection) override;
 
+    void colorScreen(vec3 color);
+
 };

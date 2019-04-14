@@ -133,3 +133,10 @@ void Window::draw(Renderable* renderable, const mat3& projection) {
 vec2 Window::size() {
     return {(float) width_, (float) height_};
 }
+
+void Window::colorScreen(vec3 color) {
+    framebuffer_->bind();
+    glClearColor(color.x / 256.f, color.y / 256.f, color.z / 256.f, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    framebuffer_->unbind();
+}

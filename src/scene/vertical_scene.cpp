@@ -108,9 +108,7 @@ void VerticalScene::update(Blackboard &blackboard) {
 
 void VerticalScene::render(Blackboard &blackboard) {
     // update the rendering systems
-    glClearColor(74.f / 256.f, 105.f / 256.f, 189.f / 256.f,
-                 1); // same colour as the top of the background
-    glClear(GL_COLOR_BUFFER_BIT);
+    blackboard.window.colorScreen(vec3{74.f, 105.f, 189.f});
     render_system.update(blackboard, registry_);
 }
 
