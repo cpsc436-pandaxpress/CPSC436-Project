@@ -11,6 +11,7 @@
 #include <systems/fade_overlay_system.h>
 #include <systems/physics_system.h>
 #include <systems/pause_menu_transform_system.h>
+#include <systems/background_transform_system.h>
 #include <systems/render_system.h>
 #include <systems/story_animation_system.h>
 #include "scene.h"
@@ -29,17 +30,16 @@ private:
     const float HEARTS_POS_Y = 40.f;
     const float JACKO_START_X = 1000.f;
     const float JACKO_START_Y = 80.f;
-    const std::string BEACH_SCENE_END_LABEL = "end_scene";
     const float BEACH_SCENE_END = 27.f;
 
     bool pause = false;
     bool endScene = false;
 
-    uint32_t background_entity;
     uint32_t panda_entity;
     uint32_t kelly_entity;
     uint32_t hearts_entity;
     uint32_t jacko_entity;
+    std::vector<uint32_t> bg_entities;
     SpriteTransformSystem sprite_transform_system;
     StoryAnimationSystem story_animation_system;
     TimerSystem timer_system;
@@ -48,6 +48,7 @@ private:
     RenderSystem render_system;
     PhysicsSystem physics_system;
     Timer scene_timer;
+    BackgroundTransformSystem background_transform_system;
 
 
     void create_background(Blackboard &blackboard);
@@ -61,6 +62,8 @@ private:
 public:
     StoryIntroScene(Blackboard &blackboard,
                     SceneManager &scene_manager);
+
+    static const std::string BEACH_SCENE_END_LABEL;
 
     virtual void update(Blackboard& blackboard) override;
     virtual void render(Blackboard& blackboard) override;

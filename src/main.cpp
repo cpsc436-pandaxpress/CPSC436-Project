@@ -134,7 +134,12 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("bg_grave_top.png"), "grave_top");
     blackboard.texture_manager.load_texture(textures_path("bg_grave_mid.png"), "grave_middle");
 
-    blackboard.texture_manager.load_texture(textures_path("story_beach.png"), "beach_background");
+    blackboard.texture_manager.load_texture(textures_path("story_beach_back.png"), "beach_back");
+    blackboard.texture_manager.load_texture(textures_path("story_beach_front.png"), "beach_front");
+    blackboard.texture_manager.load_texture(textures_path("story_beach_water_1.png"), "beach_water_1");
+    blackboard.texture_manager.load_texture(textures_path("story_beach_water_2.png"), "beach_water_2");
+    blackboard.texture_manager.load_texture(textures_path("story_beach_water_3.png"), "beach_water_3");
+    blackboard.texture_manager.load_texture(textures_path("story_beach_water_4.png"), "beach_water_4");
     blackboard.texture_manager.load_texture(textures_path("story_beach_kelly.png"), "beach_kelly");
     blackboard.texture_manager.load_texture(textures_path("story_beach_panda.png"), "beach_panda");
     blackboard.texture_manager.load_texture(textures_path("story_beach_hearts.png"), "beach_hearts");

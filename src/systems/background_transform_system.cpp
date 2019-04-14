@@ -28,6 +28,10 @@ void BackgroundTransformSystem::update(Blackboard &blackboard, entt::DefaultRegi
                 boss_background_transform(blackboard, background);
             }
                 break;
+            case STORY_TYPE: {
+                story_beach_background_transform(blackboard, background);
+            }
+                break;
         }
     }
 }
@@ -110,5 +114,16 @@ void BackgroundTransformSystem::boss_background_transform(Blackboard &blackboard
         vec2 pos1 = background.pos1();
         background.set_pos1(blackboard.camera.position().x + displacement,
                             blackboard.camera.position().y + displacementY);
+    }
+}
+
+void BackgroundTransformSystem::story_beach_background_transform(Blackboard &blackboard,
+                                                              Background &background) {
+    if (background.z_pos() != 0 && background.z_pos() != 5) {
+        float displacement =  STORY_LAYER_SPEED * blackboard.delta_time / background.z_pos();
+        background.set_pos1(background.pos1().x, background.pos1().y + displacement);
+        if (background.pos1().y > WAVE_MAX || background.pos1().y < WAVE_MIN ) {
+            background.set_z_pos(background.z_pos() * -1);
+        }
     }
 }

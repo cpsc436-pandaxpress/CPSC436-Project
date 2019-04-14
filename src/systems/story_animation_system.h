@@ -31,6 +31,10 @@ private:
     const int KELLYFRAMES = 10;
     const int JACKOFRAMES = 8;
     const int HEARTSFRAMES = 6;
+    const int PANDASUNCREENRUBS = 27;
+    const int PANDAHEARTPUMPS = 25;
+    const int JACKOENTERING = 25;
+
 
     float animationTime = 0.f;
     int counter = 0;

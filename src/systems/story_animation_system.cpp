@@ -9,8 +9,8 @@
 #include "components/jacko.h"
 #include "components/hearts.h"
 #include "components/timer.h"
+#include "scene/story_intro.h"
 #include "level/level_system.h"
-
 
 
 StoryAnimationSystem::StoryAnimationSystem() {}
@@ -18,20 +18,24 @@ StoryAnimationSystem::StoryAnimationSystem() {}
 void StoryAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
 
     int row;
-
-    auto panda_view = registry.view<Panda, Timer, Sprite>();
-    for (auto panda_entity: panda_view) {
-        auto &sprite = panda_view.get<Sprite>(panda_entity);
-
-        auto &timer = panda_view.get<Timer>(panda_entity);
-        float curr_time = timer.get_curr_time("end_scene");
+    auto fade_view = registry.view<FadeOverlay, Timer>();
+    for (auto fade_entity: fade_view) {
+        auto &timer = fade_view.get<Timer>(fade_entity);
+        float curr_time = timer.get_curr_time(StoryIntroScene::BEACH_SCENE_END_LABEL);
 
         if (curr_time == 0.f) {
             resetScene();
-        } else if ((int) animationTime == 0){
+        }
+    }
+
+    auto panda_view = registry.view<Panda, Sprite>();
+    for (auto panda_entity: panda_view) {
+        auto &sprite = panda_view.get<Sprite>(panda_entity);
+
+        if ((int) animationTime == 0){
             animatePanda(0, row, sprite);
         } else if (counter != (int) animationTime) {
-            if (pandaSunscreen < 27) {
+            if (pandaSunscreen < PANDASUNCREENRUBS) {
                 row = 1;
                 pandaSunscreen++;
                 if (pandaIndex == PANDAFRAMES) {
@@ -40,17 +44,17 @@ void StoryAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
                 if (pandaSunscreen == 27) {
                     break;
                 }
-            } else if (pandaHeartPumping <= 25){
+            } else if (pandaHeartPumping <= PANDAHEARTPUMPS){
                 row = 2;
                 pandaHeartPumping++;
                 if (pandaIndex == PANDAFRAMES){
                     pandaIndex = 5;
                 }
-                if (pandaHeartPumping > 25) {
+                if (pandaHeartPumping > PANDAHEARTPUMPS) {
                     pandaIndex = 0;
                     break;
                 }
-            } else if (jackoEnters <= 25) {
+            } else if (jackoEnters <= JACKOENTERING) {
                 row = 3;
                 jackoEnters++;
 
@@ -64,7 +68,7 @@ void StoryAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
                     registry.destroy<Hearts>();
                 }
 
-                if (jackoEnters >  25) {
+                if (jackoEnters >  JACKOENTERING) {
                     pandaIndex = 0;
                     break;
                 }

@@ -18,6 +18,8 @@
 #include "story_intro.h"
 #include "util/constants.h"
 
+std::string const StoryIntroScene::BEACH_SCENE_END_LABEL = "end_scene";
+
 StoryIntroScene::StoryIntroScene(Blackboard &blackboard, SceneManager &scene_manager) :
         GameScene(scene_manager),
         sprite_transform_system(),
@@ -26,7 +28,8 @@ StoryIntroScene::StoryIntroScene(Blackboard &blackboard, SceneManager &scene_man
         physics_system(),
         fade_overlay_system(),
         pause_menu_transform_system(),
-        render_system()
+        render_system(),
+        background_transform_system(STORY_TYPE)
 {
     init_scene(blackboard);
     reset_scene(blackboard);
@@ -52,12 +55,18 @@ void StoryIntroScene::update(Blackboard &blackboard) {
         return;
     }
 
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+
     if (!pause) {
         story_animation_system.update(blackboard, registry_);
         sprite_transform_system.update(blackboard, registry_);
         timer_system.update(blackboard, registry_);
         scene_timer.update(blackboard.delta_time);
         physics_system.update(blackboard, registry_);
+        background_transform_system.update(blackboard, registry_);
+        if (endScene || (!endScene && fadeOverlay.alpha() > 0.f)) {
+            fade_overlay_system.update(blackboard, registry_);
+        }
     } else {
         pause_menu_transform_system.update(blackboard, registry_);
     }
@@ -65,11 +74,6 @@ void StoryIntroScene::update(Blackboard &blackboard) {
     if (scene_timer.exists(BEACH_SCENE_END_LABEL) && scene_timer.is_done(BEACH_SCENE_END_LABEL)) {
         scene_timer.remove(BEACH_SCENE_END_LABEL);
         endScene = true;
-    }
-    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
-
-    if ((endScene && !pause) || (!endScene && fadeOverlay.alpha() > 0.f && !pause)) {
-        fade_overlay_system.update(blackboard, registry_);
     }
 
     if (fadeOverlay.alpha() > 1.6f) {
@@ -94,6 +98,7 @@ void StoryIntroScene::init_scene(Blackboard &blackboard) {
     create_fade_overlay(blackboard);
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
     fadeOverlay.set_alpha(1.0);
+    registry_.assign<Timer>(fade_overlay_entity);
 
     if (!scene_timer.exists(BEACH_SCENE_END_LABEL)) {
         scene_timer.save_watch(BEACH_SCENE_END_LABEL, BEACH_SCENE_END);
@@ -106,8 +111,10 @@ void StoryIntroScene::reset_scene(Blackboard &blackboard) {
         registry_.destroy(kelly_entity);
         registry_.destroy(hearts_entity);
     }
-    registry_.destroy(background_entity);
     registry_.destroy(jacko_entity);
+//    for (uint32_t e: bg_entities) {
+//        registry_.destroy(e);
+//    }
     registry_.destroy<FadeOverlay>();
     init_scene(blackboard);
 }
@@ -123,7 +130,6 @@ void StoryIntroScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Transform>(panda_entity, PANDA_POS_X, PANDA_POS_Y, 0., scaleX, scaleY);
     registry_.assign<Sprite>(panda_entity, texture, shader, mesh);
     registry_.assign<Panda>(panda_entity);
-    registry_.assign<Timer>(panda_entity);
     registry_.assign<Layer>(panda_entity, PANDA_LAYER);
 }
 
@@ -174,21 +180,34 @@ void StoryIntroScene::create_jacko(Blackboard &blackboard) {
 }
 
 void StoryIntroScene::create_background(Blackboard &blackboard) {
-    auto texture = blackboard.texture_manager.get_texture("beach_background");
+    std::vector<Texture> textures;
+    textures.reserve(6);
+    // This order matters for rendering
+    textures.push_back(blackboard.texture_manager.get_texture("beach_front"));
+    textures.push_back(blackboard.texture_manager.get_texture("beach_water_1"));
+    textures.push_back(blackboard.texture_manager.get_texture("beach_water_2"));
+    textures.push_back(blackboard.texture_manager.get_texture("beach_water_3"));
+    textures.push_back(blackboard.texture_manager.get_texture("beach_water_4"));
+    textures.push_back(blackboard.texture_manager.get_texture("beach_back"));
+    // end order
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
-    background_entity = registry_.create();
-    auto &background = registry_.assign<Sprite>(background_entity, texture, shader, mesh);
-    registry_.assign<Layer>(background_entity, BACKGROUND_LAYER);
-    auto cam_size = blackboard.camera.size();
-    background.set_size((int)cam_size.x, (int)cam_size.y);
-    background.set_pos(0, 0);
+    int i = 0;
+    for (Texture t: textures) {
+        auto bg_entity = registry_.create();
+        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, i);
+        registry_.assign<Layer>(bg_entity, BACKGROUND_LAYER - i);
+        bg.set_pos1(0.0f, 0.0f);
+        bg.set_rotation_rad(0.0f);
+        bg.set_scale(blackboard.camera.size().x / t.width(),
+                     blackboard.camera.size().y / t.height());
+        bg_entities.push_back(bg_entity);
+        i++;
+    }
+
 
 }
-
-
-
 
 
 
