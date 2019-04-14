@@ -12,9 +12,17 @@
 
 struct Panda {
     bool alive;
+    bool hurt, invincible, recovering, facingRight;
+    bool dead, dying;
 
     Panda() :
-        alive(true)
+        alive(true),
+        hurt(false),
+        invincible(false),
+        recovering(false),
+        facingRight(true),
+        dead(false),
+        dying(false)
         {}
 };
 

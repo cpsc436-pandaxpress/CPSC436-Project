@@ -45,8 +45,6 @@ set(SOURCE_FILES
         src/graphics/mesh.cpp
         src/graphics/camera.cpp
         src/systems/player_movement_system.cpp
-        src/systems/collision_system.cpp
-        src/systems/sprite_render_system.cpp
         src/systems/sprite_transform_system.cpp
         src/util/constants.h
         src/systems/physics_system.cpp
@@ -54,26 +52,107 @@ set(SOURCE_FILES
         src/components/bread.h
         src/util/random.cpp
         src/util/random.h
+        src/scene/main_menu_scene.h
+        src/scene/main_menu_scene.cpp
         src/components/obstacle.h
         src/graphics/background.cpp
-        src/systems/background_render_system.cpp
-        src/systems/background_render_system.h
         src/systems/background_transform_system.cpp
         src/systems/background_transform_system.h
         src/scene/vertical_scene.cpp
         src/scene/vertical_scene.h
         src/util/csv_reader.cpp
         src/util/csv_reader.h
-        src/systems/level_system.cpp
-        src/systems/level_system.h
+        src/level/level_system.cpp
+        src/level/level_system.h
         src/scene/horizontal_scene.cpp
         src/scene/horizontal_scene.h
-        src/systems/horizontal_level_system.h
-        src/systems/horizontal_level_system.cpp
+        src/scene/boss_scene.cpp
+        src/scene/boss_scene.h
+        src/level/horizontal_level_system.h
+        src/level/horizontal_level_system.cpp
+        src/components/ghost.h
         src/components/llama.h src/components/spit.h
-        src/components/tutorial.h
-        src/systems/vertical_level_system.cpp
-        src/systems/vertical_level_system.h src/graphics/framebuffer.cpp)
+        src/components/pause_menu.h
+        src/level/vertical_level_system.cpp
+        src/level/vertical_level_system.h
+        src/components/chases.h
+        src/systems/chase_system.cpp
+        src/systems/chase_system.h
+        src/util/node.cpp
+        src/util/node.h
+        src/components/falling_platform.h
+        src/util/selector_node.h
+        src/util/selector_node.cpp
+        src/systems/jacko_ai_system.cpp
+        src/systems/jacko_ai_system.h
+        src/components/evades.h
+        src/level/boss_level_system.h
+        src/level/boss_level_system.cpp
+        src/systems/ghost_movement_system.cpp
+        src/systems/ghost_movement_system.h
+        src/graphics/mesh_manager.cpp
+        src/systems/player_animation_system.cpp
+        src/systems/player_animation_system.h
+        src/components/timer.cpp
+        src/components/timer.h
+        src/systems/timer_system.cpp
+        src/systems/timer_system.h
+        src/systems/falling_platform_system.cpp
+        src/systems/falling_platform_system.h
+        src/systems/panda_damage_system.cpp
+        src/systems/enemy_system.cpp
+        src/systems/enemy_system.h
+        src/systems/enemy_animation_system.cpp
+        src/systems/enemy_animation_system.h
+        src/util/sound_manager.cpp
+        src/util/sound_manager.h
+        src/graphics/health_bar.cpp
+        src/graphics/health_bar.h
+        src/systems/health_bar_transform_system.cpp
+        src/systems/health_bar_transform_system.h
+        src/graphics/cave.cpp src/graphics/cave.h
+        src/graphics/text.cpp
+        src/graphics/text.h
+        src/graphics/font.cpp
+        src/graphics/font.h
+        src/systems/text_transform_system.cpp
+        src/systems/text_transform_system.h
+        src/systems/score_system.cpp
+        src/systems/score_system.h
+        src/components/score.h
+        src/level/level.cpp
+        src/level/level.h
+        src/components/layer.h
+        src/graphics/fade_overlay.h
+        src/graphics/fade_overlay.cpp
+        src/systems/fade_overlay_system.cpp
+        src/systems/fade_overlay_system.h
+        src/scene/scene_mode.h
+        src/systems/pause_menu_transform_system.cpp
+        src/systems/pause_menu_transform_system.h
+        src/systems/transition_system.cpp
+        src/systems/transition_system.h
+        src/graphics/cave_entrance.h
+        src/graphics/cave_entrance.cpp
+        src/components/hud_element.h
+        src/systems/hud_transform_system.cpp
+        src/systems/hud_transform_system.h
+        src/graphics/font_manager.cpp
+        src/graphics/font_manager.h
+        src/components/label.h
+        src/systems/label_system.cpp
+        src/systems/label_system.h
+        src/util/scene_helper.h
+        src/util/property_reader.cpp
+        src/util/property_reader.h
+        src/systems/render_system.cpp
+        src/systems/render_system.h
+        src/scene/game_scene.cpp
+        src/scene/game_scene.h
+        src/graphics/framebuffer.h
+        src/graphics/framebuffer.cpp
+        )
+
 
 # Create executable target
 
@@ -88,7 +167,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS 0)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ext/stb_image/)
 target_include_directories(${PROJECT_NAME} PUBLIC ext/entt/)
-
+target_include_directories(${PROJECT_NAME} PUBLIC /usr/local/include/freetype2/)
 # Find OpenGL
 find_package(OpenGL REQUIRED)
 
@@ -97,7 +176,10 @@ if (OPENGL_FOUND)
     target_link_libraries(${PROJECT_NAME} PUBLIC ${OPENGL_gl_LIBRARY})
 endif()
 
-
+# Find FreeType
+find_package(Freetype REQUIRED)
+target_include_directories(${PROJECT_NAME} PUBLIC ${FREETYPE_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${FREETYPE_LIBRARIES})
 
 if (IS_OS_LINUX OR IS_OS_MAC)
     # Try to find packages rather than to use the precompiled ones

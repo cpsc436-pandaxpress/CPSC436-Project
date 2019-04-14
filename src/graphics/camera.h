@@ -27,5 +27,7 @@ public:
 
     const mat3& get_projection();
 
-
+    bool in_transition;
+    bool transition_ready;
+    const vec2 get_relative_pos(vec2 pos);
 };
