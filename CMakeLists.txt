@@ -60,6 +60,8 @@ set(SOURCE_FILES
         src/systems/background_transform_system.h
         src/scene/vertical_scene.cpp
         src/scene/vertical_scene.h
+        src/scene/dracula_boss_scene.cpp
+        src/scene/dracula_boss_scene.h
         src/util/csv_reader.cpp
         src/util/csv_reader.h
         src/level/level_system.cpp
