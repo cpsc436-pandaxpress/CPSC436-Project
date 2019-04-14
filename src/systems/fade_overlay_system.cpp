@@ -17,16 +17,10 @@ void FadeOverlaySystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
     }*/
     float alpha;
 
-    auto viewPanda = registry.view<Panda>();
-    for (auto entity: viewPanda) {
-        auto &panda = viewPanda.get(entity);
-        if (panda.dead) {
-            alpha = 0.f;
-        }
-    }
     if(blackboard.camera.transition_ready) {
         alpha = 0.f;
     }
+
     auto viewFade = registry.view<FadeOverlay, Timer>();
     for (auto entity: viewFade) {
         auto &fadeOverlay = viewFade.get<FadeOverlay>(entity);
@@ -35,15 +29,12 @@ void FadeOverlaySystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
         if ((int) curr_time == 0){
             fadeOverlay.set_fadeIn(true);
         }
-
         if (fadeOverlay.fadeIn()) {
             alpha = fadeOverlay.alpha() - change_in_alpha;
-            if ((int) alpha < 0) {
-//                printf("%s \n", "sos");
+            if (alpha < 0.f) {
                 fadeOverlay.set_fadeIn(false);
             }
-        } else if ((int) alpha < 0) {
-//            printf("%s \n", "so");
+        } else {
             alpha = fadeOverlay.alpha() + change_in_alpha;
         }
 

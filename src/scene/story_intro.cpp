@@ -32,7 +32,6 @@ StoryIntroScene::StoryIntroScene(Blackboard &blackboard, SceneManager &scene_man
         background_transform_system(STORY_TYPE)
 {
     init_scene(blackboard);
-    reset_scene(blackboard);
     gl_has_errors();
 }
 
@@ -98,7 +97,6 @@ void StoryIntroScene::init_scene(Blackboard &blackboard) {
     create_fade_overlay(blackboard);
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
     fadeOverlay.set_alpha(1.0);
-    registry_.assign<Timer>(fade_overlay_entity);
 
     if (!scene_timer.exists(BEACH_SCENE_END_LABEL)) {
         scene_timer.save_watch(BEACH_SCENE_END_LABEL, BEACH_SCENE_END);
@@ -112,9 +110,10 @@ void StoryIntroScene::reset_scene(Blackboard &blackboard) {
         registry_.destroy(hearts_entity);
     }
     registry_.destroy(jacko_entity);
-//    for (uint32_t e: bg_entities) {
-//        registry_.destroy(e);
-//    }
+    for (uint32_t e: bg_entities) {
+        registry_.destroy(e);
+    }
+    bg_entities.clear();
     registry_.destroy<FadeOverlay>();
     init_scene(blackboard);
 }
@@ -196,7 +195,7 @@ void StoryIntroScene::create_background(Blackboard &blackboard) {
     int i = 0;
     for (Texture t: textures) {
         auto bg_entity = registry_.create();
-        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, i);
+        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, i, false);
         registry_.assign<Layer>(bg_entity, BACKGROUND_LAYER - i);
         bg.set_pos1(0.0f, 0.0f);
         bg.set_rotation_rad(0.0f);

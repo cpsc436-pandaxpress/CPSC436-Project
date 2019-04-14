@@ -16,9 +16,9 @@ private:
 public:
     const float HORIZONTAL_LAYER_SPEED = 37.5f;
     const float VERTICAL_LAYER_SPEED = 15.0f;
-    const float STORY_LAYER_SPEED = 20.0f;
-    const float WAVE_MAX = 50.0f;
-    const float WAVE_MIN = -50.0f;
+    const float STORY_LAYER_SPEED = 10.0f;
+    const float WAVE_MAX = 20.0f;
+    const float WAVE_MIN = -20.0f;
 
 
     BackgroundTransformSystem(SceneType scene_type);

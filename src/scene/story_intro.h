@@ -21,8 +21,6 @@
 #include "../systems/timer_system.h"
 
 class StoryIntroScene: public GameScene {
-public:
-    static const std::string BEACH_SCENE_END_LABEL;
 private:
     const float PANDA_POS_X = -420.f;
     const float PANDA_POS_Y = 150.f;
@@ -32,7 +30,7 @@ private:
     const float HEARTS_POS_Y = 40.f;
     const float JACKO_START_X = 1000.f;
     const float JACKO_START_Y = 80.f;
-    const float BEACH_SCENE_END = 27.f;
+    const float BEACH_SCENE_END = 32.f;
 
     bool pause = false;
     bool endScene = false;

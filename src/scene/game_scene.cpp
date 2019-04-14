@@ -80,6 +80,7 @@ void GameScene::create_fade_overlay(Blackboard &blackboard) {
     float width = blackboard.camera.size().x;
     vec2 size = {width, height};
     auto &fade = registry_.assign<FadeOverlay>(fade_overlay_entity, meshFade, shaderFade, size);
+    registry_.assign<Timer>(fade_overlay_entity);
     registry_.assign<Layer>(fade_overlay_entity, OVERLAY_LAYER);
 }
 
