@@ -4,15 +4,27 @@
 
 #pragma once
 
+#include <cstdint>
+#include "texture.h"
+
+
 // Owning wrapper of an OpenGL framebuffer
-//TODO: define
-//TODO: implement
 class Framebuffer {
+private:
+    GLuint buffer_, texture_;
+    uint32_t _width, _height;
+
 public:
-    Framebuffer();
+    Framebuffer(uint32_t width, uint32_t height);
     ~Framebuffer();
 
     Texture get_texture();
 
-    void resize();
+    void bind();
+    void unbind();
+
+    uint32_t width() { return _width; }
+    uint32_t height() { return _height; }
+
+    void resize(uint32_t width, uint32_t height);
 };

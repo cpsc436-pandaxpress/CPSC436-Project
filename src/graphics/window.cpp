@@ -59,7 +59,13 @@ void Window::clear() {
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Window::display() {
+void Window::display(Shader shader) {
+
+    auto fb_texture = framebuffer_.get_texture();
+
+    auto sprite = Sprite(fb_texture, shader);
+
+
     SDL_GL_SwapWindow(sdl_window_);
 
     last_time_ = recent_time_;
@@ -73,7 +79,9 @@ float Window::delta_time() {
 
 void Window::draw(Renderable* renderable, const mat3& projection) {
     // no need to do any setup
+    framebuffer_.bind();
     renderable->draw(projection);
+    framebuffer_.unbind();
 }
 
 vec2 Window::size() {

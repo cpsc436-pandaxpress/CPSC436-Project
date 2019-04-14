@@ -17,6 +17,7 @@ private:
     uint64_t last_time_, recent_time_;
     uint32_t width_, height_;
     float delta_time_ = 0;
+    Framebuffer framebuffer_;
 
 public:
     Window(): sdl_window_(nullptr), gl_context_() {}
@@ -32,8 +33,9 @@ public:
     // clears the window
     void clear();
 
-    // swaps the buffers and displays what's been drawn
-    void display();
+    // renders the internal buffer to the back buffer using the given shader
+    // then swaps the back buffers and displays what's been drawn
+    void display(Shader shader);
 
     // returns the time elapsed between the last 2 display() calls, in seconds
     float delta_time();
