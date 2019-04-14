@@ -17,7 +17,8 @@ private:
     Mesh mesh_;
     vec2 position_, size_, scale_;
     float alpha_;
-    bool cutscene_;
+    bool fadeIn_;
+
 public:
 
     FadeOverlay(Mesh mesh, Shader shader, vec2 size);
@@ -39,7 +40,8 @@ public:
     void set_alpha(float alpha);
     float alpha();
 
-    void set_cutscene(bool cutscene);
+    void set_fadeIn(bool fade_in);
+    bool fadeIn();
 };
 
 #endif //PANDAEXPRESS_FADE_H

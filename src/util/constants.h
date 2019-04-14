@@ -35,5 +35,6 @@ static const SceneID STORY_JUNGLE_INTRO_SCENE_ID  = 7;
 static const SceneType JUNGLE_TYPE = 0;
 static const SceneType SKY_TYPE = 1;
 static const SceneType BOSS_TYPE = 2;
+static const SceneType STORY_TYPE = 3;
 
 #endif //PANDAEXPRESS_CONSTANTS_H

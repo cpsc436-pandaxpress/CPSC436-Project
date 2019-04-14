@@ -13,7 +13,7 @@ FadeOverlay::FadeOverlay(Mesh mesh, Shader shader, vec2 size) :
         position_ = {0.f, 0.f};
         scale_ = {1.f, 1.f};
         alpha_ = 0.f;
-        cutscene_ = false;
+        fadeIn_ = false;
 }
 
 
@@ -23,7 +23,7 @@ FadeOverlay::FadeOverlay(const FadeOverlay &other) :
         position_(other.position_),
         scale_(other.scale_),
         alpha_(other.alpha_),
-        cutscene_(other.cutscene_)
+        fadeIn_(other.alpha_)
 {}
 
 void FadeOverlay::draw(const mat3 &projection) {
@@ -115,6 +115,10 @@ float FadeOverlay::alpha() {
     return alpha_;
 }
 
-void FadeOverlay::set_cutscene(bool cutscene) {
-    cutscene_ = cutscene;
+void FadeOverlay::set_fadeIn(bool fade_in) {
+    fadeIn_ = fade_in;
+}
+
+bool FadeOverlay::fadeIn() {
+    return fadeIn_;
 }
