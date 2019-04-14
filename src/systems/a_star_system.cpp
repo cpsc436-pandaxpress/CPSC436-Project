@@ -34,7 +34,7 @@ AStarSystem::AStarSystem(Blackboard &blackboard, entt::DefaultRegistry &registry
 void AStarSystem::createGrid(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     int level = 0;
     std::string level_path = levels_path("");
-    std::string levelFile = level_path + "boss_level_" + std::to_string(level) + ".csv";
+    std::string levelFile = level_path + "dracula_level.csv";
     CSVReader reader(levelFile);
     std::vector<std::vector<char>> dataList = reader.getData();
     for (int i = 0; i < dataList[0].size(); i++) {

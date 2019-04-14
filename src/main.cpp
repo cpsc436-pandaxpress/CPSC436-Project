@@ -123,7 +123,8 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("bg_middle.png"), "bg_middle");
     blackboard.texture_manager.load_texture(textures_path("bg_top.png"), "bg_top");
     blackboard.texture_manager.load_texture(textures_path("pause_menu.png"), "pause_menu");
-
+    blackboard.texture_manager.load_texture(textures_path("dracula.png"), "dracula");
+    blackboard.texture_manager.load_texture(textures_path("bat.png"), "bat");
     blackboard.texture_manager.load_texture(textures_path("jacko_sprite_sheet.png"), "jacko");
     blackboard.texture_manager.load_texture(textures_path("burger.png"), "burger");
 
@@ -173,7 +174,7 @@ int start() {
     scene_manager.add_scene(ENDLESS_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), ENDLESS);
     scene_manager.add_scene(ENDLESS_SKY_SCENE_ID, (Scene*)(&vertical_scene), ENDLESS);
     scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene));
-    scene_manager.add_scene(DRACULA_BOSS_SCENE_ID, (Scene*)(&boss_scene));
+    scene_manager.add_scene(DRACULA_BOSS_SCENE_ID, (Scene*)(&dracula_boss_scene));
     scene_manager.add_scene(STORY_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY);
 
     // set the first scene

@@ -23,6 +23,7 @@ DraculaBossScene::DraculaBossScene(Blackboard &blackboard, SceneManager &scene_m
         fade_overlay_system(),
         pause_menu_transform_system(),
         a_star_system(blackboard, registry_),
+        seek_system(),
         hud_transform_system()
 {
     init_scene(blackboard);
@@ -50,6 +51,7 @@ void DraculaBossScene::update(Blackboard &blackboard) {
         pause = false;
         return;
     }
+
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_7)) {
         std::vector<Coordinates*> path = a_star_system.getProjectilePath(blackboard, registry_);
         for(int i=0; i<path.size(); i++){
@@ -70,12 +72,7 @@ void DraculaBossScene::update(Blackboard &blackboard) {
         registry_.assign<Collidable>(bat_entity, texture.width() * scaleX,
                                      texture.height() * scaleY);
         registry_.assign<Seeks>(bat_entity, path);
-        /*
-        blackboard.camera.set_position(0, 0);
-        reset_scene(blackboard);
-        change_scene(MAIN_MENU_SCENE_ID);
-         */
-        return;
+
     }
 
     if (!pause) {
@@ -99,6 +96,7 @@ void DraculaBossScene::update(Blackboard &blackboard) {
         timer_system.update(blackboard, registry_);
         falling_platform_system.update(blackboard, registry_);
         background_transform_system.update(blackboard, registry_);
+        seek_system.update(blackboard,registry_);
         hud_transform_system.update(blackboard, registry_); // should run last
     } else {
         pause_menu_transform_system.update(blackboard, registry_);
@@ -170,6 +168,7 @@ void DraculaBossScene::create_dracula(Blackboard &blackboard, uint32_t target) {
     registry_.assign<Transform>(dracula_entity, -300, -300, 0., scaleX, scaleY);
     registry_.assign<Sprite>(dracula_entity, texture, shader, mesh);
     registry_.assign<Dracula>(dracula_entity);
+    registry_.assign<Boss>(dracula_entity);
     registry_.assign<Chases>(dracula_entity, target);
     registry_.assign<Health>(dracula_entity, 4);
     registry_.assign<Interactable>(dracula_entity);
