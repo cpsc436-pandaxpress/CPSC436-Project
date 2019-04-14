@@ -1,16 +1,15 @@
 //
-// Created by Avery Brown on 2019-04-10.
+// Created by Avery Brown on 2019-04-13.
 //
 
-#ifndef PANDAEXPRESS_STORY_ANIMATION_SYSTEM_H
-#define PANDAEXPRESS_STORY_ANIMATION_SYSTEM_H
-
+#ifndef PANDAEXPRESS_STORY_JUNGLE_ANIMATION_SYSTEM_H
+#define PANDAEXPRESS_STORY_JUNGLE_ANIMATION_SYSTEM_H
 
 #include "system.h"
 
-class StoryAnimationSystem : public System {
+class StoryJungleAnimationSystem : public System {
 public:
-    StoryAnimationSystem();
+    StoryJungleAnimationSystem();
 
     bool jackoGrabsKelly = false;
 
@@ -19,18 +18,11 @@ public:
 private:
     const float PANDAWIDTH = 0.07692;
     const float PANDAHEIGHT = 0.25f;
-    const float KELLYWIDTH = 0.1f;
+    const float KELLYWIDTH = 0.25f;
     const float KELLYHEIGHT = 1.f;
-    const float JACKOWIDTH = 0.125f;
-    const float JACKOHEIGHT = 0.3333f;
-    const float HEARTSWIDTH = 0.1667f;
-    const float HEARTSHEIGHT = 1.f;
     const float FRAMERATE = 3.f;
-    const float JACKOSPEED = 160.f;
     const int PANDAFRAMES = 13;
-    const int KELLYFRAMES = 10;
-    const int JACKOFRAMES = 8;
-    const int HEARTSFRAMES = 6;
+    const int KELLYFRAMES = 4;
 
     float animationTime = 0.f;
     int counter = 0;
@@ -49,4 +41,4 @@ private:
 
 };
 
-#endif //PANDAEXPRESS_STORY_ANIMATION_SYSTEM_H
+#endif //PANDAEXPRESS_STORY_JUNGLE_ANIMATION_SYSTEM_H

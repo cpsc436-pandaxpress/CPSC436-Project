@@ -26,7 +26,9 @@
 #include <graphics/cave.h>
 #include <graphics/font_manager.h>
 #include <util/property_reader.h>
-#include <scene/story_intro.h>
+#include <scene/story_intro_beach.h>
+#include <scene/story_intro_jungle.h>
+
 
 
 int start() {
@@ -140,6 +142,8 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("story_beach_hearts.png"), "beach_hearts");
     blackboard.texture_manager.load_texture(textures_path("story_beach_jacko.png"), "beach_jacko");
 
+    blackboard.texture_manager.load_texture(textures_path("story_jungle_background.png"), "story_jungle_background");
+    blackboard.texture_manager.load_texture(textures_path("story_jungle_kelly.png"), "story_jungle_kelly");
 
 
     blackboard.mesh_manager.load_mesh("health", 4, HealthBar::vertices, 6, HealthBar::indices);
@@ -154,7 +158,7 @@ int start() {
 
     // initialize scenes here
     MainMenuScene main_menu(blackboard, scene_manager);
-    main_menu.add_item(blackboard, "story_text", STORY_INTRO_SCENE_ID);
+    main_menu.add_item(blackboard, "story_text", STORY_BEACH_INTRO_SCENE_ID);
     main_menu.add_item(blackboard, "endless_jungle_text", ENDLESS_JUNGLE_SCENE_ID);
     main_menu.add_item(blackboard, "endless_sky_text", ENDLESS_SKY_SCENE_ID);
     main_menu.add_item(blackboard, "jacko_text",  BOSS_SCENE_ID);
@@ -172,15 +176,17 @@ int start() {
     VerticalScene vertical_scene(blackboard, scene_manager);
     vertical_scene.set_high_score(std::stoi(scores.get("sky")));
 
-    StoryIntroScene story_intro_scene(blackboard, scene_manager);
+    StoryIntroBeachScene story_beach_intro_scene(blackboard, scene_manager);
 
+    StoryIntroJungleScene story_jungle_intro_scene(blackboard, scene_manager);
 
     scene_manager.add_scene(STORY_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY);
     scene_manager.add_scene(ENDLESS_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), ENDLESS);
     scene_manager.add_scene(ENDLESS_SKY_SCENE_ID, (Scene*)(&vertical_scene), ENDLESS);
     scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene));
     scene_manager.add_scene(STORY_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY);
-    scene_manager.add_scene(STORY_INTRO_SCENE_ID, (Scene*)(&story_intro_scene), STORY);
+    scene_manager.add_scene(STORY_BEACH_INTRO_SCENE_ID, (Scene*)(&story_beach_intro_scene), STORY);
+    scene_manager.add_scene(STORY_JUNGLE_INTRO_SCENE_ID, (Scene*)(&story_jungle_intro_scene), STORY);
 
     // set the first scene
 

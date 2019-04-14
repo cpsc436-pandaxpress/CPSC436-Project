@@ -15,10 +15,10 @@
 #include <components/layer.h>
 #include <graphics/fade_overlay.h>
 #include <components/hud_element.h>
-#include "story_intro.h"
+#include "story_intro_beach.h"
 #include "util/constants.h"
 
-StoryIntroScene::StoryIntroScene(Blackboard &blackboard, SceneManager &scene_manager) :
+StoryIntroBeachScene::StoryIntroBeachScene(Blackboard &blackboard, SceneManager &scene_manager) :
         GameScene(scene_manager),
         sprite_transform_system(),
         story_animation_system(),
@@ -33,7 +33,7 @@ StoryIntroScene::StoryIntroScene(Blackboard &blackboard, SceneManager &scene_man
     gl_has_errors();
 }
 
-void StoryIntroScene::update(Blackboard &blackboard) {
+void StoryIntroBeachScene::update(Blackboard &blackboard) {
 
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
         if (pause) {
@@ -74,16 +74,16 @@ void StoryIntroScene::update(Blackboard &blackboard) {
 
     if (fadeOverlay.alpha() > 1.6f) {
         reset_scene(blackboard);
-        change_scene(STORY_JUNGLE_SCENE_ID);
+        change_scene(STORY_JUNGLE_INTRO_SCENE_ID);
     }
 
 }
 
-void StoryIntroScene::render(Blackboard &blackboard) {
+void StoryIntroBeachScene::render(Blackboard &blackboard) {
     render_system.update(blackboard, registry_);
 }
 
-void StoryIntroScene::init_scene(Blackboard &blackboard) {
+void StoryIntroBeachScene::init_scene(Blackboard &blackboard) {
     endScene = false;
 
     create_background(blackboard);
@@ -100,7 +100,7 @@ void StoryIntroScene::init_scene(Blackboard &blackboard) {
     }
 }
 
-void StoryIntroScene::reset_scene(Blackboard &blackboard) {
+void StoryIntroBeachScene::reset_scene(Blackboard &blackboard) {
     registry_.destroy(panda_entity);
     if (!story_animation_system.jackoGrabsKelly) {
         registry_.destroy(kelly_entity);
@@ -112,7 +112,7 @@ void StoryIntroScene::reset_scene(Blackboard &blackboard) {
     init_scene(blackboard);
 }
 
-void StoryIntroScene::create_panda(Blackboard &blackboard) {
+void StoryIntroBeachScene::create_panda(Blackboard &blackboard) {
     panda_entity = registry_.create();
     auto texture = blackboard.texture_manager.get_texture("beach_panda");
     auto shader = blackboard.shader_manager.get_shader("sprite");
@@ -127,7 +127,7 @@ void StoryIntroScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Layer>(panda_entity, PANDA_LAYER);
 }
 
-void StoryIntroScene::create_kelly(Blackboard &blackboard) {
+void StoryIntroBeachScene::create_kelly(Blackboard &blackboard) {
     kelly_entity = registry_.create();
     auto texture = blackboard.texture_manager.get_texture("beach_kelly");
     auto shader = blackboard.shader_manager.get_shader("sprite");
@@ -142,7 +142,7 @@ void StoryIntroScene::create_kelly(Blackboard &blackboard) {
     registry_.assign<Layer>(kelly_entity, PANDA_LAYER);
 }
 
-void StoryIntroScene::create_hearts(Blackboard &blackboard) {
+void StoryIntroBeachScene::create_hearts(Blackboard &blackboard) {
     hearts_entity = registry_.create();
     auto texture = blackboard.texture_manager.get_texture("beach_hearts");
     auto shader = blackboard.shader_manager.get_shader("sprite");
@@ -157,7 +157,7 @@ void StoryIntroScene::create_hearts(Blackboard &blackboard) {
     registry_.assign<Layer>(hearts_entity, PANDA_LAYER);
 }
 
-void StoryIntroScene::create_jacko(Blackboard &blackboard) {
+void StoryIntroBeachScene::create_jacko(Blackboard &blackboard) {
     jacko_entity = registry_.create();
 
     auto texture = blackboard.texture_manager.get_texture("beach_jacko");
@@ -173,7 +173,7 @@ void StoryIntroScene::create_jacko(Blackboard &blackboard) {
     registry_.assign<Layer>(jacko_entity, ENEMY_LAYER);
 }
 
-void StoryIntroScene::create_background(Blackboard &blackboard) {
+void StoryIntroBeachScene::create_background(Blackboard &blackboard) {
     auto texture = blackboard.texture_manager.get_texture("beach_background");
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
