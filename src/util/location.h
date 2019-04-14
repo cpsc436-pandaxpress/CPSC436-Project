@@ -29,7 +29,7 @@ public:
 
 private:
     // Hardcoded size of boss room.  Can change this if we decide to use it somewhere else;
-    int cols = 16;
+    int cols = 32;
     int rows = 9;
 };
 

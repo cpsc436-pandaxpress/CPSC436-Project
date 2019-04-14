@@ -96,7 +96,7 @@ void DraculaBossScene::update(Blackboard &blackboard) {
         timer_system.update(blackboard, registry_);
         falling_platform_system.update(blackboard, registry_);
         background_transform_system.update(blackboard, registry_);
-        seek_system.update(blackboard,registry_);
+        seek_system.update(blackboard, registry_);
         hud_transform_system.update(blackboard, registry_); // should run last
     } else {
         pause_menu_transform_system.update(blackboard, registry_);
