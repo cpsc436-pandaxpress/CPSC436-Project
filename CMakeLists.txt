@@ -75,6 +75,7 @@ set(SOURCE_FILES
         src/components/ghost.h
         src/components/llama.h src/components/spit.h
         src/components/pause_menu.h
+        src/components/seeks.h
         src/level/vertical_level_system.cpp
         src/level/vertical_level_system.h
         src/components/chases.h
@@ -85,6 +86,10 @@ set(SOURCE_FILES
         src/components/falling_platform.h
         src/util/selector_node.h
         src/util/selector_node.cpp
+        src/systems/seek_system.cpp
+        src/systems/seek_system.h
+        src/systems/a_star_system.cpp
+        src/systems/a_star_system.h
         src/systems/jacko_ai_system.cpp
         src/systems/jacko_ai_system.h
         src/systems/dracula_ai_system.cpp
