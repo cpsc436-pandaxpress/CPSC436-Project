@@ -3,6 +3,7 @@
 //
 
 #include <GL/glew.h>
+#include <cstdio>
 #include "framebuffer.h"
 #include "texture.h"
 #include "gl_include.h"
@@ -23,9 +24,17 @@ Framebuffer::~Framebuffer() {
     glDeleteTextures(1, &texture_);
 }
 
-Texture Framebuffer::get_texture() {
-    return Texture(_width, _height, texture_);
+void Framebuffer::test() {
+    float pixel_data[4];
+    bind();
+    glReadPixels(0, 0, 1, 1, GL_RGBA, GL_FLOAT, pixel_data);
+    unbind();
 }
+
+Texture Framebuffer::get_texture() {
+    return Texture(width_, height_, texture_);
+}
+
 
 void Framebuffer::bind() {
     glBindFramebuffer(GL_FRAMEBUFFER, buffer_);
@@ -36,25 +45,27 @@ void Framebuffer::unbind() {
 }
 
 void Framebuffer::resize(uint32_t width, uint32_t height) {
-    _width = width;
-    _height = height;
+    width_ = width;
+    height_ = height;
 
     // generate the texture
     glBindTexture(GL_TEXTURE_2D, texture_);
 
     glTexImage2D(
-        GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_FLOAT, NULL
+        GL_TEXTURE_2D, 0, GL_RGBA, width_, height_, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr
     );
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     // bind the texture to the Framebuffer
+    bind();
     glFramebufferTexture2D(
         GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_, 0
     );
+    unbind();
 
-    glBindTexture(GL_TEXTURE_2D, 0);
 }
 

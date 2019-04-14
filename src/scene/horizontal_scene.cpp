@@ -122,7 +122,7 @@ void HorizontalScene::update_camera(Blackboard &blackboard) {
 
 void HorizontalScene::render(Blackboard &blackboard) {
     glClearColor(19.f / 256.f, 136.f / 256.f, 126.f / 256.f, 1); // same colour as the top of the background
-    glClear(GL_COLOR_BUFFER_BIT);
+    //glClear(GL_COLOR_BUFFER_BIT);
     render_system.update(blackboard, registry_);
 }
 

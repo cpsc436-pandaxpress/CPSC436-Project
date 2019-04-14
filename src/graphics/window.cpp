@@ -89,6 +89,8 @@ void Window::destroy() {
 }
 
 void Window::clear() {
+    glClearColor(1, 0, 1, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
     framebuffer_->bind();
     glClearColor(1, 1, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -96,12 +98,16 @@ void Window::clear() {
 }
 
 void Window::display(Shader shader, Mesh mesh) {
+    framebuffer_->test();
 
     auto fb_texture = framebuffer_->get_texture();
 
     auto sprite = Sprite(fb_texture, shader, mesh);
+    sprite.set_size(width_, height_);
+    sprite.set_scale(1, -1);
+    sprite.set_pos(0, 0);
 
-    auto null_camera = Camera(1, 1, 0, 0);
+    auto null_camera = Camera(width_, height_, 0, 0);
     null_camera.compose();
 
     sprite.draw(null_camera.get_projection());
