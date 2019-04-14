@@ -6,6 +6,7 @@
 #define PANDAEXPRESS_JACKO_AI_SYSTEM_H
 
 #include "system.h"
+#include "util/ai_nodes.h"
 #include "util/selector_node.h"
 #include "components/jacko.h"
 #include "components/chases.h"
@@ -20,7 +21,8 @@
 class JackoAISystem: public System {
     private:
         SelectorNode root;
-
+    AINodes::CheckHealth* checkHealth;
+    AINodes::CheckPandaDeath* checkPandaDeath;
     public:
     JackoAISystem(Blackboard& blackboard, entt::DefaultRegistry& registry);
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;

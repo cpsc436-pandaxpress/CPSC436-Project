@@ -8,6 +8,7 @@
 
 #include <queue>
 #include <level/boss_level_system.h>
+#include "components/boss.h"
 #include <systems/background_transform_system.h>
 #include <systems/panda_damage_system.h>
 #include <systems/timer_system.h>

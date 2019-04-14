@@ -12,7 +12,7 @@ DraculaBossScene::DraculaBossScene(Blackboard &blackboard, SceneManager &scene_m
         physics_system(),
         player_movement_system(BOSS_TYPE),
         chase_system(),
-        jacko_ai_system(blackboard, registry_),
+        dracula_ai_system(blackboard, registry_),
         player_animation_system(BOSS_TYPE),
         timer_system(),
         panda_dmg_system(),
@@ -63,7 +63,7 @@ void DraculaBossScene::update(Blackboard &blackboard) {
         physics_system.update(blackboard, registry_);
         panda_dmg_system.update(blackboard, registry_);
         health_bar_transform_system.update(blackboard, registry_);
-        jacko_ai_system.update(blackboard, registry_);
+        dracula_ai_system.update(blackboard, registry_);
         sprite_transform_system.update(blackboard, registry_);
         player_animation_system.update(blackboard, registry_);
         enemy_animation_system.update(blackboard, registry_);
@@ -109,7 +109,7 @@ void DraculaBossScene::init_scene(Blackboard &blackboard) {
     blackboard.camera.compose();
     create_background(blackboard);
     create_panda(blackboard);
-    create_jacko(blackboard, panda_entity);
+    create_dracula(blackboard, panda_entity);
     create_fade_overlay(blackboard);
     level_system.init();
 }
@@ -121,7 +121,7 @@ void DraculaBossScene::reset_scene(Blackboard &blackboard) {
 
 void DraculaBossScene::cleanup() {
     level_system.destroy_entities(registry_);
-    registry_.destroy(jacko_entity);
+    registry_.destroy(dracula_entity);
     for (uint32_t e: bg_entities) {
         registry_.destroy(e);
     }
@@ -129,8 +129,8 @@ void DraculaBossScene::cleanup() {
     GameScene::cleanup();
 }
 
-void DraculaBossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
-    jacko_entity = registry_.create();
+void DraculaBossScene::create_dracula(Blackboard &blackboard, uint32_t target) {
+    dracula_entity = registry_.create();
 
     auto texture = blackboard.texture_manager.get_texture("jacko");
     auto shader = blackboard.shader_manager.get_shader("sprite");
@@ -138,25 +138,25 @@ void DraculaBossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
 
     float scaleY = 200.0f / texture.height();
     float scaleX = 200.0f / texture.width();
-    registry_.assign<Transform>(jacko_entity, -300, -300, 0., scaleX, scaleY);
-    registry_.assign<Sprite>(jacko_entity, texture, shader, mesh);
-    registry_.assign<Jacko>(jacko_entity);
-    registry_.assign<Chases>(jacko_entity, target);
-    registry_.assign<Health>(jacko_entity, 10);
-    registry_.assign<Interactable>(jacko_entity);
-    registry_.assign<CausesDamage>(jacko_entity, TOP_VULNERABLE_MASK, 1);
-    registry_.assign<Velocity>(jacko_entity, 0.f, 0.f);
-    registry_.assign<Collidable>(jacko_entity,
+    registry_.assign<Transform>(dracula_entity, -300, -300, 0., scaleX, scaleY);
+    registry_.assign<Sprite>(dracula_entity, texture, shader, mesh);
+    registry_.assign<Dracula>(dracula_entity);
+    registry_.assign<Chases>(dracula_entity, target);
+    registry_.assign<Health>(dracula_entity, 10);
+    registry_.assign<Interactable>(dracula_entity);
+    registry_.assign<CausesDamage>(dracula_entity, TOP_VULNERABLE_MASK, 1);
+    registry_.assign<Velocity>(dracula_entity, 0.f, 0.f);
+    registry_.assign<Collidable>(dracula_entity,
                                  texture.width() * scaleX * 0.75,
                                  texture.height() * scaleY
     );
-    registry_.assign<Layer>(jacko_entity, BOSS_LAYER);
+    registry_.assign<Layer>(dracula_entity, BOSS_LAYER);
 
     auto shaderHealth = blackboard.shader_manager.get_shader("health");
     auto meshHealth = blackboard.mesh_manager.get_mesh("health");
     vec2 size = {HEALTH_BAR_X_SIZE, HEALTH_BAR_Y_SIZE};
     vec2 scale = {0.3, 0.3};
-    auto &healthbar = registry_.assign<HealthBar>(jacko_entity,
+    auto &healthbar = registry_.assign<HealthBar>(dracula_entity,
                                                   meshHealth, shaderHealth, size, scale);
 }
 

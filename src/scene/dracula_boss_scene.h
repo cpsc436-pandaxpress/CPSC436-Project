@@ -21,7 +21,7 @@
 #include "../systems/physics_system.h"
 #include "../systems/player_movement_system.h"
 #include "../systems/timer_system.h"
-#include "../systems/jacko_ai_system.h"
+#include "../systems/dracula_ai_system.h"
 #include "../systems/falling_platform_system.h"
 #include "../systems/chase_system.h"
 #include "../systems/player_animation_system.h"
@@ -34,7 +34,7 @@ private:
 
     bool pause = false;
     std::vector<uint32_t> bg_entities;
-    uint32_t jacko_entity;
+    uint32_t dracula_entity;
 
     BossLevelSystem level_system;
     SpriteTransformSystem sprite_transform_system;
@@ -42,7 +42,7 @@ private:
     PhysicsSystem physics_system;
     PlayerMovementSystem player_movement_system;
     ChaseSystem chase_system;
-    JackoAISystem jacko_ai_system;
+    DraculaAISystem dracula_ai_system;
     PlayerAnimationSystem player_animation_system;
     TimerSystem timer_system;
     FallingPlatformSystem falling_platform_system;
@@ -55,7 +55,7 @@ private:
     RenderSystem render_system;
 
     void create_background(Blackboard &blackboard);
-    void create_jacko(Blackboard& blackboard, uint32_t panda);
+    void create_dracula(Blackboard& blackboard, uint32_t panda);
     void update_panda(Blackboard& blackboard);
     void update_camera(Blackboard& blackboard);
 public:

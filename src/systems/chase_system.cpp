@@ -9,7 +9,7 @@
 #include "components/velocity.h"
 #include "components/interactable.h"
 #include "components/panda.h"
-#include "components/jacko.h"
+#include "components/boss.h"
 #include "components/chases.h"
 #include "components/transform.h"
 #include "components/bread.h"
@@ -22,11 +22,11 @@ ChaseSystem::ChaseSystem() {}
 
 
 void ChaseSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry) {
-    auto chaser_view = registry.view<Jacko, Chases, Transform, Velocity, Interactable>();
+    auto chaser_view = registry.view<Boss, Chases, Transform, Velocity, Interactable>();
     auto panda_view = registry.view<Panda, Transform, Velocity>();
 
     for (auto entity: chaser_view) {
-        auto &jacko = chaser_view.get<Jacko>(entity);
+        auto &jacko = chaser_view.get<Boss>(entity);
         auto &transform = chaser_view.get<Transform>(entity);
         auto &velocity = chaser_view.get<Velocity>(entity);
         auto &chases = chaser_view.get<Chases>(entity);

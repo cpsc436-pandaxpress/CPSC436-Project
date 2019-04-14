@@ -7,7 +7,8 @@
 
 #include "system.h"
 #include "util/selector_node.h"
-#include "components/jacko.h"
+#include "util/ai_nodes.h"
+#include "components/dracula.h"
 #include "components/chases.h"
 #include "components/evades.h"
 #include "components/panda.h"
@@ -20,6 +21,8 @@
 class DraculaAISystem: public System {
     private:
         SelectorNode root;
+        AINodes::CheckHealth* checkHealth;
+        AINodes::CheckPandaDeath* checkPandaDeath;
 
     public:
     DraculaAISystem(Blackboard& blackboard, entt::DefaultRegistry& registry);

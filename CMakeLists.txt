@@ -153,7 +153,7 @@ set(SOURCE_FILES
         src/systems/render_system.h
         src/scene/game_scene.cpp
         src/scene/game_scene.h
-        )
+        src/components/dracula.h src/util/ai_nodes.cpp src/util/ai_nodes.h src/components/boss.h)
 
 
 # Create executable target
