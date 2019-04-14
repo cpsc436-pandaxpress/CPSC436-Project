@@ -87,6 +87,8 @@ set(SOURCE_FILES
         src/util/selector_node.cpp
         src/systems/jacko_ai_system.cpp
         src/systems/jacko_ai_system.h
+        src/systems/dracula_ai_system.cpp
+        src/systems/dracula_ai_system.h
         src/components/evades.h
         src/level/boss_level_system.h
         src/level/boss_level_system.cpp
