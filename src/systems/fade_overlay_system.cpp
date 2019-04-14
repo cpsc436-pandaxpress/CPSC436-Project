@@ -5,6 +5,7 @@
 #include <graphics/fade_overlay.h>
 #include <components/panda.h>
 #include <components/timer.h>
+#include <scene/story_intro.h>
 #include "fade_overlay_system.h"
 
 FadeOverlaySystem::FadeOverlaySystem() {}
@@ -23,7 +24,7 @@ void FadeOverlaySystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
             alpha = 0.f;
         }
         auto &timer = viewPanda.get<Timer>(entity);
-        float curr_time = timer.get_curr_time("end_scene");
+        float curr_time = timer.get_curr_time(StoryIntroScene::BEACH_SCENE_END_LABEL);
         if ((int) curr_time == 0){
             fadeIn = true;
         }

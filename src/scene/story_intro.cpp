@@ -18,6 +18,8 @@
 #include "story_intro.h"
 #include "util/constants.h"
 
+std::string const StoryIntroScene::BEACH_SCENE_END_LABEL = "end_scene";
+
 StoryIntroScene::StoryIntroScene(Blackboard &blackboard, SceneManager &scene_manager) :
         GameScene(scene_manager),
         sprite_transform_system(),

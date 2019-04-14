@@ -3,6 +3,7 @@
 //
 
 
+#include <scene/story_intro.h>
 #include "story_animation_system.h"
 #include "components/panda.h"
 #include "components/kelly.h"
@@ -24,7 +25,7 @@ void StoryAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
         auto &sprite = panda_view.get<Sprite>(panda_entity);
 
         auto &timer = panda_view.get<Timer>(panda_entity);
-        float curr_time = timer.get_curr_time("end_scene");
+        float curr_time = timer.get_curr_time(StoryIntroScene::BEACH_SCENE_END_LABEL);
 
         if (curr_time == 0.f) {
             resetScene();
