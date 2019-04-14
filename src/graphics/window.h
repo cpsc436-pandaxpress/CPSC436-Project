@@ -17,11 +17,11 @@ private:
     SDL_Window* sdl_window_;
     SDL_GLContext gl_context_;
     uint64_t last_time_, recent_time_;
-    uint32_t width_, height_;
+    int width_, height_;
     float delta_time_ = 0;
-    std::unique_ptr<Framebuffer> framebuffer_;
     int WINDOWED_WIDTH = 800;
     int WINDOWED_HEIGHT = 450;
+    std::unique_ptr<Framebuffer> framebuffer_;
 
 public:
     Window(const char* title);

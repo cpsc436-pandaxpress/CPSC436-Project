@@ -29,7 +29,6 @@
 
 
 int start() {
-    printf("abcdefg \n");
     Window window("Express Panda");
 
     Blackboard blackboard = {
@@ -88,7 +87,7 @@ int start() {
     blackboard.shader_manager.load_shader(
             shaders_path("caveEntrance.vs.glsl"),
             shaders_path("caveEntrance.fs.glsl"),"caveEntrance");
-  
+
      blackboard.shader_manager.load_shader(
             shaders_path("text.vs.glsl"),
             shaders_path("text.fs.glsl"), "text");
@@ -99,9 +98,9 @@ int start() {
 
     // example post-process shader
     blackboard.shader_manager.load_shader(
-        shaders_path("sprite.vs.glsl"),
-        shaders_path("recolor.fs.glsl"),
-        "recolor");
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("recolor.fs.glsl"),
+            "recolor");
 
     blackboard.texture_manager.load_texture(textures_path("panda.png"), "panda");
     blackboard.texture_manager.load_texture(textures_path("panda_sprite_sheet.png"), "panda_sprites");
@@ -178,7 +177,6 @@ int start() {
     // set the first scene
 
     scene_manager.change_scene(MAIN_MENU_SCENE_ID);
-
 
     blackboard.post_process_shader = std::make_unique<Shader>(blackboard.shader_manager.get_shader("sprite"));
 
