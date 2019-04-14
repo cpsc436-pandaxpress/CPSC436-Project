@@ -4,6 +4,7 @@
 
 #include "dracula_boss_scene.h"
 #include "util/constants.h"
+#include "components/seeks.h"
 
 DraculaBossScene::DraculaBossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         GameScene(scene_manager),
@@ -21,6 +22,7 @@ DraculaBossScene::DraculaBossScene(Blackboard &blackboard, SceneManager &scene_m
         health_bar_transform_system(),
         fade_overlay_system(),
         pause_menu_transform_system(),
+        a_star_system(blackboard, registry_),
         hud_transform_system()
 {
     init_scene(blackboard);
@@ -46,6 +48,33 @@ void DraculaBossScene::update(Blackboard &blackboard) {
         registry_.destroy(pause_menu_entity);
         change_scene(MAIN_MENU_SCENE_ID);
         pause = false;
+        return;
+    }
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_7)) {
+        std::vector<Coordinates*> path = a_star_system.getProjectilePath(blackboard, registry_);
+        for(int i=0; i<path.size(); i++){
+            std::cout<< path[i]->x << " " << path[i]->y <<"\n";
+        }
+        bat_entity = registry_.create();
+
+        auto texture = blackboard.texture_manager.get_texture("bat");
+        auto shader = blackboard.shader_manager.get_shader("sprite");
+        auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+
+        float scaleY = 50.0 / texture.height();
+        float scaleX = 50.0 / texture.width();
+        registry_.assign<Transform>(bat_entity, path[0]->x, path[0]->y, 0., scaleX, scaleY);
+        registry_.assign<Sprite>(bat_entity, texture, shader, mesh);
+        registry_.assign<Velocity>(bat_entity);
+        registry_.assign<Timer>(bat_entity);
+        registry_.assign<Collidable>(bat_entity, texture.width() * scaleX,
+                                     texture.height() * scaleY);
+        registry_.assign<Seeks>(bat_entity, path);
+        /*
+        blackboard.camera.set_position(0, 0);
+        reset_scene(blackboard);
+        change_scene(MAIN_MENU_SCENE_ID);
+         */
         return;
     }
 
@@ -132,17 +161,17 @@ void DraculaBossScene::cleanup() {
 void DraculaBossScene::create_dracula(Blackboard &blackboard, uint32_t target) {
     dracula_entity = registry_.create();
 
-    auto texture = blackboard.texture_manager.get_texture("jacko");
+    auto texture = blackboard.texture_manager.get_texture("dracula");
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
-    float scaleY = 200.0f / texture.height();
-    float scaleX = 200.0f / texture.width();
+    float scaleY = 90.0 / texture.height();
+    float scaleX = 90.0 / texture.width();
     registry_.assign<Transform>(dracula_entity, -300, -300, 0., scaleX, scaleY);
     registry_.assign<Sprite>(dracula_entity, texture, shader, mesh);
     registry_.assign<Dracula>(dracula_entity);
     registry_.assign<Chases>(dracula_entity, target);
-    registry_.assign<Health>(dracula_entity, 10);
+    registry_.assign<Health>(dracula_entity, 4);
     registry_.assign<Interactable>(dracula_entity);
     registry_.assign<CausesDamage>(dracula_entity, TOP_VULNERABLE_MASK, 1);
     registry_.assign<Velocity>(dracula_entity, 0.f, 0.f);
@@ -150,14 +179,13 @@ void DraculaBossScene::create_dracula(Blackboard &blackboard, uint32_t target) {
                                  texture.width() * scaleX * 0.75,
                                  texture.height() * scaleY
     );
-    registry_.assign<Layer>(dracula_entity, BOSS_LAYER);
 
-    auto shaderHealth = blackboard.shader_manager.get_shader("health");
-    auto meshHealth = blackboard.mesh_manager.get_mesh("health");
-    vec2 size = {HEALTH_BAR_X_SIZE, HEALTH_BAR_Y_SIZE};
+    //auto shaderHealth = blackboard.shader_manager.get_shader("health");
+    //auto meshHealth = blackboard.mesh_manager.get_mesh("health");
+    float height = 75.f;
+    float width = 750.f;
+    vec2 size = {width, height};
     vec2 scale = {0.3, 0.3};
-    auto &healthbar = registry_.assign<HealthBar>(dracula_entity,
-                                                  meshHealth, shaderHealth, size, scale);
 }
 
 void DraculaBossScene::create_background(Blackboard &blackboard) {

@@ -27,6 +27,8 @@
 #include "../systems/player_animation_system.h"
 #include "../systems/enemy_animation_system.h"
 #include "game_scene.h"
+#include "../systems/seek_system.h"
+#include <systems/a_star_system.h>
 
 class DraculaBossScene: public GameScene {
 private:
@@ -35,6 +37,7 @@ private:
     bool pause = false;
     std::vector<uint32_t> bg_entities;
     uint32_t dracula_entity;
+    uint32_t bat_entity;
 
     BossLevelSystem level_system;
     SpriteTransformSystem sprite_transform_system;
@@ -53,6 +56,8 @@ private:
     PauseMenuTransformSystem pause_menu_transform_system;
     HudTransformSystem hud_transform_system;
     RenderSystem render_system;
+    AStarSystem a_star_system;
+    SeekSystem seek_system;
 
     void create_background(Blackboard &blackboard);
     void create_dracula(Blackboard& blackboard, uint32_t panda);
