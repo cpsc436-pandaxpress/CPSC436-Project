@@ -7,9 +7,14 @@ in vec2 vpos; // Distance from local origin
 // Output color
 layout(location = 0) out  vec4 color;
 
+uniform vec3 fcolor;
+
 void main()
 {
-    vec3 brown = vec3(1.0, 1.0, 1.0);
+    color = vec4(fcolor * vcolor, 1.0);
+
+    // vec3 brown = vec3(1.0, 1.0, 1.0);
 	color = vec4(0.5, 0.5, 0.5, 1.0); //just white
+	// color = vec4(vcolor, 1.0);
 
 }

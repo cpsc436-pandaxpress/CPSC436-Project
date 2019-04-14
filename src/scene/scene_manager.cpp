@@ -25,7 +25,7 @@ bool SceneManager::add_scene(SceneID id, Scene *scene) {
     }
 }
 
-bool SceneManager::change_scene(SceneID id) {
+bool SceneManager::change_scene(SceneID id, bool reset) {
     if (scenes_.count(id) == 0) {
         return false;
     }
@@ -36,6 +36,9 @@ bool SceneManager::change_scene(SceneID id) {
 
         if (scene_modes_.count(id) > 0) {
             scenes_[id]->set_mode(scene_modes_[id]);
+        }
+        if (reset) {
+            scenes_[id]->reset_scene(blackboard);
         }
 
         return true;

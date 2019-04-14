@@ -7,9 +7,7 @@
 
 #include <cinttypes>
 #include <vector>
-#include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
-#include "../systems/sprite_render_system.h"
 #include "../systems/sprite_transform_system.h"
 #include "../util/blackboard.h"
 #include "../systems/player_animation_system.h"
@@ -41,7 +39,9 @@ public:
 
     virtual void render(Blackboard& blackboard) override;
 
-    void add_item(Blackboard& blackboard, char* texture_name, SceneID sceneID);
+    void add_item(Blackboard& blackboard, const char* texture_name, SceneID sceneID);
+
+    void reset_scene(Blackboard& blackboard) override;
 };
 
 #endif //PANDAEXPRESS_MAIN_MENU_SCENE_H

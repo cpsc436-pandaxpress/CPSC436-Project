@@ -1,15 +1,16 @@
 //
-// Created by Becca Roth on 2019-03-08.
+// Created by Becca Roth on 2019-04-01.
 //
 
-#ifndef PANDAEXPRESS_CAVE_H
-#define PANDAEXPRESS_CAVE_H
+#ifndef PANDAEXPRESS_CAVE_ENTRANCE_H
+#define PANDAEXPRESS_CAVE_ENTRANCE_H
+
 
 #include "render.h"
 #include "shader.h"
 #include "mesh.h"
 
-class Cave : public Renderable {
+class CaveEntrance : public Renderable {
 private:
     Shader shader_;
     Mesh mesh_;
@@ -18,13 +19,11 @@ private:
     float rotation_;
     int status_;
 public:
-    static Vertex vertices[41];
-    static uint16_t indices[168];
-    static Vertex entrance_vertices[4];
-    static uint16_t entrance_indices[6];
+    static Vertex vertices[4];
+    static uint16_t indices[9];
 
-    Cave(Mesh mesh, Shader shader, vec2 size, vec2 scale);
-    Cave(const Cave& other);
+    CaveEntrance(Mesh mesh, Shader shader, vec2 size, vec2 scale);
+    CaveEntrance(const CaveEntrance& other);
 
     void draw(const mat3& projection);
 
@@ -54,4 +53,5 @@ public:
     int status();
 };
 
-#endif //PANDAEXPRESS_CAVE_H
+
+#endif //PANDAEXPRESS_CAVE_ENTRANCE_H

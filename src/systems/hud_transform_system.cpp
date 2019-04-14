@@ -20,7 +20,7 @@ void HudTransformSystem::update(Blackboard &blackboard, entt::DefaultRegistry &r
         auto& healthbar = healthBarViews.get<HealthBar>(entity);
         healthbar.set_pos(blackboard.camera.get_relative_pos(hud.position));
     }
-    auto textViews = registry.view<HudElement, Score, Text>(); // Text HUD Elements
+    auto textViews = registry.view<HudElement, Text>(); // Text HUD Elements
     for (auto entity: textViews) {
         auto& hud = textViews.get<HudElement>(entity);
         auto& text = textViews.get<Text>(entity);

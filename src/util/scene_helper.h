@@ -13,8 +13,8 @@
 #include <components/label.h>
 #include "blackboard.h"
 
-void generate_label_text(Blackboard &blackboard, entt::DefaultRegistry &registry,
-                         vec2 pos, const char *text) {
+void create_label_text(Blackboard &blackboard, entt::DefaultRegistry &registry,
+                       vec2 pos, const char *text) {
     auto shader = blackboard.shader_manager.get_shader("text");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
     FontType font = blackboard.fontManager.get_font("titillium_72");

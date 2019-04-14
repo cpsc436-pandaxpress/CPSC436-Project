@@ -52,13 +52,13 @@ void PandaDamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
             timer.remove(DMG_TIMER_LABEL);
         }
         if (health.health_points == 0){
-            dying = true;
+            panda.dying = true;
             panda.alive = false;
         }
         // start of dying animation
-        if (dying && interactable.grounded) {
+        if (panda.dying && interactable.grounded) {
             timer.save_watch(DEATH_TIMER_LABEL, DEATH_TIMER);
-            dying = false;
+            panda.dying = false;
         }
 
         if (health.health_points < 0 && !panda.hurt && interactable.grounded) {

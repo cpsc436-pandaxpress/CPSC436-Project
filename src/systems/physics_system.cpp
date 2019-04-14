@@ -16,6 +16,7 @@
 #include <graphics/text.h>
 #include <components/label.h>
 #include "components/platform.h"
+#include <graphics/cave_entrance.h>
 
 
 #include "util/entity_pairs.h"
@@ -280,15 +281,15 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                 if (registry.has<Bread>(entry.entity)) {
                                     blackboard.score += BREAD_KILL_POINTS;
                                     std::string str = "+" + std::to_string(BREAD_KILL_POINTS);
-                                    generate_label_text(blackboard, registry,
-                                                        vec2{transform.x, transform.y - 100.f},
-                                                        str.c_str());
+                                    create_label_text(blackboard, registry,
+                                                      vec2{transform.x, transform.y - 100.f},
+                                                      str.c_str());
                                 } else if (registry.has<Llama>(entry.entity)) {
                                     blackboard.score += LLAMA_KILL_POINTS;
                                     std::string str = "+" + std::to_string(LLAMA_KILL_POINTS);
-                                    generate_label_text(blackboard, registry,
-                                                        vec2{transform.x, transform.y - 100.f},
-                                                        str.c_str());
+                                    create_label_text(blackboard, registry,
+                                                      vec2{transform.x, transform.y - 100.f},
+                                                      str.c_str());
                                 }
                             }
                         }
@@ -312,6 +313,12 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                             registry.destroy(entry.entity);
                         }
                     }
+
+                    /*if ( registry.has<CaveEntrance>(entry.entity)) {
+                        if (registry.has<Panda>(d_entity)) {
+                            blackboard.camera.transition_ready = true;
+                        }
+                    }*/
                 }
             }
 

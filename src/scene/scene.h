@@ -23,6 +23,7 @@ private:
 
 protected:
     entt::DefaultRegistry registry_;
+    SceneMode mode_;
 
 public:
     Scene(SceneManager& scene_manager);
@@ -38,8 +39,9 @@ public:
 
     virtual void set_mode(SceneMode mode);
 
+    virtual void reset_scene(Blackboard& blackboard) = 0;
 
 protected:
     // wraps SceneManager::change_scene()
-    bool change_scene(SceneID id);
+    bool change_scene(SceneID id, bool reset = false);
 };

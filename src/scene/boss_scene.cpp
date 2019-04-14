@@ -2,33 +2,13 @@
 // Created by Prayansh Srivastava on 2019-02-12.
 //
 
-#include <graphics/background.h>
-#include <components/food.h>
-#include <components/obeys_gravity.h>
-#include <components/health.h>
-#include <components/interactable.h>
-#include <components/falling_platform.h>
-#include <components/causes_damage.h>
-#include <components/velocity.h>
-#include <components/jacko.h>
-#include <components/chases.h>
-#include <components/timer.h>
-#include <components/pause_menu.h>
-#include <components/timer.h>
-#include <graphics/health_bar.h>
-#include <components/layer.h>
-#include <graphics/fade_overlay.h>
-#include <components/hud_element.h>
 #include "boss_scene.h"
 #include "util/constants.h"
 
 BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
-        Scene(scene_manager),
+        GameScene(scene_manager),
         level_system(),
-        sprite_render_system(),
-        sprite_transform_system(),
         background_transform_system(BOSS_TYPE),
-        background_render_system(),
         physics_system(),
         player_movement_system(BOSS_TYPE),
         chase_system(),
@@ -38,12 +18,9 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         panda_dmg_system(),
         falling_platform_system(),
         enemy_animation_system(),
-        health_bar_render_system(),
         health_bar_transform_system(),
         fade_overlay_system(),
-        fade_overlay_render_system(),
         pause_menu_transform_system(),
-        pause_menu_render_system(),
         hud_transform_system()
 {
     init_scene(blackboard);
@@ -53,7 +30,6 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
 
 void BossScene::update(Blackboard &blackboard) {
     auto &panda = registry_.get<Panda>(panda_entity);
-    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
     auto &interactable = registry_.get<Interactable>(panda_entity);
 
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
@@ -103,17 +79,7 @@ void BossScene::update(Blackboard &blackboard) {
 void BossScene::render(Blackboard &blackboard) {
     glClearColor(30.f / 256.f, 55.f / 256.f, 153.f / 256.f, 1); // same colour as the top of the background
     glClear(GL_COLOR_BUFFER_BIT);
-    background_render_system.update(blackboard, registry_); // render background first
-    sprite_render_system.update(blackboard, registry_);
-    health_bar_render_system.update(blackboard, registry_);
-
-    auto &panda = registry_.get<Panda>(panda_entity);
-    if (!panda.alive) {
-        fade_overlay_render_system.update(blackboard, registry_);
-    }
-    if (pause) {
-        pause_menu_render_system.update(blackboard, registry_);
-    }
+    render_system.update(blackboard, registry_);
 }
 
 void BossScene::update_panda(Blackboard &blackboard) {
@@ -149,46 +115,18 @@ void BossScene::init_scene(Blackboard &blackboard) {
 }
 
 void BossScene::reset_scene(Blackboard &blackboard) {
+    cleanup();
+    init_scene(blackboard);
+}
+
+void BossScene::cleanup() {
     level_system.destroy_entities(registry_);
-    registry_.destroy(panda_entity);
     registry_.destroy(jacko_entity);
-    registry_.destroy(fade_overlay_entity);
     for (uint32_t e: bg_entities) {
         registry_.destroy(e);
     }
     bg_entities.clear();
-    init_scene(blackboard);
-}
-
-
-void BossScene::create_panda(Blackboard &blackboard) {
-    panda_entity = registry_.create();
-    auto texture = blackboard.texture_manager.get_texture("panda_sprites");
-    auto shader = blackboard.shader_manager.get_shader("sprite");
-    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-
-    float scaleY = 75.0f / texture.height();
-    float scaleX = 75.0f / texture.width();
-    registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scaleX, scaleY);
-    registry_.assign<Sprite>(panda_entity, texture, shader, mesh);
-    registry_.assign<Panda>(panda_entity);
-    registry_.assign<ObeysGravity>(panda_entity);
-    registry_.assign<Health>(panda_entity, 3);
-    registry_.assign<Interactable>(panda_entity);
-    registry_.assign<CausesDamage>(panda_entity, PANDA_DMG_MASK, 1);
-    registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
-    registry_.assign<Collidable>(panda_entity, texture.width() * scaleX, texture.height() * scaleY);
-    registry_.assign<Timer>(panda_entity);
-    registry_.assign<Layer>(panda_entity, PANDA_LAYER);
-    auto shaderHealth = blackboard.shader_manager.get_shader("health");
-    auto meshHealth = blackboard.mesh_manager.get_mesh("health");
-    vec2 size = {HEALTH_BAR_X_SIZE, HEALTH_BAR_Y_SIZE};
-    vec2 scale = {0.5, 0.5};
-    auto &healthbar = registry_.assign<HealthBar>(panda_entity,
-                                                  meshHealth, shaderHealth, size, scale);
-    registry_.assign<HudElement>(panda_entity,
-                                 vec2{size.x / 2.f * scale.x + 100.f,
-                                      blackboard.camera.size().y - 50.f});
+    GameScene::cleanup();
 }
 
 void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
@@ -212,7 +150,7 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
                                  texture.width() * scaleX * 0.75,
                                  texture.height() * scaleY
     );
-    registry_.assign<Layer>(jacko_entity, ENEMY_LAYER);
+    registry_.assign<Layer>(jacko_entity, BOSS_LAYER);
 
     auto shaderHealth = blackboard.shader_manager.get_shader("health");
     auto meshHealth = blackboard.mesh_manager.get_mesh("health");
@@ -239,6 +177,7 @@ void BossScene::create_background(Blackboard &blackboard) {
     for (Texture t: textures) {
         auto bg_entity = registry_.create();
         auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, indices[i], indices[i] == 3);
+        registry_.assign<Layer>(bg_entity, BACKGROUND_LAYER - i);
         bg.set_pos1(0.0f, 0.0f);
         bg.set_rotation_rad(0.0f);
         bg.set_scale(blackboard.camera.size().x / t.width(),
@@ -248,30 +187,3 @@ void BossScene::create_background(Blackboard &blackboard) {
     }
 
 }
-
-void BossScene::create_fade_overlay(Blackboard &blackboard) {
-    fade_overlay_entity = registry_.create();
-    auto shaderFade = blackboard.shader_manager.get_shader("fade");
-    auto meshFade = blackboard.mesh_manager.get_mesh("health");
-    float height = blackboard.camera.size().y;
-    float width = blackboard.camera.size().x;
-    vec2 size = {width, height};
-    auto &fade = registry_.assign<FadeOverlay>(fade_overlay_entity, meshFade, shaderFade, size);
-}
-
-void BossScene::create_pause_menu(Blackboard &blackboard) {
-    pause_menu_entity = registry_.create();
-
-    auto texture = blackboard.texture_manager.get_texture("pause_menu");
-    auto shader = blackboard.shader_manager.get_shader("sprite");
-    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-
-    registry_.assign<Sprite>(pause_menu_entity, texture, shader, mesh);
-    registry_.assign<PauseMenu>(pause_menu_entity);
-}
-
-
-
-
-
-

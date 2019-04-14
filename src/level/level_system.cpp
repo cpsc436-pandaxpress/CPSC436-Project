@@ -17,7 +17,7 @@ void LevelSystem::init() {
 }
 
 void LevelSystem::generateEntity(char value, float x, float y,
-                                 Blackboard &blackboard, entt::DefaultRegistry &registry) {
+                                 Blackboard &blackboard, entt::DefaultRegistry &registry, SceneMode mode) {
     switch (value) {
         case '1': {
             auto texture = blackboard.texture_manager.get_texture(
@@ -148,17 +148,35 @@ void LevelSystem::generateEntity(char value, float x, float y,
         }
             break;
         case 'a': {
-            auto cave = registry.create();
-            auto shaderCave = blackboard.shader_manager.get_shader("cave");
-            auto meshCave = blackboard.mesh_manager.get_mesh("cave");
-            registry.assign<Transform>(cave, 100, 200, 0., 80, 80);
-            registry.assign<Interactable>(cave);
-            float heightCave = 750.f;
-            float widthCave = 750.f;
-            vec2 sizeCave = {widthCave, heightCave};
-            vec2 scaleCave = {-80, 80};
-            auto &caveE = registry.assign<Cave>(cave, meshCave, shaderCave, sizeCave, scaleCave);
-            caveE.set_pos(550, -550);
+            if (mode == STORY) {
+                auto cave = registry.create();
+                auto shaderCave = blackboard.shader_manager.get_shader("cave");
+                auto meshCave = blackboard.mesh_manager.get_mesh("cave");
+                registry.assign<Transform>(cave, x, y, 0., 80, 80);
+                registry.assign<Interactable>(cave);
+                float heightCave = 750.f;
+                float widthCave = 750.f;
+                vec2 sizeCave = {widthCave, heightCave};
+                vec2 scaleCave = {-80, 80};
+                auto &caveE = registry.assign<Cave>(cave, meshCave, shaderCave, sizeCave, scaleCave);
+                caveE.set_pos(x, y - heightCave);
+                registry.assign<Layer>(cave, TERRAIN_LAYER);
+
+                auto caveEntrance = registry.create();
+                auto shaderCaveEntrance = blackboard.shader_manager.get_shader("caveEntrance");
+                auto meshCaveEntrance = blackboard.mesh_manager.get_mesh("caveEntrance");
+                registry.assign<Transform>(caveEntrance, x, y, 0.f, 80, 80);
+                registry.assign<Interactable>(caveEntrance);
+                float heightCave_entrance = 2 * 80;
+                float widthCave_entrance = 2 * 80;
+                vec2 sizeCave_entrance = {widthCave_entrance, heightCave_entrance};
+                vec2 scaleCave_entrance = {80, 80};
+                registry.assign<Collidable>(caveEntrance, heightCave_entrance, widthCave_entrance);
+                auto &caveEntranceE = registry.assign<CaveEntrance>(caveEntrance, meshCaveEntrance, shaderCaveEntrance,
+                                                                    sizeCave_entrance, scaleCave_entrance);
+                caveEntranceE.set_pos(x + 700, y - heightCave);
+                registry.assign<Layer>(caveEntrance, TERRAIN_LAYER + 1);
+            }
         }
             break;
         case '9': {
@@ -180,6 +198,7 @@ void LevelSystem::generateEntity(char value, float x, float y,
             registry.assign<Sprite>(platform, texture, shader, mesh);
             registry.assign<Collidable>(platform, texture.width() * scaleX,
                                         texture.height() * scaleY);
+            registry.assign<Layer>(platform, TERRAIN_LAYER);
         }
             break;
         case 'f': {
@@ -197,6 +216,7 @@ void LevelSystem::generateEntity(char value, float x, float y,
             registry.assign<Velocity>(burger);
             registry.assign<Collidable>(burger, texture.width() * scaleX,
                                          texture.height() * scaleY);
+            registry.assign<Layer>(burger, ITEM_LAYER);
         }
             break;
 
@@ -239,6 +259,7 @@ void LevelSystem::destroy_entities(entt::DefaultRegistry &registry) {
     registry.destroy<Bread>();
     registry.destroy<Obstacle>();
     registry.destroy<Cave>();
+    registry.destroy<CaveEntrance>();
     registry.destroy<Food>();
 
     while (!chunks_.empty()) {

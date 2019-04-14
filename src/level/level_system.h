@@ -22,9 +22,12 @@
 #include <components/interactable.h>
 #include <components/obeys_gravity.h>
 #include <graphics/cave.h>
+#include <graphics/cave_entrance.h>
 #include "util/random.h"
 #include "systems/system.h"
+#include <scene/scene_mode.h>
 #include <queue>
+#include <util/constants.h>
 
 class LevelSystem : public System {
 protected:
@@ -38,7 +41,7 @@ protected:
     const float PLATFORM_HEIGHT = 20.f;
 
     void generateEntity(char value, float x, float y,
-                        Blackboard &blackboard, entt::DefaultRegistry &registry);
+                        Blackboard &blackboard, entt::DefaultRegistry &registry, SceneMode mode);
 
 
 public:
