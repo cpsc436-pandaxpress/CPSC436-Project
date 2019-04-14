@@ -16,6 +16,7 @@
 #include "util/blackboard.h"
 #include "util/random.h"
 #include <scene/horizontal_scene.h>
+#include <scene/dracula_boss_scene.h>
 #include <SDL_mixer.h>
 #include <sstream>
 #include <scene/vertical_scene.h>
@@ -67,6 +68,10 @@ int start() {
     blackboard.input_manager.track(SDL_SCANCODE_A);
     blackboard.input_manager.track(SDL_SCANCODE_D);
     blackboard.input_manager.track(SDL_SCANCODE_W);
+    blackboard.input_manager.track(SDL_SCANCODE_W);
+    blackboard.input_manager.track(SDL_SCANCODE_7);
+    blackboard.input_manager.track(SDL_SCANCODE_8);
+    blackboard.input_manager.track(SDL_SCANCODE_9);
 
 
     blackboard.shader_manager.load_shader(
@@ -159,6 +164,7 @@ int start() {
     horizontal_scene.set_high_score(std::stoi(scores.get("jungle")));
 
     BossScene boss_scene(blackboard, scene_manager);
+    DraculaBossScene dracula_boss_scene(blackboard, scene_manager);
 
     VerticalScene vertical_scene(blackboard, scene_manager);
     vertical_scene.set_high_score(std::stoi(scores.get("sky")));
@@ -167,6 +173,7 @@ int start() {
     scene_manager.add_scene(ENDLESS_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), ENDLESS);
     scene_manager.add_scene(ENDLESS_SKY_SCENE_ID, (Scene*)(&vertical_scene), ENDLESS);
     scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene));
+    scene_manager.add_scene(DRACULA_BOSS_SCENE_ID, (Scene*)(&boss_scene));
     scene_manager.add_scene(STORY_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY);
 
     // set the first scene

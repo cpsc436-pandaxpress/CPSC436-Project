@@ -29,6 +29,7 @@ static const SceneID STORY_SKY_SCENE_ID    = 2;
 static const SceneID BOSS_SCENE_ID    = 3;
 static const SceneID ENDLESS_JUNGLE_SCENE_ID = 4;
 static const SceneID ENDLESS_SKY_SCENE_ID = 5;
+static const SceneID DRACULA_BOSS_SCENE_ID    = 9;
 
 static const SceneType JUNGLE_TYPE = 0;
 static const SceneType SKY_TYPE = 1;
