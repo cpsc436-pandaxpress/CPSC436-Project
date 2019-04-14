@@ -83,6 +83,10 @@ set(SOURCE_FILES
         src/systems/chase_system.h
         src/util/node.cpp
         src/util/node.h
+        src/util/coordinates.cpp
+        src/util/coordinates.h
+        src/util/location.cpp
+        src/util/location.h
         src/components/falling_platform.h
         src/util/selector_node.h
         src/util/selector_node.cpp

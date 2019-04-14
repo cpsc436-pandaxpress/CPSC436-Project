@@ -181,7 +181,7 @@ std::vector<location*> AStarSystem::findPath(location* start, location* end){
 
     }
 
-
+return path;
 }
 
 
