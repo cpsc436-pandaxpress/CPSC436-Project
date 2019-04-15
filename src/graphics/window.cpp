@@ -89,10 +89,10 @@ void Window::destroy() {
 }
 
 void Window::clear() {
-    glClearColor(1, 0, 1, 1);
+    glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     framebuffer_->bind();
-    glClearColor(1, 1, 1, 1);
+    glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     framebuffer_->unbind();
 }
@@ -101,6 +101,10 @@ void Window::display(Shader shader, Mesh mesh) {
     framebuffer_->test();
 
     auto fb_texture = framebuffer_->get_texture();
+
+    shader.bind();
+    shader.set_uniform_float("time", SDL_GetTicks());
+    shader.unbind();
 
     auto sprite = Sprite(fb_texture, shader, mesh);
     sprite.set_size(width_, height_);

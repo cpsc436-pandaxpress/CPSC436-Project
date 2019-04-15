@@ -109,8 +109,23 @@ int start() {
 
     blackboard.shader_manager.load_shader(
             shaders_path("sprite.vs.glsl"),
-            shaders_path("vape.fs.glsl"),
-            "vape");
+            shaders_path("wave.fs.glsl"),
+            "wave");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("edge.fs.glsl"),
+            "edge");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("shake.vs.glsl"),
+            shaders_path("blur.fs.glsl"),
+            "shake");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("blur.fs.glsl"),
+            "blur");
 
     blackboard.texture_manager.load_texture(textures_path("panda.png"), "panda");
     blackboard.texture_manager.load_texture(textures_path("panda_sprite_sheet.png"), "panda_sprites");
@@ -188,7 +203,7 @@ int start() {
 
     scene_manager.change_scene(MAIN_MENU_SCENE_ID);
 
-    blackboard.post_process_shader = std::make_unique<Shader>(blackboard.shader_manager.get_shader("sprite"));
+    blackboard.post_process_shader = std::make_unique<Shader>(blackboard.shader_manager.get_shader("shake"));
 
     bool quit = false;
     while (!quit) {
