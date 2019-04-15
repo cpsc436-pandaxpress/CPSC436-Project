@@ -30,7 +30,8 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         transition_system(JUNGLE_TYPE),
         hud_transform_system(),
         label_system(),
-        render_system()
+        render_system(),
+        powerup_system()
 {
     high_score_ = 0;
     init_scene(blackboard);
@@ -87,6 +88,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
         falling_platform_system.update(blackboard, registry_);
         enemy_animation_system.update(blackboard, registry_);
         transition_system.update(blackboard, registry_);
+        powerup_system.update(blackboard, registry_);
         hud_transform_system.update(blackboard, registry_);// Must run last
         high_score_ = std::max<int>(high_score_, (int) blackboard.score);
     } else {

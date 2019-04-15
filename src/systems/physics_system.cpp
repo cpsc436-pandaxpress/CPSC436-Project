@@ -17,6 +17,7 @@
 #include <components/label.h>
 #include "components/platform.h"
 #include <graphics/cave_entrance.h>
+#include <components/shield.h>
 
 
 #include "util/entity_pairs.h"
@@ -309,6 +310,16 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                             auto &health = registry.get<Health>(d_entity);
                             if (health.health_points < health.max_health) {
                                 health.health_points++;
+                            }
+                            registry.destroy(entry.entity);
+                        }
+                    }
+
+                    if (registry.has<Shield>(entry.entity)) {
+                        if (registry.has<Panda>(d_entity)) {
+                            auto &panda = registry.get<Panda>(d_entity);
+                            if (panda.alive) {
+                                panda.gotShield = true;
                             }
                             registry.destroy(entry.entity);
                         }
