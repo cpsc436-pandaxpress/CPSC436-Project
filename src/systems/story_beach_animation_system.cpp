@@ -9,7 +9,7 @@
 #include "components/jacko.h"
 #include "components/hearts.h"
 #include "components/timer.h"
-#include "scene/story_intro.h"
+#include "scene/story_intro_beach.h"
 #include "level/level_system.h"
 
 
@@ -22,7 +22,7 @@ void StoryBeachAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegi
     auto fade_view = registry.view<FadeOverlay, Timer>();
     for (auto fade_entity: fade_view) {
         auto &timer = fade_view.get<Timer>(fade_entity);
-        float curr_time = timer.get_curr_time(StoryIntroScene::BEACH_SCENE_END_LABEL);
+        float curr_time = timer.get_curr_time(StoryIntroBeachScene::BEACH_SCENE_END_LABEL);
 
         if (curr_time == 0.f) {
             resetScene();

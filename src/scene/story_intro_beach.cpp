@@ -18,7 +18,7 @@
 #include "story_intro_beach.h"
 #include "util/constants.h"
 
-std::string const StoryIntroScene::BEACH_SCENE_END_LABEL = "end_scene";
+std::string const StoryIntroBeachScene::BEACH_SCENE_END_LABEL = "end_scene";
 
 StoryIntroBeachScene::StoryIntroBeachScene(Blackboard &blackboard, SceneManager &scene_manager) :
         GameScene(scene_manager),
@@ -178,7 +178,7 @@ void StoryIntroBeachScene::create_jacko(Blackboard &blackboard) {
     registry_.assign<Layer>(jacko_entity, ENEMY_LAYER);
 }
 
-void StoryIntroScene::create_background(Blackboard &blackboard) {
+void StoryIntroBeachScene::create_background(Blackboard &blackboard) {
     std::vector<Texture> textures;
     textures.reserve(6);
     // This order matters for rendering

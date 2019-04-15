@@ -5,7 +5,7 @@
 #include <graphics/fade_overlay.h>
 #include <components/panda.h>
 #include <components/timer.h>
-#include <scene/story_intro.h>
+#include <scene/story_intro_beach.h>
 #include "fade_overlay_system.h"
 
 FadeOverlaySystem::FadeOverlaySystem() {}
@@ -25,7 +25,7 @@ void FadeOverlaySystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
     for (auto entity: viewFade) {
         auto &fadeOverlay = viewFade.get<FadeOverlay>(entity);
         auto &timer = viewFade.get<Timer>(entity);
-        float curr_time = timer.get_curr_time(StoryIntroScene::BEACH_SCENE_END_LABEL);
+        float curr_time = timer.get_curr_time(StoryIntroBeachScene::BEACH_SCENE_END_LABEL);
         if ((int) curr_time == 0){
             fadeOverlay.set_fadeIn(true);
         }
