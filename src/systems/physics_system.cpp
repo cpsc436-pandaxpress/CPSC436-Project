@@ -335,6 +335,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                 health.health_points++;
                             }
                             registry.destroy(entry.entity);
+                            continue;
 
                         } else if (registry.has<Food>(entry.entity) && registry.has<Jacko>(d_entity)) {
                             auto &health = registry.get<Health>(d_entity);
@@ -342,17 +343,17 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                 health.health_points++;
                             }
                             registry.destroy(entry.entity);
+                            continue;
                         }
                     }
 
-                    if (registry.has<Shield>(entry.entity)) {
-                        if (registry.has<Panda>(d_entity)) {
-                            auto &panda = registry.get<Panda>(d_entity);
-                            if (panda.alive) {
-                                panda.gotShield = true;
-                            }
-                            registry.destroy(entry.entity);
+                    if (registry.has<Shield>(entry.entity) && registry.has<Panda>(d_entity)) {
+                        auto &panda = registry.get<Panda>(d_entity);
+                        if (panda.alive) {
+                            panda.gotShield = true;
                         }
+                        registry.destroy(entry.entity);
+                        continue;
                     }
 
                     /*if ( registry.has<CaveEntrance>(entry.entity)) {
