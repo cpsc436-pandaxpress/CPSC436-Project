@@ -149,7 +149,7 @@ set(SOURCE_FILES
         src/systems/render_system.h
         src/scene/game_scene.cpp
         src/scene/game_scene.h
-        )
+        src/components/shield.h)
 
 
 # Create executable target

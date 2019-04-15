@@ -30,13 +30,20 @@
 #include <util/constants.h>
 
 class LevelSystem : public System {
+private:
+    void generate_platform(bool one_way, float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void generate_bread(bool move_left, float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void generate_ghost(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void generate_llama(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void generate_spike(bool tall, float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void generate_falling_platform(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void generate_cave(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void generate_food(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void generate_shield(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+
 protected:
     Random rng_;
     std::queue<std::vector<char>> chunks_;
-
-    const float BREAD_SPEED = 50.f;
-    const float PROJECTILE_SPEED_X = -300.f;
-    const float PROJECTILE_SPEED_Y = 10.f;
 
     const float PLATFORM_HEIGHT = 20.f;
 
@@ -52,7 +59,6 @@ public:
 
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override = 0;
 
-    void generate_bread(bool move_left, float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
     virtual void destroy_entities(entt::DefaultRegistry &registry);
 
     const std::string FALLING_PLATFORM_TIMER_LABEL = "fall";
