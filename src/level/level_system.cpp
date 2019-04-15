@@ -196,10 +196,8 @@ void LevelSystem::generate_spike(bool tall, float x, float y, Blackboard &blackb
     auto scaleY = tall ? scaleX * 1.8 : scaleX * 0.5;
     auto stalagmite2 = registry.create();
     registry.assign<Obstacle>(stalagmite2);
-    registry.assign<CausesDamage>(stalagmite2, ALL_DMG_MASK, 1);
-    //
-    //
-    // registry.assign<Platform>(stalagmite2, false);
+    registry.assign<CausesDamage>(stalagmite2, BOTTOM_VULNERABLE_MASK, 1);
+    registry.assign<Platform>(stalagmite2, false);
     registry.assign<Transform>(stalagmite2, x, y, 0., scaleX, scaleY);
     registry.assign<Sprite>(stalagmite2, texture, shader, mesh);
     registry.assign<Collidable>(stalagmite2, texture.width() * scaleX,
