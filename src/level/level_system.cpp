@@ -219,10 +219,30 @@ void LevelSystem::generateEntity(char value, float x, float y,
             registry.assign<Layer>(burger, ITEM_LAYER);
         }
             break;
-
+        case 'v': {
+            generate_vial(x, y, blackboard, registry);
+        }
         default:
             break;
     }
+}
+
+void LevelSystem::generate_vial(float x, float y, Blackboard &blackboard,
+                                entt::DefaultRegistry &registry) {
+    auto vial = registry.create();
+    auto texture = blackboard.texture_manager.get_texture("vial");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+    auto scaleX = static_cast<float>((CELL_HEIGHT / 3.0f)  / texture.width());
+    auto scaleY = static_cast<float>(CELL_HEIGHT / texture.height());
+    registry.assign<Food>(vial);
+    registry.assign<Sprite>(vial, texture, shader, mesh);
+    registry.assign<Transform>(vial, x, y, 0.785f, scaleX, scaleY);
+    registry.assign<Interactable>(vial);
+    registry.assign<ObeysGravity>(vial);
+    registry.assign<Collidable>(vial, texture.width() * scaleX,
+                                texture.height() * scaleY);
+    registry.assign<Layer>(vial, ITEM_LAYER);
 }
 
 void LevelSystem::generate_bread(bool move_left, float x, float y, Blackboard &blackboard,
