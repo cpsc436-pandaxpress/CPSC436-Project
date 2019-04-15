@@ -52,7 +52,7 @@ void Framebuffer::resize(uint32_t width, uint32_t height) {
     glBindTexture(GL_TEXTURE_2D, texture_);
 
     glTexImage2D(
-        GL_TEXTURE_2D, 0, GL_RGBA, width_, height_, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr
+        GL_TEXTURE_2D, 0, GL_RGB, width_, height_, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr
     );
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
