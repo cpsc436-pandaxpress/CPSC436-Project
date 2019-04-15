@@ -119,7 +119,7 @@ void BackgroundTransformSystem::boss_background_transform(Blackboard &blackboard
 
 void BackgroundTransformSystem::story_beach_background_transform(Blackboard &blackboard,
                                                               Background &background) {
-    if (background.z_pos() != 0 && background.z_pos() != 5) {
+    if (background.z_pos() != 0 && background.z_pos() != 5 && background.z_pos() != 4) {
         float displacement =  STORY_LAYER_SPEED * blackboard.delta_time / background.z_pos();
         background.set_pos1(background.pos1().x, background.pos1().y + displacement);
         if (background.pos1().y > WAVE_MAX || background.pos1().y < WAVE_MIN ) {

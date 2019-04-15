@@ -52,6 +52,9 @@ void StoryIntroBeachScene::update(Blackboard &blackboard) {
         change_scene(MAIN_MENU_SCENE_ID);
         pause = false;
         return;
+    } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN) && !pause) {
+        reset_scene(blackboard);
+        change_scene(STORY_JUNGLE_SCENE_ID);
     }
 
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
@@ -75,6 +78,11 @@ void StoryIntroBeachScene::update(Blackboard &blackboard) {
         endScene = true;
     }
 
+    if (scene_timer.exists(SKIP_SCENE_LABEL) && scene_timer.is_done(SKIP_SCENE_LABEL)) {
+        scene_timer.remove(SKIP_SCENE_LABEL);
+        registry_.destroy(skip_entity);
+    }
+
     if (fadeOverlay.alpha() > 1.6f) {
         reset_scene(blackboard);
         change_scene(STORY_JUNGLE_INTRO_SCENE_ID);
@@ -94,12 +102,17 @@ void StoryIntroBeachScene::init_scene(Blackboard &blackboard) {
     create_kelly(blackboard);
     create_hearts(blackboard);
     create_jacko(blackboard);
+    create_skip_message(blackboard);
     create_fade_overlay(blackboard);
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
     fadeOverlay.set_alpha(1.0);
 
     if (!scene_timer.exists(BEACH_SCENE_END_LABEL)) {
         scene_timer.save_watch(BEACH_SCENE_END_LABEL, BEACH_SCENE_END);
+    }
+
+    if (!scene_timer.exists(SKIP_SCENE_LABEL)) {
+        scene_timer.save_watch(SKIP_SCENE_LABEL, SKIP_SCENE);
     }
 }
 
@@ -108,6 +121,9 @@ void StoryIntroBeachScene::reset_scene(Blackboard &blackboard) {
     if (!story_animation_system.jackoGrabsKelly) {
         registry_.destroy(kelly_entity);
         registry_.destroy(hearts_entity);
+    }
+    if (scene_timer.exists(SKIP_SCENE_LABEL) && !scene_timer.is_done(SKIP_SCENE_LABEL)) {
+        registry_.destroy(skip_entity);
     }
     registry_.destroy(jacko_entity);
     for (uint32_t e: bg_entities) {
@@ -204,8 +220,20 @@ void StoryIntroBeachScene::create_background(Blackboard &blackboard) {
         bg_entities.push_back(bg_entity);
         i++;
     }
+}
 
+void StoryIntroScene::create_skip_message(Blackboard &blackboard) {
+    skip_entity = registry_.create();
 
+    auto texture = blackboard.texture_manager.get_texture("skip_scene");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+
+    float scaleY = 80.0f / texture.height();
+    float scaleX = 400.0f / texture.width();
+    registry_.assign<Transform>(skip_entity, SKIP_POS_X, SKIP_POS_Y, 0., scaleX, scaleY);
+    registry_.assign<Sprite>(skip_entity, texture, shader, mesh);
+    registry_.assign<Layer>(skip_entity, OVERLAY_LAYER);
 }
 
 

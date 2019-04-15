@@ -31,6 +31,11 @@ private:
     const float JACKO_START_X = 1000.f;
     const float JACKO_START_Y = 80.f;
     const float BEACH_SCENE_END = 32.f;
+    const float SKIP_POS_X = 570.f;
+    const float SKIP_POS_Y = 350.f;
+    const std::string SKIP_SCENE_LABEL;
+    const float SKIP_SCENE = 10.f;
+
 
     bool pause = false;
     bool endScene = false;
@@ -39,6 +44,7 @@ private:
     uint32_t kelly_entity;
     uint32_t hearts_entity;
     uint32_t jacko_entity;
+    uint32_t skip_entity;
     std::vector<uint32_t> bg_entities;
     SpriteTransformSystem sprite_transform_system;
     StoryBeachAnimationSystem story_animation_system;
@@ -56,6 +62,7 @@ private:
     void create_kelly(Blackboard& blackboard);
     void create_hearts(Blackboard& blackboard);
     void create_jacko(Blackboard& blackboard);
+    void create_skip_message(Blackboard &blackboard);
     void init_scene(Blackboard &blackboard);
 
 

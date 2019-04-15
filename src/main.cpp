@@ -146,6 +146,7 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("story_beach_panda.png"), "beach_panda");
     blackboard.texture_manager.load_texture(textures_path("story_beach_hearts.png"), "beach_hearts");
     blackboard.texture_manager.load_texture(textures_path("story_beach_jacko.png"), "beach_jacko");
+    blackboard.texture_manager.load_texture(textures_path("skip_scene.png"), "skip_scene");
 
     blackboard.texture_manager.load_texture(textures_path("story_jungle_background.png"), "story_jungle_background");
     blackboard.texture_manager.load_texture(textures_path("story_jungle_kelly.png"), "story_jungle_kelly");

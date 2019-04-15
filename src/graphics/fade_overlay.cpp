@@ -23,7 +23,7 @@ FadeOverlay::FadeOverlay(const FadeOverlay &other) :
         position_(other.position_),
         scale_(other.scale_),
         alpha_(other.alpha_),
-        fadeIn_(other.alpha_)
+        fadeIn_(other.fadeIn_)
 {}
 
 void FadeOverlay::draw(const mat3 &projection) {
