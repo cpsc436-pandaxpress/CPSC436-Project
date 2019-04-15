@@ -203,7 +203,7 @@ int start() {
 
     scene_manager.change_scene(MAIN_MENU_SCENE_ID);
 
-    blackboard.post_process_shader = std::make_unique<Shader>(blackboard.shader_manager.get_shader("shake"));
+    blackboard.post_process_shader = std::make_unique<Shader>(blackboard.shader_manager.get_shader("sprite"));
 
     bool quit = false;
     while (!quit) {
