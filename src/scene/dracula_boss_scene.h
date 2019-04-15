@@ -56,7 +56,7 @@ private:
     PauseMenuTransformSystem pause_menu_transform_system;
     HudTransformSystem hud_transform_system;
     RenderSystem render_system;
-    AStarSystem a_star_system;
+    //AStarSystem a_star_system;
     SeekSystem seek_system;
 
     void create_background(Blackboard &blackboard);

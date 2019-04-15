@@ -17,12 +17,14 @@
 #include "components/velocity.h"
 #include "components/interactable.h"
 #include "components/health.h"
+#include "a_star_system.h"
 
 class DraculaAISystem: public System {
     private:
         SelectorNode root;
         AINodes::CheckHealth* checkHealth;
         AINodes::CheckPandaDeath* checkPandaDeath;
+        AStarSystem a_star_system;
 
     public:
     DraculaAISystem(Blackboard& blackboard, entt::DefaultRegistry& registry);

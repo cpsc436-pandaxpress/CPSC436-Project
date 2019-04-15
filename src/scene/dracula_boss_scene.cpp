@@ -22,7 +22,7 @@ DraculaBossScene::DraculaBossScene(Blackboard &blackboard, SceneManager &scene_m
         health_bar_transform_system(),
         fade_overlay_system(),
         pause_menu_transform_system(),
-        a_star_system(blackboard, registry_),
+        //a_star_system(blackboard, registry_),
         seek_system(),
         hud_transform_system()
 {
@@ -51,7 +51,7 @@ void DraculaBossScene::update(Blackboard &blackboard) {
         pause = false;
         return;
     }
-
+/*
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_7)) {
         std::vector<Coordinates*> path = a_star_system.getProjectilePath(blackboard, registry_);
         for(int i=0; i<path.size(); i++){
@@ -74,7 +74,7 @@ void DraculaBossScene::update(Blackboard &blackboard) {
         registry_.assign<Seeks>(bat_entity, path);
 
     }
-
+*/
     if (!pause) {
         if (panda.alive && !panda.dead) {
             update_camera(blackboard);

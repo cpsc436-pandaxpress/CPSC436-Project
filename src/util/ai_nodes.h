@@ -6,11 +6,16 @@
 #define PANDAEXPRESS_AI_NODES_H
 
 #include "systems/system.h"
+#include "systems/a_star_system.h"
 #include "util/selector_node.h"
+#include "util/coordinates.h"
+#include "util/location.h"
 #include "components/dracula.h"
 #include "components/boss.h"
 #include "components/chases.h"
+#include "components/seeks.h"
 #include "components/evades.h"
+#include "components/timer.h"
 #include "components/panda.h"
 #include "components/food.h"
 #include "components/transform.h"
@@ -119,6 +124,51 @@ public:
                     if(pa_transform.x > drac_transform.x && pa_transform.x < drac_transform.x+100 && pa_transform.y > drac_transform.y){
                         drac_chases.stomping=true;
                     }
+                }
+
+            }
+
+            return false;
+        }
+    };
+
+    class ShootBat: public Node{
+    private:
+        Blackboard& blackboard;
+        entt::DefaultRegistry& registry;
+        AStarSystem& a_star_system;
+    public:
+        ShootBat(Blackboard& blackboard, entt::DefaultRegistry& registry, AStarSystem& a_star_system) :
+                blackboard(blackboard),
+                registry(registry),
+                a_star_system(a_star_system){}
+        virtual bool run() override {
+            auto drac_view = registry.view<Boss, Transform>();
+            for (auto drac_entity: drac_view) {
+                auto &drac_transform = drac_view.get<Transform>(drac_entity);
+
+                auto panda_view = registry.view<Panda, Transform>();
+                for(auto panda_entity:panda_view){
+                    auto &pa_transform = panda_view.get<Transform>(panda_entity);
+
+                    std::vector<Coordinates*> path = a_star_system.getProjectilePath(blackboard, registry);
+                    uint32_t bat_entity = registry.create();
+
+                    auto texture = blackboard.texture_manager.get_texture("bat");
+                    auto shader = blackboard.shader_manager.get_shader("sprite");
+                    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+
+                    float scaleY = 50.0 / texture.height();
+                    float scaleX = 50.0 / texture.width();
+                    registry.assign<Transform>(bat_entity, path[0]->x, path[0]->y, 0., scaleX, scaleY);
+                    registry.assign<Sprite>(bat_entity, texture, shader, mesh);
+                    registry.assign<Velocity>(bat_entity);
+                    registry.assign<Timer>(bat_entity);
+                    registry.assign<Collidable>(bat_entity, texture.width() * scaleX,
+                                                 texture.height() * scaleY);
+                    registry.assign<Seeks>(bat_entity, path);
+
+
                 }
 
             }

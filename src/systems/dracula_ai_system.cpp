@@ -11,7 +11,10 @@ using namespace std;
  */
 
 
-DraculaAISystem::DraculaAISystem(Blackboard& blackboard, entt::DefaultRegistry& registry) {
+DraculaAISystem::DraculaAISystem(Blackboard& blackboard, entt::DefaultRegistry& registry):
+        a_star_system(blackboard, registry)
+{
+
     // Declare nodes
     root = SelectorNode();
     SelectorNode* firstSelector = new SelectorNode;
@@ -20,6 +23,7 @@ DraculaAISystem::DraculaAISystem(Blackboard& blackboard, entt::DefaultRegistry& 
     AINodes::ChasePanda* chasePanda = new AINodes::ChasePanda(blackboard, registry);
     AINodes::ChaseFood* chaseFood = new AINodes::ChaseFood(blackboard, registry);
     AINodes::StompPanda* stompPanda = new AINodes::StompPanda(blackboard, registry);
+    AINodes::ShootBat* shootBat = new AINodes::ShootBat(blackboard,registry, a_star_system);
 
 
 
@@ -27,6 +31,7 @@ DraculaAISystem::DraculaAISystem(Blackboard& blackboard, entt::DefaultRegistry& 
     root.addChild(firstSelector);
 
     firstSelector->addChild(checkPandaDeath);
+    firstSelector->addChild(shootBat);
     firstSelector->addChild(checkHealth);
     firstSelector->addChild(chasePanda);
     firstSelector->addChild(stompPanda);
