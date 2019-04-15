@@ -26,7 +26,7 @@ void PandaDamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
         if (panda.recovering && interactable.grounded) {
             panda.recovering = false;
         }
-        if (panda.hurt && !panda.invincible && panda.alive || health.health_points == 0) {
+        if ((panda.hurt && !panda.invincible && panda.alive) || health.health_points == 0) {
             // Do all damage calcs here
             health.health_points--;
             blackboard.soundManager.playSFX(SFX_PANDA_HURT);
