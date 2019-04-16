@@ -7,7 +7,7 @@
 #include <components/timer.h>
 #include <algorithm>
 
-VerticalLevelSystem::VerticalLevelSystem() : LevelSystem() {
+VerticalLevelSystem::VerticalLevelSystem() : LevelSystem(), mode_(ENDLESS) {
     for (int i = 0; i <= MAX_DIFFICULTY; i++) {
         levels[i] = Level::load_level(i, VERTICAL_LEVEL_TYPE);
     }
