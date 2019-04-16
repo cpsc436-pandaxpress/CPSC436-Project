@@ -13,12 +13,18 @@ void PowerupSystem::update(Blackboard &blackboard, entt::DefaultRegistry &regist
         auto& panda = panda_view.get<Panda>(entity);
         auto& timer = panda_view.get<Timer>(entity);
 
-        if (panda.gotShield) {
-            panda.invincible = true;
+        while (!panda.powerups.empty()) {
+            PowerupType type = panda.powerups.front();
+            switch (type) {
+                case SHIELD_POWERUP:
+                    panda.invincible = true;
+                    timer.save_watch(SHIELD_TIMER_LABEL, SHIELD_TIMER_LENGTH);
+                    break;
+                default:
+                    break;
+            }
 
-            timer.save_watch(SHIELD_TIMER_LABEL, SHIELD_TIMER_LENGTH);
-
-            panda.gotShield = false;
+            panda.powerups.pop();
         }
 
         if (timer.exists(SHIELD_TIMER_LABEL) && timer.is_done(SHIELD_TIMER_LABEL)) {

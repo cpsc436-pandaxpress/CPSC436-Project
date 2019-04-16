@@ -17,7 +17,7 @@
 #include <components/label.h>
 #include "components/platform.h"
 #include <graphics/cave_entrance.h>
-#include <components/shield.h>
+#include <components/powerup.h>
 
 
 #include "util/entity_pairs.h"
@@ -347,10 +347,11 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         }
                     }
 
-                    if (registry.has<Shield>(entry.entity) && registry.has<Panda>(d_entity)) {
+                    if (registry.has<Powerup>(entry.entity) && registry.has<Panda>(d_entity)) {
                         auto &panda = registry.get<Panda>(d_entity);
+                        auto &powerup = registry.get<Powerup>(entry.entity);
                         if (panda.alive) {
-                            panda.gotShield = true;
+                            panda.powerups.push(powerup.powerup_type);
                         }
                         registry.destroy(entry.entity);
                         continue;

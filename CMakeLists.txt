@@ -149,7 +149,7 @@ set(SOURCE_FILES
         src/systems/render_system.h
         src/scene/game_scene.cpp
         src/scene/game_scene.h
-        src/components/shield.h
+        src/components/powerup.h
         src/systems/powerup_system.cpp
         src/systems/powerup_system.h
         src/scene/story_intro.cpp

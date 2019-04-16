@@ -5,6 +5,9 @@
 #ifndef PANDAEXPRESS_PHYSICS_H
 #define PANDAEXPRESS_PHYSICS_H
 
+#include "powerup.h"
+#include <queue>
+
 /***
  * The entity assigned the Panda component is able to be controlled by the player_movement_system
  *
@@ -15,9 +18,8 @@ struct Panda {
     bool hurt, invincible, recovering, facingRight;
     bool dead, dying;
 
-    // Indicates that the panda picked up a shield this update
-    // Maybe change this into a set of a Powerup enum to handle multiple powerups
-    bool gotShield;
+    // Indicates which powerups the panda picked up this update loop
+    std::queue<PowerupType> powerups;
 
     Panda() :
         alive(true),

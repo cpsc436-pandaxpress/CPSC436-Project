@@ -5,7 +5,7 @@
 #include <components/timer.h>
 #include <components/layer.h>
 #include <components/food.h>
-#include <components/shield.h>
+#include <components/powerup.h>
 #include "level_system.h"
 
 LevelSystem::LevelSystem() : rng_(Random(4)),
@@ -286,7 +286,7 @@ void LevelSystem::generate_shield(float x, float y, Blackboard &blackboard, entt
     const float scale = 0.8f;
     const float y_offset = 10.f;
 
-    registry.assign<Shield>(shield);
+    registry.assign<Powerup>(shield, SHIELD_POWERUP);
     registry.assign<Sprite>(shield, texture, shader, mesh);
     registry.assign<Transform>(shield, x, y + y_offset, 0, scale, scale);
     registry.assign<Interactable>(shield);
