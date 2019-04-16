@@ -24,7 +24,8 @@ VerticalScene::VerticalScene(Blackboard &blackboard, SceneManager &scene_manager
         transition_system(SKY_TYPE),
         hud_transform_system(),
         label_system(),
-        render_system()
+        render_system(),
+        powerup_system()
 {
     high_score_ = 0;
     init_scene(blackboard);
@@ -99,6 +100,7 @@ void VerticalScene::update(Blackboard &blackboard) {
         timer_system.update(blackboard, registry_);
         falling_platform_system.update(blackboard, registry_);
         transition_system.update(blackboard, registry_);
+        powerup_system.update(blackboard, registry_);
         hud_transform_system.update(blackboard, registry_); // should run last
         high_score_ = std::max<int>(high_score_, (int)blackboard.score);
     } else {

@@ -164,6 +164,7 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("bg_grave_mid.png"), "grave_middle");
 
     blackboard.texture_manager.load_texture(textures_path("vial.png"), "vial");
+    blackboard.texture_manager.load_texture(textures_path("shield.png"), "shield");
 
     blackboard.mesh_manager.load_mesh("health", 4, HealthBar::vertices, 6, HealthBar::indices);
     blackboard.mesh_manager.load_mesh("cave", 41, Cave::vertices, 168, Cave::indices);

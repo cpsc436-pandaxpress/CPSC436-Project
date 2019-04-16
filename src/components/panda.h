@@ -15,6 +15,10 @@ struct Panda {
     bool hurt, invincible, recovering, facingRight;
     bool dead, dying;
 
+    // Indicates that the panda picked up a shield this update
+    // Maybe change this into a set of a Powerup enum to handle multiple powerups
+    bool gotShield;
+
     Panda() :
         alive(true),
         hurt(false),

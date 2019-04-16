@@ -151,6 +151,9 @@ set(SOURCE_FILES
         src/scene/game_scene.h
         src/graphics/framebuffer.h
         src/graphics/framebuffer.cpp
+        src/components/shield.h
+        src/systems/powerup_system.cpp
+        src/systems/powerup_system.h
         )
 
 
