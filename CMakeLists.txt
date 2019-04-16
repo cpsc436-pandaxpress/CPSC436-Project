@@ -151,7 +151,13 @@ set(SOURCE_FILES
         src/scene/game_scene.h
         src/components/shield.h
         src/systems/powerup_system.cpp
-        src/systems/powerup_system.h)
+        src/systems/powerup_system.h
+        src/scene/story_intro.cpp
+        src/scene/story_intro.h
+        src/systems/story_animation_system.cpp
+        src/systems/story_animation_system.h
+        src/components/kelly.h
+        src/components/hearts.h)
 
 
 # Create executable target
