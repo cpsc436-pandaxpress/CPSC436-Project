@@ -124,7 +124,6 @@ void DraculaBossScene::update_panda(Blackboard &blackboard) {
 void DraculaBossScene::update_camera(Blackboard &blackboard) {
     auto &panda_transform = registry_.get<Transform>(panda_entity);
     float y_offset = std::min(900.f, panda_transform.y + MAX_CAMERA_Y_DIFF);
-    //float y_offset =panda_transform.y + MAX_CAMERA_Y_DIFF;
     blackboard.camera.set_position(panda_transform.x, y_offset);
     blackboard.camera.compose();
 }

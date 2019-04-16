@@ -7,7 +7,9 @@
 
 enum SceneMode {
     STORY,
-    ENDLESS
+    ENDLESS,
+    DRACULA,
+    JACKO
 };
 
 #endif //PANDAEXPRESS_SCENE_MODE_H

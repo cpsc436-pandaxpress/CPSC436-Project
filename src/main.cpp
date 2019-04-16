@@ -173,8 +173,8 @@ int start() {
     scene_manager.add_scene(STORY_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY);
     scene_manager.add_scene(ENDLESS_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), ENDLESS);
     scene_manager.add_scene(ENDLESS_SKY_SCENE_ID, (Scene*)(&vertical_scene), ENDLESS);
-    scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene));
-    scene_manager.add_scene(DRACULA_BOSS_SCENE_ID, (Scene*)(&dracula_boss_scene));
+    scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene), JACKO);
+    scene_manager.add_scene(DRACULA_BOSS_SCENE_ID, (Scene*)(&dracula_boss_scene), DRACULA);
     scene_manager.add_scene(STORY_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY);
 
     // set the first scene
