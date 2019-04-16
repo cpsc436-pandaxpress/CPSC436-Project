@@ -46,7 +46,7 @@ void AStarSystem::createGrid(Blackboard &blackboard, entt::DefaultRegistry &regi
 
     }
     cols = dataList[0].size();
-    rows =9;
+    rows =18;
 
     for(int i = 0; i<rows; i++){
         std::vector<location*> row;

@@ -22,7 +22,6 @@ DraculaBossScene::DraculaBossScene(Blackboard &blackboard, SceneManager &scene_m
         health_bar_transform_system(),
         fade_overlay_system(),
         pause_menu_transform_system(),
-        //a_star_system(blackboard, registry_),
         seek_system(),
         hud_transform_system()
 {
@@ -124,8 +123,8 @@ void DraculaBossScene::update_panda(Blackboard &blackboard) {
 
 void DraculaBossScene::update_camera(Blackboard &blackboard) {
     auto &panda_transform = registry_.get<Transform>(panda_entity);
-    float y_offset = std::min(0.f, panda_transform.y + MAX_CAMERA_Y_DIFF);
-
+    float y_offset = std::min(900.f, panda_transform.y + MAX_CAMERA_Y_DIFF);
+    //float y_offset =panda_transform.y + MAX_CAMERA_Y_DIFF;
     blackboard.camera.set_position(panda_transform.x, y_offset);
     blackboard.camera.compose();
 }

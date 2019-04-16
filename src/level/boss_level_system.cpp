@@ -15,7 +15,8 @@ BossLevelSystem::BossLevelSystem() : LevelSystem() {
 
 void BossLevelSystem::init() {
     LevelSystem::init();
-    level_ = Level::load_from_path("jacko_level.csv");
+    //level_ = Level::load_from_path("jacko_level.csv");
+    level_ = Level::load_from_path("dracula_level.csv");
     generated_ = false;
 }
 
