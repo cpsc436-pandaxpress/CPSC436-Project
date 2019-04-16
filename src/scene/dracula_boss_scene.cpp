@@ -168,6 +168,7 @@ void DraculaBossScene::create_dracula(Blackboard &blackboard, uint32_t target) {
     registry_.assign<Transform>(dracula_entity, -300, -300, 0., scaleX, scaleY);
     registry_.assign<Sprite>(dracula_entity, texture, shader, mesh);
     registry_.assign<Dracula>(dracula_entity);
+    registry_.assign<Timer>(dracula_entity);
     registry_.assign<Boss>(dracula_entity);
     registry_.assign<Chases>(dracula_entity, target);
     registry_.assign<Health>(dracula_entity, 4);
