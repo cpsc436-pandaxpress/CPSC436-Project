@@ -25,7 +25,7 @@ void FadeOverlaySystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
     for (auto entity: viewFade) {
         auto &fadeOverlay = viewFade.get<FadeOverlay>(entity);
         auto &timer = viewFade.get<Timer>(entity);
-        float curr_time = timer.get_curr_time(StoryIntroScene::BEACH_SCENE_END_LABEL);
+        float curr_time = timer.get_curr_time();
         if ((int) curr_time == 0){
             fadeOverlay.set_fadeIn(true);
         }
