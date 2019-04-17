@@ -20,6 +20,7 @@
 #include <systems/hud_transform_system.h>
 #include <systems/label_system.h>
 #include <systems/render_system.h>
+#include <systems/powerup_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_transform_system.h"
@@ -59,6 +60,7 @@ private:
     HudTransformSystem hud_transform_system;
     LabelSystem label_system;
     RenderSystem render_system;
+    PowerupSystem powerup_system;
 
     void create_background(Blackboard &blackboard);
     void init_scene(Blackboard &blackboard);
