@@ -2,10 +2,10 @@
 // Created by Kenneth William on 2019-03-28.
 //
 
-#include "location.h"
+#include "Location.h"
 
 
-void location::addNeighbours(std::vector<std::vector<location*>> grid){
+void Location::addNeighbours(std::vector<std::vector<Location*>> grid){
     if(i>0)
         neighbours.push_back(grid[i-1][j]);
     if(i<rows-1)

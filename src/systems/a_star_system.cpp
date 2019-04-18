@@ -7,15 +7,15 @@
 
 int cols=0;
 int rows=0;
-std::vector<std::vector<location*>> grid;
+std::vector<std::vector<Location*>> grid;
 
 
 
-float manhattanDistance(location *a, location *b){
+float manhattanDistance(Location *a, Location *b){
     return abs(a->i - b->i)+abs(a->j - b->j);
 }
 
-bool contains(std::vector<location*> list, location* location){
+bool contains(std::vector<Location*> list, Location* location){
     for(int i = 0; i<list.size(); i++){
         if(list[i]==location){
             return true;
@@ -49,9 +49,9 @@ void AStarSystem::createGrid(Blackboard &blackboard, entt::DefaultRegistry &regi
     rows =18;
 
     for(int i = 0; i<rows; i++){
-        std::vector<location*> row;
+        std::vector<Location*> row;
         for(int j=0; j<cols; j++){
-            row.push_back(new location(i,j));
+            row.push_back(new Location(i,j));
             if(dataList[i][j]=='1' || dataList[i][j]=='b'){
                 row[row.size()-1]->platform=true;
             }
@@ -69,7 +69,7 @@ void AStarSystem::createGrid(Blackboard &blackboard, entt::DefaultRegistry &regi
 
 }
 
-location* AStarSystem::getGridLocation(float x, float y){
+Location* AStarSystem::getGridLocation(float x, float y){
     int i = (x+800-X_OFFSET)/100;
     int j = (y+450-Y_OFFSET)/100;
 
@@ -85,9 +85,9 @@ Coordinates* AStarSystem::getScreenLocation(int j, int i){
 }
 
 std::vector<Coordinates*> AStarSystem::getProjectilePath(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    location* start;
-    location* end;
-    std::vector<location*> path;
+    Location* start;
+    Location* end;
+    std::vector<Location*> path;
     std::vector<Coordinates*> coordinatePath;
 
     auto dracula = registry.view<Dracula, Transform>();
@@ -121,10 +121,10 @@ std::vector<Coordinates*> AStarSystem::getProjectilePath(Blackboard &blackboard,
  * A* Pathfinding algorithm adapted from https://www.youtube.com/watch?v=aKYlikFAV4k
  * and Wikipedia pseudocode https://en.wikipedia.org/wiki/A*_search_algorithm
  */
-std::vector<location*> AStarSystem::findPath(location* start, location* end){
-    std::vector<location*> openSet;
-    std::vector<location*> closedSet;
-    std::vector<location*> path;
+std::vector<Location*> AStarSystem::findPath(Location* start, Location* end){
+    std::vector<Location*> openSet;
+    std::vector<Location*> closedSet;
+    std::vector<Location*> path;
     openSet.push_back(start);
 
     while(!openSet.empty()){
@@ -134,9 +134,9 @@ std::vector<location*> AStarSystem::findPath(location* start, location* end){
                 best = i;
             }
         }
-        location* current = openSet[best];
+        Location* current = openSet[best];
         if(current == end){
-            location* temp = current;
+            Location* temp = current;
             while(temp != NULL){
                 path.insert(path.begin(), temp);
                 temp=temp->previous;
@@ -157,9 +157,9 @@ std::vector<location*> AStarSystem::findPath(location* start, location* end){
         openSet.erase(openSet.begin()+best);
         closedSet.push_back(current);
 
-        std::vector<location*> neighbours = current->neighbours;
+        std::vector<Location*> neighbours = current->neighbours;
         for(int i=0; i<neighbours.size(); i++){
-            location* neighbour = neighbours[i];
+            Location* neighbour = neighbours[i];
             if(!contains(closedSet, neighbour) && !neighbour->platform){
                 float tempG = current->g_score +1.f;
 

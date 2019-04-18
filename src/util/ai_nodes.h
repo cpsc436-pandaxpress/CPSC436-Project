@@ -9,7 +9,7 @@
 #include "systems/a_star_system.h"
 #include "util/selector_node.h"
 #include "util/coordinates.h"
-#include "util/location.h"
+#include "util/Location.h"
 #include "components/dracula.h"
 #include "components/boss.h"
 #include "components/chases.h"
@@ -214,6 +214,74 @@ public:
 
             return false;
         }
+    };
+
+
+    class TeleportAttack: public Node{
+    private:
+        Blackboard& blackboard;
+        entt::DefaultRegistry& registry;
+        AStarSystem& a_star_system;
+        bool pathSet = false;
+        std::vector<Coordinates *> path;
+    public:
+        TeleportAttack(Blackboard& blackboard, entt::DefaultRegistry& registry, AStarSystem& a_star_system):
+                blackboard(blackboard),
+                registry(registry),
+                a_star_system(a_star_system){}
+            virtual bool run() override {
+                    auto drac_view = registry.view<Boss, Transform, Chases, Velocity, Timer>();
+                    for (auto drac_entity: drac_view) {
+                        auto &drac_transform = drac_view.get<Transform>(drac_entity);
+                        auto &drac_velocity = drac_view.get<Velocity>(drac_entity);
+                        auto &drac_chases = drac_view.get<Chases>(drac_entity);
+                        auto &timer = drac_view.get<Timer>(drac_entity);
+
+                        if(timer.watch_exists("teleport")) {
+                            if (timer.is_done("teleport")) {
+                                if(timer.watch_exists("teleportDelay")) {
+                                    drac_chases.chase_speed=0.f;
+                                    drac_velocity.x_velocity=0.f;
+                                    drac_velocity.y_velocity=0.f;
+
+                                    if (timer.is_done("teleportDelay")) {
+                                        auto panda_view = registry.view<Panda, Transform>();
+                                        for(auto panda_entity: panda_view) {
+                                            auto panda_transform = panda_view.get<Transform>(panda_entity);
+
+                                            Location *panda_location = a_star_system.getGridLocation(panda_transform.x, panda_transform.y);
+                                            Location *teleport_location = new Location(panda_location->i, panda_location->j+2);
+
+
+                                            Coordinates *teleport_coords = a_star_system.getScreenLocation(teleport_location->i,
+                                                                                                           teleport_location->j);
+                                            drac_transform.x = teleport_coords->x;
+                                            drac_transform.y = teleport_coords->y;
+                                            drac_chases.chase_speed=120.f;
+                                            timer.remove("teleportDelay");
+                                            timer.save_watch("teleport", 1.f);
+                                            return true;
+                                        }
+
+                                    }else{
+                                        return false;
+                                    }
+                                }else{
+                                    timer.save_watch("teleportDelay", 0.5f);
+                                    return true;
+                                }
+
+                            }
+
+                        }else {
+                            timer.save_watch("teleport", 1.f);
+                            return false;
+                        }
+
+                    }
+                return false;
+        }
+
     };
 
 /***

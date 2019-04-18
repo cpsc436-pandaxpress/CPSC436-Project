@@ -24,7 +24,7 @@ else()
 endif()
 
 # Add source files as we code (QWERTY)
-# Generate the shader folder location to the header
+# Generate the shader folder Location to the header
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp")
 
 
@@ -85,8 +85,8 @@ set(SOURCE_FILES
         src/util/node.h
         src/util/coordinates.cpp
         src/util/coordinates.h
-        src/util/location.cpp
-        src/util/location.h
+        src/util/Location.cpp
+        src/util/Location.h
         src/components/falling_platform.h
         src/util/selector_node.h
         src/util/selector_node.cpp

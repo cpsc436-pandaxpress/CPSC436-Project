@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <vector>
 
-class location {
+class Location {
 
 public:
     int i =0;
@@ -16,16 +16,16 @@ public:
     float f_score = 0.;
     float g_score = 0.;
     float h_score = 0.;
-    location* previous = NULL;
+    Location* previous = NULL;
     bool platform = false;
-    std::vector<location*> neighbours;
-    location(){};
-    location(int i, int j){
+    std::vector<Location*> neighbours;
+    Location(){};
+    Location(int i, int j){
         this->i = i;
         this->j = j;
     }
 
-    void addNeighbours(std::vector<std::vector<location*>> grid);
+    void addNeighbours(std::vector<std::vector<Location*>> grid);
 
 private:
     // Hardcoded size of boss room.  Can change this if we decide to use it somewhere else;

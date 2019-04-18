@@ -24,14 +24,15 @@ DraculaAISystem::DraculaAISystem(Blackboard& blackboard, entt::DefaultRegistry& 
     AINodes::ChaseFood* chaseFood = new AINodes::ChaseFood(blackboard, registry);
     AINodes::StompPanda* stompPanda = new AINodes::StompPanda(blackboard, registry);
     AINodes::ShootBat* shootBat = new AINodes::ShootBat(blackboard,registry, a_star_system);
-
+    AINodes::TeleportAttack* teleportAttack = new AINodes::TeleportAttack(blackboard, registry, a_star_system);
 
 
     // Building the behaviour tree
     root.addChild(firstSelector);
 
     firstSelector->addChild(checkPandaDeath);
-    firstSelector->addChild(shootBat);
+    //firstSelector->addChild(shootBat);
+    firstSelector->addChild(teleportAttack);
     firstSelector->addChild(checkHealth);
     firstSelector->addChild(chasePanda);
     firstSelector->addChild(stompPanda);

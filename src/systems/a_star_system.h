@@ -13,7 +13,7 @@
 #include "util/csv_reader.h"
 #include "util/constants.h"
 #include <iostream>
-#include "util/location.h"
+#include "util/Location.h"
 #include "util/coordinates.h"
 
 class AStarSystem: public System{
@@ -22,9 +22,9 @@ public:
     void destroyGrid();
     virtual void update(Blackboard &blackboard, entt::DefaultRegistry &registry);
     void createGrid(Blackboard &blackboard, entt::DefaultRegistry &registry);
-    std::vector<location*> findPath(location* start, location* end);
+    std::vector<Location*> findPath(Location* start, Location* end);
     std::vector<Coordinates*> getProjectilePath(Blackboard &blackboard, entt::DefaultRegistry &registry);
-    location* getGridLocation(float x, float y);
+    Location* getGridLocation(float x, float y);
     Coordinates* getScreenLocation(int i, int j);
 
 private:
