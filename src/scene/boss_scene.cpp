@@ -110,7 +110,7 @@ void BossScene::init_scene(Blackboard &blackboard) {
     create_panda(blackboard);
     create_jacko(blackboard, panda_entity);
     create_fade_overlay(blackboard);
-    level_system.init();
+    level_system.init(registry_);
 }
 
 void BossScene::reset_scene(Blackboard &blackboard) {

@@ -10,11 +10,10 @@
 
 LevelSystem::LevelSystem() : rng_(Random(4)),
                              chunks_() {
-    init();
 }
 
-void LevelSystem::init() {
-    rng_.init(STORY_SEED);
+void LevelSystem::init(entt::DefaultRegistry &registry) {
+    destroy_entities(registry);
 }
 
 void LevelSystem::generateEntity(char value, float x, float y,
@@ -50,7 +49,7 @@ void LevelSystem::generateEntity(char value, float x, float y,
         }
             break;
         case 'a': {
-            if (mode == STORY)
+            if (mode == STORY_EASY || mode == STORY_HARD)
                 generate_cave(x, y, blackboard, registry);
         }
             break;

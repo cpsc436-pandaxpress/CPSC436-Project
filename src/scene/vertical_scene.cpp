@@ -44,7 +44,7 @@ void VerticalScene::init_scene(Blackboard &blackboard) {
         create_high_score_text(blackboard, high_score_);
     }
     create_fade_overlay(blackboard);
-    level_system.init();
+    level_system.init(mode_, registry_);
 }
 
 void VerticalScene::update(Blackboard &blackboard) {
@@ -180,7 +180,7 @@ void VerticalScene::create_background(Blackboard &blackboard) {
 
 void VerticalScene::set_mode(SceneMode mode) {
     Scene::set_mode(mode);
-    level_system.set_mode(mode);
+    level_system.init(mode, registry_);
 }
 
 void VerticalScene::set_high_score(int value) {

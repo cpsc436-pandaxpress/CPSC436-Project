@@ -163,7 +163,7 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
         create_high_score_text(blackboard, high_score_);
     }
     create_fade_overlay(blackboard);
-    level_system.init();
+    level_system.init(mode_, registry_);
 }
 
 void HorizontalScene::create_background(Blackboard &blackboard) {
@@ -194,7 +194,7 @@ void HorizontalScene::create_background(Blackboard &blackboard) {
 
 void HorizontalScene::set_mode(SceneMode mode) {
     Scene::set_mode(mode);
-    level_system.set_mode(mode);
+    level_system.init(mode, registry_);
 }
 
 void HorizontalScene::set_high_score(int value) {

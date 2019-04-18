@@ -18,11 +18,17 @@ private:
     void destroy_off_screen(entt::DefaultRegistry &registry, float x);
 
     const float FIRST_COL_X = -200;
-    const int MIN_DIFFICULTY = 2;
-    const int MAX_DIFFICULTY = 9;
-    const int DIFFICULTY_RANGE = 4;
-    const float LEVEL_UP_INTERVAL = 10;
+    const int MIN_DIFFICULTY_EASY = 5;
+    const int MAX_DIFFICULTY_EASY = 9;
+    const int MIN_DIFFICULTY_HARD = 18;
+    const int MAX_DIFFICULTY_HARD = 20;
+    const int DIFFICULTY_RANGE = 7;
+    const float LEVEL_UP_INTERVAL = 5;
     const std::string LEVEL_UP_LABEL = "level_up";
+
+    int min_difficulty;
+    int max_difficulty;
+
 
     float last_col_generated_, last_col_loaded_;
     int difficulty;
@@ -36,13 +42,13 @@ public:
 
     HorizontalLevelSystem();
 
-    void init() override;
+    void init(SceneMode mode, entt::DefaultRegistry &registry);
 
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override;
 
     void destroy_entities(entt::DefaultRegistry &registry) override;
 
-    void set_mode(SceneMode mode);
+    // void set_mode(SceneMode mode);
 };
 
 #endif //PANDAEXPRESS_HORIZONTAL_LEVEL_SYSTEM_H
