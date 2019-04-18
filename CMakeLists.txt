@@ -157,7 +157,10 @@ set(SOURCE_FILES
         src/systems/story_animation_system.cpp
         src/systems/story_animation_system.h
         src/components/kelly.h
-        src/components/hearts.h)
+        src/components/hearts.h
+        src/graphics/framebuffer.h
+        src/graphics/framebuffer.cpp
+        )
 
 
 # Create executable target

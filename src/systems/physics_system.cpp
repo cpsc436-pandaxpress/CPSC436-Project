@@ -279,7 +279,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         auto& transform = registry.get<Transform>(d_entity);
                         auto& health = registry.get<Health>(entry.entity);
                         if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)
-                        && !panda.invincible){
+                        && !panda.recovering){
                             //do damage
                             health.health_points -= cd.hp;
 

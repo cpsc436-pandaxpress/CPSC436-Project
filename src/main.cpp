@@ -30,9 +30,7 @@
 
 
 int start() {
-    auto window = Window();
-
-    window.initialize("Express Panda");
+    Window window("Express Panda");
 
     Blackboard blackboard = {
         Camera(1600, 900, 0, 0),
@@ -45,6 +43,7 @@ int start() {
         Random(0),
         SoundManager(),
         FontManager(),
+        std::unique_ptr<Shader>(),
         0
     };
 
@@ -89,7 +88,7 @@ int start() {
     blackboard.shader_manager.load_shader(
             shaders_path("caveEntrance.vs.glsl"),
             shaders_path("caveEntrance.fs.glsl"),"caveEntrance");
-  
+
      blackboard.shader_manager.load_shader(
             shaders_path("text.vs.glsl"),
             shaders_path("text.fs.glsl"), "text");
@@ -97,6 +96,37 @@ int start() {
     blackboard.shader_manager.load_shader(
             shaders_path("fade.vs.glsl"),
             shaders_path("fade.fs.glsl"),"fade");
+
+    // example post-process shader
+    blackboard.shader_manager.load_shader(
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("recolor.fs.glsl"),
+            "recolor");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("grayscale.fs.glsl"),
+            "gray");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("wave.fs.glsl"),
+            "wave");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("edge.fs.glsl"),
+            "edge");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("shake.vs.glsl"),
+            shaders_path("blur.fs.glsl"),
+            "shake");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("blur.fs.glsl"),
+            "blur");
 
     blackboard.texture_manager.load_texture(textures_path("panda.png"), "panda");
     blackboard.texture_manager.load_texture(textures_path("panda_sprite_sheet.png"), "panda_sprites");
@@ -193,7 +223,7 @@ int start() {
 
     scene_manager.change_scene(MAIN_MENU_SCENE_ID);
 
-
+    blackboard.post_process_shader = std::make_unique<Shader>(blackboard.shader_manager.get_shader("sprite"));
 
     bool quit = false;
     while (!quit) {
@@ -206,7 +236,10 @@ int start() {
         window.clear();
         scene_manager.render(blackboard);
 
-        window.display();
+        window.display(
+            *blackboard.post_process_shader,
+            blackboard.mesh_manager.get_mesh("sprite")
+        );
 
         quit = blackboard.input_manager.should_exit();
     }

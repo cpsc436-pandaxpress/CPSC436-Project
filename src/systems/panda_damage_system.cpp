@@ -14,7 +14,7 @@ PandaDamageSystem::PandaDamageSystem() {
 }
 
 void PandaDamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    auto view = registry.view<Panda, Health, Timer, Velocity, Interactable>();
+    auto view = registry.view<Panda, Health, Timer, Velocity, Interactable, Sprite>();
 
     for (auto entity: view) {
         //get the sprite
@@ -23,8 +23,10 @@ void PandaDamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
         auto &health = view.get<Health>(entity);
         auto &velocity = view.get<Velocity>(entity);
         auto &interactable = view.get<Interactable>(entity);
+        auto &sprite = view.get<Sprite>(entity);
         if (panda.recovering && interactable.grounded) {
             panda.recovering = false;
+            sprite.set_color(1.f, 1.f, 1.f);
         }
         if ((panda.hurt && !panda.invincible && panda.alive) || health.health_points == 0) {
             // Do all damage calcs here
@@ -45,6 +47,7 @@ void PandaDamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
             // Make invincibleh
             panda.invincible = true;
             timer.save_watch(DMG_TIMER_LABEL, DMG_INVINCIBLE_TIMER);
+            sprite.set_color(254 / 256.f, 202 / 256.f, 87 / 256.f); // yellow
         }
         // Reset Panda Invincibility timer
         if (timer.exists(DMG_TIMER_LABEL) && timer.is_done(DMG_TIMER_LABEL)) {

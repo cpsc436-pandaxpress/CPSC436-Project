@@ -77,8 +77,7 @@ void BossScene::update(Blackboard &blackboard) {
 }
 
 void BossScene::render(Blackboard &blackboard) {
-    glClearColor(30.f / 256.f, 55.f / 256.f, 153.f / 256.f, 1); // same colour as the top of the background
-    glClear(GL_COLOR_BUFFER_BIT);
+    blackboard.window.colorScreen(vec3{30.f, 55.f, 153.f});
     render_system.update(blackboard, registry_);
 }
 

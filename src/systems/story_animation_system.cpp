@@ -21,7 +21,7 @@ void StoryAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
     auto fade_view = registry.view<FadeOverlay, Timer>();
     for (auto fade_entity: fade_view) {
         auto &timer = fade_view.get<Timer>(fade_entity);
-        float curr_time = timer.get_curr_time(StoryIntroScene::BEACH_SCENE_END_LABEL);
+        float curr_time = timer.get_curr_time();
 
         if (curr_time == 0.f) {
             resetScene();

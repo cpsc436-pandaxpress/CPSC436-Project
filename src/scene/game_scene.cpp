@@ -18,7 +18,7 @@ void GameScene::create_panda(Blackboard &blackboard) {
     float scaleY = 75.0f / texture.height();
     float scaleX = 75.0f / texture.width();
     vec2 size = {HEALTH_BAR_X_SIZE, HEALTH_BAR_Y_SIZE};
-    vec2 scale = {0.5, 0.5};
+    vec2 scale = {0.6, 0.6};
 
     panda_entity = registry_.create();
     registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scaleX, scaleY);

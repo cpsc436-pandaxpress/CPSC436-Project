@@ -1,6 +1,6 @@
 #version 330
 // Input attributes
-in vec3 in_position;
+in highp vec3 in_position;
 
 // Passed to fragment shader
 out float pos_x;
