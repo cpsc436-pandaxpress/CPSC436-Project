@@ -9,7 +9,7 @@
 #include <scene/scene_mode.h>
 #include "horizontal_level_system.h"
 
-HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem() {
+HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem(), mode_(ENDLESS) {
     for (int i = 0; i <= MAX_DIFFICULTY; i++) {
         levels[i] = Level::load_level(i, HORIZONTAL_LEVEL_TYPE);
     }

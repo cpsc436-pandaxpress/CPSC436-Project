@@ -136,6 +136,8 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("bg_grave_top.png"), "grave_top");
     blackboard.texture_manager.load_texture(textures_path("bg_grave_mid.png"), "grave_middle");
 
+    blackboard.texture_manager.load_texture(textures_path("shield.png"), "shield");
+  
     blackboard.texture_manager.load_texture(textures_path("story_beach_back.png"), "beach_back");
     blackboard.texture_manager.load_texture(textures_path("story_beach_front.png"), "beach_front");
     blackboard.texture_manager.load_texture(textures_path("story_beach_water_1.png"), "beach_water_1");
@@ -150,7 +152,6 @@ int start() {
 
     blackboard.texture_manager.load_texture(textures_path("story_jungle_background.png"), "story_jungle_background");
     blackboard.texture_manager.load_texture(textures_path("story_jungle_kelly.png"), "story_jungle_kelly");
-
 
     blackboard.mesh_manager.load_mesh("health", 4, HealthBar::vertices, 6, HealthBar::indices);
     blackboard.mesh_manager.load_mesh("cave", 41, Cave::vertices, 168, Cave::indices);
