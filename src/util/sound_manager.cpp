@@ -43,7 +43,7 @@ void SoundManager::init() {
     m_background_music[STORY_HARD_JUNGLE_SCENE_ID] = m_background_music[MAIN_MENU_SCENE_ID];
     m_background_music[STORY_EASY_SKY_SCENE_ID] = Mix_LoadMUS(audio_path("vertical2.ogg"));
     m_background_music[ENDLESS_SKY_SCENE_ID] = m_background_music[STORY_EASY_SKY_SCENE_ID];
-    m_background_music[STORY_HARD_JUNGLE_SCENE_ID] = m_background_music[STORY_HARD_JUNGLE_SCENE_ID];
+    m_background_music[STORY_EASY_SKY_SCENE_ID] = m_background_music[STORY_EASY_SKY_SCENE_ID];
     m_background_music[BOSS_SCENE_ID] = Mix_LoadMUS(audio_path("graveyard.ogg"));
 
     Mix_PlayMusic(m_background_music[MAIN_MENU_SCENE_ID], -1);
