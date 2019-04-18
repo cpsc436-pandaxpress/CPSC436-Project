@@ -7,7 +7,12 @@
 #include <components/timer.h>
 #include <algorithm>
 
-VerticalLevelSystem::VerticalLevelSystem() : LevelSystem(), mode_(ENDLESS) {
+VerticalLevelSystem::VerticalLevelSystem() :
+        LevelSystem(),
+        mode_(ENDLESS),
+        min_difficulty(MIN_DIFFICULTY_EASY),
+        max_difficulty(MAX_DIFFICULTY_HARD),
+        difficulty_range(DIFFICULTY_RANGE_ENDLESS) {
     for (int i = 0; i <= MAX_DIFFICULTY_HARD; i++) {
         levels[i] = Level::load_level(i, VERTICAL_LEVEL_TYPE);
     }
@@ -23,14 +28,17 @@ void VerticalLevelSystem::init(SceneMode mode, entt::DefaultRegistry &registry) 
         rng_.init((unsigned int) rand());
         min_difficulty = MIN_DIFFICULTY_EASY;
         max_difficulty = MAX_DIFFICULTY_HARD;
+        difficulty_range = DIFFICULTY_RANGE_ENDLESS;
     } else if (mode_ == STORY_EASY) {
         rng_.init(STORY_SEED);
         min_difficulty = MIN_DIFFICULTY_EASY;
         max_difficulty = MAX_DIFFICULTY_EASY;
+        difficulty_range = DIFFICULTY_RANGE_STORY;
     } else if (mode == STORY_HARD) {
         rng_.init(STORY_SEED);
         min_difficulty = MIN_DIFFICULTY_HARD;
         max_difficulty = MAX_DIFFICULTY_HARD;
+        difficulty_range = DIFFICULTY_RANGE_STORY;
     }
 
     last_row_generated_ = last_row_loaded_ = FIRST_ROW_Y;
@@ -40,7 +48,7 @@ void VerticalLevelSystem::init(SceneMode mode, entt::DefaultRegistry &registry) 
 }
 
 void VerticalLevelSystem::load_next_chunk() {
-    int level = rng_.nextInt(std::max(0, difficulty - DIFFICULTY_RANGE), difficulty);
+    int level = rng_.nextInt(std::max(0, difficulty - difficulty_range), difficulty);
     load_next_chunk(level);
 }
 

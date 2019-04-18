@@ -13,7 +13,8 @@ HorizontalLevelSystem::HorizontalLevelSystem() :
         LevelSystem(),
         mode_(ENDLESS),
         min_difficulty(MIN_DIFFICULTY_EASY),
-        max_difficulty(MAX_DIFFICULTY_HARD)
+        max_difficulty(MAX_DIFFICULTY_HARD),
+        difficulty_range(DIFFICULTY_RANGE_ENDLESS)
 {
     for (int i = 0; i <= MAX_DIFFICULTY_HARD; i++) {
         levels[i] = Level::load_level(i, HORIZONTAL_LEVEL_TYPE);
@@ -30,14 +31,17 @@ void HorizontalLevelSystem::init(SceneMode mode, entt::DefaultRegistry &registry
         rng_.init((unsigned int) rand());
         min_difficulty = MIN_DIFFICULTY_EASY;
         max_difficulty = MAX_DIFFICULTY_HARD;
+        difficulty_range = DIFFICULTY_RANGE_ENDLESS;
     } else if (mode_ == STORY_EASY) {
         rng_.init(STORY_SEED);
         min_difficulty = MIN_DIFFICULTY_EASY;
         max_difficulty = MAX_DIFFICULTY_EASY;
+        difficulty_range = DIFFICULTY_RANGE_STORY;
     } else if (mode == STORY_HARD) {
         rng_.init(STORY_SEED);
         min_difficulty = MIN_DIFFICULTY_HARD;
         max_difficulty = MAX_DIFFICULTY_HARD;
+        difficulty_range = DIFFICULTY_RANGE_STORY;
     }
 
     last_col_generated_ = last_col_loaded_ = FIRST_COL_X;
@@ -47,7 +51,7 @@ void HorizontalLevelSystem::init(SceneMode mode, entt::DefaultRegistry &registry
 }
 
 void HorizontalLevelSystem::load_next_chunk() {
-    int level = rng_.nextInt(std::max(1, difficulty - DIFFICULTY_RANGE), difficulty);
+    int level = rng_.nextInt(std::max(1, difficulty - difficulty_range), difficulty);
     load_next_chunk(level);
 }
 

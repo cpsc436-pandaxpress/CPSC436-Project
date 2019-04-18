@@ -22,7 +22,8 @@ private:
     const int MAX_DIFFICULTY_EASY = 9;
     const int MIN_DIFFICULTY_HARD = 14;
     const int MAX_DIFFICULTY_HARD = 21;
-    const int DIFFICULTY_RANGE = 2;
+    const int DIFFICULTY_RANGE_STORY = 2;
+    const int DIFFICULTY_RANGE_ENDLESS = 7;
     const float LEVEL_UP_INTERVAL = 5;
     const std::string LEVEL_UP_LABEL = "level_up";
 
@@ -30,6 +31,7 @@ private:
 
     int min_difficulty;
     int max_difficulty;
+    int difficulty_range;
 
 
     float last_col_generated_, last_col_loaded_;
