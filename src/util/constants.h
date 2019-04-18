@@ -36,4 +36,6 @@ static const SceneType SKY_TYPE = 1;
 static const SceneType BOSS_TYPE = 2;
 static const SceneType STORY_TYPE = 3;
 
+static const float DEFAULT_SPEED_MULTIPLIER = 1.0f;
+
 #endif //PANDAEXPRESS_CONSTANTS_H

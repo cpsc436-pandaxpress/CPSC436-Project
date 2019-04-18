@@ -44,7 +44,8 @@ int start() {
         SoundManager(),
         FontManager(),
         std::unique_ptr<Shader>(),
-        0
+        0,
+        DEFAULT_SPEED_MULTIPLIER
     };
 
 

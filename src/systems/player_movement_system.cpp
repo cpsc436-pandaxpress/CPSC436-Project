@@ -84,7 +84,7 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
 
 void PlayerMovementSystem::update_horizontal_scene(Blackboard &blackboard, Velocity &velocity) {
     const float dvx = PANDA_HS_ACCELERATION * blackboard.delta_time;
-    const float camera_vx = HorizontalScene::CAMERA_SPEED;
+    const float camera_vx = HorizontalScene::CAMERA_SPEED * blackboard.speed_multiplier;
     if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT) ||
         blackboard.input_manager.key_pressed(SDL_SCANCODE_A)) {
         // First if for quick turn around, otherwise it felt too slidey when switching movement direction

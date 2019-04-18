@@ -111,6 +111,7 @@ void BossScene::init_scene(Blackboard &blackboard) {
     create_jacko(blackboard, panda_entity);
     create_fade_overlay(blackboard);
     level_system.init();
+    blackboard.post_process_shader = std::make_unique<Shader>(blackboard.shader_manager.get_shader("sprite"));
 }
 
 void BossScene::reset_scene(Blackboard &blackboard) {
