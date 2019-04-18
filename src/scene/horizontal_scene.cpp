@@ -110,7 +110,19 @@ void HorizontalScene::update_panda(Blackboard &blackboard) {
 
     if (transform.x + panda_collidable.width < cam_position.x - cam_size.x / 2 ||
         transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || panda.dead) {
-        reset_scene(blackboard);
+        if (mode_ == ENDLESS) {
+            reset_scene(blackboard);
+        } else if (blackboard.story_lives > 1) {
+            blackboard.story_lives -= 1;
+            blackboard.story_health = MAX_HEALTH;
+            reset_scene(blackboard);
+        } else {
+            blackboard.story_lives -= 1;
+            blackboard.camera.set_position(0, 0);
+            reset_scene(blackboard);
+            change_scene(MAIN_MENU_SCENE_ID);
+            return;
+        }
     } else if (transform.x + panda_collidable.width / 2 > cam_position.x + cam_size.x / 2) {
         transform.x = cam_position.x + cam_size.x / 2 - panda_collidable.width / 2;
     }
@@ -149,6 +161,8 @@ void HorizontalScene::cleanup() {
 }
 
 void HorizontalScene::go_to_next_scene(Blackboard &blackboard) {
+    auto &health = registry_.get<Health>(panda_entity);
+    blackboard.story_health = health.health_points;
     if (mode_ == STORY_EASY) {
         cleanup();
         blackboard.camera.in_transition = false;
@@ -178,6 +192,7 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
         timer_entity = registry_.create();
         auto& timer = registry_.assign<Timer>(timer_entity);
         timer.save_watch(END_TIMER_LABEL, END_TIMER_LENGTH);
+        create_lives_text(blackboard);
     }
     create_fade_overlay(blackboard);
     level_system.init(mode_, registry_);

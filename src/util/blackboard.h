@@ -32,4 +32,6 @@ struct Blackboard {
     FontManager fontManager;
     std::unique_ptr<Shader> post_process_shader;
     float score;
+    int story_lives;
+    int story_health;
 };

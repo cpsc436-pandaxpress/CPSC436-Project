@@ -26,6 +26,7 @@
 #include "../systems/chase_system.h"
 #include "../systems/player_animation_system.h"
 #include "../systems/enemy_animation_system.h"
+#include "../systems/transition_system.h"
 #include "game_scene.h"
 
 class BossScene: public GameScene {
@@ -53,11 +54,14 @@ private:
     PauseMenuTransformSystem pause_menu_transform_system;
     HudTransformSystem hud_transform_system;
     RenderSystem render_system;
+    TransitionSystem transition_system;
+
 
     void create_background(Blackboard &blackboard);
     void create_jacko(Blackboard& blackboard, uint32_t panda);
     void update_panda(Blackboard& blackboard);
     void update_camera(Blackboard& blackboard);
+    void generate_cave(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
 public:
 
     BossScene(Blackboard &blackboard,
@@ -67,7 +71,7 @@ public:
     virtual void render(Blackboard& blackboard) override;
     void init_scene(Blackboard &blackboard);
     void reset_scene(Blackboard& blackboard) override;
-
+    void go_to_next_scene(Blackboard &blackboard);
     void cleanup();
 };
 

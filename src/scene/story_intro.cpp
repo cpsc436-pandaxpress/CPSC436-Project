@@ -114,6 +114,8 @@ void StoryIntroScene::init_scene(Blackboard &blackboard) {
     if (!scene_timer.exists(SKIP_SCENE_LABEL)) {
         scene_timer.save_watch(SKIP_SCENE_LABEL, SKIP_SCENE);
     }
+    blackboard.story_health = 3;
+    blackboard.story_lives = 3;
 }
 
 void StoryIntroScene::reset_scene(Blackboard &blackboard) {

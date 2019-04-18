@@ -52,28 +52,21 @@ void TransitionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& reg
                 }
             }
                 break;
+            case BOSS_TYPE: {
+                for (auto panda_entity : panda_view) {
+                    auto &panda = panda_view.get<Panda>(panda_entity);
+                    auto &panda_transform = panda_view.get<Transform>(panda_entity);
+                    auto &panda_velocity = panda_view.get<Velocity>(panda_entity);
+                    if (cave.pos().x + 750/2 <= panda_transform.x) {
+                        if (panda_transform.y >= cave.pos().y + cave.size().y) {
+                            blackboard.camera.transition_ready = true;
+                        } else {
+                            panda_velocity.x_velocity = 0.f;
+                        }
+                    }
+                }
+            }
+                break;
         }
     }
 }
-
-/*void TransitionSystem::runTransition(Blackboard &blackboard, entt::DefaultRegistry& registry) {
-    vec2 cam_position = blackboard.camera.position();
-    vec2 cam_size = blackboard.camera.size();
-
-    auto cave_view = registry.view<Cave, Transform>();
-    for (auto cave_entity : cave_view) {
-        auto &cave = cave_view.get<Cave>(cave_entity);
-        auto &cave_transform = cave_view.get<Transform>(cave_entity);
-        if(cave.pos().x - cave.size().x < cam_position.x - cam_size.x/2 + cave_offset){
-            auto panda_view = registry.view<Panda, Velocity>();
-            for (auto panda_entity : panda_view) {
-                auto &panda = panda_view.get<Panda>(panda_entity);
-                auto &panda_velocity = panda_view.get<Velocity>(panda_entity);
-                panda_velocity.x_velocity = 0.f;
-            }
-        }
-        if(cave.pos().x - cave.size().x < cam_position.x - cam_size.x/2 + cave_offset){
-            blackboard.camera.in_transition = true;
-        }
-    }
-}*/
