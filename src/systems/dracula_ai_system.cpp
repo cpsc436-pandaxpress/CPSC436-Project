@@ -31,7 +31,7 @@ DraculaAISystem::DraculaAISystem(Blackboard& blackboard, entt::DefaultRegistry& 
     root.addChild(firstSelector);
 
     firstSelector->addChild(checkPandaDeath);
-    //firstSelector->addChild(shootBat);
+    firstSelector->addChild(shootBat);
     firstSelector->addChild(teleportAttack);
     firstSelector->addChild(checkHealth);
     firstSelector->addChild(chasePanda);

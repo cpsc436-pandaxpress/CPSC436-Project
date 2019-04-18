@@ -146,12 +146,18 @@ public:
                 registry(registry),
                 a_star_system(a_star_system){}
         virtual bool run() override {
-            auto drac_view = registry.view<Boss, Transform, Chases, Velocity, Timer>();
+
+            auto drac_view = registry.view<Dracula, Transform, Chases, Velocity, Timer>();
             for (auto drac_entity: drac_view) {
+                auto &dracula = drac_view.get<Dracula>(drac_entity);
                 auto &drac_transform = drac_view.get<Transform>(drac_entity);
                 auto &drac_velocity = drac_view.get<Velocity>(drac_entity);
                 auto &drac_chases = drac_view.get<Chases>(drac_entity);
                 auto &timer = drac_view.get<Timer>(drac_entity);
+
+                if(dracula.shooter_count>3){
+                    return false;
+                }
 
                 if(timer.watch_exists("batAttack")) {
                     if (timer.is_done("batAttack")) {
@@ -192,8 +198,9 @@ public:
                                 }
 
                                 }else{
-                                    timer.save_watch("batAttack", 4.f);
+                                    timer.remove("batAttack");
                                     drac_chases.chase_speed=120.f;
+                                    dracula.shooter_count++;
                                     batCount=0;
                                     pathSet=false;
                                     return false;
@@ -230,12 +237,17 @@ public:
                 registry(registry),
                 a_star_system(a_star_system){}
             virtual bool run() override {
-                    auto drac_view = registry.view<Boss, Transform, Chases, Velocity, Timer>();
+                    auto drac_view = registry.view<Dracula, Transform, Chases, Velocity, Timer>();
                     for (auto drac_entity: drac_view) {
+                        auto &dracula = drac_view.get<Dracula>(drac_entity);
                         auto &drac_transform = drac_view.get<Transform>(drac_entity);
                         auto &drac_velocity = drac_view.get<Velocity>(drac_entity);
                         auto &drac_chases = drac_view.get<Chases>(drac_entity);
                         auto &timer = drac_view.get<Timer>(drac_entity);
+
+                        if(dracula.shooter_count<3){
+                            return false;
+                        }
 
                         if(timer.watch_exists("teleport")) {
                             if (timer.is_done("teleport")) {
@@ -248,19 +260,32 @@ public:
                                         auto panda_view = registry.view<Panda, Transform>();
                                         for(auto panda_entity: panda_view) {
                                             auto panda_transform = panda_view.get<Transform>(panda_entity);
-
+                                            Coordinates *teleport_coords;
                                             Location *panda_location = a_star_system.getGridLocation(panda_transform.x, panda_transform.y);
-                                            Location *teleport_location = new Location(panda_location->i, panda_location->j+2);
+                                            Location *teleport_location_right = new Location(panda_location->i, panda_location->j+2);
+                                            Location *teleport_location_left = new Location(panda_location->i, panda_location->j-2);
+                                            Location *teleport_location_above = new Location(panda_location->i-2, panda_location->j);
+
+                                            if(!teleport_location_left->platform || !teleport_location_right->platform){
+                                                if(panda_location->i %2){
+                                                    teleport_coords = a_star_system.getScreenLocation(teleport_location_right->i,
+                                                                                                      teleport_location_right->j);
+                                                }else{
+                                                    teleport_coords = a_star_system.getScreenLocation(teleport_location_left->i,
+                                                                                                      teleport_location_left->j);
+                                                }
+                                            }else{
+                                                teleport_coords = a_star_system.getScreenLocation(teleport_location_above->i,
+                                                                                                  teleport_location_above->j);
+                                            }
 
 
-                                            Coordinates *teleport_coords = a_star_system.getScreenLocation(teleport_location->i,
-                                                                                                           teleport_location->j);
                                             drac_transform.x = teleport_coords->x;
                                             drac_transform.y = teleport_coords->y;
                                             drac_chases.chase_speed=120.f;
                                             timer.remove("teleportDelay");
                                             timer.save_watch("teleport", 1.f);
-                                            return true;
+                                            return false;
                                         }
 
                                     }else{
@@ -268,7 +293,7 @@ public:
                                     }
                                 }else{
                                     timer.save_watch("teleportDelay", 0.5f);
-                                    return true;
+                                    return false;
                                 }
 
                             }

@@ -9,6 +9,7 @@ struct Boss {
     bool evading;
     int invincibility_timer;
 
+
     Boss() : alive(true),
                 invincibility_timer(0){}
 };
