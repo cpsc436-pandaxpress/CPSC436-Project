@@ -7,6 +7,7 @@
 #include <components/collidable.h>
 #include <components/timer.h>
 #include <scene/scene_mode.h>
+#include <iostream>
 #include "horizontal_level_system.h"
 
 HorizontalLevelSystem::HorizontalLevelSystem() :
@@ -18,6 +19,8 @@ HorizontalLevelSystem::HorizontalLevelSystem() :
     for (int i = 0; i <= MAX_DIFFICULTY_HARD; i++) {
         levels[i] = Level::load_level(i, HORIZONTAL_LEVEL_TYPE);
     }
+
+    levels[END_LEVEL] = Level::load_level(END_LEVEL, HORIZONTAL_LEVEL_TYPE);
 }
 
 void HorizontalLevelSystem::init(SceneMode mode, entt::DefaultRegistry &registry) {
@@ -60,6 +63,7 @@ void HorizontalLevelSystem::load_next_chunk(int id) {
         last_col_loaded_ += CELL_WIDTH;
         chunks_.push(col);
     }
+    std::cout << "Loaded " << id << "\n";
 }
 
 // y should range from (-400, 400)
@@ -76,6 +80,7 @@ void HorizontalLevelSystem::generate_next_chunk(Blackboard &blackboard,
         }
         last_col_generated_ += CELL_WIDTH;
         chunks_.pop();
+        std::cout << "Generated chunk\n";
     }
 }
 
@@ -152,4 +157,8 @@ void HorizontalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, 
             registry.destroy(entity);
         }
     }
+}
+
+void HorizontalLevelSystem::generate_end_level() {
+    load_next_chunk(END_LEVEL);
 }

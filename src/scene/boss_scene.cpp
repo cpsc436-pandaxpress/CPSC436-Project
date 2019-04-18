@@ -56,6 +56,14 @@ void BossScene::update(Blackboard &blackboard) {
         } else if (!panda.alive && interactable.grounded) {
             fade_overlay_system.update(blackboard, registry_);
         }
+
+        // TODO: CHANGE THIS!
+        // This is a temporary way of advancing to the next level
+        auto& jacko_health = registry_.get<Health>(jacko_entity);
+        if (jacko_health.health_points <= 0) {
+            change_scene(STORY_HARD_JUNGLE_SCENE_ID);
+        }
+
         update_panda(blackboard);
 
         level_system.update(blackboard, registry_);

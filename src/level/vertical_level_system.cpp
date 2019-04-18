@@ -11,6 +11,8 @@ VerticalLevelSystem::VerticalLevelSystem() : LevelSystem(), mode_(ENDLESS) {
     for (int i = 0; i <= MAX_DIFFICULTY_HARD; i++) {
         levels[i] = Level::load_level(i, VERTICAL_LEVEL_TYPE);
     }
+
+    levels[END_LEVEL] = Level::load_level(END_LEVEL, VERTICAL_LEVEL_TYPE);
 }
 
 void VerticalLevelSystem::init(SceneMode mode, entt::DefaultRegistry &registry) {
@@ -119,5 +121,9 @@ void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, fl
             registry.destroy(entity);
         }
     }
+}
+
+void VerticalLevelSystem::generate_end_level() {
+    load_next_chunk(END_LEVEL);
 }
 

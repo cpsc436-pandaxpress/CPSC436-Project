@@ -24,13 +24,15 @@ private:
 
     const float FIRST_ROW_Y = 300.f;
     const float COL_X_OFFSET = -750.f;
-    const int MIN_DIFFICULTY_EASY = 5;
-    const int MAX_DIFFICULTY_EASY = 11;
+    const int MIN_DIFFICULTY_EASY = 3;
+    const int MAX_DIFFICULTY_EASY = 9;
     const int MIN_DIFFICULTY_HARD = 15;
     const int MAX_DIFFICULTY_HARD = 20;
-    const int DIFFICULTY_RANGE = 7;
+    const int DIFFICULTY_RANGE = 2;
     const float LEVEL_UP_INTERVAL = 5;
     const std::string LEVEL_UP_LABEL = "level_up";
+
+    const int END_LEVEL = 50;
 
     int min_difficulty;
     int max_difficulty;
@@ -53,6 +55,8 @@ public:
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override;
 
     void destroy_entities(entt::DefaultRegistry &registry) override;
+
+    void generate_end_level();
 };
 
 
