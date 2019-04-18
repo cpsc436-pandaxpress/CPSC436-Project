@@ -7,7 +7,6 @@
 #include <components/collidable.h>
 #include <components/timer.h>
 #include <scene/scene_mode.h>
-#include <iostream>
 #include "horizontal_level_system.h"
 
 HorizontalLevelSystem::HorizontalLevelSystem() :
@@ -63,7 +62,6 @@ void HorizontalLevelSystem::load_next_chunk(int id) {
         last_col_loaded_ += CELL_WIDTH;
         chunks_.push(col);
     }
-    std::cout << "Loaded " << id << "\n";
 }
 
 // y should range from (-400, 400)
@@ -80,7 +78,6 @@ void HorizontalLevelSystem::generate_next_chunk(Blackboard &blackboard,
         }
         last_col_generated_ += CELL_WIDTH;
         chunks_.pop();
-        std::cout << "Generated chunk\n";
     }
 }
 
