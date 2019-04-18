@@ -32,9 +32,7 @@
 
 
 int start() {
-    auto window = Window();
-
-    window.initialize("Express Panda");
+    Window window("Express Panda");
 
     Blackboard blackboard = {
         Camera(1600, 900, 0, 0),
@@ -47,6 +45,7 @@ int start() {
         Random(0),
         SoundManager(),
         FontManager(),
+        std::unique_ptr<Shader>(),
         0
     };
 
@@ -91,7 +90,7 @@ int start() {
     blackboard.shader_manager.load_shader(
             shaders_path("caveEntrance.vs.glsl"),
             shaders_path("caveEntrance.fs.glsl"),"caveEntrance");
-  
+
      blackboard.shader_manager.load_shader(
             shaders_path("text.vs.glsl"),
             shaders_path("text.fs.glsl"), "text");
@@ -99,6 +98,37 @@ int start() {
     blackboard.shader_manager.load_shader(
             shaders_path("fade.vs.glsl"),
             shaders_path("fade.fs.glsl"),"fade");
+
+    // example post-process shader
+    blackboard.shader_manager.load_shader(
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("recolor.fs.glsl"),
+            "recolor");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("grayscale.fs.glsl"),
+            "gray");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("wave.fs.glsl"),
+            "wave");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("edge.fs.glsl"),
+            "edge");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("shake.vs.glsl"),
+            shaders_path("blur.fs.glsl"),
+            "shake");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("blur.fs.glsl"),
+            "blur");
 
     blackboard.texture_manager.load_texture(textures_path("panda.png"), "panda");
     blackboard.texture_manager.load_texture(textures_path("panda_sprite_sheet.png"), "panda_sprites");
@@ -187,19 +217,22 @@ int start() {
 
     StoryIntroJungleScene story_jungle_intro_scene(blackboard, scene_manager);
 
-    scene_manager.add_scene(STORY_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY);
+    scene_manager.add_scene(STORY_EASY_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY_EASY);
     scene_manager.add_scene(ENDLESS_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), ENDLESS);
     scene_manager.add_scene(ENDLESS_SKY_SCENE_ID, (Scene*)(&vertical_scene), ENDLESS);
     scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene));
     scene_manager.add_scene(STORY_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY);
     scene_manager.add_scene(STORY_BEACH_INTRO_SCENE_ID, (Scene*)(&story_beach_intro_scene), STORY);
     scene_manager.add_scene(STORY_JUNGLE_INTRO_SCENE_ID, (Scene*)(&story_jungle_intro_scene), STORY);
+    scene_manager.add_scene(STORY_EASY_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY_EASY);
+    scene_manager.add_scene(STORY_HARD_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY_HARD);
+    scene_manager.add_scene(STORY_HARD_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY_HARD);
 
     // set the first scene
 
     scene_manager.change_scene(MAIN_MENU_SCENE_ID);
 
-
+    blackboard.post_process_shader = std::make_unique<Shader>(blackboard.shader_manager.get_shader("sprite"));
 
     bool quit = false;
     while (!quit) {
@@ -212,7 +245,10 @@ int start() {
         window.clear();
         scene_manager.render(blackboard);
 
-        window.display();
+        window.display(
+            *blackboard.post_process_shader,
+            blackboard.mesh_manager.get_mesh("sprite")
+        );
 
         quit = blackboard.input_manager.should_exit();
     }

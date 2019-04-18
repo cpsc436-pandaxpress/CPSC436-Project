@@ -24,13 +24,15 @@ static const SFXID SFX_JACKO_LAUGH = 1;
 static const SFXID SFX_PANDA_HURT = 2;
 
 static const SceneID MAIN_MENU_SCENE_ID   = 0;
-static const SceneID STORY_JUNGLE_SCENE_ID  = 1;
-static const SceneID STORY_SKY_SCENE_ID    = 2;
+static const SceneID STORY_EASY_JUNGLE_SCENE_ID  = 1;
+static const SceneID STORY_EASY_SKY_SCENE_ID    = 2;
 static const SceneID BOSS_SCENE_ID    = 3;
 static const SceneID ENDLESS_JUNGLE_SCENE_ID = 4;
 static const SceneID ENDLESS_SKY_SCENE_ID = 5;
 static const SceneID STORY_BEACH_INTRO_SCENE_ID  = 6;
-static const SceneID STORY_JUNGLE_INTRO_SCENE_ID  = 7;
+static const SceneID STORY_HARD_JUNGLE_SCENE_ID = 7;
+static const SceneID STORY_HARD_SKY_SCENE_ID = 8;
+static const SceneID STORY_JUNGLE_INTRO_SCENE_ID  = 9;
 
 static const SceneType JUNGLE_TYPE = 0;
 static const SceneType SKY_TYPE = 1;

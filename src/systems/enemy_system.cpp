@@ -174,6 +174,11 @@ void EnemySystem::handle_spit(vec2 cam_position, vec2 cam_size, SceneType scene_
         auto &spit_transform = spit_view.get<Transform>(enemy_entity);
         auto &spit_collidable = spit_view.get<Collidable>(enemy_entity);
 
+        if (spit.hit) {
+            registry.destroy(enemy_entity);
+            continue;
+        }
+
         if (scene_type == JUNGLE_TYPE) {
             if (spit_transform.x + spit_collidable.width < cam_position.x - cam_size.x / 2 ||
                 spit_transform.y - spit_collidable.height > cam_position.y + cam_size.y / 2 + VERTICAL_BUFFER) {

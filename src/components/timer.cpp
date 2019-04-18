@@ -48,7 +48,7 @@ void Timer::remove(std::string label) {
     watches.erase(label);
 }
 
-float Timer::get_curr_time(std::string label) {
+float Timer::get_curr_time() {
     return curr_time;
 }
 

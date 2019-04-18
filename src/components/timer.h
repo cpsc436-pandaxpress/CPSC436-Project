@@ -23,7 +23,7 @@ public:
     void reset_watch(std::string label);
     bool exists(std::string label);
     void remove(std::string label);
-    float get_curr_time(std::string label);
+    float get_curr_time();
     float get_target_time(std::string label);
 
 

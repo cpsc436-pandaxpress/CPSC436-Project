@@ -9,27 +9,49 @@
 #include <scene/scene_mode.h>
 #include "horizontal_level_system.h"
 
-HorizontalLevelSystem::HorizontalLevelSystem(): LevelSystem(), mode_(ENDLESS) {
-    for (int i = 0; i <= MAX_DIFFICULTY; i++) {
+HorizontalLevelSystem::HorizontalLevelSystem() :
+        LevelSystem(),
+        mode_(ENDLESS),
+        min_difficulty(MIN_DIFFICULTY_EASY),
+        max_difficulty(MAX_DIFFICULTY_HARD),
+        difficulty_range(DIFFICULTY_RANGE_ENDLESS)
+{
+    for (int i = 0; i <= MAX_DIFFICULTY_HARD; i++) {
         levels[i] = Level::load_level(i, HORIZONTAL_LEVEL_TYPE);
     }
+
+    levels[END_LEVEL] = Level::load_level(END_LEVEL, HORIZONTAL_LEVEL_TYPE);
 }
 
-void HorizontalLevelSystem::init(){
-    LevelSystem::init();
+void HorizontalLevelSystem::init(SceneMode mode, entt::DefaultRegistry &registry) {
+    LevelSystem::init(registry);
 
+    mode_ = mode;
     if (mode_ == ENDLESS) {
         rng_.init((unsigned int) rand());
+        min_difficulty = MIN_DIFFICULTY_EASY;
+        max_difficulty = MAX_DIFFICULTY_HARD;
+        difficulty_range = DIFFICULTY_RANGE_ENDLESS;
+    } else if (mode_ == STORY_EASY) {
+        rng_.init(STORY_SEED);
+        min_difficulty = MIN_DIFFICULTY_EASY;
+        max_difficulty = MAX_DIFFICULTY_EASY;
+        difficulty_range = DIFFICULTY_RANGE_STORY;
+    } else if (mode == STORY_HARD) {
+        rng_.init(STORY_SEED);
+        min_difficulty = MIN_DIFFICULTY_HARD;
+        max_difficulty = MAX_DIFFICULTY_HARD;
+        difficulty_range = DIFFICULTY_RANGE_STORY;
     }
 
     last_col_generated_ = last_col_loaded_ = FIRST_COL_X;
-    difficulty = MIN_DIFFICULTY;
+    difficulty = min_difficulty;
     difficulty_timer.save_watch(LEVEL_UP_LABEL, LEVEL_UP_INTERVAL);
     load_next_chunk(0);
 }
 
 void HorizontalLevelSystem::load_next_chunk() {
-    int level = rng_.nextInt(std::max(1, difficulty - DIFFICULTY_RANGE), difficulty);
+    int level = rng_.nextInt(std::max(1, difficulty - difficulty_range), difficulty);
     load_next_chunk(level);
 }
 
@@ -79,7 +101,7 @@ void HorizontalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry
 
     difficulty_timer.update(blackboard.delta_time);
 
-    if (difficulty < MAX_DIFFICULTY && difficulty_timer.is_done(LEVEL_UP_LABEL)) {
+    if (difficulty < max_difficulty && difficulty_timer.is_done(LEVEL_UP_LABEL)) {
         difficulty++;
         difficulty_timer.reset_watch(LEVEL_UP_LABEL);
     }
@@ -138,11 +160,6 @@ void HorizontalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, 
     }
 }
 
-void HorizontalLevelSystem::set_mode(SceneMode mode) {
-    mode_ = mode;
-    if (mode_ == ENDLESS) {
-        rng_.init((unsigned int) rand());
-    } else if (mode_ == STORY) {
-        rng_.init(STORY_SEED);
-    }
+void HorizontalLevelSystem::generate_end_level() {
+    load_next_chunk(END_LEVEL);
 }

@@ -158,8 +158,17 @@ set(SOURCE_FILES
         src/components/powerup.h
         src/systems/powerup_system.cpp
         src/systems/powerup_system.h
+        src/systems/story_animation_system.cpp
+        src/systems/story_animation_system.h
+        src/components/kelly.h
+        src/components/hearts.h
+        src/graphics/framebuffer.h
+        src/graphics/framebuffer.cpp
         src/scene/story_intro_jungle.cpp
-        src/scene/story_intro_jungle.h src/systems/story_jungle_animation_system.cpp src/systems/story_jungle_animation_system.h)
+        src/scene/story_intro_jungle.h
+        src/systems/story_jungle_animation_system.cpp
+        src/systems/story_jungle_animation_system.h
+        )
 
 
 # Create executable target

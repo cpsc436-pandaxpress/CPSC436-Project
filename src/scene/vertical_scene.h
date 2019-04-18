@@ -57,7 +57,12 @@ private:
     bool pause = false;
     int high_score_;
 
+    uint32_t timer_entity;
+    const std::string END_TIMER_LABEL = "end";
+    const float END_TIMER_LENGTH = 30;
+
     void init_scene(Blackboard &blackboard);
+    void check_end_timer();
 public:
 
     VerticalScene(Blackboard& blackboard, SceneManager& scene_manager);
@@ -67,7 +72,7 @@ public:
 
     void create_background(Blackboard &blackboard);
 
-    void set_mode(SceneMode mode) override;
+    void set_mode(SceneMode mode, Blackboard &blackboard) override;
 
     void set_high_score(int value);
 

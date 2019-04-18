@@ -7,27 +7,48 @@
 #include <components/timer.h>
 #include <algorithm>
 
-VerticalLevelSystem::VerticalLevelSystem() : LevelSystem(), mode_(ENDLESS) {
-    for (int i = 0; i <= MAX_DIFFICULTY; i++) {
+VerticalLevelSystem::VerticalLevelSystem() :
+        LevelSystem(),
+        mode_(ENDLESS),
+        min_difficulty(MIN_DIFFICULTY_EASY),
+        max_difficulty(MAX_DIFFICULTY_HARD),
+        difficulty_range(DIFFICULTY_RANGE_ENDLESS) {
+    for (int i = 0; i <= MAX_DIFFICULTY_HARD; i++) {
         levels[i] = Level::load_level(i, VERTICAL_LEVEL_TYPE);
     }
+
+    levels[END_LEVEL] = Level::load_level(END_LEVEL, VERTICAL_LEVEL_TYPE);
 }
 
-void VerticalLevelSystem::init() {
-    LevelSystem::init();
+void VerticalLevelSystem::init(SceneMode mode, entt::DefaultRegistry &registry) {
+    LevelSystem::init(registry);
 
+    mode_ = mode;
     if (mode_ == ENDLESS) {
         rng_.init((unsigned int) rand());
+        min_difficulty = MIN_DIFFICULTY_EASY;
+        max_difficulty = MAX_DIFFICULTY_HARD;
+        difficulty_range = DIFFICULTY_RANGE_ENDLESS;
+    } else if (mode_ == STORY_EASY) {
+        rng_.init(STORY_SEED);
+        min_difficulty = MIN_DIFFICULTY_EASY;
+        max_difficulty = MAX_DIFFICULTY_EASY;
+        difficulty_range = DIFFICULTY_RANGE_STORY;
+    } else if (mode == STORY_HARD) {
+        rng_.init(STORY_SEED);
+        min_difficulty = MIN_DIFFICULTY_HARD;
+        max_difficulty = MAX_DIFFICULTY_HARD;
+        difficulty_range = DIFFICULTY_RANGE_STORY;
     }
 
     last_row_generated_ = last_row_loaded_ = FIRST_ROW_Y;
-    difficulty = MIN_DIFFICULTY;
+    difficulty = min_difficulty;
     difficulty_timer.save_watch(LEVEL_UP_LABEL, LEVEL_UP_INTERVAL);
     load_next_chunk(0);
 }
 
 void VerticalLevelSystem::load_next_chunk() {
-    int level = rng_.nextInt(std::max(0, difficulty - 5), difficulty);
+    int level = rng_.nextInt(std::max(0, difficulty - difficulty_range), difficulty);
     load_next_chunk(level);
 }
 
@@ -75,7 +96,7 @@ void VerticalLevelSystem::update(Blackboard &blackboard, entt::DefaultRegistry &
 
     difficulty_timer.update(blackboard.delta_time);
 
-    if (difficulty < MAX_DIFFICULTY && difficulty_timer.is_done(LEVEL_UP_LABEL)) {
+    if (difficulty < max_difficulty && difficulty_timer.is_done(LEVEL_UP_LABEL)) {
         difficulty++;
         difficulty_timer.reset_watch(LEVEL_UP_LABEL);
     }
@@ -110,11 +131,7 @@ void VerticalLevelSystem::destroy_off_screen(entt::DefaultRegistry &registry, fl
     }
 }
 
-void VerticalLevelSystem::set_mode(SceneMode mode) {
-    mode_ = mode;
-    if (mode_ == ENDLESS) {
-        rng_.init((unsigned int) rand());
-    } else if (mode_ == STORY) {
-        rng_.init(STORY_SEED);
-    }
+void VerticalLevelSystem::generate_end_level() {
+    load_next_chunk(END_LEVEL);
 }
+

@@ -235,9 +235,3 @@ void StoryIntroScene::create_skip_message(Blackboard &blackboard) {
     registry_.assign<Sprite>(skip_entity, texture, shader, mesh);
     registry_.assign<Layer>(skip_entity, OVERLAY_LAYER);
 }
-
-
-
-
-
-

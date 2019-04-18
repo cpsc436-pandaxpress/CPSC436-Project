@@ -46,9 +46,6 @@ void TransitionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& reg
                             cave.pos().x + cave.size().x / 2 <= panda_transform.x) {
                         blackboard.camera.transition_ready = true;
                     }
-                    printf("%f\n", cave.pos().x + cave.size().x / 2);
-                    printf("%f\n", cam_position.x + cam_size.x / 2);
-                    printf("%f\n\n", panda_transform.x);
                 }
                 if (cave_transform.y > cam_position.y + cave_offset) {
                     blackboard.camera.in_transition = true;
