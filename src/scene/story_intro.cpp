@@ -54,7 +54,7 @@ void StoryIntroScene::update(Blackboard &blackboard) {
         return;
     } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN) && !pause) {
         reset_scene(blackboard);
-        change_scene(STORY_JUNGLE_SCENE_ID);
+        change_scene(STORY_EASY_JUNGLE_SCENE_ID);
     }
 
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
@@ -85,7 +85,7 @@ void StoryIntroScene::update(Blackboard &blackboard) {
 
     if (fadeOverlay.alpha() > 1.6f) {
         reset_scene(blackboard);
-        change_scene(STORY_JUNGLE_SCENE_ID);
+        change_scene(STORY_EASY_JUNGLE_SCENE_ID);
     }
 
 }

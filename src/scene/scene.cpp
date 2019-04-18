@@ -14,6 +14,6 @@ bool Scene::change_scene(SceneID id, bool reset) {
     return scene_manager_.change_scene(id, reset);
 }
 
-void Scene::set_mode(SceneMode mode) {
+void Scene::set_mode(SceneMode mode, Blackboard &blackboard) {
     mode_ = mode;
 }

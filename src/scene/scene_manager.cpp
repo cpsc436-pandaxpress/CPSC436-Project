@@ -35,7 +35,7 @@ bool SceneManager::change_scene(SceneID id, bool reset) {
         blackboard.soundManager.changeBackgroundMusic(id);
 
         if (scene_modes_.count(id) > 0) {
-            scenes_[id]->set_mode(scene_modes_[id]);
+            scenes_[id]->set_mode(scene_modes_[id], blackboard);
         }
         if (reset) {
             scenes_[id]->reset_scene(blackboard);

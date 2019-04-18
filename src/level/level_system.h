@@ -55,7 +55,7 @@ public:
 
     LevelSystem();
 
-    virtual void init();
+    virtual void init(entt::DefaultRegistry &registry);
 
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override = 0;
 

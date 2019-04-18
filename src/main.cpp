@@ -211,14 +211,14 @@ int start() {
 
     StoryIntroScene story_intro_scene(blackboard, scene_manager);
 
-
-    scene_manager.add_scene(STORY_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY);
+    scene_manager.add_scene(STORY_EASY_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY_EASY);
     scene_manager.add_scene(ENDLESS_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), ENDLESS);
     scene_manager.add_scene(ENDLESS_SKY_SCENE_ID, (Scene*)(&vertical_scene), ENDLESS);
     scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene));
-    scene_manager.add_scene(STORY_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY);
-    scene_manager.add_scene(STORY_INTRO_SCENE_ID, (Scene*)(&story_intro_scene), STORY);
-
+    scene_manager.add_scene(STORY_EASY_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY_EASY);
+    scene_manager.add_scene(STORY_INTRO_SCENE_ID, (Scene*)(&story_intro_scene));
+    scene_manager.add_scene(STORY_HARD_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY_HARD);
+    scene_manager.add_scene(STORY_HARD_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY_HARD);
     // set the first scene
 
     scene_manager.change_scene(MAIN_MENU_SCENE_ID);
