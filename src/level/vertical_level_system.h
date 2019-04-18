@@ -24,12 +24,12 @@ private:
 
     const float FIRST_ROW_Y = 300.f;
     const float COL_X_OFFSET = -750.f;
-    const int MIN_DIFFICULTY_EASY = 3;
-    const int MAX_DIFFICULTY_EASY = 10;
-    const int MIN_DIFFICULTY_HARD = 9;
-    const int MAX_DIFFICULTY_HARD = 12;
-    const int DIFFICULTY_RANGE = 0;
-    const float LEVEL_UP_INTERVAL = 2;
+    const int MIN_DIFFICULTY_EASY = 5;
+    const int MAX_DIFFICULTY_EASY = 11;
+    const int MIN_DIFFICULTY_HARD = 15;
+    const int MAX_DIFFICULTY_HARD = 20;
+    const int DIFFICULTY_RANGE = 7;
+    const float LEVEL_UP_INTERVAL = 5;
     const std::string LEVEL_UP_LABEL = "level_up";
 
     int min_difficulty;
