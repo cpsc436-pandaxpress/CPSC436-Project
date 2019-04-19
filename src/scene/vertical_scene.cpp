@@ -168,6 +168,9 @@ void VerticalScene::create_background(Blackboard &blackboard) {
     auto tex3 = blackboard.texture_manager.get_texture("horizon");
     // end order
     auto shader = blackboard.shader_manager.get_shader("sprite");
+    if (mode_ == STORY_HARD) {
+        shader = blackboard.shader_manager.get_shader("recolor");
+    }
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
     auto bg_entity1 = registry_.create();

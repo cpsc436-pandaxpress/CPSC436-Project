@@ -208,6 +208,9 @@ void HorizontalScene::create_background(Blackboard &blackboard) {
     textures.push_back(blackboard.texture_manager.get_texture("bg_back"));
     // end order
     auto shader = blackboard.shader_manager.get_shader("sprite");
+    if (mode_ == STORY_HARD) {
+        shader = blackboard.shader_manager.get_shader("recolor");
+    }
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
     int i = 0;
     for (Texture t: textures) {
