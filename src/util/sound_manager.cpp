@@ -46,6 +46,8 @@ void SoundManager::init() {
     m_background_music[BOSS_SCENE_ID] = Mix_LoadMUS(audio_path("graveyard.ogg"));
 
     m_background_music[INVINCIBILITY_MUSIC] = Mix_LoadMUS(audio_path("invincibility.ogg"));
+    m_background_music[VAPE_HORIZONTAL_MUSIC] = Mix_LoadMUS(audio_path("horizontalslow.ogg"));
+    m_background_music[VAPE_VERTICAL_MUSIC] = Mix_LoadMUS(audio_path("verticalslow.ogg"));
 
     Mix_PlayMusic(m_background_music[MAIN_MENU_SCENE_ID], -1);
 }

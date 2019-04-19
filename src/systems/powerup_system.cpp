@@ -27,6 +27,12 @@ void PowerupSystem::update(Blackboard &blackboard, entt::DefaultRegistry &regist
                     blackboard.post_process_shader = std::make_unique<Shader>(
                             blackboard.shader_manager.get_shader("shift"));
                     timer.save_watch(VAPE_TIMER_LABEL, VAPE_TIMER_LENGTH);
+                    if(blackboard.soundManager.currentStage==1 || blackboard.soundManager.currentStage==4
+                    || blackboard.soundManager.currentStage==7){
+                        blackboard.soundManager.changeBackgroundMusic(VAPE_HORIZONTAL_MUSIC);
+                    }else{
+                        blackboard.soundManager.changeBackgroundMusic(VAPE_VERTICAL_MUSIC);
+                    }
                     break;
                 default:
                     break;
@@ -67,6 +73,7 @@ void PowerupSystem::update(Blackboard &blackboard, entt::DefaultRegistry &regist
             if (timer.is_done(VAPE_TIMER_LABEL)) {
                 blackboard.post_process_shader = std::make_unique<Shader>(
                         blackboard.shader_manager.get_shader("sprite"));
+                blackboard.soundManager.changeBackgroundMusic(blackboard.soundManager.currentStage);
                 timer.remove(VAPE_TIMER_LABEL);
             }
         }
