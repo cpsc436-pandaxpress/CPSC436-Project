@@ -44,7 +44,8 @@ int start() {
         SoundManager(),
         FontManager(),
         std::unique_ptr<Shader>(),
-        0
+        0,
+        DEFAULT_SPEED_MULTIPLIER
     };
 
 
@@ -105,28 +106,13 @@ int start() {
 
     blackboard.shader_manager.load_shader(
             shaders_path("sprite.vs.glsl"),
-            shaders_path("grayscale.fs.glsl"),
-            "gray");
-
-    blackboard.shader_manager.load_shader(
-            shaders_path("sprite.vs.glsl"),
             shaders_path("wave.fs.glsl"),
             "wave");
 
     blackboard.shader_manager.load_shader(
             shaders_path("sprite.vs.glsl"),
-            shaders_path("edge.fs.glsl"),
-            "edge");
-
-    blackboard.shader_manager.load_shader(
-            shaders_path("shake.vs.glsl"),
-            shaders_path("blur.fs.glsl"),
-            "shake");
-
-    blackboard.shader_manager.load_shader(
-            shaders_path("sprite.vs.glsl"),
-            shaders_path("blur.fs.glsl"),
-            "blur");
+            shaders_path("split.fs.glsl"),
+            "shift");
 
     blackboard.texture_manager.load_texture(textures_path("panda.png"), "panda");
     blackboard.texture_manager.load_texture(textures_path("panda_sprite_sheet.png"), "panda_sprites");
@@ -164,6 +150,7 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("bg_grave_top.png"), "grave_top");
     blackboard.texture_manager.load_texture(textures_path("bg_grave_mid.png"), "grave_middle");
 
+    blackboard.texture_manager.load_texture(textures_path("vial.png"), "vial");
     blackboard.texture_manager.load_texture(textures_path("shield.png"), "shield");
   
     blackboard.texture_manager.load_texture(textures_path("story_beach_back.png"), "beach_back");
@@ -228,7 +215,7 @@ int start() {
     bool quit = false;
     while (!quit) {
         //update blackboard
-        blackboard.delta_time = std::min<float>(window.delta_time(), 0.25f);
+        blackboard.delta_time = std::min<float>(window.delta_time(), 0.25f) * blackboard.time_multiplier;
         blackboard.input_manager.update();
 
         scene_manager.update(blackboard);

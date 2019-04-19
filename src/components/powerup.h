@@ -6,7 +6,8 @@
 #define PANDAEXPRESS_SHIELD_H
 
 enum PowerupType {
-    SHIELD_POWERUP
+    SHIELD_POWERUP,
+    VAPE_POWERUP
 };
 
 struct Powerup {

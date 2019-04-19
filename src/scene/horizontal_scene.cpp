@@ -121,7 +121,8 @@ void HorizontalScene::update_camera(Blackboard &blackboard) {
 
     auto &panda_transform = registry_.get<Transform>(panda_entity);
     float y_offset = std::min(0.f, panda_transform.y + MAX_CAMERA_Y_DIFF);
-    blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time,
+    blackboard.camera.set_position(
+            cam_position.x + CAMERA_SPEED * blackboard.delta_time,
                                    y_offset);
     blackboard.camera.compose();
 }
@@ -171,6 +172,7 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
     blackboard.randNumGenerator.init(0);
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
+    blackboard.time_multiplier = DEFAULT_SPEED_MULTIPLIER;
     create_background(blackboard);
     create_panda(blackboard);
     if (mode_ == ENDLESS) {
@@ -182,6 +184,7 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
         timer.save_watch(END_TIMER_LABEL, END_TIMER_LENGTH);
     }
     create_fade_overlay(blackboard);
+    blackboard.post_process_shader = std::make_unique<Shader>(blackboard.shader_manager.get_shader("sprite"));
     level_system.init(mode_, registry_);
 }
 
