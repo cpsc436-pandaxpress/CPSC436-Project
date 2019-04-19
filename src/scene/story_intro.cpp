@@ -87,6 +87,7 @@ void StoryIntroScene::update(Blackboard &blackboard) {
         reset_scene(blackboard);
         change_scene(STORY_EASY_JUNGLE_SCENE_ID);
     }
+    update_strobe_effect(blackboard);
 
 }
 
@@ -104,6 +105,7 @@ void StoryIntroScene::init_scene(Blackboard &blackboard) {
     create_jacko(blackboard);
     create_skip_message(blackboard);
     create_fade_overlay(blackboard);
+    create_strobe_effect(blackboard);
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
     fadeOverlay.set_alpha(1.0);
 
