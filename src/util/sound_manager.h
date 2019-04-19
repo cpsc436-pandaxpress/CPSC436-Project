@@ -20,6 +20,7 @@ public:
     void init();
     void changeBackgroundMusic(SceneID id);
     void playSFX(SFXID id);
+    SceneID currentStage;
 private:
     std::unordered_map<SceneID, Mix_Music*> m_background_music;
     std::unordered_map<SFXID, Mix_Chunk*> m_sfx;

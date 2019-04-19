@@ -8,9 +8,9 @@
 
 #include "system.h"
 
-class StoryAnimationSystem : public System {
+class StoryBeachAnimationSystem : public System {
 public:
-    StoryAnimationSystem();
+    StoryBeachAnimationSystem();
 
     bool jackoGrabsKelly = false;
 

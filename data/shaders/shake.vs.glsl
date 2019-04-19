@@ -16,7 +16,7 @@ void main()
 	texcoord = in_texcoord;
 	vec3 pos = projection * transform * vec3(in_position.xy, 1.0);
 	gl_Position = vec4(pos.xy, in_position.z, 1.0);
-	float strength = 0.005;
+	float strength = 0.025;
     gl_Position.x += cos(time * 10) * strength;
     gl_Position.y += cos(time * 15) * strength;
 }

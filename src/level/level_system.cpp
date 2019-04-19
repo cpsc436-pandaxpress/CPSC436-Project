@@ -68,7 +68,11 @@ void LevelSystem::generateEntity(char value, float x, float y,
         case 's': {
             generate_shield(x, y, blackboard, registry);
         }
-
+        break;
+        case 'v': {
+            generate_vial(x, y, blackboard, registry);
+        }
+        break;
         default:
             break;
     }
@@ -123,10 +127,13 @@ void LevelSystem::generate_platform(bool one_way, float x, float y, Blackboard &
                                     entt::DefaultRegistry &registry) {
     float height = one_way ? PLATFORM_HEIGHT : (float) CELL_HEIGHT;
     y = one_way ? y - (float) CELL_HEIGHT / 2 + PLATFORM_HEIGHT / 2 : y;
-
     auto texture = blackboard.texture_manager.get_texture(
             (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "platform1"
-                                                                   : "platform2");
+                                                                   : "platform2");;
+    if (!one_way) {
+        texture = blackboard.texture_manager.get_texture(
+                (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "solid_block_1" : "solid_block_2");
+    }
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
     auto scaleX = static_cast<float>(CELL_WIDTH / texture.width());
@@ -206,8 +213,8 @@ void LevelSystem::generate_spike(bool tall, float x, float y, Blackboard &blackb
 
 void LevelSystem::generate_falling_platform(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry) {
     auto texture = blackboard.texture_manager.get_texture(
-            (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "platform1"
-                                                                   : "platform2");
+            (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "falling_blocks_1"
+                                                                   : "falling_blocks_2");
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
     auto scaleX = static_cast<float>(CELL_WIDTH / texture.width());
@@ -291,4 +298,21 @@ void LevelSystem::generate_shield(float x, float y, Blackboard &blackboard, entt
     registry.assign<Interactable>(shield);
     registry.assign<Collidable>(shield, texture.width() * scale, texture.height() * scale);
     registry.assign<Layer>(shield, ITEM_LAYER);
+}
+
+void LevelSystem::generate_vial(float x, float y, Blackboard &blackboard,
+                                entt::DefaultRegistry &registry) {
+    auto vial = registry.create();
+    auto texture = blackboard.texture_manager.get_texture("vial");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+    auto scaleX = static_cast<float>((CELL_HEIGHT / 3.0f)  / texture.width());
+    auto scaleY = static_cast<float>(CELL_HEIGHT / texture.height());
+    registry.assign<Powerup>(vial, VAPE_POWERUP);
+    registry.assign<Sprite>(vial, texture, shader, mesh);
+    registry.assign<Transform>(vial, x, y, 0.785f, scaleX, scaleY); // rotate by PI/4
+    registry.assign<Interactable>(vial);
+    registry.assign<Collidable>(vial, texture.width() * scaleX,
+                                texture.height() * scaleY);
+    registry.assign<Layer>(vial, ITEM_LAYER);
 }
