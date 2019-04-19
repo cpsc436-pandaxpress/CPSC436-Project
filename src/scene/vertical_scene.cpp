@@ -37,7 +37,7 @@ void VerticalScene::init_scene(Blackboard &blackboard) {
     blackboard.randNumGenerator.init(0);
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
-    blackboard.speed_multiplier = DEFAULT_SPEED_MULTIPLIER;
+    blackboard.time_multiplier = DEFAULT_SPEED_MULTIPLIER;
     create_background(blackboard);
     create_panda(blackboard);
     if (mode_ == ENDLESS) {
@@ -216,7 +216,7 @@ int VerticalScene::get_high_score() {
 void VerticalScene::update_camera(Blackboard &blackboard) {
     vec2 cam_position = blackboard.camera.position();
     blackboard.camera.set_position(cam_position.x,
-            cam_position.y - CAMERA_SPEED * blackboard.delta_time * blackboard.speed_multiplier
+            cam_position.y - CAMERA_SPEED * blackboard.delta_time
     );
     blackboard.camera.compose();
 }

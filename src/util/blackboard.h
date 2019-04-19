@@ -32,5 +32,5 @@ struct Blackboard {
     FontManager fontManager;
     std::unique_ptr<Shader> post_process_shader;
     float score;
-    float speed_multiplier;
+    float time_multiplier;
 };

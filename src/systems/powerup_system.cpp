@@ -22,7 +22,7 @@ void PowerupSystem::update(Blackboard &blackboard, entt::DefaultRegistry &regist
                     sprite.set_color(72 / 256.f, 219 / 256.f, 251 / 256.f);
                     break;
                 case VAPE_POWERUP:
-                    blackboard.speed_multiplier *= 0.6f;
+                    blackboard.time_multiplier *= 0.6f;
                     blackboard.post_process_shader = std::make_unique<Shader>(
                             blackboard.shader_manager.get_shader("shift"));
                     timer.save_watch(VAPE_TIMER_LABEL, VAPE_TIMER_LENGTH);
@@ -61,7 +61,7 @@ void PowerupSystem::update(Blackboard &blackboard, entt::DefaultRegistry &regist
             blackboard.post_process_shader->bind();
             blackboard.post_process_shader->set_uniform_float("timeElapsed", val);
             blackboard.post_process_shader->unbind();
-            blackboard.speed_multiplier = fmax(0.5f, 1 - val);
+            blackboard.time_multiplier = fmax(0.5f, 1 - val);
             if (timer.is_done(VAPE_TIMER_LABEL)) {
                 blackboard.post_process_shader = std::make_unique<Shader>(
                         blackboard.shader_manager.get_shader("sprite"));

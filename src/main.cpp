@@ -215,7 +215,7 @@ int start() {
     bool quit = false;
     while (!quit) {
         //update blackboard
-        blackboard.delta_time = std::min<float>(window.delta_time(), 0.25f);
+        blackboard.delta_time = std::min<float>(window.delta_time(), 0.25f) * blackboard.time_multiplier;
         blackboard.input_manager.update();
 
         scene_manager.update(blackboard);
