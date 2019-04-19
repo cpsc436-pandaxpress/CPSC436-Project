@@ -170,7 +170,7 @@ set(SOURCE_FILES
 
 # Create executable target
 
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${BOX2D_SOURCE_FILES})
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC src/)
 
 # Added this so policy CMP0065 doesn't scream
