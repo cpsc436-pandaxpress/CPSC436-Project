@@ -25,11 +25,13 @@ DraculaAISystem::DraculaAISystem(Blackboard& blackboard, entt::DefaultRegistry& 
     AINodes::StompPanda* stompPanda = new AINodes::StompPanda(blackboard, registry);
     AINodes::ShootBat* shootBat = new AINodes::ShootBat(blackboard,registry, a_star_system);
     AINodes::TeleportAttack* teleportAttack = new AINodes::TeleportAttack(blackboard, registry, a_star_system);
+    AINodes::TeleportIntoFrame* teleportIntoFrame = new AINodes::TeleportIntoFrame(blackboard, registry, a_star_system);
 
 
     // Building the behaviour tree
     root.addChild(firstSelector);
 
+    //firstSelector->addChild(teleportIntoFrame);
     firstSelector->addChild(checkPandaDeath);
     firstSelector->addChild(shootBat);
     firstSelector->addChild(teleportAttack);

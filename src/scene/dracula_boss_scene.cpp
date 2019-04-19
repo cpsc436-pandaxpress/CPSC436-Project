@@ -163,7 +163,7 @@ void DraculaBossScene::create_dracula(Blackboard &blackboard, uint32_t target) {
 
     float scaleY = 90.0 / texture.height();
     float scaleX = 90.0 / texture.width();
-    registry_.assign<Transform>(dracula_entity, -300, -300, 0., scaleX, scaleY);
+    registry_.assign<Transform>(dracula_entity, -300, 1200, 0., scaleX, scaleY);
     registry_.assign<Sprite>(dracula_entity, texture, shader, mesh);
     registry_.assign<Dracula>(dracula_entity);
     registry_.assign<Timer>(dracula_entity);

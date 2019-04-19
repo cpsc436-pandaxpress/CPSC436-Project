@@ -266,14 +266,23 @@ public:
                                             Location *teleport_location_left = a_star_system.getGridLocation(panda_transform.x-200, panda_transform.y);
                                             Location *teleport_location_above = a_star_system.getGridLocation(panda_transform.x, panda_transform.y-400);
 
-                                            if(!teleport_location_left->platform && !teleport_location_right->platform){
-                                                if(panda_location->i %2 && (panda_location->i %5)){
-                                                    teleport_coords = a_star_system.getScreenLocation(teleport_location_right->i,
-                                                                                                      teleport_location_right->j);
-                                                }else{
-                                                    teleport_coords = a_star_system.getScreenLocation(teleport_location_left->i,
-                                                                                                      teleport_location_left->j);
-                                                }
+                                            if((!teleport_location_left->platform && !teleport_location_right->platform)){
+                                                //blackboard.randNumGenerator.init(4);
+                                                int teleportChooser = blackboard.randNumGenerator.nextInt(0,2);
+                                                switch(teleportChooser){
+                                                case 0: teleport_coords = a_star_system.getScreenLocation(teleport_location_right->i,
+                                                                                                          teleport_location_right->j);
+                                                break;
+
+                                                case 1: teleport_coords = a_star_system.getScreenLocation(teleport_location_left->i,
+                                                                                                          teleport_location_left->j);
+                                                break;
+
+                                                case 2: teleport_coords = a_star_system.getScreenLocation(teleport_location_above->i,
+                                                        teleport_location_above->j);
+                                                break;
+                                                    }
+
                                             }else{
                                                 teleport_coords = a_star_system.getScreenLocation(teleport_location_above->i,
                                                                                                   teleport_location_above->j);
@@ -309,6 +318,85 @@ public:
 
                     }
                 return false;
+        }
+
+    };
+
+
+    class TeleportIntoFrame: public Node{
+    private:
+        Blackboard& blackboard;
+        entt::DefaultRegistry& registry;
+        AStarSystem& a_star_system;
+    public:
+        TeleportIntoFrame(Blackboard& blackboard, entt::DefaultRegistry& registry, AStarSystem& a_star_system):
+                blackboard(blackboard),
+                registry(registry),
+                a_star_system(a_star_system){}
+        virtual bool run() override {
+            auto drac_view = registry.view<Dracula, Transform, Chases, Velocity, Timer>();
+            for (auto drac_entity: drac_view) {
+                auto &dracula = drac_view.get<Dracula>(drac_entity);
+                auto &drac_transform = drac_view.get<Transform>(drac_entity);
+                auto &drac_velocity = drac_view.get<Velocity>(drac_entity);
+                auto &drac_chases = drac_view.get<Chases>(drac_entity);
+                auto &timer = drac_view.get<Timer>(drac_entity);
+
+                if( !(drac_transform.x<blackboard.camera.position().x || drac_transform.x>(blackboard.camera.position().x+1600)) ){
+                    return false;
+                }
+
+                if(timer.watch_exists("teleportIntoFrame")) {
+                    if (timer.is_done("teleportIntoFrame")) {
+                        if(timer.watch_exists("teleportDelay")) {
+                            drac_chases.chase_speed=0.f;
+                            drac_velocity.x_velocity=0.f;
+                            drac_velocity.y_velocity=0.f;
+
+                            if (timer.is_done("teleportDelay")) {
+                                auto panda_view = registry.view<Panda, Transform>();
+                                for(auto panda_entity: panda_view) {
+                                    auto panda_transform = panda_view.get<Transform>(panda_entity);
+                                    Coordinates *teleport_coords;
+                                    int teleportOffset;
+                                    Location *teleport_location;
+
+                                    if(blackboard.randNumGenerator.nextInt()%2){
+                                        teleport_location = a_star_system.getGridLocation(panda_transform.x+teleportOffset, panda_transform.y-600);
+                                    }else{
+                                        teleport_location = a_star_system.getGridLocation(panda_transform.x+teleportOffset, panda_transform.y-600);
+                                    }
+
+                                    teleport_coords = a_star_system.getScreenLocation(teleport_location->i,
+                                                                                      teleport_location->j);
+
+
+                                    drac_transform.x = teleport_coords->x;
+                                    drac_transform.y = teleport_coords->y;
+                                    drac_chases.chase_speed=120.f;
+                                    timer.remove("teleportDelay");
+                                    timer.remove("teleportIntoFrame");
+
+                                    return false;
+                                }
+
+                            }else{
+                                return false;
+                            }
+                        }else{
+                            timer.save_watch("teleportDelay", 0.5f);
+                            return false;
+                        }
+
+                    }
+
+                }else {
+                    timer.save_watch("teleportIntoFrame", 1.f);
+                    return false;
+                }
+
+            }
+            return false;
         }
 
     };
