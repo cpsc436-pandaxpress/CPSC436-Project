@@ -134,6 +134,16 @@ void Sprite::set_scale(float x_scale, float y_scale) {
     scale_ = { x_scale, y_scale };
 }
 
+void Sprite::set_scale_int(float x_scale, float y_scale) {
+    int pix_x = (int)pixel_scale_.x;
+    int pix_y = (int)pixel_scale_.y;
+
+    float true_x_scale = (pixel_scale_.x * x_scale) / pix_x;
+    float true_y_scale = (pixel_scale_.y * y_scale) / pix_y;
+
+    scale_ = { true_x_scale, true_y_scale };
+}
+
 void Sprite::set_size(int x_size, int y_size) {
     set_scale(
         (float)x_size / pixel_scale_.x,

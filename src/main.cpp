@@ -25,7 +25,11 @@
 #include <graphics/health_bar.h>
 #include <graphics/cave.h>
 
+#include <Box2D/Box2D.h>
+
 int main(int argc, char** argv) {
+
+    auto world = b2World(b2Vec2(0, 0));
 
     auto window = Window();
 

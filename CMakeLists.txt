@@ -28,7 +28,7 @@ endif()
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp")
 
 
-#file(GLOB SOURCE_FILES src/*.cpp src/*.hpp)
+file(GLOB_RECURSE BOX2D_SOURCE_FILES ext/Box2D/*.cpp ext/Box2D/*.h)
 
 set(SOURCE_FILES
         src/main.cpp
@@ -135,7 +135,7 @@ set(SOURCE_FILES
 
 # Create executable target
 
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${BOX2D_SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC src/)
 
 # Added this so policy CMP0065 doesn't scream
@@ -146,6 +146,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS 0)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ext/stb_image/)
 target_include_directories(${PROJECT_NAME} PUBLIC ext/entt/)
+target_include_directories(${PROJECT_NAME} PUBLIC ext/Box2D/)
 target_include_directories(${PROJECT_NAME} PUBLIC /usr/local/include/freetype2/)
 # Find OpenGL
 find_package(OpenGL REQUIRED)
