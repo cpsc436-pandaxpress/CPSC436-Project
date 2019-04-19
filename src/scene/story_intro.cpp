@@ -236,5 +236,23 @@ void StoryIntroScene::create_skip_message(Blackboard &blackboard) {
     registry_.assign<Layer>(skip_entity, OVERLAY_LAYER);
 }
 
+void StoryIntroScene::create_strobe_effect(Blackboard &blackboard) {
+    scene_timer.save_watch("STROBE", 5.f); // 5 second timer for effect
+    blackboard.post_process_shader = std::make_unique<Shader>(
+            blackboard.shader_manager.get_shader("strobe"));
+}
 
-
+void StoryIntroScene::update_strobe_effect(Blackboard &blackboard) {
+    if (scene_timer.exists("STROBE")) {
+        float val = (((scene_timer.get_target_time("STROBE") - scene_timer.get_curr_time()) /
+                      5.f)); // Ratio of time done (Ranges from [1...0])
+        blackboard.post_process_shader->bind();
+        blackboard.post_process_shader->set_uniform_float("timeElapsed", val);
+        blackboard.post_process_shader->unbind();
+        // Setup new timeElapsed Uniform
+        if (scene_timer.is_done("STROBE")) {
+            blackboard.post_process_shader = std::make_unique<Shader>(
+                    blackboard.shader_manager.get_shader("sprite"));
+        }
+    }
+}
