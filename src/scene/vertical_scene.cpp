@@ -47,6 +47,7 @@ void VerticalScene::init_scene(Blackboard &blackboard) {
         timer_entity = registry_.create();
         auto& timer = registry_.assign<Timer>(timer_entity);
         timer.save_watch(END_TIMER_LABEL, END_TIMER_LENGTH);
+        create_lives_text(blackboard);
     }
     create_fade_overlay(blackboard);
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
@@ -132,7 +133,11 @@ void VerticalScene::update(Blackboard &blackboard) {
 
 void VerticalScene::render(Blackboard &blackboard) {
     // update the rendering systems
-    blackboard.window.colorScreen(vec3{74.f, 105.f, 189.f});
+    if (mode_ == STORY_HARD) {
+        blackboard.window.colorScreen(vec3{105.f, 74.f, 189.f});
+    } else {
+        blackboard.window.colorScreen(vec3{74.f, 105.f, 189.f});
+    }
     render_system.update(blackboard, registry_);
 }
 
@@ -156,17 +161,20 @@ void VerticalScene::cleanup() {
 }
 
 void VerticalScene::go_to_next_scene(Blackboard &blackboard) {
+    auto &health = registry_.get<Health>(panda_entity);
+    blackboard.story_health = health.health_points;
     if (mode_ == STORY_EASY) {
+        blackboard.camera.set_position(0, 0);
         cleanup();
         blackboard.camera.in_transition = false;
         blackboard.camera.transition_ready = false;
         change_scene(BOSS_SCENE_ID);
         init_scene(blackboard);
     } else if (mode_ == STORY_HARD) {
+        blackboard.camera.set_position(0, 0);
         cleanup();
         blackboard.camera.in_transition = false;
         blackboard.camera.transition_ready = false;
-
         // TODO: change to final boss scene
         change_scene(MAIN_MENU_SCENE_ID);
         init_scene(blackboard);
@@ -180,6 +188,9 @@ void VerticalScene::create_background(Blackboard &blackboard) {
     auto tex3 = blackboard.texture_manager.get_texture("horizon");
     // end order
     auto shader = blackboard.shader_manager.get_shader("sprite");
+    if (mode_ == STORY_HARD) {
+        shader = blackboard.shader_manager.get_shader("recolor");
+    }
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
     auto bg_entity1 = registry_.create();
@@ -242,7 +253,20 @@ void VerticalScene::update_panda(Blackboard &blackboard) {
 
     if (transform.y - panda_collidable.height / 2 > cam_position.y + cam_size.y / 2 ||
         panda.dead) {
-        reset_scene(blackboard);
+        if (mode_ == ENDLESS) {
+            reset_scene(blackboard);
+        } else if (blackboard.story_lives > 1) {
+            blackboard.story_lives -= 1;
+            blackboard.story_health = MAX_HEALTH;
+            reset_scene(blackboard);
+        } else {
+            blackboard.story_health = MAX_HEALTH;
+            blackboard.story_lives = MAX_LIVES;
+            blackboard.camera.set_position(0, 0);
+            reset_scene(blackboard);
+            change_scene(MAIN_MENU_SCENE_ID);
+            return;
+        }
     } else if (transform.x + panda_collidable.width / 2 > cam_position.x + cam_size.x / 2) {
         transform.x = cam_position.x + cam_size.x / 2 - panda_collidable.width / 2;
     } else if (transform.x - panda_collidable.width / 2 < cam_position.x - cam_size.x / 2) {

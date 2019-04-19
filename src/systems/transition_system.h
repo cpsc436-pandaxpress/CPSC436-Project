@@ -12,6 +12,7 @@
 #include "components/transform.h"
 #include "components/velocity.h"
 #include "components/panda.h"
+#include "components/jacko.h"
 #include "scene/scene.h"
 
 class TransitionSystem {

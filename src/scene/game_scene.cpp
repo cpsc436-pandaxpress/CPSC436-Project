@@ -25,7 +25,11 @@ void GameScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Sprite>(panda_entity, texture, shader, mesh);
     registry_.assign<Panda>(panda_entity);
     registry_.assign<ObeysGravity>(panda_entity);
-    registry_.assign<Health>(panda_entity, 3);
+    if (mode_ != ENDLESS){
+        registry_.assign<Health>(panda_entity, blackboard.story_health, 3);
+    } else {
+        registry_.assign<Health>(panda_entity, 3);
+    }
     registry_.assign<Interactable>(panda_entity);
     registry_.assign<CausesDamage>(panda_entity, PANDA_DMG_MASK, 1);
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
@@ -70,6 +74,21 @@ void GameScene::create_high_score_text(Blackboard &blackboard, int high_score) {
                                  vec2{blackboard.camera.size().x / 2.0f - HUD_HEALTH_X_OFFSET,
                                       blackboard.camera.size().y - HUD_Y_OFFSET});
     registry_.assign<Layer>(high_score_entity, TEXT_LAYER);
+}
+
+void GameScene::create_lives_text(Blackboard &blackboard) {
+    FontType font = blackboard.fontManager.get_font("titillium_72");
+    auto shader = blackboard.shader_manager.get_shader("text");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+    std::string textVal = "LI VES:   " + std::to_string(blackboard.story_lives);
+
+    auto lives_entity = registry_.create();
+    auto &text = registry_.assign<Text>(lives_entity, shader, mesh, font, textVal);
+    text.set_scale(0.8f);
+    registry_.assign<HudElement>(lives_entity,
+                                 vec2{blackboard.camera.size().x - HUD_SCORE_X_OFFSET,
+                                      blackboard.camera.size().y - HUD_Y_OFFSET});
+    registry_.assign<Layer>(lives_entity, TEXT_LAYER);
 }
 
 void GameScene::create_fade_overlay(Blackboard &blackboard) {
