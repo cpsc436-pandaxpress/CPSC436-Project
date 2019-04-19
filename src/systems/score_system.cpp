@@ -25,5 +25,6 @@ void ScoreSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry
         score_text = ss.str();
         text.set_text(score_text);
     }
-
+    blackboard.time_multiplier += blackboard.delta_time * TIME_MULTIPLIER_SPEED;
+    blackboard.time_multiplier = fmin(MAX_SPEED_MULTIPLIER, blackboard.time_multiplier);
 }

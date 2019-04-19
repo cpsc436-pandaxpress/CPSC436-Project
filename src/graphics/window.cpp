@@ -102,10 +102,6 @@ void Window::display(Shader shader, Mesh mesh) {
 
     auto fb_texture = framebuffer_->get_texture();
 
-    shader.bind();
-    shader.set_uniform_float("time", SDL_GetTicks());
-    shader.unbind();
-
     auto sprite = Sprite(fb_texture, shader, mesh);
     sprite.set_size(width_, height_);
     sprite.set_scale(1, -1);
