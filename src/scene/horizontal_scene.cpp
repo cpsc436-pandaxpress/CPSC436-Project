@@ -145,6 +145,8 @@ void HorizontalScene::cleanup() {
         registry_.destroy(e);
     }
     bg_entities.clear();
+    if (registry_.valid(timer_entity))
+        registry_.destroy(timer_entity);
     GameScene::cleanup();
 }
 
