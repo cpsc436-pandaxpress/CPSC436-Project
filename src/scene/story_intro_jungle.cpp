@@ -53,8 +53,7 @@ void StoryIntroJungleScene::update(Blackboard &blackboard) {
         pause = false;
         return;
     } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN) && !pause) {
-        reset_scene(blackboard);
-        change_scene(STORY_EASY_JUNGLE_SCENE_ID);
+        fade_overlay_system.update(blackboard, registry_);
     }
 
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
@@ -80,14 +79,16 @@ void StoryIntroJungleScene::update(Blackboard &blackboard) {
         endScene = true;
     }
 
+    auto &velocity = registry_.get<Velocity>(skip_entity);
+    auto &transform = registry_.get<Transform>(skip_entity);
+
     if (scene_timer.exists(SKIP_SCENE_LABEL) && scene_timer.is_done(SKIP_SCENE_LABEL)) {
         scene_timer.remove(SKIP_SCENE_LABEL);
-        auto &velocity = registry_.get<Velocity>(skip_entity);
         velocity.x_velocity = SKIP_SPEED;
-    }
-
-    if ((endScene && !pause) || (!endScene && fadeOverlay.alpha() > 0.f && !pause)) {
-        fade_overlay_system.update(blackboard, registry_);
+    } else {
+        if (transform.x < 570.f) {
+            velocity.x_velocity = 0.f;
+        }
     }
 
     if (fadeOverlay.alpha() > 1.6f) {
@@ -209,7 +210,7 @@ void StoryIntroJungleScene::create_skip_message(Blackboard &blackboard) {
     float scaleX = 400.0f / texture.width();
     registry_.assign<Transform>(skip_entity, SKIP_POS_X, SKIP_POS_Y, 0., scaleX, scaleY);
     registry_.assign<Sprite>(skip_entity, texture, shader, mesh);
-    registry_.assign<Velocity>(skip_entity, 0.f, 0.f);
+    registry_.assign<Velocity>(skip_entity, -SKIP_SPEED, 0.f);
     registry_.assign<Layer>(skip_entity, OVERLAY_LAYER);
 }
 

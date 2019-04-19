@@ -12,9 +12,7 @@ FadeOverlaySystem::FadeOverlaySystem() {}
 
 void FadeOverlaySystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     float change_in_alpha = FADE_OUT_SPEED*blackboard.delta_time;
-    /*if (blackboard.camera.transition_ready){
-        change_in_alpha = FADE_OUT_SPEED_TRANSITION*blackboard.delta_time;
-    }*/
+
     float alpha;
 
     if(blackboard.camera.transition_ready) {

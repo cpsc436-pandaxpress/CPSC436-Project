@@ -31,7 +31,7 @@ void main()
         vec3(0.5, 0.0, 1.0) //violet
     );
     int t = int(timeElapsed*10);
-    int index = int(mod(t, 3));
+    int index = int(mod(t, 9));
     vec3 colorHighlight = colors[index];
     color = vec4(colorHighlight, 1.0) * texture(sampler0, vec2(true_uv.x, true_uv.y));
 }
