@@ -61,6 +61,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
         pause = false;
         return;
     }
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
 
     if (!pause) {
         if (panda.alive && !panda.dead) {
@@ -71,6 +72,10 @@ void HorizontalScene::update(Blackboard &blackboard) {
             }
             player_movement_system.update(blackboard, registry_);
         } else if (!panda.alive && interactable.grounded) {
+            fade_overlay_system.update(blackboard, registry_);
+        }
+
+        if (fadeOverlay.alpha() > 0.f) {
             fade_overlay_system.update(blackboard, registry_);
         }
 
@@ -182,6 +187,8 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
         timer.save_watch(END_TIMER_LABEL, END_TIMER_LENGTH);
     }
     create_fade_overlay(blackboard);
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+    fadeOverlay.set_alpha(1.0);
     level_system.init(mode_, registry_);
 }
 

@@ -181,7 +181,11 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("skip_scene.png"), "skip_scene");
 
     blackboard.texture_manager.load_texture(textures_path("story_jungle_background.png"), "story_jungle_background");
+    blackboard.texture_manager.load_texture(textures_path("story_jungle_panda.png"), "story_jungle_panda");
     blackboard.texture_manager.load_texture(textures_path("story_jungle_kelly.png"), "story_jungle_kelly");
+    blackboard.texture_manager.load_texture(textures_path("story_jungle_grass.png"), "story_jungle_grass");
+    blackboard.texture_manager.load_texture(textures_path("story_jungle_vape.png"), "story_jungle_vape");
+
 
     blackboard.mesh_manager.load_mesh("health", 4, HealthBar::vertices, 6, HealthBar::indices);
     blackboard.mesh_manager.load_mesh("cave", 41, Cave::vertices, 168, Cave::indices);
@@ -221,9 +225,8 @@ int start() {
     scene_manager.add_scene(ENDLESS_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), ENDLESS);
     scene_manager.add_scene(ENDLESS_SKY_SCENE_ID, (Scene*)(&vertical_scene), ENDLESS);
     scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene));
-    scene_manager.add_scene(STORY_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY);
-    scene_manager.add_scene(STORY_BEACH_INTRO_SCENE_ID, (Scene*)(&story_beach_intro_scene), STORY);
-    scene_manager.add_scene(STORY_JUNGLE_INTRO_SCENE_ID, (Scene*)(&story_jungle_intro_scene), STORY);
+    scene_manager.add_scene(STORY_BEACH_INTRO_SCENE_ID, (Scene*)(&story_beach_intro_scene), STORY_EASY);
+    scene_manager.add_scene(STORY_JUNGLE_INTRO_SCENE_ID, (Scene*)(&story_jungle_intro_scene), STORY_EASY);
     scene_manager.add_scene(STORY_EASY_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY_EASY);
     scene_manager.add_scene(STORY_HARD_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY_HARD);
     scene_manager.add_scene(STORY_HARD_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY_HARD);

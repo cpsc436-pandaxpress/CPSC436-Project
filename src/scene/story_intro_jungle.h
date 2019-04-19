@@ -21,19 +21,30 @@
 
 class StoryIntroJungleScene: public GameScene {
 private:
-    const float PANDA_POS_X = -420.f;
-    const float PANDA_POS_Y = 150.f;
+    const float PANDA_POS_X = -475.f;
+    const float PANDA_POS_Y = 135.f;
     const float KELLY_POS_X = 550.f;
-    const float KELLY_POS_Y = -250.f;
-    const std::string BEACH_SCENE_END_LABEL = "end_scene";
-    const float BEACH_SCENE_END = 27.f;
+    const float KELLY_POS_Y = -150.f;
+    const float VAPE_POS_X = 0.f;
+    const float VAPE_POS_Y = -1200.f;
+    const std::string SCENE_END_LABEL = "end_scene";
+    const float SCENE_END = 33.f;
+    const float SKIP_POS_X = 570.f;
+    const float SKIP_POS_Y = 350.f;
+    const std::string SKIP_SCENE_LABEL = "skip";
+    const float SKIP_SCENE = 6.f;
+    const float SKIP_SPEED = 250.f;
+
 
     bool pause = false;
     bool endScene = false;
 
     uint32_t background_entity;
+    uint32_t grass_entity;
     uint32_t panda_entity;
     uint32_t kelly_entity;
+    uint32_t skip_entity;
+    uint32_t vape_entity;
     SpriteTransformSystem sprite_transform_system;
     StoryJungleAnimationSystem story_animation_system;
     TimerSystem timer_system;
@@ -47,6 +58,8 @@ private:
     void create_background(Blackboard &blackboard);
     void create_panda(Blackboard& blackboard);
     void create_kelly(Blackboard& blackboard);
+    void create_vape(Blackboard& blackboard);
+    void create_skip_message(Blackboard& blackboard);
     void init_scene(Blackboard &blackboard);
 
 

@@ -42,9 +42,6 @@ void StoryBeachAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegi
                 if (pandaIndex == PANDAFRAMES) {
                     pandaIndex = 0;
                 }
-                if (pandaSunscreen == 27) {
-                    break;
-                }
             } else if (pandaHeartPumping <= PANDAHEARTPUMPS){
                 row = 2;
                 pandaHeartPumping++;

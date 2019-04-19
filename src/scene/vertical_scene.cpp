@@ -48,6 +48,8 @@ void VerticalScene::init_scene(Blackboard &blackboard) {
         timer.save_watch(END_TIMER_LABEL, END_TIMER_LENGTH);
     }
     create_fade_overlay(blackboard);
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+    fadeOverlay.set_alpha(1.0);
     level_system.init(mode_, registry_);
 }
 
@@ -78,6 +80,9 @@ void VerticalScene::update(Blackboard &blackboard) {
         pause = false;
         return;
     }
+
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+
     if (!pause) {
         if (panda.alive && !panda.dead) {
             if (!blackboard.camera.in_transition){
@@ -88,6 +93,11 @@ void VerticalScene::update(Blackboard &blackboard) {
         } else if (!panda.alive && interactable.grounded) {
             fade_overlay_system.update(blackboard, registry_);
         }
+
+        if (fadeOverlay.alpha() > 0.f) {
+            fade_overlay_system.update(blackboard, registry_);
+        }
+
 
         if (mode_ == STORY_EASY || mode_ == STORY_HARD)
             check_end_timer();

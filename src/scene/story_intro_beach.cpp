@@ -54,7 +54,7 @@ void StoryIntroBeachScene::update(Blackboard &blackboard) {
         return;
     } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN) && !pause) {
         reset_scene(blackboard);
-        change_scene(STORY_JUNGLE_SCENE_ID);
+        change_scene(STORY_JUNGLE_INTRO_SCENE_ID);
     }
 
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
@@ -80,7 +80,8 @@ void StoryIntroBeachScene::update(Blackboard &blackboard) {
 
     if (scene_timer.exists(SKIP_SCENE_LABEL) && scene_timer.is_done(SKIP_SCENE_LABEL)) {
         scene_timer.remove(SKIP_SCENE_LABEL);
-        registry_.destroy(skip_entity);
+        auto &velocity = registry_.get<Velocity>(skip_entity);
+        velocity.x_velocity = SKIP_SPEED;
     }
 
     if (fadeOverlay.alpha() > 1.6f) {
@@ -118,12 +119,10 @@ void StoryIntroBeachScene::init_scene(Blackboard &blackboard) {
 
 void StoryIntroBeachScene::reset_scene(Blackboard &blackboard) {
     registry_.destroy(panda_entity);
+    registry_.destroy(skip_entity);
     if (!story_animation_system.jackoGrabsKelly) {
         registry_.destroy(kelly_entity);
         registry_.destroy(hearts_entity);
-    }
-    if (scene_timer.exists(SKIP_SCENE_LABEL) && !scene_timer.is_done(SKIP_SCENE_LABEL)) {
-        registry_.destroy(skip_entity);
     }
     registry_.destroy(jacko_entity);
     for (uint32_t e: bg_entities) {
@@ -222,7 +221,7 @@ void StoryIntroBeachScene::create_background(Blackboard &blackboard) {
     }
 }
 
-void StoryIntroScene::create_skip_message(Blackboard &blackboard) {
+void StoryIntroBeachScene::create_skip_message(Blackboard &blackboard) {
     skip_entity = registry_.create();
 
     auto texture = blackboard.texture_manager.get_texture("skip_scene");
@@ -233,5 +232,6 @@ void StoryIntroScene::create_skip_message(Blackboard &blackboard) {
     float scaleX = 400.0f / texture.width();
     registry_.assign<Transform>(skip_entity, SKIP_POS_X, SKIP_POS_Y, 0., scaleX, scaleY);
     registry_.assign<Sprite>(skip_entity, texture, shader, mesh);
+    registry_.assign<Velocity>(skip_entity, 0.f, 0.f);
     registry_.assign<Layer>(skip_entity, OVERLAY_LAYER);
 }

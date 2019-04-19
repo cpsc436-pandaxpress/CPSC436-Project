@@ -34,7 +34,8 @@ private:
     const float SKIP_POS_X = 570.f;
     const float SKIP_POS_Y = 350.f;
     const std::string SKIP_SCENE_LABEL;
-    const float SKIP_SCENE = 10.f;
+    const float SKIP_SCENE = 6.f;
+    const float SKIP_SPEED = 250.f;
 
 
     bool pause = false;
