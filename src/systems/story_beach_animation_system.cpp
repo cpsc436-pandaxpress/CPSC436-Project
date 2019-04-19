@@ -3,19 +3,20 @@
 //
 
 
-#include "story_animation_system.h"
+#include "story_beach_animation_system.h"
 #include "components/panda.h"
 #include "components/kelly.h"
 #include "components/jacko.h"
 #include "components/hearts.h"
 #include "components/timer.h"
-#include "scene/story_intro.h"
+#include "scene/story_intro_beach.h"
 #include "level/level_system.h"
 
 
-StoryAnimationSystem::StoryAnimationSystem() {}
 
-void StoryAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+StoryBeachAnimationSystem::StoryBeachAnimationSystem() {}
+
+void StoryBeachAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
 
     int row;
     auto fade_view = registry.view<FadeOverlay, Timer>();
@@ -40,9 +41,6 @@ void StoryAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
                 pandaSunscreen++;
                 if (pandaIndex == PANDAFRAMES) {
                     pandaIndex = 0;
-                }
-                if (pandaSunscreen == 27) {
-                    break;
                 }
             } else if (pandaHeartPumping <= PANDAHEARTPUMPS){
                 row = 2;
@@ -129,7 +127,7 @@ void StoryAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
 }
 
 
-void StoryAnimationSystem::animateJacko(int index, Sprite &sprite){
+void StoryBeachAnimationSystem::animateJacko(int index, Sprite &sprite){
     int row;
     if (!jackoGrabsKelly) {
         row = ((int) animationTime % 2);
@@ -143,27 +141,27 @@ void StoryAnimationSystem::animateJacko(int index, Sprite &sprite){
     sprite.set_uvs(uv1, uv2);
 }
 
-void StoryAnimationSystem::animatePanda(int index, int row, Sprite &sprite){
+void StoryBeachAnimationSystem::animatePanda(int index, int row, Sprite &sprite){
     vec2 uv1 = {index * PANDAWIDTH + 0.0055f, (row - 1)*PANDAHEIGHT + 0.003f};
     vec2 uv2 = {(index + 1) * PANDAWIDTH - 0.011f, row*PANDAHEIGHT - 0.075f};
     sprite.set_uvs(uv1, uv2);
 }
 
-void StoryAnimationSystem::animateKelly(Sprite &sprite){
+void StoryBeachAnimationSystem::animateKelly(Sprite &sprite){
     int index = ((int) animationTime % KELLYFRAMES);
     vec2 uv1 = {index*KELLYWIDTH, 0.f};
     vec2 uv2 = {(index+1)*KELLYWIDTH, KELLYHEIGHT};
     sprite.set_uvs(uv1, uv2);
 }
 
-void StoryAnimationSystem::animateHearts(Sprite &sprite){
+void StoryBeachAnimationSystem::animateHearts(Sprite &sprite){
     int index = ((int) animationTime % HEARTSFRAMES);
     vec2 uv1 = {index*HEARTSWIDTH, 0.f};
     vec2 uv2 = {(index+1)*HEARTSWIDTH, HEARTSHEIGHT};
     sprite.set_uvs(uv1, uv2);
 }
 
-void StoryAnimationSystem::resetScene() {
+void StoryBeachAnimationSystem::resetScene() {
     animationTime = 0.f;
     counter = 0;
     pandaIndex = 0;
