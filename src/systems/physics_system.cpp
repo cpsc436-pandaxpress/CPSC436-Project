@@ -30,9 +30,11 @@
 PhysicsSystem::PhysicsSystem() :
     world_(b2Vec2(0, pix_to_meters(GRAVITY))),
     collisions_(),
-    body_lookup_()
+    body_lookup_(),
+    registry_(nullptr)
 {
     world_.SetContactListener(this);
+    world_.SetContactFilter(this);
 }
 
 void PhysicsSystem::update(Blackboard& blackboard, entt::DefaultRegistry& registry) {
@@ -42,17 +44,18 @@ void PhysicsSystem::update(Blackboard& blackboard, entt::DefaultRegistry& regist
     // check for registered collisions
     // set transforms accordingly
 
-    /*
+//    registry_ = &registry;
+//
+//
+//    // update mappings and set velocities / gravity
+//    maintain(registry);
+//
+//    // step the world
+//    world_.Step(blackboard.delta_time, 10, 8);
+//
+//    handle_collisions(blackboard, registry);
+//    set_transforms(registry);
 
-    // update mappings and set velocities / gravity
-    maintain();
-
-    // step the world
-    world_.Step(blackboard.delta_time, 10, 8);
-
-    handle_collisions();
-    set_transforms();
-     */
 
 
     apply_gravity(blackboard, registry);
@@ -82,7 +85,7 @@ void PhysicsSystem::BeginContact(b2Contact* contact) {
             break;
     }
 
-    collisions_.emplace_back(e1, e2, normal, 0);
+    collisions_.emplace_back(e1, e2, normalize(normal), 0);
 }
 
 /// Called when two fixtures cease to touch.
@@ -91,7 +94,19 @@ void PhysicsSystem::EndContact(b2Contact* contact) {}
 bool PhysicsSystem::ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB) {
     // determine if collision _should_ happen
     // - one should be interactible
-    return true;
+    auto e1 = (uint32_t)(uint64_t)(fixtureA->GetBody()->GetUserData());
+    auto e2 = (uint32_t)(uint64_t)(fixtureB->GetBody()->GetUserData());
+
+    if (registry_->has<Interactable>(e1) && registry_->has<Interactable>(e2)) {
+        return registry_->has<Panda>(e1) || registry_->has<Panda>(e2);
+    }
+    else if (registry_->has<Interactable>(e1) || registry_->has<Interactable>(e2)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+    //TODO: check for 1way platforms
 }
 
 void PhysicsSystem::maintain(entt::DefaultRegistry& registry) {
@@ -109,29 +124,46 @@ void PhysicsSystem::maintain(entt::DefaultRegistry& registry) {
     }
 
     // add box2d bodies for new entities
-    for (auto entity: physics_view) {
-        if (body_lookup_.count(entity) < 0) {
+    for (auto entity : physics_view) {
+        b2Body* body;
+        if (body_lookup_.count(entity) == 0) {
             // need to construct an entity
-            bool is_static = registry.has<Velocity>(entity);
+            bool is_static = !registry.has<Velocity>(entity);
             bool use_circle = registry.has<Panda>(entity);
 
-            b2Body* body = create_body_for(
+            body = create_body_for(
                 (void*)(uint64_t)(entity),
                 registry.get<Collidable>(entity),
                 registry.get<Transform>(entity),
                 is_static,
                 use_circle
             );
+
+            body_lookup_.insert(std::pair<uint32_t, b2Body*>(entity, body));
+        }
+        else {
+            body = body_lookup_[entity];
+        }
+
+        if (registry.has<ObeysGravity>(entity)) {
+            auto obeys_gravity = registry.get<ObeysGravity>(entity);
+            body->SetGravityScale(obeys_gravity.gravityFactor);
+        }
+
+        if (registry.has<Velocity>(entity)) {
+            auto velocity = registry.get<Velocity>(entity);
+            body->SetLinearVelocity(b2Vec2(pix_to_meters(velocity.x_velocity), pix_to_meters(velocity.y_velocity)));
         }
     }
 
 }
 
-void PhysicsSystem::handle_collisions(entt::DefaultRegistry& registry) {
-    for (auto collision : collisions_) {
+void PhysicsSystem::handle_collisions(Blackboard& blackboard, entt::DefaultRegistry& registry) {
+    int i = collisions_.size();
+    for (auto entry : collisions_) {
 
-        auto e1 = collision.e1;
-        auto e2 = collision.e2;
+        auto e1 = entry.e1;
+        auto e2 = entry.e2;
 
         //TODO: set grounded if necessary
 
@@ -151,12 +183,12 @@ void PhysicsSystem::handle_collisions(entt::DefaultRegistry& registry) {
             auto& panda = registry.get<Panda>(e2);
             auto& transform = registry.get<Transform>(e2);
             //TODO
-//            if (entry.normal.x == 0 && entry.normal.y == 0) {
-//                panda.hurt = true;
-//            }
-//            else if (cd.normal_matches_mask(entry.normal.x, entry.normal.y)) {
-//                panda.hurt = true;
-//            }
+            if (entry.normal.x == 0 && entry.normal.y == 0) {
+                panda.hurt = true;
+            }
+            else if (cd.normal_matches_mask(entry.normal.x, entry.normal.y)) {
+                panda.hurt = true;
+            }
         }
         else if ( registry.has<CausesDamage>(e2)
                   && registry.has<Panda>(e1)
@@ -167,69 +199,70 @@ void PhysicsSystem::handle_collisions(entt::DefaultRegistry& registry) {
             auto& transform = registry.get<Transform>(e1);
 
             //TODO: same as above
-//            if (entry.normal.x == 0 && entry.normal.y == 0) {
-//                panda.hurt = true;
-//            }
-//            if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)) {
-//                panda.hurt = true;
-//            }
+            if (entry.normal.x == 0 && entry.normal.y == 0) {
+                panda.hurt = true;
+            }
+            if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)) {
+                panda.hurt = true;
+            }
         }
 
         // COLLISION: Panda hits Health
         if ( registry.has<Health>(e1)
              && registry.has<Panda>(e2)
             ) {
+            auto& velocity = registry.get<Velocity>(e2);
             auto& cd = registry.get<CausesDamage>(e2);
             auto& panda = registry.get<Panda>(e2);
             auto& transform = registry.get<Transform>(e2);
             auto& health = registry.get<Health>(e1);
             //TODO
-//            if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)
-//                && !panda.recovering){
-//                //do damage
-//                health.health_points -= cd.hp;
-//
-//                if (entry.normal.x != 0) {
-//                    dv.x_velocity = 700 * entry.normal.x;
-//                }
-//                if (entry.normal.y != 0) {
-//                    dv.y_velocity = 700 * entry.normal.y;
-//                }
-//
-//                if (registry.has<Jacko>(entry.e1)) {
-//                    // panda is hitting jacko
-//                    auto& jacko = registry.get<Jacko>(entry.e1);
-//                    auto& chases = registry.get<Chases>(entry.e1);
-//                    if (health.health_points <= 0) {
-//                        registry.remove<Interactable>(entry.e1);
-//                        registry.remove<Chases>(entry.e1);
-//                        registry.assign<ObeysGravity>(entry.e1);
-//                    }
-//                    else {
-//                        chases.evading = true;
-//                    }
-//                }
-//                    //else if to exclude jacko from normal dying stuff
-//                else if (health.health_points <= 0) {
-//                    //normal way to kill stuff
-//                    if (registry.has<Interactable>(entry.e1)) {
-//                        registry.remove<Interactable>(entry.e1);
-//                    }
-//                    if (registry.has<Bread>(entry.e1)) {
-//                        blackboard.score += BREAD_KILL_POINTS;
-//                        std::string str = "+" + std::to_string(BREAD_KILL_POINTS);
-//                        create_label_text(blackboard, registry,
-//                                          vec2{transform.x, transform.y - 100.f},
-//                                          str.c_str());
-//                    } else if (registry.has<Llama>(entry.e1)) {
-//                        blackboard.score += LLAMA_KILL_POINTS;
-//                        std::string str = "+" + std::to_string(LLAMA_KILL_POINTS);
-//                        create_label_text(blackboard, registry,
-//                                          vec2{transform.x, transform.y - 100.f},
-//                                          str.c_str());
-//                    }
-//                }
-//            }
+            if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)
+                && !panda.recovering){
+                //do damage
+                health.health_points -= cd.hp;
+
+                if (entry.normal.x != 0) {
+                    velocity.x_velocity = 700 * entry.normal.x;
+                }
+                if (entry.normal.y != 0) {
+                    velocity.y_velocity = 700 * entry.normal.y;
+                }
+
+                if (registry.has<Jacko>(entry.e1)) {
+                    // panda is hitting jacko
+                    auto& jacko = registry.get<Jacko>(entry.e1);
+                    auto& chases = registry.get<Chases>(entry.e1);
+                    if (health.health_points <= 0) {
+                        registry.remove<Interactable>(entry.e1);
+                        registry.remove<Chases>(entry.e1);
+                        registry.assign<ObeysGravity>(entry.e1);
+                    }
+                    else {
+                        chases.evading = true;
+                    }
+                }
+                    //else if to exclude jacko from normal dying stuff
+                else if (health.health_points <= 0) {
+                    //normal way to kill stuff
+                    if (registry.has<Interactable>(entry.e1)) {
+                        registry.remove<Interactable>(entry.e1);
+                    }
+                    if (registry.has<Bread>(entry.e1)) {
+                        blackboard.score += BREAD_KILL_POINTS;
+                        std::string str = "+" + std::to_string(BREAD_KILL_POINTS);
+                        create_label_text(blackboard, registry,
+                                          vec2{transform.x, transform.y - 100.f},
+                                          str.c_str());
+                    } else if (registry.has<Llama>(entry.e1)) {
+                        blackboard.score += LLAMA_KILL_POINTS;
+                        std::string str = "+" + std::to_string(LLAMA_KILL_POINTS);
+                        create_label_text(blackboard, registry,
+                                          vec2{transform.x, transform.y - 100.f},
+                                          str.c_str());
+                    }
+                }
+            }
         }
 
 
@@ -273,7 +306,17 @@ void PhysicsSystem::handle_collisions(entt::DefaultRegistry& registry) {
 }
 
 void PhysicsSystem::set_transforms(entt::DefaultRegistry& registry) {
-    //TODO
+    for (auto entry : body_lookup_) {
+        auto entity = entry.first;
+        auto body = entry.second;
+
+        auto x = meters_to_pix(body->GetPosition().x);
+        auto y = meters_to_pix(body->GetPosition().y);
+
+        auto transform = registry.get<Transform>(entity);
+        transform.x = x;
+        transform.y = y;
+    }
 }
 
 
@@ -284,10 +327,13 @@ b2Body* PhysicsSystem::create_body_for(void* data, const Collidable& collidable,
     body_def.position.y = transform.y;
     body_def.userData = data;
 
+    auto h_width = pix_to_meters(collidable.width / 2);
+    auto h_height = pix_to_meters(collidable.height / 2);
+
     b2PolygonShape box_shape = b2PolygonShape();
-    box_shape.SetAsBox(collidable.width / 2, collidable.height / 2);
+    box_shape.SetAsBox(h_width, h_height);
     b2CircleShape circle_shape = b2CircleShape();
-    circle_shape.m_radius = (collidable.width + collidable.height) / 4;
+    circle_shape.m_radius = (h_width + h_height) / 2;
 
     auto fixture_def = b2FixtureDef();
     fixture_def.shape = use_circle ? (b2Shape*)&circle_shape : (b2Shape*)&box_shape;

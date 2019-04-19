@@ -5,7 +5,7 @@
 #ifndef PANDAEXPRESS_PHYSICS_SYSTEM_H
 #define PANDAEXPRESS_PHYSICS_SYSTEM_H
 
-
+#include <cstdint>
 #include <Box2D.h>
 #include <unordered_map>
 #include <unordered_set>
@@ -56,6 +56,7 @@ private:
     b2World world_;
     std::vector<CollisionEntry> collisions_;
     std::unordered_map<uint32_t, b2Body* > body_lookup_;
+    entt::DefaultRegistry* registry_;
 
 public:
 
@@ -73,7 +74,7 @@ public:
 private:
 
     void maintain(entt::DefaultRegistry& registry);
-    void handle_collisions(entt::DefaultRegistry& registry);
+    void handle_collisions(Blackboard& blackboard, entt::DefaultRegistry& registry);
     void set_transforms(entt::DefaultRegistry& registry);
     b2Body* create_body_for(void* data, const Collidable& collidable, const Transform& transform, bool is_static, bool use_circle);
 
