@@ -33,6 +33,8 @@ static const SceneID STORY_INTRO_SCENE_ID  = 6;
 static const SceneID STORY_HARD_JUNGLE_SCENE_ID = 7;
 static const SceneID STORY_HARD_SKY_SCENE_ID = 8;
 
+static const SceneID INVINCIBILITY_MUSIC = 10;
+
 static const SceneType JUNGLE_TYPE = 0;
 static const SceneType SKY_TYPE = 1;
 static const SceneType BOSS_TYPE = 2;

@@ -20,6 +20,7 @@ void PowerupSystem::update(Blackboard &blackboard, entt::DefaultRegistry &regist
                     panda.invincible = true;
                     timer.save_watch(SHIELD_TIMER_LABEL, SHIELD_TIMER_LENGTH);
                     sprite.set_color(72 / 256.f, 219 / 256.f, 251 / 256.f);
+                    blackboard.soundManager.changeBackgroundMusic(INVINCIBILITY_MUSIC);
                     break;
                 default:
                     break;
@@ -47,6 +48,7 @@ void PowerupSystem::update(Blackboard &blackboard, entt::DefaultRegistry &regist
             if (timer.is_done(SHIELD_TIMER_LABEL)) {
                 panda.invincible = false;
                 timer.remove(SHIELD_TIMER_LABEL);
+                blackboard.soundManager.changeBackgroundMusic(blackboard.soundManager.currentStage);
                 sprite.set_color(1.f, 1.f, 1.f);
             }
         }
