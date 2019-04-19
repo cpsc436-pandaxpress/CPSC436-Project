@@ -1,12 +1,22 @@
 #include "background.h"
 #include "../util/gl_utils.h"
 
+Background::Background(Texture texture, Shader shader, Mesh mesh, int z, bool infinite = true) :
+        shader_(shader),
+        texture_(texture),
+        sp1_(Sprite(texture, shader, mesh)),
+        sp2_(Sprite(texture, shader, mesh)),
+        z(z),
+        infinite(infinite) {
+}
+
 Background::Background(Texture texture, Shader shader, Mesh mesh, int z) :
         shader_(shader),
         texture_(texture),
         sp1_(Sprite(texture, shader, mesh)),
         sp2_(Sprite(texture, shader, mesh)),
-        z(z) {
+        z(z),
+        infinite(true) {
 }
 
 Background::Background(const Background &other) :
@@ -14,13 +24,16 @@ Background::Background(const Background &other) :
         texture_(other.texture_),
         sp1_(other.sp1_),
         sp2_(other.sp2_),
-        z(other.z) {}
+        z(other.z),
+        infinite(other.infinite) {}
 
 
 void Background::draw(const mat3 &projection) {
     // draw background sprites
     sp1_.draw(projection);
-    sp2_.draw(projection);
+    if (infinite) {
+        sp2_.draw(projection);
+    }
 }
 
 vec2 Background::pos1() {

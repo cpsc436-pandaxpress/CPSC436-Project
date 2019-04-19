@@ -26,6 +26,7 @@ public:
     // Holds a list of pre-compiled Characters
     std::unordered_map<GLchar, Character> characters;
     bool load(std::string font, GLuint fontSize);
+    void deleteTextures();
 };
 
 

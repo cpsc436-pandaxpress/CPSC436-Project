@@ -37,7 +37,6 @@ bool TextureManager::load_texture(const char *path, const char *name) {
     if (data == nullptr) {
         return false;
     }
-
     gl_flush_errors();
     glGenTextures(1, &id);
     glBindTexture(GL_TEXTURE_2D, id);

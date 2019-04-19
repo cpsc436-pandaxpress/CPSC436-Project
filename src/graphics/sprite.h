@@ -38,6 +38,7 @@ public:
     void set_scale(const vec2& scale);
     void set_scale(float x_scale, float y_scale);
     void set_scale_int(float x_scale, float y_scale);
+    void set_size(uint32_t width, uint32_t height);
 
     void set_size(int x_size, int y_size);
 

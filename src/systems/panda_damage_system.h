@@ -15,6 +15,9 @@ private:
     const float DMG_REACTION_X = 200.f;
     const float DMG_REACTION_Y = -1000.f;
     const std::string DMG_TIMER_LABEL = "dmg_invincible";
+    const std::string DEATH_TIMER_LABEL = "dying";
+    const float DEATH_TIMER = 2.5f;
+
 public:
     PandaDamageSystem();
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;

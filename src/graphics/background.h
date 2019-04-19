@@ -13,8 +13,10 @@ private:
     Texture texture_;
     Sprite sp1_, sp2_;
     int z;
+    bool infinite;
 
 public:
+    Background(Texture texture, Shader shader, Mesh mesh, int z, bool infinite);
     Background(Texture texture, Shader shader, Mesh mesh, int z);
 
     Background(const Background &other);

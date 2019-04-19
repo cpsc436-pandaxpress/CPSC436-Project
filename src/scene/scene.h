@@ -9,6 +9,7 @@
 #include "../util/blackboard.h"
 #include "../util/input_manager.h"
 #include "../util/constants.h"
+#include "scene_mode.h"
 
 // Simple int ID
 
@@ -22,6 +23,7 @@ private:
 
 protected:
     entt::DefaultRegistry registry_;
+    SceneMode mode_;
 
 public:
     Scene(SceneManager& scene_manager);
@@ -35,8 +37,11 @@ public:
     // render the scene
     virtual void render(Blackboard& blackboard) = 0;
 
+    virtual void set_mode(SceneMode mode, Blackboard &blackboard);
+
+    virtual void reset_scene(Blackboard& blackboard) = 0;
 
 protected:
     // wraps SceneManager::change_scene()
-    bool change_scene(SceneID id);
+    bool change_scene(SceneID id, bool reset = false);
 };

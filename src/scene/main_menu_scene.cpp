@@ -6,9 +6,7 @@
 #include <graphics/background.h>
 
 
-static const int BUTTON_WIDTH = 350;
-static const int BUTTON_HEIGHT = 120;
-static const int BUTTON_PADDING = 40;
+
 
 MainMenuScene::MainMenuScene(Blackboard& blackboard, SceneManager& scene_manager) :
     Scene(scene_manager),
@@ -56,29 +54,29 @@ void MainMenuScene::update(Blackboard& blackboard) {
         selected_button_ %= count;
     }
 
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
+        blackboard.input_manager.signal_exit();
+    }
 
-
-    int button_y = -250;
-    int button_x =  350;
 
     for (auto i = 0; i < count; i++) {
         if (i == selected_button_) {
-            button_sprites_[i].set_color(0.7f, 0.9f, 0.9f);
-            button_bg_sprites_[i].set_color(0.5f, 0.5f, 0.5f);
-        }
-        else {
             button_sprites_[i].set_color(1.f, 1.f, 1.f);
             button_bg_sprites_[i].set_color(0.3f, 0.3f, 0.3f);
+        }
+        else {
+            button_sprites_[i].set_color(0.7f, 0.9f, 0.9f);
+            button_bg_sprites_[i].set_color(0.5f, 0.5f, 0.5f);
         }
         button_sprites_[i].set_size(BUTTON_WIDTH, BUTTON_HEIGHT);
         button_bg_sprites_[i].set_size(BUTTON_WIDTH, BUTTON_HEIGHT);
         auto vertical_offset = (BUTTON_HEIGHT + BUTTON_PADDING) * i;
-        button_sprites_[i].set_pos(button_x, button_y + vertical_offset);
-        button_bg_sprites_[i].set_pos(button_x, button_y + vertical_offset);
+        button_sprites_[i].set_pos(BUTTON_X, BUTTON_Y + vertical_offset);
+        button_bg_sprites_[i].set_pos(BUTTON_X, BUTTON_Y + vertical_offset);
     }
 
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN)) {
-        change_scene(button_targets_[selected_button_]);
+        change_scene(button_targets_[selected_button_], true);
     }
 
 }
@@ -86,14 +84,14 @@ void MainMenuScene::update(Blackboard& blackboard) {
 void MainMenuScene::render(Blackboard& blackboard) {
     auto& projection = blackboard.camera.get_projection();
 
-    splash_sprite_.draw(projection);
+    blackboard.window.draw((Renderable*)&splash_sprite_, projection);
 
     for (auto i = 0; i < button_sprites_.size(); i++) {
-        button_sprites_[i].draw(projection);
+        blackboard.window.draw((Renderable*)&(button_sprites_[i]), projection);
     }
 }
 
-void MainMenuScene::add_item(Blackboard& blackboard, char* texture_name, SceneID sceneID) {
+void MainMenuScene::add_item(Blackboard& blackboard, const char* texture_name, SceneID sceneID) {
     auto texture = blackboard.texture_manager.get_texture(texture_name);
     auto bg_texture = blackboard.texture_manager.get_texture("pixel");
     auto shader = blackboard.shader_manager.get_shader("sprite");
@@ -107,4 +105,8 @@ void MainMenuScene::add_item(Blackboard& blackboard, char* texture_name, SceneID
     button_bg_sprites_.push_back(bg_sprite);
     button_y_positions_.push_back(0);
     button_targets_.push_back(sceneID);
+}
+
+void MainMenuScene::reset_scene(Blackboard &blackboard) {
+
 }

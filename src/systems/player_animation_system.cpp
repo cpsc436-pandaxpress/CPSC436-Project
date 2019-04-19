@@ -1,42 +1,42 @@
 
 #include "player_animation_system.h"
-#include "components/panda.h"
 #include "util/constants.h"
 #include "scene/horizontal_scene.h"
 
 
 
-
-PlayerAnimationSystem::PlayerAnimationSystem(SceneID scene_id) :
-        scene_id(scene_id) {}
+PlayerAnimationSystem::PlayerAnimationSystem(SceneType scene_type) :
+        scene_type(scene_type) {}
 
 void PlayerAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
 
-    auto view = registry.view<Panda, Interactable, Sprite>();
+    auto view = registry.view<Panda, Interactable, Sprite, Transform>();
 
     for (auto entity: view) {
         auto &panda = view.get<Panda>(entity);
+        auto &transform = view.get<Transform>(entity);
         auto &walkable = view.get<Interactable>(entity);
         auto &sprite = view.get<Sprite>(entity);
 
-        switch (scene_id) {
-            case HORIZONTAL_SCENE_ID:
-                update_horizontal_scene(blackboard, walkable, sprite);
+        switch (scene_type) {
+            case JUNGLE_TYPE:
+                update_horizontal_scene(blackboard, walkable, sprite, panda);
                 break;
-            case VERTICAL_SCENE_ID:
-                update_vertical_boss_scene(blackboard, walkable, sprite);
+            case SKY_TYPE:
+                update_vertical_boss_scene(blackboard, walkable, sprite, panda, transform);
                 break;
-            case BOSS_SCENE_ID:
-                update_vertical_boss_scene(blackboard, walkable, sprite);
+            case BOSS_TYPE:
+                update_vertical_boss_scene(blackboard, walkable, sprite, panda, transform);
                 break;
             default:
-                fprintf(stderr, "Invalid scene ID: %d\n", scene_id);
+                fprintf(stderr, "Invalid scene ID: %d\n", scene_type);
         }
 
     }
 }
 
-void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Interactable &walkable, Sprite &sprite) {
+void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Interactable &walkable, Sprite &sprite,
+                                                    Panda &panda) {
     float frameRate = 8.f;
     int frames, row;
     int index = 0;
@@ -45,10 +45,9 @@ void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Inte
      */
     if (walkable.grounded) {
         frames = 8;
-        row = 2;
-        if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)){
+        if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
             frameRate = 10.f;
-        } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)){
+        } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
             frameRate = 6.f;
         }
     }
@@ -57,33 +56,46 @@ void PlayerAnimationSystem::update_horizontal_scene(Blackboard &blackboard, Inte
      */
     if (!walkable.grounded) {
         frames = 2;
-        row = 2;
         index = 8;
-        if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)){
+        if (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)) {
             frameRate = 3.f;
-        } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)){
+        } else if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
             frameRate = 1.f;
         } else {
             frameRate = 2.f;
         }
     }
-    animate(frames, index, row, sprite);
 
-    animationTime += frameRate*blackboard.delta_time;
+    if (panda.alive || !walkable.grounded) {
+        row = 1;
+        animate(true, frames, index, row, sprite);
+    } else if (!panda.alive && walkable.grounded) {
+        frames = 10;
+        frameRate = 15.f;
+        if (death_index < frames && (counter != (int) animationTime)) {
+            row = 2;
+            animate(false, frames, death_index, row, sprite);
+        }
+    }
+    counter = (int) animationTime;
+    animationTime += frameRate * blackboard.delta_time;
 
 }
 
-void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, Interactable &walkable, Sprite &sprite) {
+void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, Interactable &walkable, Sprite &sprite,
+                                                       Panda &panda, Transform &transform) {
     float frameRate = 8.f;
     int frames, index, row;
     bool idle = true;
     index = 0;
 
-    if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT)) {
-        direction_left = true;
+    if (panda.alive && (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT) ||
+                        blackboard.input_manager.key_pressed(SDL_SCANCODE_A))) {
+        transform.x_scale = -abs(transform.x_scale);
         idle = false;
-    } else if(blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT)){
-        direction_left = false;
+    } else if (panda.alive && (blackboard.input_manager.key_pressed(SDL_SCANCODE_RIGHT) ||
+                               blackboard.input_manager.key_pressed(SDL_SCANCODE_D))) {
+        transform.x_scale = abs(transform.x_scale);
         idle = false;
     }
     /*
@@ -92,16 +104,8 @@ void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, I
 
     if (walkable.grounded) {
         frames = 8;
-        if (direction_left) {
-            if (!idle){
-                row = 3;
-            } else {
-                row = 1;
-                frameRate = 3.f;
-            }
-
-        } else if (!direction_left && !idle){
-            row = 2;
+        if (!idle) {
+            row = 1;
         } else {
             row = 0;
             frameRate = 3.f;
@@ -116,20 +120,38 @@ void PlayerAnimationSystem::update_vertical_boss_scene(Blackboard &blackboard, I
         frameRate = 1.f;
         frames = 2;
         index = 8;
-        if (direction_left) {
-            row = 3;
-        } else {
+        row = 1;
+    }
+
+    if (panda.alive) {
+        animate(true, frames, index, row, sprite);
+    } else if (!panda.alive && walkable.grounded) {
+        frames = 10;
+        frameRate = 15.f;
+        if (death_index < frames && (counter != (int) animationTime)) {
             row = 2;
+            animate(false, frames, death_index, row, sprite);
         }
     }
-    animate(frames, index, row, sprite);
-    animationTime += frameRate*blackboard.delta_time;
+    counter = (int) animationTime;
+    animationTime += frameRate * blackboard.delta_time;
 
 }
 
-void PlayerAnimationSystem::animate(int frames, int index, int row, Sprite &sprite){
-    index += ((int) animationTime % frames);
-    vec2 uv1 = {index*pandawidth, pandaheight*row};
-    vec2 uv2 = {(index+1)*pandawidth - 0.001f, pandaheight*(1+row) - 0.02f};
+void PlayerAnimationSystem::animate(bool alive, int frames, int index, int row, Sprite &sprite) {
+    float w1, w2, h1, h2;
+    w1 = 0.024f;
+    w2 = -0.0065f;
+    h1 = 0.01f;
+    h2 = 0.115f;
+    if (alive) {
+        index += ((int) animationTime % frames);
+        death_index = 0;
+    } else if (!alive) {
+        w1 = 0.012f;
+        death_index++;
+    }
+    vec2 uv1 = {index * pandawidth + w1, pandaheight * row + h1};
+    vec2 uv2 = {(index + 1) * pandawidth + w2, pandaheight * (1 + row) - h2};
     sprite.set_uvs(uv1, uv2);
 }

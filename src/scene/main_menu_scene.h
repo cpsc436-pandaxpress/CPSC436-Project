@@ -7,12 +7,9 @@
 
 #include <cinttypes>
 #include <vector>
-#include <systems/background_render_system.h>
 #include <systems/background_transform_system.h>
-#include "../systems/sprite_render_system.h"
 #include "../systems/sprite_transform_system.h"
 #include "../util/blackboard.h"
-#include "../systems/collision_system.h"
 #include "../systems/player_animation_system.h"
 #include "../systems/enemy_animation_system.h"
 #include "scene.h"
@@ -29,6 +26,12 @@ private:
     std::vector<SceneID> button_targets_;
     int selected_button_ = -1;
 
+    const int BUTTON_WIDTH = 625;
+    const int BUTTON_HEIGHT = 140;
+    const int BUTTON_PADDING = 40;
+    const int BUTTON_X =  450;
+    const int BUTTON_Y = -250;
+
 public:
     MainMenuScene(Blackboard& blackboard, SceneManager& scene_manager);
 
@@ -36,7 +39,9 @@ public:
 
     virtual void render(Blackboard& blackboard) override;
 
-    void add_item(Blackboard& blackboard, char* texture_name, SceneID sceneID);
+    void add_item(Blackboard& blackboard, const char* texture_name, SceneID sceneID);
+
+    void reset_scene(Blackboard& blackboard) override;
 };
 
 #endif //PANDAEXPRESS_MAIN_MENU_SCENE_H

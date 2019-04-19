@@ -3,3 +3,4 @@
 build/
 cmake-build-debug/
 src/project_path.hpp
+data/score.ini
