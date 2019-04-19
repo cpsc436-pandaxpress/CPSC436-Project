@@ -23,9 +23,7 @@
 
 #include "util/scene_helper.h"
 
-// TODO: add box2d world
-// TODO: add method to maintain entity-body relationships
-// TODO: implement collision filter method
+
 
 PhysicsSystem::PhysicsSystem() :
     world_(b2Vec2(0, pix_to_meters(GRAVITY))),
@@ -152,7 +150,8 @@ void PhysicsSystem::maintain(entt::DefaultRegistry& registry) {
 
         if (registry.has<Velocity>(entity)) {
             auto velocity = registry.get<Velocity>(entity);
-            body->SetLinearVelocity(b2Vec2(pix_to_meters(velocity.x_velocity), pix_to_meters(velocity.y_velocity)));
+            auto old_b2_velocity = body->GetLinearVelocity();
+            body->SetLinearVelocity(b2Vec2(pix_to_meters(velocity.x_velocity), old_b2_velocity.y + pix_to_meters(velocity.y_velocity)));
         }
     }
 
@@ -306,14 +305,15 @@ void PhysicsSystem::handle_collisions(Blackboard& blackboard, entt::DefaultRegis
 }
 
 void PhysicsSystem::set_transforms(entt::DefaultRegistry& registry) {
-    for (auto entry : body_lookup_) {
-        auto entity = entry.first;
-        auto body = entry.second;
+    auto physics_view = registry.view<Collidable, Transform>();
+
+    for (auto entity : physics_view) {
+        auto body = body_lookup_[entity];
 
         auto x = meters_to_pix(body->GetPosition().x);
         auto y = meters_to_pix(body->GetPosition().y);
 
-        auto transform = registry.get<Transform>(entity);
+        auto& transform = physics_view.get<Transform>(entity);
         transform.x = x;
         transform.y = y;
     }
@@ -323,8 +323,8 @@ void PhysicsSystem::set_transforms(entt::DefaultRegistry& registry) {
 b2Body* PhysicsSystem::create_body_for(void* data, const Collidable& collidable, const Transform& transform, bool is_static, bool use_circle) {
     auto body_def = b2BodyDef();
     body_def.type = is_static ? b2BodyType::b2_staticBody : b2BodyType::b2_dynamicBody;
-    body_def.position.x = transform.x;
-    body_def.position.y = transform.y;
+    body_def.position.x = pix_to_meters(transform.x);
+    body_def.position.y = pix_to_meters(transform.y);
     body_def.userData = data;
 
     auto h_width = pix_to_meters(collidable.width / 2);
