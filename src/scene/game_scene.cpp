@@ -25,8 +25,7 @@ void GameScene::create_panda(Blackboard &blackboard) {
     registry_.assign<Sprite>(panda_entity, texture, shader, mesh);
     registry_.assign<Panda>(panda_entity);
     registry_.assign<ObeysGravity>(panda_entity);
-    if (mode_ == STORY_EASY || mode_ == STORY_HARD){
-        printf("blackboard health 2: %i\n",blackboard.story_health);
+    if (mode_ != ENDLESS){
         registry_.assign<Health>(panda_entity, blackboard.story_health, 3);
     } else {
         registry_.assign<Health>(panda_entity, 3);

@@ -30,6 +30,9 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
 }
 
 void BossScene::update(Blackboard &blackboard) {
+    if (!initialized) {
+        initial_update(blackboard);
+    }
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &interactable = registry_.get<Interactable>(panda_entity);
     if (blackboard.camera.transition_ready) {
@@ -139,6 +142,11 @@ void BossScene::init_scene(Blackboard &blackboard) {
     create_fade_overlay(blackboard);
     create_lives_text(blackboard);
     level_system.init(registry_);
+}
+
+void BossScene::initial_update(Blackboard &blackboard) {
+    reset_scene(blackboard);
+    initialized = true;
 }
 
 void BossScene::reset_scene(Blackboard &blackboard) {

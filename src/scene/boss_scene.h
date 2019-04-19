@@ -34,6 +34,7 @@ private:
     const float MAX_CAMERA_Y_DIFF = 200.f;
 
     bool pause = false;
+    bool initialized = false;
     std::vector<uint32_t> bg_entities;
     uint32_t jacko_entity;
 
@@ -61,6 +62,7 @@ private:
     void create_jacko(Blackboard& blackboard, uint32_t panda);
     void update_panda(Blackboard& blackboard);
     void update_camera(Blackboard& blackboard);
+    void initial_update(Blackboard& blackboard);
     void generate_cave(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
 public:
 
