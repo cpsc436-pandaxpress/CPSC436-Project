@@ -106,28 +106,13 @@ int start() {
 
     blackboard.shader_manager.load_shader(
             shaders_path("sprite.vs.glsl"),
-            shaders_path("grayscale.fs.glsl"),
-            "gray");
-
-    blackboard.shader_manager.load_shader(
-            shaders_path("sprite.vs.glsl"),
             shaders_path("wave.fs.glsl"),
             "wave");
 
     blackboard.shader_manager.load_shader(
             shaders_path("sprite.vs.glsl"),
-            shaders_path("edge.fs.glsl"),
-            "edge");
-
-    blackboard.shader_manager.load_shader(
-            shaders_path("shake.vs.glsl"),
-            shaders_path("blur.fs.glsl"),
-            "shake");
-
-    blackboard.shader_manager.load_shader(
-            shaders_path("sprite.vs.glsl"),
-            shaders_path("blur.fs.glsl"),
-            "blur");
+            shaders_path("split.fs.glsl"),
+            "shift");
 
     blackboard.texture_manager.load_texture(textures_path("panda.png"), "panda");
     blackboard.texture_manager.load_texture(textures_path("panda_sprite_sheet.png"), "panda_sprites");

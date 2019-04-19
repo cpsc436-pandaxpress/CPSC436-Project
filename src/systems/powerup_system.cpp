@@ -24,7 +24,7 @@ void PowerupSystem::update(Blackboard &blackboard, entt::DefaultRegistry &regist
                 case VAPE_POWERUP:
                     blackboard.speed_multiplier *= 0.6f;
                     blackboard.post_process_shader = std::make_unique<Shader>(
-                            blackboard.shader_manager.get_shader("wave"));
+                            blackboard.shader_manager.get_shader("shift"));
                     timer.save_watch(VAPE_TIMER_LABEL, VAPE_TIMER_LENGTH);
                     break;
                 default:
@@ -58,6 +58,9 @@ void PowerupSystem::update(Blackboard &blackboard, entt::DefaultRegistry &regist
         if (timer.exists(VAPE_TIMER_LABEL)) {
             float val = (((timer.get_target_time(VAPE_TIMER_LABEL) - timer.get_curr_time()) /
                               VAPE_TIMER_LENGTH));
+            blackboard.post_process_shader->bind();
+            blackboard.post_process_shader->set_uniform_float("timeElapsed", val);
+            blackboard.post_process_shader->unbind();
             blackboard.speed_multiplier = fmax(0.5f, 1 - val);
             if(val < 0.1){
                 if((int)(val*100) % 2 == 0){
@@ -65,7 +68,7 @@ void PowerupSystem::update(Blackboard &blackboard, entt::DefaultRegistry &regist
                             blackboard.shader_manager.get_shader("sprite"));
                 } else {
                     blackboard.post_process_shader = std::make_unique<Shader>(
-                            blackboard.shader_manager.get_shader("wave"));
+                            blackboard.shader_manager.get_shader("shift"));
                 }
             }
             if (timer.is_done(VAPE_TIMER_LABEL)) {
