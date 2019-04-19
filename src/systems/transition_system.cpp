@@ -41,9 +41,10 @@ void TransitionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& reg
                     auto &panda_transform = panda_view.get<Transform>(panda_entity);
                     auto &panda_velocity = panda_view.get<Velocity>(panda_entity);
                     if (cave_transform.y < panda_transform.y &&
-                            cave_transform.y + 200 > panda_transform.y &&
+                            cave_transform.y + 20 > panda_transform.y &&
                             cave.pos().x + cave.size().x / 2 < cam_position.x + cam_size.x / 2 &&
-                            cave.pos().x + cave.size().x / 2 <= panda_transform.x) {
+                            cave.pos().x + cave.size().x / 2 <= panda_transform.x &&
+                            cave.pos().x + cave.size().x / 2  + 20 >= panda_transform.x) {
                         blackboard.camera.transition_ready = true;
                     }
                 }
@@ -57,12 +58,12 @@ void TransitionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& reg
                     auto &panda = panda_view.get<Panda>(panda_entity);
                     auto &panda_transform = panda_view.get<Transform>(panda_entity);
                     auto &panda_velocity = panda_view.get<Velocity>(panda_entity);
-                    if (cave.pos().x + 750/2 <= panda_transform.x) {
-                        if (panda_transform.y >= cave.pos().y + cave.size().y) {
-                            blackboard.camera.transition_ready = true;
-                        } else {
-                            panda_velocity.x_velocity = 0.f;
-                        }
+                    if (cave_transform.y < panda_transform.y &&
+                        cave_transform.y + 20 > panda_transform.y &&
+                        cave.pos().x + cave.size().x / 2 < cam_position.x + cam_size.x / 2 &&
+                        cave.pos().x + cave.size().x / 2 <= panda_transform.x &&
+                        cave.pos().x + cave.size().x / 2  + 20 >= panda_transform.x) {
+                        blackboard.camera.transition_ready = true;
                     }
                 }
             }
