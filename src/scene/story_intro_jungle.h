@@ -29,10 +29,10 @@ private:
     const float VAPE_POS_Y = -1200.f;
     const std::string SCENE_END_LABEL = "end_scene";
     const float SCENE_END = 33.f;
-    const float SKIP_POS_X = 570.f;
+    const float SKIP_POS_X = 1800.f;
     const float SKIP_POS_Y = 350.f;
     const std::string SKIP_SCENE_LABEL = "skip";
-    const float SKIP_SCENE = 6.f;
+    const float SKIP_SCENE = 9.f;
     const float SKIP_SPEED = 250.f;
     const std::string STROBE_LABEL = "STROBE";
     const float STROBE = 2.f;

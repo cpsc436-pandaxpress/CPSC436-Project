@@ -31,10 +31,10 @@ private:
     const float JACKO_START_X = 1000.f;
     const float JACKO_START_Y = 80.f;
     const float BEACH_SCENE_END = 32.f;
-    const float SKIP_POS_X = 570.f;
+    const float SKIP_POS_X = 1800.f;
     const float SKIP_POS_Y = 350.f;
     const std::string SKIP_SCENE_LABEL;
-    const float SKIP_SCENE = 6.f;
+    const float SKIP_SCENE = 9.f;
     const float SKIP_SPEED = 250.f;
 
 
