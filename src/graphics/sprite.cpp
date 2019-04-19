@@ -203,3 +203,7 @@ void Sprite::set_texture_rect(uint32_t left, uint32_t top, uint32_t width, uint3
     float v2 = (float)(top + height) / texture_.height();
     set_uvs(u1, v1, u2, v2);
 }
+
+void Sprite::set_shader(Shader shader) {
+    shader_ = shader;
+}

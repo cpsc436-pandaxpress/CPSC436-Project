@@ -29,9 +29,10 @@ static const SceneID STORY_EASY_SKY_SCENE_ID    = 2;
 static const SceneID BOSS_SCENE_ID    = 3;
 static const SceneID ENDLESS_JUNGLE_SCENE_ID = 4;
 static const SceneID ENDLESS_SKY_SCENE_ID = 5;
-static const SceneID STORY_INTRO_SCENE_ID  = 6;
+static const SceneID STORY_BEACH_INTRO_SCENE_ID  = 6;
 static const SceneID STORY_HARD_JUNGLE_SCENE_ID = 7;
 static const SceneID STORY_HARD_SKY_SCENE_ID = 8;
+static const SceneID STORY_JUNGLE_INTRO_SCENE_ID  = 9;
 
 static const SceneType JUNGLE_TYPE = 0;
 static const SceneType SKY_TYPE = 1;
@@ -40,5 +41,8 @@ static const SceneType STORY_TYPE = 3;
 
 static const int MAX_LIVES = 3;
 static const int MAX_HEALTH = 3;
+static const float DEFAULT_SPEED_MULTIPLIER = 1.0f;
+static const float MAX_SPEED_MULTIPLIER = 1.5f;
+static const float TIME_MULTIPLIER_SPEED = 0.001f;
 
 #endif //PANDAEXPRESS_CONSTANTS_H

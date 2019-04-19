@@ -4,6 +4,7 @@
 
 #include "boss_scene.h"
 #include "util/constants.h"
+#include <graphics/fade_overlay.h>
 
 BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         GameScene(scene_manager),
@@ -26,6 +27,7 @@ BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
 {
     init_scene(blackboard);
     reset_scene(blackboard); // idk why??? but this is required
+    create_fade_overlay(blackboard);
     gl_has_errors();
 }
 
@@ -35,9 +37,14 @@ void BossScene::update(Blackboard &blackboard) {
     }
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &interactable = registry_.get<Interactable>(panda_entity);
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
     if (blackboard.camera.transition_ready) {
-        go_to_next_scene(blackboard);
-        return;
+        if (fadeOverlay.alpha() < 1.2f) {
+            fade_overlay_system.update(blackboard, registry_);
+        } else {
+            go_to_next_scene(blackboard);
+            return;
+        }
     }
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
         if (pause) {
@@ -63,6 +70,11 @@ void BossScene::update(Blackboard &blackboard) {
             update_camera(blackboard);
             player_movement_system.update(blackboard, registry_);
         } else if (!panda.alive && interactable.grounded) {
+            fade_overlay_system.update(blackboard, registry_);
+        }
+
+
+        if (fadeOverlay.alpha() > 0.f) {
             fade_overlay_system.update(blackboard, registry_);
         }
 
@@ -141,7 +153,10 @@ void BossScene::init_scene(Blackboard &blackboard) {
     create_jacko(blackboard, panda_entity);
     create_fade_overlay(blackboard);
     create_lives_text(blackboard);
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+    fadeOverlay.set_alpha(1.0);
     level_system.init(registry_);
+    blackboard.post_process_shader = std::make_unique<Shader>(blackboard.shader_manager.get_shader("sprite"));
 }
 
 void BossScene::initial_update(Blackboard &blackboard) {
@@ -179,7 +194,7 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
     registry_.assign<Sprite>(jacko_entity, texture, shader, mesh);
     registry_.assign<Jacko>(jacko_entity);
     registry_.assign<Chases>(jacko_entity, target);
-    registry_.assign<Health>(jacko_entity, 10);
+    registry_.assign<Health>(jacko_entity, 1);
     registry_.assign<Interactable>(jacko_entity);
     registry_.assign<CausesDamage>(jacko_entity, TOP_VULNERABLE_MASK, 1);
     registry_.assign<Velocity>(jacko_entity, 0.f, 0.f);
@@ -232,7 +247,6 @@ void BossScene::go_to_next_scene(Blackboard &blackboard) {
     blackboard.camera.in_transition = false;
     blackboard.camera.transition_ready = false;
     change_scene(STORY_HARD_JUNGLE_SCENE_ID);
-    init_scene(blackboard);
 }
 
 void BossScene::generate_cave(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry) {

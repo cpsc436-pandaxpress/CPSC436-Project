@@ -34,4 +34,5 @@ struct Blackboard {
     float score;
     int story_lives;
     int story_health;
+    float time_multiplier;
 };

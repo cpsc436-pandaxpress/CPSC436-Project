@@ -41,10 +41,17 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
 void HorizontalScene::update(Blackboard &blackboard) {
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &interactable = registry_.get<Interactable>(panda_entity);
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+
     if (blackboard.camera.transition_ready) {
-        go_to_next_scene(blackboard);
-        return;
+        if (fadeOverlay.alpha() < 1.2f) {
+            fade_overlay_system.update(blackboard, registry_);
+        } else {
+            go_to_next_scene(blackboard);
+            return;
+        }
     }
+
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
         if (pause) {
             pause = false;
@@ -71,6 +78,10 @@ void HorizontalScene::update(Blackboard &blackboard) {
             }
             player_movement_system.update(blackboard, registry_);
         } else if (!panda.alive && interactable.grounded) {
+            fade_overlay_system.update(blackboard, registry_);
+        }
+
+        if (fadeOverlay.alpha() > 0.f) {
             fade_overlay_system.update(blackboard, registry_);
         }
 
@@ -133,13 +144,18 @@ void HorizontalScene::update_camera(Blackboard &blackboard) {
 
     auto &panda_transform = registry_.get<Transform>(panda_entity);
     float y_offset = std::min(0.f, panda_transform.y + MAX_CAMERA_Y_DIFF);
-    blackboard.camera.set_position(cam_position.x + CAMERA_SPEED * blackboard.delta_time,
+    blackboard.camera.set_position(
+            cam_position.x + CAMERA_SPEED * blackboard.delta_time,
                                    y_offset);
     blackboard.camera.compose();
 }
 
 void HorizontalScene::render(Blackboard &blackboard) {
-    blackboard.window.colorScreen(vec3{19.f, 136.f, 126.f});
+    if (mode_ == STORY_HARD) {
+        blackboard.window.colorScreen(vec3{126.f, 19.f, 136.f});
+    } else {
+        blackboard.window.colorScreen(vec3{19.f, 136.f, 126.f});
+    }
     render_system.update(blackboard, registry_);
 }
 
@@ -157,6 +173,8 @@ void HorizontalScene::cleanup() {
         registry_.destroy(e);
     }
     bg_entities.clear();
+    if (registry_.valid(timer_entity))
+        registry_.destroy(timer_entity);
     GameScene::cleanup();
 }
 
@@ -183,6 +201,7 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
     blackboard.randNumGenerator.init(0);
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
+    blackboard.time_multiplier = DEFAULT_SPEED_MULTIPLIER;
     create_background(blackboard);
     create_panda(blackboard);
     if (mode_ == ENDLESS) {
@@ -195,6 +214,9 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
         create_lives_text(blackboard);
     }
     create_fade_overlay(blackboard);
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+    fadeOverlay.set_alpha(1.0);
+    blackboard.post_process_shader = std::make_unique<Shader>(blackboard.shader_manager.get_shader("sprite"));
     level_system.init(mode_, registry_);
 }
 
