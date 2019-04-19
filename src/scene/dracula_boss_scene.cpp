@@ -50,30 +50,7 @@ void DraculaBossScene::update(Blackboard &blackboard) {
         pause = false;
         return;
     }
-/*
-    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_7)) {
-        std::vector<Coordinates*> path = a_star_system.getProjectilePath(blackboard, registry_);
-        for(int i=0; i<path.size(); i++){
-            std::cout<< path[i]->x << " " << path[i]->y <<"\n";
-        }
-        bat_entity = registry_.create();
 
-        auto texture = blackboard.texture_manager.get_texture("bat");
-        auto shader = blackboard.shader_manager.get_shader("sprite");
-        auto mesh = blackboard.mesh_manager.get_mesh("sprite");
-
-        float scaleY = 50.0 / texture.height();
-        float scaleX = 50.0 / texture.width();
-        registry_.assign<Transform>(bat_entity, path[0]->x, path[0]->y, 0., scaleX, scaleY);
-        registry_.assign<Sprite>(bat_entity, texture, shader, mesh);
-        registry_.assign<Velocity>(bat_entity);
-        registry_.assign<Timer>(bat_entity);
-        registry_.assign<Collidable>(bat_entity, texture.width() * scaleX,
-                                     texture.height() * scaleY);
-        registry_.assign<Seeks>(bat_entity, path);
-
-    }
-*/
     if (!pause) {
         if (panda.alive && !panda.dead) {
             update_camera(blackboard);
@@ -82,9 +59,10 @@ void DraculaBossScene::update(Blackboard &blackboard) {
             fade_overlay_system.update(blackboard, registry_);
         }
         update_panda(blackboard);
-
+        seek_system.update(blackboard, registry_);
         level_system.update(blackboard, registry_);
         chase_system.update(blackboard, registry_);
+
         physics_system.update(blackboard, registry_);
         panda_dmg_system.update(blackboard, registry_);
         health_bar_transform_system.update(blackboard, registry_);
@@ -95,7 +73,7 @@ void DraculaBossScene::update(Blackboard &blackboard) {
         timer_system.update(blackboard, registry_);
         falling_platform_system.update(blackboard, registry_);
         background_transform_system.update(blackboard, registry_);
-        seek_system.update(blackboard, registry_);
+
         hud_transform_system.update(blackboard, registry_); // should run last
     } else {
         pause_menu_transform_system.update(blackboard, registry_);
@@ -146,6 +124,7 @@ void DraculaBossScene::reset_scene(Blackboard &blackboard) {
 
 void DraculaBossScene::cleanup() {
     level_system.destroy_entities(registry_);
+
     registry_.destroy(dracula_entity);
     for (uint32_t e: bg_entities) {
         registry_.destroy(e);

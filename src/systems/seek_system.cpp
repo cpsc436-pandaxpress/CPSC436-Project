@@ -43,11 +43,13 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
 
 
             if(abs(target->x - transform.x) < 1 && seeks.goingHorizontal){
+
                 seeks.seekList.erase(seeks.seekList.begin());
                 seeks.goingHorizontal=false;
                 seeks.goingVertical=false;
 
             }else if(abs(target->y - transform.y) < 1 && seeks.goingVertical){
+
                 seeks.seekList.erase(seeks.seekList.begin());
                 seeks.goingHorizontal=false;
                 seeks.goingVertical=false;
@@ -62,7 +64,7 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
                     velocity.y_velocity=0;
                     transform.y = transform.y + sin(transform.x/50)*0.3f;
                 }else if(seeks.goingVertical) {
-                    if (target->y < transform.y) {
+                    if (target->y -blackboard.camera.position().y < transform.y-blackboard.camera.position().y) {
                         velocity.y_velocity = -seeks.seek_speed;
                     } else {
                         velocity.y_velocity = seeks.seek_speed;
