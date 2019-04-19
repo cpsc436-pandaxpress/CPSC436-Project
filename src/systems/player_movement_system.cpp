@@ -83,6 +83,10 @@ void PlayerMovementSystem::update(Blackboard &blackboard, entt::DefaultRegistry&
 }
 
 void PlayerMovementSystem::update_horizontal_scene(Blackboard &blackboard, Velocity &velocity) {
+    if (blackboard.camera.transition_ready){
+        velocity.x_velocity = 0.f;
+        return;
+    }
     const float dvx = PANDA_HS_ACCELERATION * blackboard.delta_time;
     const float camera_vx = HorizontalScene::CAMERA_SPEED;
     if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT) ||
@@ -117,6 +121,10 @@ void PlayerMovementSystem::update_horizontal_scene(Blackboard &blackboard, Veloc
 
 void PlayerMovementSystem::update_vertical_scene(Blackboard &blackboard,
                                                  Velocity &velocity, Panda &panda) {
+    if (blackboard.camera.transition_ready){
+        velocity.x_velocity = 0.f;
+        return;
+    }
     const float dvx = PANDA_ACCELERATION * blackboard.delta_time;
     if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT) ||
         blackboard.input_manager.key_pressed(SDL_SCANCODE_A)) {
@@ -152,6 +160,10 @@ void PlayerMovementSystem::update_vertical_scene(Blackboard &blackboard,
 
 void PlayerMovementSystem::update_boss_scene(Blackboard &blackboard,
                                              Velocity &velocity, Panda &panda) {
+    if (blackboard.camera.transition_ready){
+        velocity.x_velocity = 0.f;
+        return;
+    }
     const float dvx = PANDA_ACCELERATION * blackboard.delta_time;
     if (blackboard.input_manager.key_pressed(SDL_SCANCODE_LEFT) ||
         blackboard.input_manager.key_pressed(SDL_SCANCODE_A)) {
