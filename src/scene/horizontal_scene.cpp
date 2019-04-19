@@ -186,14 +186,12 @@ void HorizontalScene::go_to_next_scene(Blackboard &blackboard) {
         blackboard.camera.in_transition = false;
         blackboard.camera.transition_ready = false;
         change_scene(STORY_EASY_SKY_SCENE_ID);
-        init_scene(blackboard);
     }
     else if (mode_ == STORY_HARD) {
         cleanup();
         blackboard.camera.in_transition = false;
         blackboard.camera.transition_ready = false;
         change_scene(STORY_HARD_SKY_SCENE_ID);
-        init_scene(blackboard);
     }
 }
 
