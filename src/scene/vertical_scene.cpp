@@ -144,16 +144,17 @@ void VerticalScene::go_to_next_scene(Blackboard &blackboard) {
     auto &health = registry_.get<Health>(panda_entity);
     blackboard.story_health = health.health_points;
     if (mode_ == STORY_EASY) {
+        blackboard.camera.set_position(0, 0);
         cleanup();
         blackboard.camera.in_transition = false;
         blackboard.camera.transition_ready = false;
         change_scene(BOSS_SCENE_ID);
         init_scene(blackboard);
     } else if (mode_ == STORY_HARD) {
+        blackboard.camera.set_position(0, 0);
         cleanup();
         blackboard.camera.in_transition = false;
         blackboard.camera.transition_ready = false;
-
         // TODO: change to final boss scene
         change_scene(MAIN_MENU_SCENE_ID);
         init_scene(blackboard);
@@ -235,7 +236,8 @@ void VerticalScene::update_panda(Blackboard &blackboard) {
             blackboard.story_health = MAX_HEALTH;
             reset_scene(blackboard);
         } else {
-            blackboard.story_lives -= 1;
+            blackboard.story_health = MAX_HEALTH;
+            blackboard.story_lives = MAX_LIVES;
             blackboard.camera.set_position(0, 0);
             reset_scene(blackboard);
             change_scene(MAIN_MENU_SCENE_ID);
