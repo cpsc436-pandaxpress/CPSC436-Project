@@ -356,7 +356,8 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
 
     auto static_view = registry.view<Collidable, Transform>();
 
-    auto recorded_collisions = std::unordered_set<uint_pair, PairHash> {};
+    auto recorded_collisions = std::unordered_set<uint_pair, PairHash>();
+
     for (auto d_entity : dynamic_view) {
         auto& interactible = dynamic_view.get<Interactable>(d_entity);
 
@@ -379,7 +380,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                     continue;
                 }
                 //if the entities already collided this frame
-                if (recorded_collisions.count(uint_pair(d_entity, s_entity)) < 0) {
+                if (recorded_collisions.count(uint_pair(d_entity, s_entity)) > 0) {
                     continue;
                 }
 
@@ -459,10 +460,9 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         interactible.grounded = true;
                     }
                     else {
-                        // COLLISION: CausesDamage hits Panda
                         if ( registry.has<CausesDamage>(entry.e1)
                              && registry.has<Panda>(d_entity)
-                                ) {
+                            ) {
                             auto& cd = registry.get<CausesDamage>(entry.e1);
                             auto& health = registry.get<Health>(d_entity);
                             auto& panda = registry.get<Panda>(d_entity);
@@ -500,11 +500,9 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
 
 
                     // check for causing damage to the panda
-
-                    // COLLISION: CausesDamage hits Panda
                     if ( registry.has<CausesDamage>(entry.e1)
-                        && registry.has<Panda>(d_entity)
-                    ) {
+                         && registry.has<Panda>(d_entity)
+                        ) {
                         auto& cd = registry.get<CausesDamage>(entry.e1);
                         auto& health = registry.get<Health>(d_entity);
                         auto& panda = registry.get<Panda>(d_entity);
@@ -532,16 +530,16 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         }
                     }
 
-                    // COLLISION: Panda hits Health
+                    // check for the panda causing damage
                     if ( registry.has<Health>(entry.e1)
                          && registry.has<Panda>(d_entity)
-                    ) {
+                        ) {
                         auto& cd = registry.get<CausesDamage>(d_entity);
                         auto& panda = registry.get<Panda>(d_entity);
                         auto& transform = registry.get<Transform>(d_entity);
                         auto& health = registry.get<Health>(entry.e1);
                         if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)
-                        && !panda.recovering){
+                            && !panda.recovering){
                             //do damage
                             health.health_points -= cd.hp;
 
@@ -565,7 +563,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                     chases.evading = true;
                                 }
                             }
-                            //else if to exclude jacko from normal dying stuff
+                                //else if to exclude jacko from normal dying stuff
                             else if (health.health_points <= 0) {
                                 //normal way to kill stuff
                                 if (registry.has<Interactable>(entry.e1)) {
@@ -588,7 +586,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         }
                     }
 
-                    // COLLISION: Panda hits Food
+                    //check for food
                     if ( registry.has<Food>(entry.e1)) {
                         if (registry.has<Panda>(d_entity)) {
                             auto &panda = registry.get<Panda>(d_entity);
@@ -609,7 +607,6 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         }
                     }
 
-                    // COLLISION: Panda hits Powerup
                     if (registry.has<Powerup>(entry.e1) && registry.has<Panda>(d_entity)) {
                         auto &panda = registry.get<Panda>(d_entity);
                         auto &powerup = registry.get<Powerup>(entry.e1);
