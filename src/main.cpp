@@ -27,12 +27,11 @@
 #include <graphics/cave.h>
 #include <graphics/font_manager.h>
 #include <util/property_reader.h>
+#include <scene/story_intro.h>
 
 
 int start() {
-    auto window = Window();
-
-    window.initialize("Express Panda");
+    Window window("Express Panda");
 
     Blackboard blackboard = {
         Camera(1600, 900, 0, 0),
@@ -45,7 +44,9 @@ int start() {
         Random(0),
         SoundManager(),
         FontManager(),
-        0
+        std::unique_ptr<Shader>(),
+        0,
+        DEFAULT_SPEED_MULTIPLIER
     };
 
 
@@ -93,7 +94,7 @@ int start() {
     blackboard.shader_manager.load_shader(
             shaders_path("caveEntrance.vs.glsl"),
             shaders_path("caveEntrance.fs.glsl"),"caveEntrance");
-  
+
      blackboard.shader_manager.load_shader(
             shaders_path("text.vs.glsl"),
             shaders_path("text.fs.glsl"), "text");
@@ -101,6 +102,22 @@ int start() {
     blackboard.shader_manager.load_shader(
             shaders_path("fade.vs.glsl"),
             shaders_path("fade.fs.glsl"),"fade");
+
+    // example post-process shader
+    blackboard.shader_manager.load_shader(
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("recolor.fs.glsl"),
+            "recolor");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("wave.fs.glsl"),
+            "wave");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("split.fs.glsl"),
+            "shift");
 
     blackboard.texture_manager.load_texture(textures_path("panda.png"), "panda");
     blackboard.texture_manager.load_texture(textures_path("panda_sprite_sheet.png"), "panda_sprites");
@@ -139,6 +156,22 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("bg_grave_top.png"), "grave_top");
     blackboard.texture_manager.load_texture(textures_path("bg_grave_mid.png"), "grave_middle");
 
+    blackboard.texture_manager.load_texture(textures_path("vial.png"), "vial");
+    blackboard.texture_manager.load_texture(textures_path("shield.png"), "shield");
+  
+    blackboard.texture_manager.load_texture(textures_path("story_beach_back.png"), "beach_back");
+    blackboard.texture_manager.load_texture(textures_path("story_beach_front.png"), "beach_front");
+    blackboard.texture_manager.load_texture(textures_path("story_beach_water_1.png"), "beach_water_1");
+    blackboard.texture_manager.load_texture(textures_path("story_beach_water_2.png"), "beach_water_2");
+    blackboard.texture_manager.load_texture(textures_path("story_beach_water_3.png"), "beach_water_3");
+    blackboard.texture_manager.load_texture(textures_path("story_beach_water_4.png"), "beach_water_4");
+    blackboard.texture_manager.load_texture(textures_path("story_beach_kelly.png"), "beach_kelly");
+    blackboard.texture_manager.load_texture(textures_path("story_beach_panda.png"), "beach_panda");
+    blackboard.texture_manager.load_texture(textures_path("story_beach_hearts.png"), "beach_hearts");
+    blackboard.texture_manager.load_texture(textures_path("story_beach_jacko.png"), "beach_jacko");
+    blackboard.texture_manager.load_texture(textures_path("skip_scene.png"), "skip_scene");
+
+
     blackboard.mesh_manager.load_mesh("health", 4, HealthBar::vertices, 6, HealthBar::indices);
     blackboard.mesh_manager.load_mesh("cave", 41, Cave::vertices, 168, Cave::indices);
     blackboard.mesh_manager.load_mesh("caveEntrance", 4, CaveEntrance::vertices, 9, CaveEntrance::indices);
@@ -151,7 +184,7 @@ int start() {
 
     // initialize scenes here
     MainMenuScene main_menu(blackboard, scene_manager);
-    main_menu.add_item(blackboard, "story_text", STORY_JUNGLE_SCENE_ID);
+    main_menu.add_item(blackboard, "story_text", STORY_INTRO_SCENE_ID);
     main_menu.add_item(blackboard, "endless_jungle_text", ENDLESS_JUNGLE_SCENE_ID);
     main_menu.add_item(blackboard, "endless_sky_text", ENDLESS_SKY_SCENE_ID);
     main_menu.add_item(blackboard, "jacko_text",  BOSS_SCENE_ID);
@@ -170,23 +203,30 @@ int start() {
     VerticalScene vertical_scene(blackboard, scene_manager);
     vertical_scene.set_high_score(std::stoi(scores.get("sky")));
 
-    scene_manager.add_scene(STORY_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY);
+    StoryIntroScene story_intro_scene(blackboard, scene_manager);
+
+    scene_manager.add_scene(STORY_EASY_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY_EASY);
     scene_manager.add_scene(ENDLESS_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), ENDLESS);
     scene_manager.add_scene(ENDLESS_SKY_SCENE_ID, (Scene*)(&vertical_scene), ENDLESS);
+
     scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene), JACKO);
     scene_manager.add_scene(DRACULA_BOSS_SCENE_ID, (Scene*)(&dracula_boss_scene), DRACULA);
-    scene_manager.add_scene(STORY_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY);
+
+    scene_manager.add_scene(STORY_EASY_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY_EASY);
+    scene_manager.add_scene(STORY_INTRO_SCENE_ID, (Scene*)(&story_intro_scene));
+    scene_manager.add_scene(STORY_HARD_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY_HARD);
+    scene_manager.add_scene(STORY_HARD_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY_HARD);
 
     // set the first scene
 
     scene_manager.change_scene(MAIN_MENU_SCENE_ID);
 
-
+    blackboard.post_process_shader = std::make_unique<Shader>(blackboard.shader_manager.get_shader("sprite"));
 
     bool quit = false;
     while (!quit) {
         //update blackboard
-        blackboard.delta_time = std::min<float>(window.delta_time(), 0.25f);
+        blackboard.delta_time = std::min<float>(window.delta_time(), 0.25f) * blackboard.time_multiplier;
         blackboard.input_manager.update();
 
         scene_manager.update(blackboard);
@@ -194,7 +234,10 @@ int start() {
         window.clear();
         scene_manager.render(blackboard);
 
-        window.display();
+        window.display(
+            *blackboard.post_process_shader,
+            blackboard.mesh_manager.get_mesh("sprite")
+        );
 
         quit = blackboard.input_manager.should_exit();
     }

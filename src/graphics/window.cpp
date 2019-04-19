@@ -5,9 +5,22 @@
 #include <GL/glew.h>
 
 #include "window.h"
+#include "camera.h"
 
-Window::~Window() {
+Window::~Window()
+{
     SDL_QuitSubSystem(SDL_INIT_VIDEO);
+}
+
+Window::Window(const char* title) :
+    sdl_window_(nullptr),
+    gl_context_(),
+    framebuffer_()
+{
+    auto init_success = initialize(title);
+    if (!init_success) {
+        int i = 0; //debug
+    }
 }
 
 bool Window::initialize(const char* title) {
@@ -66,6 +79,8 @@ bool Window::initialize(const char* title) {
         return false;
     }
 
+    framebuffer_ = std::make_unique<Framebuffer>(width_, height_);
+
     return true;
 }
 
@@ -74,11 +89,29 @@ void Window::destroy() {
 }
 
 void Window::clear() {
-    glClearColor(1, 1, 1, 1); // same colour as the top of the background
+    glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
+    framebuffer_->bind();
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    framebuffer_->unbind();
 }
 
-void Window::display() {
+void Window::display(Shader shader, Mesh mesh) {
+    framebuffer_->test();
+
+    auto fb_texture = framebuffer_->get_texture();
+
+    auto sprite = Sprite(fb_texture, shader, mesh);
+    sprite.set_size(width_, height_);
+    sprite.set_scale(1, -1);
+    sprite.set_pos(0, 0);
+
+    auto null_camera = Camera(width_, height_, 0, 0);
+    null_camera.compose();
+
+    sprite.draw(null_camera.get_projection());
+
     SDL_GL_SwapWindow(sdl_window_);
 
     last_time_ = recent_time_;
@@ -92,9 +125,18 @@ float Window::delta_time() {
 
 void Window::draw(Renderable* renderable, const mat3& projection) {
     // no need to do any setup
+    framebuffer_->bind();
     renderable->draw(projection);
+    framebuffer_->unbind();
 }
 
 vec2 Window::size() {
     return {(float) width_, (float) height_};
+}
+
+void Window::colorScreen(vec3 color) {
+    framebuffer_->bind();
+    glClearColor(color.x / 256.f, color.y / 256.f, color.z / 256.f, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    framebuffer_->unbind();
 }

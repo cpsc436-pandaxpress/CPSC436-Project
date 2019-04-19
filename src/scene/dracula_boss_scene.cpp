@@ -136,7 +136,7 @@ void DraculaBossScene::init_scene(Blackboard &blackboard) {
     create_panda(blackboard);
     create_dracula(blackboard, panda_entity);
     create_fade_overlay(blackboard);
-    level_system.init();
+    level_system.init(registry_);
 }
 
 void DraculaBossScene::reset_scene(Blackboard &blackboard) {

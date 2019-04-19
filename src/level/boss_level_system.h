@@ -24,7 +24,7 @@ public:
 
     BossLevelSystem();
 
-    void init() override;
+    void init(entt::DefaultRegistry &registry) override;
 
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override;
 };

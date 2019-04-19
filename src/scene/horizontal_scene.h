@@ -20,6 +20,7 @@
 #include <systems/hud_transform_system.h>
 #include <systems/label_system.h>
 #include <systems/render_system.h>
+#include <systems/powerup_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_transform_system.h"
@@ -37,6 +38,10 @@ private:
     const float MAX_CAMERA_Y_DIFF = 250.f;
     bool pause = false;
     int high_score_;
+
+    uint32_t timer_entity;
+    const std::string END_TIMER_LABEL = "end";
+    const float END_TIMER_LENGTH = 30;
 
     std::vector<uint32_t> bg_entities;
     HorizontalLevelSystem level_system;
@@ -59,11 +64,13 @@ private:
     HudTransformSystem hud_transform_system;
     LabelSystem label_system;
     RenderSystem render_system;
+    PowerupSystem powerup_system;
 
     void create_background(Blackboard &blackboard);
     void init_scene(Blackboard &blackboard);
     void update_panda(Blackboard& blackboard);
     void update_camera(Blackboard& blackboard);
+    void check_end_timer();
 public:
     HorizontalScene(Blackboard &blackboard,
                     SceneManager &scene_manager);
@@ -71,7 +78,7 @@ public:
 
     virtual void render(Blackboard& blackboard) override;
 
-    void set_mode(SceneMode mode) override;
+    void set_mode(SceneMode mode, Blackboard &blackboard) override;
 
     void set_high_score(int value);
 

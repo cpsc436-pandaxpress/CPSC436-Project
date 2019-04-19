@@ -37,7 +37,7 @@ public:
     // render the scene
     virtual void render(Blackboard& blackboard) = 0;
 
-    virtual void set_mode(SceneMode mode);
+    virtual void set_mode(SceneMode mode, Blackboard &blackboard);
 
     virtual void reset_scene(Blackboard& blackboard) = 0;
 

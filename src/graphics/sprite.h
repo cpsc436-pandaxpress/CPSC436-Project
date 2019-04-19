@@ -37,6 +37,7 @@ public:
     vec2 scale();
     void set_scale(const vec2& scale);
     void set_scale(float x_scale, float y_scale);
+    void set_scale_int(float x_scale, float y_scale);
     void set_size(uint32_t width, uint32_t height);
 
     void set_size(int x_size, int y_size);
@@ -54,5 +55,7 @@ public:
     void set_uvs(float u1, float v1, float u2, float v2);
     void set_uvs(const vec2& uv1, const vec2& uv2);
     void set_texture_rect(uint32_t left, uint32_t top, uint32_t width, uint32_t height);
+
+    void set_shader(Shader shader);
 
 };

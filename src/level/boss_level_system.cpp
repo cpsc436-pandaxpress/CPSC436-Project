@@ -10,13 +10,15 @@
 #include "boss_level_system.h"
 
 BossLevelSystem::BossLevelSystem() : LevelSystem() {
-    init();
+
 }
 
-void BossLevelSystem::init() {
-    LevelSystem::init();
+
+void BossLevelSystem::init(entt::DefaultRegistry &registry)  {
+    LevelSystem::init(registry);
     //level_ = Level::load_from_path("jacko_level.csv");
     level_ = Level::load_from_path("dracula_level.csv");
+
     generated_ = false;
 }
 
@@ -33,7 +35,7 @@ void BossLevelSystem::generate_level(Blackboard &blackboard, entt::DefaultRegist
         for (size_t j = 0; j < level_.height(); j++) {
             float y = FIRST_ROW_Y + (float) CELL_HEIGHT * j;
 
-            generateEntity(level_.get_tile_at(i, j), x, y, blackboard, registry, STORY);
+            generateEntity(level_.get_tile_at(i, j), x, y, blackboard, registry, STORY_EASY);
         }
     }
 }

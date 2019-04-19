@@ -130,8 +130,25 @@ void Sprite::set_scale(const vec2& scale) {
     scale_ = { scale.x, scale.y };
 }
 
+void Sprite::set_scale_int(float x_scale, float y_scale) {
+    int pix_x = (int)pixel_scale_.x;
+    int pix_y = (int)pixel_scale_.y;
+
+    float true_x_scale = (pixel_scale_.x * x_scale) / pix_x;
+    float true_y_scale = (pixel_scale_.x * y_scale) / pix_x;
+
+    scale_ = { true_x_scale, true_y_scale };
+}
+
 void Sprite::set_scale(float x_scale, float y_scale) {
     scale_ = { x_scale, y_scale };
+}
+
+void Sprite::set_size(uint32_t width, uint32_t height) {
+    set_scale(
+        (float)width / pixel_scale_.x,
+        (float)height / pixel_scale_.y
+    );
 }
 
 void Sprite::set_size(int x_size, int y_size) {
@@ -185,4 +202,8 @@ void Sprite::set_texture_rect(uint32_t left, uint32_t top, uint32_t width, uint3
     float u2 = (float)(left + width) / texture_.width();
     float v2 = (float)(top + height) / texture_.height();
     set_uvs(u1, v1, u2, v2);
+}
+
+void Sprite::set_shader(Shader shader) {
+    shader_ = shader;
 }
