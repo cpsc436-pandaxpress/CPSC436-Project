@@ -19,10 +19,16 @@ void main()
         uv1.x + texcoord.x * uv_delta.x,
         uv1.y + texcoord.y * uv_delta.y
     );
-    vec3 colors[3] = vec3[](
-        vec3(1.0, 1.0, 0.0), // RED
-        vec3(0.0, 0.0, 1.0), // BLUE
-        vec3(0.0, 1.0, 0.0)  // GREEN
+    vec3 colors[9] = vec3[](
+        vec3(0.9, 0.1, 1.0),  //magenta
+        vec3(1.0, 1.0, 0.0), //yellow
+        vec3(1.0, 0.5, .0), //orange
+        vec3(0.2, 1.0, 1.0), //cyan
+        vec3(1.0, 0.9, 0.0), //more yellow
+        vec3(1.0, 0.0, 0.0), //red
+        vec3(0.4, 1.0, 0.4), //green
+        vec3(0.0, 0.4, 0.8), //indigo
+        vec3(0.5, 0.0, 1.0) //violet
     );
     int t = int(timeElapsed*10);
     int index = int(mod(t, 3));

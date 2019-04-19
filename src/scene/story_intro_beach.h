@@ -77,9 +77,6 @@ public:
     virtual void render(Blackboard& blackboard) override;
     void reset_scene(Blackboard& blackboard) override;
 
-    void create_strobe_effect(Blackboard &blackboard);
-
-    void update_strobe_effect(Blackboard &blackboard);
 };
 
 #endif //PANDAEXPRESS_STORY_INTRO_H

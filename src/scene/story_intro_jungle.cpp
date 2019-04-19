@@ -19,6 +19,8 @@
 #include "story_intro_jungle.h"
 #include "util/constants.h"
 
+std::string const StoryIntroJungleScene::JUNGLE_SCENE_END_LABEL = "end_scene";
+
 StoryIntroJungleScene::StoryIntroJungleScene(Blackboard &blackboard, SceneManager &scene_manager) :
         GameScene(scene_manager),
         sprite_transform_system(),
@@ -30,7 +32,6 @@ StoryIntroJungleScene::StoryIntroJungleScene(Blackboard &blackboard, SceneManage
         render_system()
 {
     init_scene(blackboard);
-    reset_scene(blackboard);
     gl_has_errors();
 }
 
@@ -67,6 +68,9 @@ void StoryIntroJungleScene::update(Blackboard &blackboard) {
         if (endScene || (!endScene && fadeOverlay.alpha() > 0.f)) {
             fade_overlay_system.update(blackboard, registry_);
         }
+        if (story_animation_system.pandaGetsVape == 1) {
+            create_strobe_effect(blackboard);
+        }
     } else {
         pause_menu_transform_system.update(blackboard, registry_);
     }
@@ -90,6 +94,8 @@ void StoryIntroJungleScene::update(Blackboard &blackboard) {
         reset_scene(blackboard);
         change_scene(STORY_EASY_JUNGLE_SCENE_ID);
     }
+
+    update_strobe_effect(blackboard);
 
 }
 
@@ -128,6 +134,15 @@ void StoryIntroJungleScene::reset_scene(Blackboard &blackboard) {
     registry_.destroy(skip_entity);
     registry_.destroy(background_entity);
     registry_.destroy<FadeOverlay>();
+    if (scene_timer.exists(SCENE_END_LABEL) && !scene_timer.is_done(SCENE_END_LABEL)) {
+        scene_timer.remove(SCENE_END_LABEL);
+    }
+    if (scene_timer.exists(STROBE_LABEL) && !scene_timer.is_done(STROBE_LABEL)) {
+        scene_timer.remove(STROBE_LABEL);
+    }
+    if (scene_timer.exists(SKIP_SCENE_LABEL) && !scene_timer.is_done(SKIP_SCENE_LABEL)) {
+        scene_timer.remove(SKIP_SCENE_LABEL);
+    }
     init_scene(blackboard);
 }
 
@@ -211,4 +226,25 @@ void StoryIntroJungleScene::create_vape(Blackboard &blackboard) {
     registry_.assign<Vape>(vape_entity);
     registry_.assign<Velocity>(vape_entity, 0.f, 0.f);
     registry_.assign<Layer>(vape_entity, PANDA_LAYER-1);
+}
+
+void StoryIntroJungleScene::create_strobe_effect(Blackboard &blackboard) {
+    scene_timer.save_watch("STROBE", STROBE); // 5 second timer for effect
+    blackboard.post_process_shader = std::make_unique<Shader>(
+            blackboard.shader_manager.get_shader("strobe"));
+}
+
+void StoryIntroJungleScene::update_strobe_effect(Blackboard &blackboard) {
+    if (scene_timer.exists("STROBE")) {
+        float val = ((3*(scene_timer.get_target_time("STROBE") - scene_timer.get_curr_time()) /
+                STROBE)); // Ratio of time done (Ranges from [1...0])
+        blackboard.post_process_shader->bind();
+        blackboard.post_process_shader->set_uniform_float("timeElapsed", val);
+        blackboard.post_process_shader->unbind();
+        // Setup new timeElapsed Uniform
+        if (scene_timer.is_done("STROBE")) {
+            blackboard.post_process_shader = std::make_unique<Shader>(
+                    blackboard.shader_manager.get_shader("sprite"));
+        }
+    }
 }

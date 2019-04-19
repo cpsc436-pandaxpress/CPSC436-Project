@@ -191,6 +191,11 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("story_jungle_grass.png"), "story_jungle_grass");
     blackboard.texture_manager.load_texture(textures_path("story_jungle_vape.png"), "story_jungle_vape");
 
+    blackboard.texture_manager.load_texture(textures_path("solid_block_1.png"), "solid_block_1");
+    blackboard.texture_manager.load_texture(textures_path("solid_block_2.png"), "solid_block_2");
+    blackboard.texture_manager.load_texture(textures_path("falling_blocks_1.png"), "falling_blocks_1");
+    blackboard.texture_manager.load_texture(textures_path("falling_blocks_2.png"), "falling_blocks_2");
+
 
     blackboard.mesh_manager.load_mesh("health", 4, HealthBar::vertices, 6, HealthBar::indices);
     blackboard.mesh_manager.load_mesh("cave", 41, Cave::vertices, 168, Cave::indices);

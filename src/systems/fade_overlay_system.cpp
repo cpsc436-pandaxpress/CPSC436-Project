@@ -40,7 +40,10 @@ void FadeOverlaySystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
 
         float position_x = blackboard.camera.position().x;
         float position_y = blackboard.camera.position().y;
+        float scale_x = blackboard.camera.size().x;
+        float scale_y = blackboard.camera.size().y;
         fadeOverlay.set_pos(position_x, position_y);
+        fadeOverlay.set_scale({scale_x*2, scale_y*2});
         fadeOverlay.set_alpha(alpha);
     }
 }

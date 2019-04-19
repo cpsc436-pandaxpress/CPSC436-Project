@@ -88,7 +88,6 @@ void StoryIntroBeachScene::update(Blackboard &blackboard) {
         reset_scene(blackboard);
         change_scene(STORY_JUNGLE_INTRO_SCENE_ID);
     }
-    update_strobe_effect(blackboard);
 
 }
 
@@ -106,7 +105,6 @@ void StoryIntroBeachScene::init_scene(Blackboard &blackboard) {
     create_jacko(blackboard);
     create_skip_message(blackboard);
     create_fade_overlay(blackboard);
-    create_strobe_effect(blackboard);
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
     fadeOverlay.set_alpha(1.0);
 
@@ -132,6 +130,12 @@ void StoryIntroBeachScene::reset_scene(Blackboard &blackboard) {
     }
     bg_entities.clear();
     registry_.destroy<FadeOverlay>();
+    if (scene_timer.exists(BEACH_SCENE_END_LABEL) && !scene_timer.is_done(BEACH_SCENE_END_LABEL)) {
+        scene_timer.remove(BEACH_SCENE_END_LABEL);
+    }
+    if (scene_timer.exists(SKIP_SCENE_LABEL) && !scene_timer.is_done(SKIP_SCENE_LABEL)) {
+        scene_timer.remove(SKIP_SCENE_LABEL);
+    }
     init_scene(blackboard);
 }
 
@@ -236,25 +240,4 @@ void StoryIntroBeachScene::create_skip_message(Blackboard &blackboard) {
     registry_.assign<Sprite>(skip_entity, texture, shader, mesh);
     registry_.assign<Velocity>(skip_entity, 0.f, 0.f);
     registry_.assign<Layer>(skip_entity, OVERLAY_LAYER);
-}
-
-void StoryIntroBeachScene::create_strobe_effect(Blackboard &blackboard) {
-    scene_timer.save_watch("STROBE", 5.f); // 5 second timer for effect
-    blackboard.post_process_shader = std::make_unique<Shader>(
-            blackboard.shader_manager.get_shader("strobe"));
-}
-
-void StoryIntroBeachScene::update_strobe_effect(Blackboard &blackboard) {
-    if (scene_timer.exists("STROBE")) {
-        float val = (((scene_timer.get_target_time("STROBE") - scene_timer.get_curr_time()) /
-                      5.f)); // Ratio of time done (Ranges from [1...0])
-        blackboard.post_process_shader->bind();
-        blackboard.post_process_shader->set_uniform_float("timeElapsed", val);
-        blackboard.post_process_shader->unbind();
-        // Setup new timeElapsed Uniform
-        if (scene_timer.is_done("STROBE")) {
-            blackboard.post_process_shader = std::make_unique<Shader>(
-                    blackboard.shader_manager.get_shader("sprite"));
-        }
-    }
 }

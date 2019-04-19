@@ -25,7 +25,7 @@ private:
     const float VAPEWIDTH = 0.25;
     const int KELLYFRAMES = 5;
     const int VAPEFRAMES = 4;
-    const int KELLYCALLSFORHELP = 15;
+    const int KELLYCALLSFORHELP = 18;
     const float VAPESPEED = 200.f;
     const int PANDASIGHS = 10;
     const int PANDARISES = 10;

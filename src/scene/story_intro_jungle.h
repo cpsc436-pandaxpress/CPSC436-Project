@@ -21,8 +21,8 @@
 
 class StoryIntroJungleScene: public GameScene {
 private:
-    const float PANDA_POS_X = -475.f;
-    const float PANDA_POS_Y = 135.f;
+    const float PANDA_POS_X = -240.f;
+    const float PANDA_POS_Y = 190.f;
     const float KELLY_POS_X = 550.f;
     const float KELLY_POS_Y = -150.f;
     const float VAPE_POS_X = 0.f;
@@ -34,6 +34,8 @@ private:
     const std::string SKIP_SCENE_LABEL = "skip";
     const float SKIP_SCENE = 6.f;
     const float SKIP_SPEED = 250.f;
+    const std::string STROBE_LABEL = "STROBE";
+    const float STROBE = 2.f;
 
 
     bool pause = false;
@@ -67,10 +69,16 @@ public:
     StoryIntroJungleScene(Blackboard &blackboard,
                          SceneManager &scene_manager);
 
+    static const std::string JUNGLE_SCENE_END_LABEL;
+
+
     virtual void update(Blackboard& blackboard) override;
     virtual void render(Blackboard& blackboard) override;
     void reset_scene(Blackboard& blackboard) override;
 
+    void create_strobe_effect(Blackboard &blackboard);
+
+    void update_strobe_effect(Blackboard &blackboard);
 };
 
 #endif //PANDAEXPRESS_STORY_INTRO_JUNGLE_H

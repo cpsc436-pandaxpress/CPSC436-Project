@@ -104,7 +104,7 @@ void StoryJungleAnimationSystem::update(Blackboard &blackboard, entt::DefaultReg
                 }
 
             } else if (pandaRuns < PANDARUNS) {
-                pandaFrameRate = 10.f;
+                pandaFrameRate = 7.f;
                 row = 6;
                 pandaFrames = 10;
                 pandaRuns++;
@@ -189,14 +189,15 @@ void StoryJungleAnimationSystem::resetScene() {
     counter = 0;
     pandaCounter = 0;
     pandaIndex = 0;
-    kellyCallsForHelp = false;
     kellyIndex = 0;
     pandaSighing = 0;
-    vapeEnters = false;
-    kellyCallingForHelp = 0;
     pandaHearsKelly = 0;
     pandaRises = 0;
     pandaSeesVape = 0;
-    pandaGetsVape = 0;
     pandaRuns = 0;
+    kellyCallsForHelp = false;
+    kellyCallingForHelp = 0;
+    vapeEnters = false;
+    pandaFrameRate = 4.f;
+    pandaGetsVape = 0;
 }
