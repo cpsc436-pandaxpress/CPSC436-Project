@@ -49,6 +49,8 @@ void VerticalScene::init_scene(Blackboard &blackboard) {
         timer.save_watch(END_TIMER_LABEL, END_TIMER_LENGTH);
     }
     create_fade_overlay(blackboard);
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+    fadeOverlay.set_alpha(1.0);
     level_system.init(mode_, registry_);
     blackboard.post_process_shader = std::make_unique<Shader>(blackboard.shader_manager.get_shader("sprite"));
 }
@@ -58,10 +60,15 @@ void VerticalScene::update(Blackboard &blackboard) {
     auto &interactable = registry_.get<Interactable>(panda_entity);
     auto &transform = registry_.get<Transform>(panda_entity);
     auto &panda_collidable = registry_.get<Collidable>(panda_entity);
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
 
     if (blackboard.camera.transition_ready) {
-        go_to_next_scene(blackboard);
-        return;
+        if (fadeOverlay.alpha() < 1.2f) {
+            fade_overlay_system.update(blackboard, registry_);
+        } else {
+            go_to_next_scene(blackboard);
+            return;
+        }
     }
 
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
@@ -80,6 +87,7 @@ void VerticalScene::update(Blackboard &blackboard) {
         pause = false;
         return;
     }
+
     if (!pause) {
         if (panda.alive && !panda.dead) {
             if (!blackboard.camera.in_transition){
@@ -88,6 +96,10 @@ void VerticalScene::update(Blackboard &blackboard) {
             }
             player_movement_system.update(blackboard, registry_);
         } else if (!panda.alive && interactable.grounded) {
+            fade_overlay_system.update(blackboard, registry_);
+        }
+
+        if (fadeOverlay.alpha() > 0.f) {
             fade_overlay_system.update(blackboard, registry_);
         }
 

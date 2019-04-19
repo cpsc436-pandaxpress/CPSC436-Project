@@ -33,13 +33,17 @@ void EnemySystem::generate_projectile(float x, float y, bool spit_left, Blackboa
     registry.assign<Spit>(projectile);
     registry.assign<CausesDamage>(projectile, TOP_VULNERABLE_MASK, 1);
     registry.assign<Health>(projectile, 1);
+
+    float spit_x;
     if (spit_left) {
         registry.assign<Velocity>(projectile, PROJECTILE_SPEED_X, PROJECTILE_SPEED_Y);
+        spit_x = -60.f;
     } else {
         scaleX = -scaleX; // flip projectile
         registry.assign<Velocity>(projectile, -PROJECTILE_SPEED_X, PROJECTILE_SPEED_Y);
+        spit_x = 60.f;
     }
-    registry.assign<Transform>(projectile, x - 15.f, y + 25.f, 0., scaleX, scaleY);
+    registry.assign<Transform>(projectile, x + spit_x, y + 30.f, 0., scaleX, scaleY);
     registry.assign<Interactable>(projectile);
     registry.assign<Collidable>(projectile, texture.width() * scaleY,
                                 texture.height() * scaleY);

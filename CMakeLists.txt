@@ -149,18 +149,24 @@ set(SOURCE_FILES
         src/systems/render_system.h
         src/scene/game_scene.cpp
         src/scene/game_scene.h
+        src/scene/story_intro_beach.cpp
+        src/scene/story_intro_beach.h
+        src/systems/story_beach_animation_system.cpp
+        src/systems/story_beach_animation_system.h
+        src/components/kelly.h
+        src/components/hearts.h
         src/components/powerup.h
         src/systems/powerup_system.cpp
         src/systems/powerup_system.h
-        src/scene/story_intro.cpp
-        src/scene/story_intro.h
-        src/systems/story_animation_system.cpp
-        src/systems/story_animation_system.h
         src/components/kelly.h
         src/components/hearts.h
         src/graphics/framebuffer.h
         src/graphics/framebuffer.cpp
-        )
+        src/scene/story_intro_jungle.cpp
+        src/scene/story_intro_jungle.h
+        src/systems/story_jungle_animation_system.cpp
+        src/systems/story_jungle_animation_system.h
+        src/components/vape.h)
 
 
 # Create executable target
