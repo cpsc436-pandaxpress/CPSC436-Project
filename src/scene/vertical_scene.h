@@ -27,6 +27,7 @@
 #include <systems/hud_transform_system.h>
 #include <systems/label_system.h>
 #include <systems/render_system.h>
+#include <systems/powerup_system.h>
 
 class VerticalScene : public GameScene {
 private:
@@ -51,11 +52,17 @@ private:
     HudTransformSystem hud_transform_system;
     LabelSystem label_system;
     RenderSystem render_system;
+    PowerupSystem powerup_system;
 
     bool pause = false;
     int high_score_;
 
+    uint32_t timer_entity;
+    const std::string END_TIMER_LABEL = "end";
+    const float END_TIMER_LENGTH = 30;
+
     void init_scene(Blackboard &blackboard);
+    void check_end_timer();
 public:
 
     VerticalScene(Blackboard& blackboard, SceneManager& scene_manager);
@@ -65,7 +72,7 @@ public:
 
     void create_background(Blackboard &blackboard);
 
-    void set_mode(SceneMode mode) override;
+    void set_mode(SceneMode mode, Blackboard &blackboard) override;
 
     void set_high_score(int value);
 

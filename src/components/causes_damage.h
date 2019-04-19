@@ -21,6 +21,7 @@ static constexpr const uint8_t DAMAGE_RIGHT = 8;
 static constexpr const uint8_t PANDA_DMG_MASK = DAMAGE_DOWN;
 static constexpr const uint8_t ALL_DMG_MASK = DAMAGE_UP | DAMAGE_DOWN | DAMAGE_LEFT | DAMAGE_RIGHT;
 static constexpr const uint8_t TOP_VULNERABLE_MASK = DAMAGE_DOWN | DAMAGE_LEFT | DAMAGE_RIGHT;
+static constexpr const uint8_t BOTTOM_VULNERABLE_MASK = DAMAGE_UP | DAMAGE_LEFT | DAMAGE_RIGHT;
 
 struct CausesDamage {
 private:

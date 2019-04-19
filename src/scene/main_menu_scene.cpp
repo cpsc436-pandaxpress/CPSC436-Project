@@ -84,10 +84,10 @@ void MainMenuScene::update(Blackboard& blackboard) {
 void MainMenuScene::render(Blackboard& blackboard) {
     auto& projection = blackboard.camera.get_projection();
 
-    splash_sprite_.draw(projection);
+    blackboard.window.draw((Renderable*)&splash_sprite_, projection);
 
     for (auto i = 0; i < button_sprites_.size(); i++) {
-        button_sprites_[i].draw(projection);
+        blackboard.window.draw((Renderable*)&(button_sprites_[i]), projection);
     }
 }
 

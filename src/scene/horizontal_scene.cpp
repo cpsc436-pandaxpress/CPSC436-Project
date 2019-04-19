@@ -30,7 +30,8 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
         transition_system(JUNGLE_TYPE),
         hud_transform_system(),
         label_system(),
-        render_system()
+        render_system(),
+        powerup_system()
 {
     high_score_ = 0;
     init_scene(blackboard);
@@ -72,6 +73,10 @@ void HorizontalScene::update(Blackboard &blackboard) {
         } else if (!panda.alive && interactable.grounded) {
             fade_overlay_system.update(blackboard, registry_);
         }
+
+        if (mode_ == STORY_EASY || mode_ == STORY_HARD)
+            check_end_timer();
+
         update_panda(blackboard);
 
         level_system.update(blackboard, registry_);
@@ -87,6 +92,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
         falling_platform_system.update(blackboard, registry_);
         enemy_animation_system.update(blackboard, registry_);
         transition_system.update(blackboard, registry_);
+        powerup_system.update(blackboard, registry_);
         hud_transform_system.update(blackboard, registry_);// Must run last
         high_score_ = std::max<int>(high_score_, (int) blackboard.score);
     } else {
@@ -121,8 +127,7 @@ void HorizontalScene::update_camera(Blackboard &blackboard) {
 }
 
 void HorizontalScene::render(Blackboard &blackboard) {
-    glClearColor(19.f / 256.f, 136.f / 256.f, 126.f / 256.f, 1); // same colour as the top of the background
-    glClear(GL_COLOR_BUFFER_BIT);
+    blackboard.window.colorScreen(vec3{19.f, 136.f, 126.f});
     render_system.update(blackboard, registry_);
 }
 
@@ -140,15 +145,26 @@ void HorizontalScene::cleanup() {
         registry_.destroy(e);
     }
     bg_entities.clear();
+    if (registry_.valid(timer_entity))
+        registry_.destroy(timer_entity);
     GameScene::cleanup();
 }
 
 void HorizontalScene::go_to_next_scene(Blackboard &blackboard) {
-    cleanup();
-    blackboard.camera.in_transition = false;
-    blackboard.camera.transition_ready = false;
-    change_scene(STORY_SKY_SCENE_ID);
-    init_scene(blackboard);
+    if (mode_ == STORY_EASY) {
+        cleanup();
+        blackboard.camera.in_transition = false;
+        blackboard.camera.transition_ready = false;
+        change_scene(STORY_EASY_SKY_SCENE_ID);
+        init_scene(blackboard);
+    }
+    else if (mode_ == STORY_HARD) {
+        cleanup();
+        blackboard.camera.in_transition = false;
+        blackboard.camera.transition_ready = false;
+        change_scene(STORY_HARD_SKY_SCENE_ID);
+        init_scene(blackboard);
+    }
 }
 
 void HorizontalScene::init_scene(Blackboard &blackboard) {
@@ -160,9 +176,13 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
     if (mode_ == ENDLESS) {
         create_score_text(blackboard);
         create_high_score_text(blackboard, high_score_);
+    } else if (mode_ == STORY_EASY || mode_ == STORY_HARD) {
+        timer_entity = registry_.create();
+        auto& timer = registry_.assign<Timer>(timer_entity);
+        timer.save_watch(END_TIMER_LABEL, END_TIMER_LENGTH);
     }
     create_fade_overlay(blackboard);
-    level_system.init();
+    level_system.init(mode_, registry_);
 }
 
 void HorizontalScene::create_background(Blackboard &blackboard) {
@@ -191,9 +211,9 @@ void HorizontalScene::create_background(Blackboard &blackboard) {
     }
 }
 
-void HorizontalScene::set_mode(SceneMode mode) {
-    Scene::set_mode(mode);
-    level_system.set_mode(mode);
+void HorizontalScene::set_mode(SceneMode mode, Blackboard &blackboard) {
+    Scene::set_mode(mode, blackboard);
+    reset_scene(blackboard);
 }
 
 void HorizontalScene::set_high_score(int value) {
@@ -202,4 +222,12 @@ void HorizontalScene::set_high_score(int value) {
 
 int HorizontalScene::get_high_score() {
     return high_score_;
+}
+
+void HorizontalScene::check_end_timer() {
+    auto& timer = registry_.get<Timer>(timer_entity);
+    if (timer.exists(END_TIMER_LABEL) && timer.is_done(END_TIMER_LABEL)) {
+        level_system.generate_end_level();
+        timer.remove(END_TIMER_LABEL);
+    }
 }

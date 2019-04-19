@@ -39,6 +39,7 @@ protected:
 
     uint32_t panda_entity;
     uint32_t pause_menu_entity;
+    uint32_t fade_overlay_entity;
 
     GameScene(SceneManager &manager);
 

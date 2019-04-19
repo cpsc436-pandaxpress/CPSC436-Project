@@ -8,6 +8,8 @@
 
 #include "render.h"
 #include "sprite.h"
+#include "framebuffer.h"
+#include <memory>
 
 // Wrap SDL calls with a window creation/management class
 class Window : public RenderTarget {
@@ -19,15 +21,13 @@ private:
     float delta_time_ = 0;
     int WINDOWED_WIDTH = 800;
     int WINDOWED_HEIGHT = 450;
+    std::unique_ptr<Framebuffer> framebuffer_;
 
 public:
-    Window(): sdl_window_(nullptr), gl_context_() {}
+    Window(const char* title);
 
     ~Window();
 
-    // Initialize the window
-    // returns false if some part of initialization fails
-    // otherwise returns true
     bool initialize(const char* title);
 
     // destroy the window when finished
@@ -36,8 +36,9 @@ public:
     // clears the window
     void clear();
 
-    // swaps the buffers and displays what's been drawn
-    void display();
+    // renders the internal buffer to the back buffer using the given shader
+    // then swaps the back buffers and displays what's been drawn
+    void display(Shader shader, Mesh mesh);
 
     // returns the time elapsed between the last 2 display() calls, in seconds
     float delta_time();
@@ -46,5 +47,7 @@ public:
     vec2 size();
 
     void draw(Renderable* renderable, const mat3& projection) override;
+
+    void colorScreen(vec3 color);
 
 };

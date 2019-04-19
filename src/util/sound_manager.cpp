@@ -24,7 +24,6 @@ void SoundManager::init() {
     if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
     {
         fprintf(stderr, "Failed to initialize SDL Audio");
-
     }
 
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) == -1)
@@ -38,10 +37,12 @@ void SoundManager::init() {
     m_sfx[SFX_PANDA_HURT] = Mix_LoadWAV(audio_path("PandaHurt.wav"));
 
     m_background_music[MAIN_MENU_SCENE_ID] = Mix_LoadMUS(audio_path("PE.ogg"));
-    m_background_music[STORY_JUNGLE_SCENE_ID] = Mix_LoadMUS(audio_path("PE.ogg"));
+    m_background_music[STORY_EASY_JUNGLE_SCENE_ID] = Mix_LoadMUS(audio_path("PE.ogg"));
     m_background_music[ENDLESS_JUNGLE_SCENE_ID] = Mix_LoadMUS(audio_path("PE.ogg"));
-    m_background_music[STORY_SKY_SCENE_ID] = Mix_LoadMUS(audio_path("vertical2.ogg"));
+    m_background_music[STORY_HARD_JUNGLE_SCENE_ID] = Mix_LoadMUS(audio_path("PE.ogg"));
+    m_background_music[STORY_EASY_SKY_SCENE_ID] = Mix_LoadMUS(audio_path("vertical2.ogg"));
     m_background_music[ENDLESS_SKY_SCENE_ID] = Mix_LoadMUS(audio_path("vertical2.ogg"));
+    m_background_music[STORY_EASY_SKY_SCENE_ID] = Mix_LoadMUS(audio_path("vertical2.ogg"));
     m_background_music[BOSS_SCENE_ID] = Mix_LoadMUS(audio_path("graveyard.ogg"));
 
     Mix_PlayMusic(m_background_music[MAIN_MENU_SCENE_ID], -1);

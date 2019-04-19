@@ -18,7 +18,7 @@ void GameScene::create_panda(Blackboard &blackboard) {
     float scaleY = 75.0f / texture.height();
     float scaleX = 75.0f / texture.width();
     vec2 size = {HEALTH_BAR_X_SIZE, HEALTH_BAR_Y_SIZE};
-    vec2 scale = {0.5, 0.5};
+    vec2 scale = {0.6, 0.6};
 
     panda_entity = registry_.create();
     registry_.assign<Transform>(panda_entity, PANDA_START_X, PANDA_START_Y, 0., scaleX, scaleY);
@@ -73,13 +73,14 @@ void GameScene::create_high_score_text(Blackboard &blackboard, int high_score) {
 }
 
 void GameScene::create_fade_overlay(Blackboard &blackboard) {
-    auto fade_overlay_entity = registry_.create();
+    fade_overlay_entity = registry_.create();
     auto shaderFade = blackboard.shader_manager.get_shader("fade");
     auto meshFade = blackboard.mesh_manager.get_mesh("health");
     float height = blackboard.camera.size().y;
     float width = blackboard.camera.size().x;
     vec2 size = {width, height};
     auto &fade = registry_.assign<FadeOverlay>(fade_overlay_entity, meshFade, shaderFade, size);
+    registry_.assign<Timer>(fade_overlay_entity);
     registry_.assign<Layer>(fade_overlay_entity, OVERLAY_LAYER);
 }
 
@@ -92,7 +93,7 @@ void GameScene::create_pause_menu(Blackboard &blackboard) {
 
     registry_.assign<Sprite>(pause_menu_entity, texture, shader, mesh);
     registry_.assign<PauseMenu>(pause_menu_entity);
-    registry_.assign<Layer>(pause_menu_entity, OVERLAY_LAYER);
+    registry_.assign<Layer>(pause_menu_entity, MENU_LAYER);
 }
 
 void GameScene::cleanup() {

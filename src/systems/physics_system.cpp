@@ -17,6 +17,8 @@
 #include <components/label.h>
 #include "components/platform.h"
 #include <graphics/cave_entrance.h>
+#include <components/powerup.h>
+#include <components/spit.h>
 
 
 #include "util/entity_pairs.h"
@@ -188,6 +190,25 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         interactible.grounded = true;
                     }
                     else {
+                        if ( registry.has<CausesDamage>(entry.entity)
+                             && registry.has<Panda>(d_entity)
+                                ) {
+                            auto& cd = registry.get<CausesDamage>(entry.entity);
+                            auto& health = registry.get<Health>(d_entity);
+                            auto& panda = registry.get<Panda>(d_entity);
+                            auto& transform = registry.get<Transform>(d_entity);
+
+                            if ((entry.normal.x == 0 && entry.normal.y == 0)
+                                || cd.normal_matches_mask(entry.normal.x, entry.normal.y)) {
+                                panda.hurt = true;
+                            }
+                        }
+
+                        if (registry.has<Spit>(d_entity)) {
+                            auto &spit = registry.get<Spit>(d_entity);
+                            spit.hit = true;
+                        }
+
                         if (entry.normal.y == -1) {
                             interactible.grounded = true;
                         }
@@ -248,7 +269,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         auto& transform = registry.get<Transform>(d_entity);
                         auto& health = registry.get<Health>(entry.entity);
                         if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)
-                        && !panda.invincible){
+                        && !panda.recovering){
                             //do damage
                             health.health_points -= cd.hp;
 
@@ -304,6 +325,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                 health.health_points++;
                             }
                             registry.destroy(entry.entity);
+                            continue;
 
                         } else if (registry.has<Food>(entry.entity) && registry.has<Jacko>(d_entity)) {
                             auto &health = registry.get<Health>(d_entity);
@@ -311,7 +333,18 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                 health.health_points++;
                             }
                             registry.destroy(entry.entity);
+                            continue;
                         }
+                    }
+
+                    if (registry.has<Powerup>(entry.entity) && registry.has<Panda>(d_entity)) {
+                        auto &panda = registry.get<Panda>(d_entity);
+                        auto &powerup = registry.get<Powerup>(entry.entity);
+                        if (panda.alive) {
+                            panda.powerups.push(powerup.powerup_type);
+                        }
+                        registry.destroy(entry.entity);
+                        continue;
                     }
 
                     /*if ( registry.has<CaveEntrance>(entry.entity)) {
