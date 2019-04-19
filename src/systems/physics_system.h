@@ -6,7 +6,6 @@
 #define PANDAEXPRESS_PHYSICS_SYSTEM_H
 
 #include <cstdint>
-#include <Box2D.h>
 #include <unordered_map>
 #include <unordered_set>
 #include "system.h"
@@ -49,34 +48,18 @@ struct CollisionEntry {
     {}
 };
 
-class PhysicsSystem : public System, b2ContactListener, b2ContactFilter {
+class PhysicsSystem : public System{
 private:
     static constexpr float GRAVITY = 2500.f;
     static constexpr float METER = 100.f;
-    b2World world_;
-    std::vector<CollisionEntry> collisions_;
-    std::unordered_map<uint32_t, b2Body* > body_lookup_;
-    entt::DefaultRegistry* registry_;
 
 public:
 
     PhysicsSystem();
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;
 
-    /// Called when two fixtures begin to touch.
-    virtual void BeginContact(b2Contact* contact) override;
-
-    /// Called when two fixtures cease to touch.
-    virtual void EndContact(b2Contact* contact) override;
-
-    virtual bool ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB) override;
-
 private:
 
-    void maintain(entt::DefaultRegistry& registry);
-    void handle_collisions(Blackboard& blackboard, entt::DefaultRegistry& registry);
-    void set_transforms(entt::DefaultRegistry& registry);
-    b2Body* create_body_for(void* data, const Collidable& collidable, const Transform& transform, bool is_static, bool use_circle);
 
     void apply_gravity(Blackboard &blackboard, entt::DefaultRegistry &registry);
     void apply_velocity(Blackboard &blackboard, entt::DefaultRegistry &registry);
@@ -101,14 +84,6 @@ private:
         const Transform &s_position,
         float buffer
     );
-
-    float pix_to_meters(float pixels) {
-        return pixels / METER;
-    }
-
-    float meters_to_pix(float meters) {
-        return meters * METER;
-    }
 };
 
 

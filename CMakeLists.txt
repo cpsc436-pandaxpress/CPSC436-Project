@@ -28,7 +28,6 @@ endif()
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp")
 
 
-file(GLOB_RECURSE BOX2D_SOURCE_FILES ext/Box2D/*.cpp ext/Box2D/*.h)
 
 set(SOURCE_FILES
         src/main.cpp
