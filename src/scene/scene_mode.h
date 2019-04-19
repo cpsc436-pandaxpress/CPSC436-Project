@@ -6,9 +6,13 @@
 #define PANDAEXPRESS_SCENE_MODE_H
 
 enum SceneMode {
+
+    DRACULA,
+    JACKO,
     STORY_EASY,
     STORY_HARD,
     ENDLESS
+
 };
 
 #endif //PANDAEXPRESS_SCENE_MODE_H

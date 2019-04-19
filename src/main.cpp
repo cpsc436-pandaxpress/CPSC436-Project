@@ -16,6 +16,7 @@
 #include "util/blackboard.h"
 #include "util/random.h"
 #include <scene/horizontal_scene.h>
+#include <scene/dracula_boss_scene.h>
 #include <SDL_mixer.h>
 #include <sstream>
 #include <scene/vertical_scene.h>
@@ -70,6 +71,10 @@ int start() {
     blackboard.input_manager.track(SDL_SCANCODE_A);
     blackboard.input_manager.track(SDL_SCANCODE_D);
     blackboard.input_manager.track(SDL_SCANCODE_W);
+    blackboard.input_manager.track(SDL_SCANCODE_W);
+    blackboard.input_manager.track(SDL_SCANCODE_7);
+    blackboard.input_manager.track(SDL_SCANCODE_8);
+    blackboard.input_manager.track(SDL_SCANCODE_9);
 
 
     blackboard.shader_manager.load_shader(
@@ -142,7 +147,8 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("bg_middle.png"), "bg_middle");
     blackboard.texture_manager.load_texture(textures_path("bg_top.png"), "bg_top");
     blackboard.texture_manager.load_texture(textures_path("pause_menu.png"), "pause_menu");
-
+    blackboard.texture_manager.load_texture(textures_path("dracula.png"), "dracula");
+    blackboard.texture_manager.load_texture(textures_path("bat.png"), "bat");
     blackboard.texture_manager.load_texture(textures_path("jacko_sprite_sheet.png"), "jacko");
     blackboard.texture_manager.load_texture(textures_path("burger.png"), "burger");
 
@@ -210,6 +216,7 @@ int start() {
     horizontal_scene.set_high_score(std::stoi(scores.get("jungle")));
 
     BossScene boss_scene(blackboard, scene_manager);
+    DraculaBossScene dracula_boss_scene(blackboard, scene_manager);
 
     VerticalScene vertical_scene(blackboard, scene_manager);
     vertical_scene.set_high_score(std::stoi(scores.get("sky")));
@@ -221,7 +228,8 @@ int start() {
     scene_manager.add_scene(STORY_EASY_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY_EASY);
     scene_manager.add_scene(ENDLESS_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), ENDLESS);
     scene_manager.add_scene(ENDLESS_SKY_SCENE_ID, (Scene*)(&vertical_scene), ENDLESS);
-    scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene));
+    scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene), JACKO);
+    scene_manager.add_scene(DRACULA_BOSS_SCENE_ID, (Scene*)(&dracula_boss_scene), DRACULA);
     scene_manager.add_scene(STORY_BEACH_INTRO_SCENE_ID, (Scene*)(&story_beach_intro_scene), STORY_EASY);
     scene_manager.add_scene(STORY_JUNGLE_INTRO_SCENE_ID, (Scene*)(&story_jungle_intro_scene), STORY_EASY);
     scene_manager.add_scene(STORY_EASY_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY_EASY);

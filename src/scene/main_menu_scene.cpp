@@ -79,6 +79,11 @@ void MainMenuScene::update(Blackboard& blackboard) {
         change_scene(button_targets_[selected_button_], true);
     }
 
+    // Hidden scene access
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_9)) {
+        change_scene(DRACULA_BOSS_SCENE_ID, true);
+    }
+
 }
 
 void MainMenuScene::render(Blackboard& blackboard) {

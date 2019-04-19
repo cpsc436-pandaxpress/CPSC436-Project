@@ -35,7 +35,8 @@ void SoundManager::init() {
     m_sfx[SFX_JUMP] = Mix_LoadWAV(audio_path("jump.wav"));
     m_sfx[SFX_JACKO_LAUGH] = Mix_LoadWAV(audio_path("JackoLaugh.wav"));
     m_sfx[SFX_PANDA_HURT] = Mix_LoadWAV(audio_path("PandaHurt.wav"));
-
+    m_background_music[STORY_INTRO_SCENE_ID] = Mix_LoadMUS(audio_path("introscene.ogg"));
+    m_background_music[STORY_JUNGLE_INTRO_SCENE_ID] = Mix_LoadMUS(audio_path("drunkscene.ogg"));
     m_background_music[MAIN_MENU_SCENE_ID] = Mix_LoadMUS(audio_path("PE.ogg"));
     m_background_music[STORY_EASY_JUNGLE_SCENE_ID] = Mix_LoadMUS(audio_path("PE.ogg"));
     m_background_music[ENDLESS_JUNGLE_SCENE_ID] = Mix_LoadMUS(audio_path("PE.ogg"));
@@ -45,11 +46,18 @@ void SoundManager::init() {
     m_background_music[STORY_EASY_SKY_SCENE_ID] = Mix_LoadMUS(audio_path("vertical2.ogg"));
     m_background_music[BOSS_SCENE_ID] = Mix_LoadMUS(audio_path("graveyard.ogg"));
 
+    m_background_music[INVINCIBILITY_MUSIC] = Mix_LoadMUS(audio_path("invincibility.ogg"));
+    m_background_music[VAPE_HORIZONTAL_MUSIC] = Mix_LoadMUS(audio_path("horizontalslow.ogg"));
+    m_background_music[VAPE_VERTICAL_MUSIC] = Mix_LoadMUS(audio_path("verticalslow.ogg"));
+
     Mix_PlayMusic(m_background_music[MAIN_MENU_SCENE_ID], -1);
 }
 
 void SoundManager::changeBackgroundMusic(SceneID id) {
     Mix_PlayMusic(m_background_music[id], -1);
+    if(id<14){
+        currentStage=id;
+    }
 }
 
 void SoundManager::playSFX(SFXID id) {
