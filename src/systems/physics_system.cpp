@@ -504,6 +504,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                             continue;
                         }
                         interactible.grounded = true;
+
                     }
                     else {
                         if ( registry.has<CausesDamage>(entry.e1)
@@ -527,6 +528,10 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
 
                         if (entry.normal.y == -1) {
                             interactible.grounded = true;
+                            if(platform.falling){
+                                platform.trigger=true;
+                                platform.shaking=true;
+                            }
                         }
                     }
 
