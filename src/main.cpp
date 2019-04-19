@@ -130,6 +130,11 @@ int start() {
             shaders_path("blur.fs.glsl"),
             "blur");
 
+    blackboard.shader_manager.load_shader(
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("strobe.fs.glsl"),
+            "strobe");
+
     blackboard.texture_manager.load_texture(textures_path("panda.png"), "panda");
     blackboard.texture_manager.load_texture(textures_path("panda_sprite_sheet.png"), "panda_sprites");
     blackboard.texture_manager.load_texture(textures_path("grass_block_1.png"), "platform1");
