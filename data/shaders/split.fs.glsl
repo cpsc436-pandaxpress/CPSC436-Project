@@ -12,6 +12,17 @@ uniform float timeElapsed;
 // Output color
 layout(location = 0) out  vec4 color;
 const float PI = 3.1415926535897932384626433832795;
+
+vec2 distort(vec2 uv) {
+	vec2 coord = uv.xy;
+	float waveFactor = 20.f * sin(PI * timeElapsed);
+	float X = uv.x * waveFactor;
+    float Y = uv.y * waveFactor / 2.0;
+    coord.y += cos(X+Y)*0.009;
+    coord.x += sin(X-Y)*0.005;
+    return coord;
+}
+
 void main() {
     vec2 uv_delta = vec2(uv2.x - uv1.x, uv2.y - uv1.y);
     vec2 true_uv = vec2(
@@ -27,9 +38,9 @@ void main() {
 	dir = normalize( dir );
 	vec2 value = d * dir * delta;
 
-	vec4 c1 = texture(sampler0, true_uv - value / resolution.x );
-	vec4 c2 = texture(sampler0, true_uv );
-	vec4 c3 = texture(sampler0, true_uv + value / resolution.y );
+	vec4 c1 = texture(sampler0, distort(true_uv - value / resolution.x ));
+	vec4 c2 = texture(sampler0, distort(true_uv) );
+	vec4 c3 = texture(sampler0, distort(true_uv + value / resolution.y ));
 	
 	color = vec4( c1.r, c2.g, c3.b, c1.a + c2.a + c3.b );
 
