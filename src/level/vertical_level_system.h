@@ -24,10 +24,20 @@ private:
 
     const float FIRST_ROW_Y = 300.f;
     const float COL_X_OFFSET = -750.f;
-    const int MIN_DIFFICULTY = 3;
-    const int MAX_DIFFICULTY = 12;
-    const float LEVEL_UP_INTERVAL = 10;
+    const int MIN_DIFFICULTY_EASY = 3;
+    const int MAX_DIFFICULTY_EASY = 9;
+    const int MIN_DIFFICULTY_HARD = 15;
+    const int MAX_DIFFICULTY_HARD = 20;
+    const int DIFFICULTY_RANGE_STORY = 2;
+    const int DIFFICULTY_RANGE_ENDLESS = 7;
+    const float LEVEL_UP_INTERVAL = 5;
     const std::string LEVEL_UP_LABEL = "level_up";
+
+    const int END_LEVEL = 50;
+
+    int min_difficulty;
+    int max_difficulty;
+    int difficulty_range;
 
     float last_row_generated_, last_row_loaded_;
     int difficulty;
@@ -42,13 +52,13 @@ public:
 
     VerticalLevelSystem();
 
-    void init() override;
+    void init(SceneMode mode, entt::DefaultRegistry &registry);
 
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override;
 
     void destroy_entities(entt::DefaultRegistry &registry) override;
 
-    void set_mode(SceneMode mode);
+    void generate_end_level();
 };
 
 

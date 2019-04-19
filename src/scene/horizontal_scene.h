@@ -39,6 +39,10 @@ private:
     bool pause = false;
     int high_score_;
 
+    uint32_t timer_entity;
+    const std::string END_TIMER_LABEL = "end";
+    const float END_TIMER_LENGTH = 30;
+
     std::vector<uint32_t> bg_entities;
     HorizontalLevelSystem level_system;
     SpriteTransformSystem sprite_transform_system;
@@ -66,6 +70,7 @@ private:
     void init_scene(Blackboard &blackboard);
     void update_panda(Blackboard& blackboard);
     void update_camera(Blackboard& blackboard);
+    void check_end_timer();
 public:
     HorizontalScene(Blackboard &blackboard,
                     SceneManager &scene_manager);
@@ -73,7 +78,7 @@ public:
 
     virtual void render(Blackboard& blackboard) override;
 
-    void set_mode(SceneMode mode) override;
+    void set_mode(SceneMode mode, Blackboard &blackboard) override;
 
     void set_high_score(int value);
 

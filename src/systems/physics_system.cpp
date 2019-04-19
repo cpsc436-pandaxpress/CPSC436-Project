@@ -18,6 +18,7 @@
 #include "components/platform.h"
 #include <graphics/cave_entrance.h>
 #include <components/powerup.h>
+#include <components/spit.h>
 
 
 #include "util/entity_pairs.h"
@@ -196,27 +197,16 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                             auto& health = registry.get<Health>(d_entity);
                             auto& panda = registry.get<Panda>(d_entity);
                             auto& transform = registry.get<Transform>(d_entity);
-                            if (entry.normal.x == 0 && entry.normal.y == 0) {
-                                panda.hurt = true;
-                            }
-                            else if (cd.normal_matches_mask(entry.normal.x, entry.normal.y)) {
+
+                            if ((entry.normal.x == 0 && entry.normal.y == 0)
+                                || cd.normal_matches_mask(entry.normal.x, entry.normal.y)) {
                                 panda.hurt = true;
                             }
                         }
-                        else if ( registry.has<CausesDamage>(d_entity)
-                                  && registry.has<Panda>(entry.entity)
-                                ) {
-                            auto& cd = registry.get<CausesDamage>(d_entity);
-                            auto& health = registry.get<Health>(entry.entity);
-                            auto& panda = registry.get<Panda>(entry.entity);
-                            auto& transform = registry.get<Transform>(entry.entity);
 
-                            if (entry.normal.x == 0 && entry.normal.y == 0) {
-                                panda.hurt = true;
-                            }
-                            if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)) {
-                                panda.hurt = true;
-                            }
+                        if (registry.has<Spit>(d_entity)) {
+                            auto &spit = registry.get<Spit>(d_entity);
+                            spit.hit = true;
                         }
 
                         if (entry.normal.y == -1) {
