@@ -41,10 +41,17 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
 void HorizontalScene::update(Blackboard &blackboard) {
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &interactable = registry_.get<Interactable>(panda_entity);
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+
     if (blackboard.camera.transition_ready) {
-        go_to_next_scene(blackboard);
-        return;
+        if (fadeOverlay.alpha() < 1.2f) {
+            fade_overlay_system.update(blackboard, registry_);
+        } else {
+            go_to_next_scene(blackboard);
+            return;
+        }
     }
+
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
         if (pause) {
             pause = false;
@@ -61,7 +68,6 @@ void HorizontalScene::update(Blackboard &blackboard) {
         pause = false;
         return;
     }
-    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
 
     if (!pause) {
         if (panda.alive && !panda.dead) {

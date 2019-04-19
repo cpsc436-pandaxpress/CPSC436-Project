@@ -60,10 +60,15 @@ void VerticalScene::update(Blackboard &blackboard) {
     auto &interactable = registry_.get<Interactable>(panda_entity);
     auto &transform = registry_.get<Transform>(panda_entity);
     auto &panda_collidable = registry_.get<Collidable>(panda_entity);
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
 
     if (blackboard.camera.transition_ready) {
-        go_to_next_scene(blackboard);
-        return;
+        if (fadeOverlay.alpha() < 1.2f) {
+            fade_overlay_system.update(blackboard, registry_);
+        } else {
+            go_to_next_scene(blackboard);
+            return;
+        }
     }
 
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
@@ -83,8 +88,6 @@ void VerticalScene::update(Blackboard &blackboard) {
         return;
     }
 
-    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
-
     if (!pause) {
         if (panda.alive && !panda.dead) {
             if (!blackboard.camera.in_transition){
@@ -99,7 +102,6 @@ void VerticalScene::update(Blackboard &blackboard) {
         if (fadeOverlay.alpha() > 0.f) {
             fade_overlay_system.update(blackboard, registry_);
         }
-
 
         if (mode_ == STORY_EASY || mode_ == STORY_HARD)
             check_end_timer();

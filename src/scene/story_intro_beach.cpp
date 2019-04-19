@@ -53,8 +53,7 @@ void StoryIntroBeachScene::update(Blackboard &blackboard) {
         pause = false;
         return;
     } else if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_RETURN) && !pause) {
-        reset_scene(blackboard);
-        change_scene(STORY_JUNGLE_INTRO_SCENE_ID);
+        fade_overlay_system.update(blackboard, registry_);
     }
 
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
