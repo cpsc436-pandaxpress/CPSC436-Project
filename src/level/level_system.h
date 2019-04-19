@@ -40,6 +40,7 @@ private:
     void generate_cave(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
     void generate_food(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
     void generate_shield(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void generate_vial(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
 
 protected:
     Random rng_;
@@ -60,7 +61,6 @@ public:
     void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override = 0;
 
     virtual void destroy_entities(entt::DefaultRegistry &registry);
-
     const std::string FALLING_PLATFORM_TIMER_LABEL = "fall";
     const std::string SPIT_TIMER_LABEL = "spit";
     static const unsigned int STORY_SEED = 1;

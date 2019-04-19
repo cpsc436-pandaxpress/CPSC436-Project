@@ -127,6 +127,7 @@ void BossScene::init_scene(Blackboard &blackboard) {
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
     fadeOverlay.set_alpha(1.0);
     level_system.init(registry_);
+    blackboard.post_process_shader = std::make_unique<Shader>(blackboard.shader_manager.get_shader("sprite"));
 }
 
 void BossScene::reset_scene(Blackboard &blackboard) {
