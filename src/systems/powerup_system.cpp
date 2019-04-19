@@ -22,10 +22,15 @@ void PowerupSystem::update(Blackboard &blackboard, entt::DefaultRegistry &regist
                     sprite.set_color(72 / 256.f, 219 / 256.f, 251 / 256.f);
                     blackboard.soundManager.changeBackgroundMusic(INVINCIBILITY_MUSIC);
                     break;
+                case VAPE_POWERUP:
+                    blackboard.time_multiplier *= 0.6f;
+                    blackboard.post_process_shader = std::make_unique<Shader>(
+                            blackboard.shader_manager.get_shader("shift"));
+                    timer.save_watch(VAPE_TIMER_LABEL, VAPE_TIMER_LENGTH);
+                    break;
                 default:
                     break;
             }
-
             panda.powerups.pop();
         }
 
@@ -50,6 +55,19 @@ void PowerupSystem::update(Blackboard &blackboard, entt::DefaultRegistry &regist
                 timer.remove(SHIELD_TIMER_LABEL);
                 blackboard.soundManager.changeBackgroundMusic(blackboard.soundManager.currentStage);
                 sprite.set_color(1.f, 1.f, 1.f);
+            }
+        }
+        if (timer.exists(VAPE_TIMER_LABEL)) {
+            float val = (((timer.get_target_time(VAPE_TIMER_LABEL) - timer.get_curr_time()) /
+                              VAPE_TIMER_LENGTH));
+            blackboard.post_process_shader->bind();
+            blackboard.post_process_shader->set_uniform_float("timeElapsed", val);
+            blackboard.post_process_shader->unbind();
+            blackboard.time_multiplier = fmax(0.5f, 1 - val);
+            if (timer.is_done(VAPE_TIMER_LABEL)) {
+                blackboard.post_process_shader = std::make_unique<Shader>(
+                        blackboard.shader_manager.get_shader("sprite"));
+                timer.remove(VAPE_TIMER_LABEL);
             }
         }
     }

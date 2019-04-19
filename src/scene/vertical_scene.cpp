@@ -37,6 +37,7 @@ void VerticalScene::init_scene(Blackboard &blackboard) {
     blackboard.randNumGenerator.init(0);
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
+    blackboard.time_multiplier = DEFAULT_SPEED_MULTIPLIER;
     create_background(blackboard);
     create_panda(blackboard);
     if (mode_ == ENDLESS) {
@@ -49,6 +50,7 @@ void VerticalScene::init_scene(Blackboard &blackboard) {
     }
     create_fade_overlay(blackboard);
     level_system.init(mode_, registry_);
+    blackboard.post_process_shader = std::make_unique<Shader>(blackboard.shader_manager.get_shader("sprite"));
 }
 
 void VerticalScene::update(Blackboard &blackboard) {
@@ -214,7 +216,8 @@ int VerticalScene::get_high_score() {
 void VerticalScene::update_camera(Blackboard &blackboard) {
     vec2 cam_position = blackboard.camera.position();
     blackboard.camera.set_position(cam_position.x,
-                                   cam_position.y - CAMERA_SPEED * blackboard.delta_time);
+            cam_position.y - CAMERA_SPEED * blackboard.delta_time
+    );
     blackboard.camera.compose();
 }
 
