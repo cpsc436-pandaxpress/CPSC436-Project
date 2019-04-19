@@ -262,12 +262,12 @@ public:
                                             auto panda_transform = panda_view.get<Transform>(panda_entity);
                                             Coordinates *teleport_coords;
                                             Location *panda_location = a_star_system.getGridLocation(panda_transform.x, panda_transform.y);
-                                            Location *teleport_location_right = new Location(panda_location->i, panda_location->j+2);
-                                            Location *teleport_location_left = new Location(panda_location->i, panda_location->j-2);
-                                            Location *teleport_location_above = new Location(panda_location->i-2, panda_location->j);
+                                            Location *teleport_location_right = a_star_system.getGridLocation(panda_transform.x+200, panda_transform.y);
+                                            Location *teleport_location_left = a_star_system.getGridLocation(panda_transform.x-200, panda_transform.y);
+                                            Location *teleport_location_above = a_star_system.getGridLocation(panda_transform.x, panda_transform.y-400);
 
-                                            if(!teleport_location_left->platform || !teleport_location_right->platform){
-                                                if(panda_location->i %2){
+                                            if(!teleport_location_left->platform && !teleport_location_right->platform){
+                                                if(panda_location->i %2 && (panda_location->i %5)){
                                                     teleport_coords = a_star_system.getScreenLocation(teleport_location_right->i,
                                                                                                       teleport_location_right->j);
                                                 }else{
@@ -284,7 +284,11 @@ public:
                                             drac_transform.y = teleport_coords->y;
                                             drac_chases.chase_speed=120.f;
                                             timer.remove("teleportDelay");
-                                            timer.save_watch("teleport", 1.f);
+                                            timer.remove("teleport");
+                                            dracula.shooter_count++;
+                                            if(dracula.shooter_count>6){
+                                                dracula.shooter_count=0;
+                                            }
                                             return false;
                                         }
 
