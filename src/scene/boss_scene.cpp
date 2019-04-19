@@ -103,6 +103,8 @@ void BossScene::update(Blackboard &blackboard) {
     } else {
         pause_menu_transform_system.update(blackboard, registry_);
     }
+
+    update_shake_effect(blackboard);
 }
 
 void BossScene::render(Blackboard &blackboard) {
@@ -168,6 +170,9 @@ void BossScene::reset_scene(Blackboard &blackboard) {
     cleanup();
     blackboard.camera.in_transition = false;
     blackboard.camera.transition_ready = false;
+    if (scene_timer.exists(SHAKE_LABEL) && !scene_timer.is_done(SHAKE_LABEL)) {
+        scene_timer.remove(SHAKE_LABEL);
+    }
     init_scene(blackboard);
 }
 
@@ -250,6 +255,7 @@ void BossScene::go_to_next_scene(Blackboard &blackboard) {
 }
 
 void BossScene::generate_cave(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry) {
+    create_shake_effect(blackboard);
     auto cave = registry.create();
     auto shaderCave = blackboard.shader_manager.get_shader("cave");
     auto meshCave = blackboard.mesh_manager.get_mesh("cave");
@@ -277,4 +283,25 @@ void BossScene::generate_cave(float x, float y, Blackboard &blackboard, entt::De
                                                         sizeCave_entrance, scaleCave_entrance);
     caveEntranceE.set_pos(x + 700, y - heightCave);
     registry.assign<Layer>(caveEntrance, TERRAIN_LAYER + 1);
+}
+
+void BossScene::create_shake_effect(Blackboard &blackboard) {
+    scene_timer.save_watch("SHAKE", SHAKE);
+    blackboard.post_process_shader = std::make_unique<Shader>(
+            blackboard.shader_manager.get_shader("shake"));
+}
+
+void BossScene::update_shake_effect(Blackboard &blackboard) {
+    if (scene_timer.exists("SHAKE")) {
+        float val = ((3*(scene_timer.get_target_time("SHAKE") - scene_timer.get_curr_time()) /
+                      SHAKE)); // Ratio of time done (Ranges from [1...0])
+        blackboard.post_process_shader->bind();
+        blackboard.post_process_shader->set_uniform_float("time", val);
+        blackboard.post_process_shader->unbind();
+        // Setup new timeElapsed Uniform
+        if (scene_timer.is_done("SHAKE")) {
+            blackboard.post_process_shader = std::make_unique<Shader>(
+                    blackboard.shader_manager.get_shader("sprite"));
+        }
+    }
 }
