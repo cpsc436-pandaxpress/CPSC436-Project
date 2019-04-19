@@ -19,7 +19,7 @@ void main() {
         uv1.y + texcoord.y * uv_delta.y
     );
 
-    vec2 delta = 2.5*sin(PI * vec2(timeElapsed, 0.0));
+    vec2 delta = 4.5 * sin(PI * vec2(timeElapsed, 0));
     vec2 resolution = vec2(16.0, 9.0);
 
 	vec2 dir = true_uv - vec2( .5 );
