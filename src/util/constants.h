@@ -48,6 +48,7 @@ static const SceneType JUNGLE_TYPE = 0;
 static const SceneType SKY_TYPE = 1;
 static const SceneType BOSS_TYPE = 2;
 static const SceneType STORY_TYPE = 3;
+static const SceneType BOSS_DRACULA_TYPE = 4;
 
 static const float DEFAULT_SPEED_MULTIPLIER = 1.0f;
 static const float MAX_SPEED_MULTIPLIER = 1.5f;

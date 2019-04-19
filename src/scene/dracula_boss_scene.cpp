@@ -9,7 +9,7 @@
 DraculaBossScene::DraculaBossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         GameScene(scene_manager),
         level_system(),
-        background_transform_system(BOSS_TYPE),
+        background_transform_system(BOSS_DRACULA_TYPE),
         physics_system(),
         player_movement_system(BOSS_TYPE),
         chase_system(),
@@ -119,6 +119,7 @@ void DraculaBossScene::update_panda(Blackboard &blackboard) {
     if (transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || panda.dead) {
         reset_scene(blackboard);
     }
+    printf("panda: (%f, %f)\n", transform.x, transform.y);
 }
 
 void DraculaBossScene::update_camera(Blackboard &blackboard) {
@@ -188,23 +189,24 @@ void DraculaBossScene::create_dracula(Blackboard &blackboard, uint32_t target) {
 
 void DraculaBossScene::create_background(Blackboard &blackboard) {
     std::vector<Texture> textures;
-    textures.reserve(4);
+    textures.reserve(2);
     // This order matters for rendering
-    textures.push_back(blackboard.texture_manager.get_texture("grave_top"));
-    textures.push_back(blackboard.texture_manager.get_texture("grave_middle"));
-    textures.push_back(blackboard.texture_manager.get_texture("grave_front"));
-    textures.push_back(blackboard.texture_manager.get_texture("grave_back"));
+    textures.push_back(blackboard.texture_manager.get_texture("castle_ground"));
+    textures.push_back(blackboard.texture_manager.get_texture("castle_back"));
     // end order
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
     int i = 0;
-    int indices[4] = {3, 1, 2, 0};
+    int indices[4] = {1, 0};
     for (Texture t: textures) {
         auto bg_entity = registry_.create();
-        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, indices[i], indices[i] == 3);
+        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, indices[i], false);
         registry_.assign<Layer>(bg_entity, BACKGROUND_LAYER - i);
         bg.set_pos1(0.0f, 0.0f);
+        if (indices[i] != 0) {
+            bg.set_pos1(0.f, 900.f);
+        }
         bg.set_rotation_rad(0.0f);
         bg.set_scale(blackboard.camera.size().x / t.width(),
                      blackboard.camera.size().y / t.height());

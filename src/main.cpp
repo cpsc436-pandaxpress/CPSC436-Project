@@ -171,6 +171,9 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("story_beach_jacko.png"), "beach_jacko");
     blackboard.texture_manager.load_texture(textures_path("skip_scene.png"), "skip_scene");
 
+    blackboard.texture_manager.load_texture(textures_path("castle_back.png"), "castle_back");
+    blackboard.texture_manager.load_texture(textures_path("castle_ground.png"), "castle_ground");
+
 
     blackboard.mesh_manager.load_mesh("health", 4, HealthBar::vertices, 6, HealthBar::indices);
     blackboard.mesh_manager.load_mesh("cave", 41, Cave::vertices, 168, Cave::indices);
