@@ -191,7 +191,7 @@ public:
                                         registry.assign<Sprite>(bat_entity, texture, shader, mesh);
                                         registry.assign<Velocity>(bat_entity);
                                         registry.assign<Timer>(bat_entity);
-                                        registry.assign<CausesDamage>(bat_entity, ALL_DMG_MASK, 1);
+                                        registry.assign<CausesDamage>(bat_entity, TOP_VULNERABLE_MASK, 1);
                                         registry.assign<Collidable>(bat_entity, texture.width() * scaleX,
                                                                     texture.height() * scaleY);
                                         registry.assign<Seeks>(bat_entity, path);
