@@ -68,18 +68,29 @@ void PhysicsSystem::BeginContact(b2Contact* contact) {
     auto e1 = (uint32_t)(uint64_t)(f1->GetBody()->GetUserData());
     auto e2 = (uint32_t)(uint64_t)(f2->GetBody()->GetUserData());
 
+    vec2 normal;
 
+    b2Manifold* manifold = contact->GetManifold();
+    switch(manifold->type) {
+        case b2Manifold::Type::e_circles:
+            return;
+        case b2Manifold::Type::e_faceA:
+            normal = {manifold->localNormal.x, manifold->localNormal.y};
+            break;
+        case b2Manifold::Type::e_faceB:
+            normal = {-manifold->localNormal.x, -manifold->localNormal.y};
+            break;
+    }
 
-    //collisions_.insert()
+    collisions_.emplace_back(e1, e2, normal, 0);
 }
 
 /// Called when two fixtures cease to touch.
-void PhysicsSystem::EndContact(b2Contact* contact) {
-
-}
+void PhysicsSystem::EndContact(b2Contact* contact) {}
 
 bool PhysicsSystem::ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB) {
     // determine if collision _should_ happen
+    // - one should be interactible
     return true;
 }
 

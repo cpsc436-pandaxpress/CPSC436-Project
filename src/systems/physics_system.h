@@ -35,7 +35,7 @@ struct CollisionEntry {
     vec2 normal, d_velocity;
     float time;
 
-
+    // normal will be on e1
     CollisionEntry(
         uint32_t e1,
         uint32_t e2,
