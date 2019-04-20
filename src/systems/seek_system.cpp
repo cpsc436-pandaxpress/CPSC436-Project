@@ -45,14 +45,14 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
             }
 
 
-            if(abs(target->x - transform.x) < 2 && (seeks.batDirection==Seeks::LEFT || seeks.batDirection==Seeks::RIGHT)){
+            if(abs(target->x - transform.x) < 3 && (seeks.batDirection==Seeks::LEFT || seeks.batDirection==Seeks::RIGHT)){
 
                 seeks.seekList.erase(seeks.seekList.begin());
                 seeks.batDirection=Seeks::WAITING;
                 velocity.y_velocity=0;
                 velocity.x_velocity=0;
 
-            }else if(abs(target->y - transform.y) < 2 && (seeks.batDirection==Seeks::UP || seeks.batDirection==Seeks::DOWN)){
+            }else if(abs(target->y - transform.y) < 3 && (seeks.batDirection==Seeks::UP || seeks.batDirection==Seeks::DOWN)){
 
                 seeks.seekList.erase(seeks.seekList.begin());
                 seeks.batDirection=Seeks::WAITING;
