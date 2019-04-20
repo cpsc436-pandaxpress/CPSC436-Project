@@ -64,7 +64,7 @@ void VerticalScene::update(Blackboard &blackboard) {
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
 
     if (blackboard.camera.transition_ready) {
-        if (fadeOverlay.alpha() < 1.2f) {
+        if (fadeOverlay.alpha() < 0.9f) {
             fade_overlay_system.update(blackboard, registry_);
         } else {
             go_to_next_scene(blackboard);
