@@ -160,7 +160,7 @@ void DraculaBossScene::create_dracula(Blackboard &blackboard, uint32_t target) {
     registry_.assign<Timer>(dracula_entity);
     registry_.assign<Boss>(dracula_entity);
     registry_.assign<Chases>(dracula_entity, target);
-    registry_.assign<Health>(dracula_entity, 10);
+    registry_.assign<Health>(dracula_entity, 10 );
     registry_.assign<Interactable>(dracula_entity);
     registry_.assign<CausesDamage>(dracula_entity, TOP_VULNERABLE_MASK, 1);
     registry_.assign<Velocity>(dracula_entity, 0.f, 0.f);

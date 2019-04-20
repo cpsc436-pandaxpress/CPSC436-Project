@@ -94,7 +94,7 @@ void StoryIntroBeachScene::update(Blackboard &blackboard) {
 
     if (fadeOverlay.alpha() > 1.6f) {
         reset_scene(blackboard);
-        change_scene(STORY_END_SCENE_ID);
+        change_scene(STORY_JUNGLE_INTRO_SCENE_ID);
     }
 
 }
