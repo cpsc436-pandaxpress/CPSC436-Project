@@ -48,6 +48,8 @@ int start() {
         FontManager(),
         std::unique_ptr<Shader>(),
         0,
+        MAX_HEALTH,
+        MAX_LIVES,
         DEFAULT_SPEED_MULTIPLIER
     };
 
@@ -125,6 +127,11 @@ int start() {
             shaders_path("sprite.vs.glsl"),
             shaders_path("strobe.fs.glsl"),
             "strobe");
+
+    blackboard.shader_manager.load_shader(
+            shaders_path("shake.vs.glsl"),
+            shaders_path("sprite.fs.glsl"),
+            "shake");
 
     blackboard.texture_manager.load_texture(textures_path("panda.png"), "panda");
     blackboard.texture_manager.load_texture(textures_path("panda_sprite_sheet.png"), "panda_sprites");

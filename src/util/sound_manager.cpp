@@ -44,6 +44,8 @@ void SoundManager::init() {
     m_sfx[SFX_JACKO_DEATH] = Mix_LoadWAV(audio_path("jackodeath.wav"));
 
 
+
+
     m_background_music[STORY_BEACH_INTRO_SCENE_ID] = Mix_LoadMUS(audio_path("introscene.ogg"));
     m_background_music[STORY_JUNGLE_INTRO_SCENE_ID] = Mix_LoadMUS(audio_path("drunkscene.ogg"));
     m_background_music[MAIN_MENU_SCENE_ID] = Mix_LoadMUS(audio_path("PE.ogg"));

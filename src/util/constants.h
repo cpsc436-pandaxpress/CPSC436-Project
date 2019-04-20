@@ -39,8 +39,10 @@ static const SceneID ENDLESS_SKY_SCENE_ID = 5;
 static const SceneID STORY_BEACH_INTRO_SCENE_ID  = 6;
 static const SceneID STORY_HARD_JUNGLE_SCENE_ID = 7;
 static const SceneID STORY_HARD_SKY_SCENE_ID = 8;
+
 static const SceneID STORY_JUNGLE_INTRO_SCENE_ID  = 9;
 static const SceneID DRACULA_BOSS_SCENE_ID    = 10;
+
 
 static const SceneID INVINCIBILITY_MUSIC = 15;
 static const SceneID VAPE_HORIZONTAL_MUSIC = 16;
@@ -53,6 +55,8 @@ static const SceneType BOSS_TYPE = 2;
 static const SceneType STORY_TYPE = 3;
 static const SceneType BOSS_DRACULA_TYPE = 4;
 
+static const int MAX_LIVES = 3;
+static const int MAX_HEALTH = 3;
 static const float DEFAULT_SPEED_MULTIPLIER = 1.0f;
 static const float MAX_SPEED_MULTIPLIER = 1.5f;
 static const float TIME_MULTIPLIER_SPEED = 0.001f;

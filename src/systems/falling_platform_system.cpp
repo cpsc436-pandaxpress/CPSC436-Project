@@ -7,25 +7,36 @@
 
 void FallingPlatformSystem::update(Blackboard& blackboard, entt::DefaultRegistry& registry) {
 
-    auto falling_platform_view = registry.view<Platform, Transform, Timer, FallingPlatform>();
+    auto falling_platform_view = registry.view<Platform, Transform, Timer>();
     for (auto falling_platform_entity : falling_platform_view) {
+
         auto& platform_timer  = falling_platform_view.get<Timer>(falling_platform_entity);
         auto& transform  = falling_platform_view.get<Transform>(falling_platform_entity);
-        auto& falling_platform  = falling_platform_view.get<FallingPlatform>(falling_platform_entity);
+        auto& platform  = falling_platform_view.get<Platform>(falling_platform_entity);
 
-        if(falling_platform.shaking){
-            if(falling_platform.shakeLeft){
+        if(platform.trigger){
+
+
+
+        if(platform.shaking){
+            if(platform.shakeLeft){
                 transform.x-=5;
             }else{
                 transform.x+=5;
             }
-            falling_platform.shakeLeft=!falling_platform.shakeLeft;
+            platform.shakeLeft=!platform.shakeLeft;
         }
 
-        if(platform_timer.is_done("fall")) {
-            falling_platform.shaking = false;
-            registry.assign<ObeysGravity>(falling_platform_entity,1.4f);
-            registry.remove<Timer>(falling_platform_entity);
+        if(platform_timer.watch_exists(FALL)){
+            if(platform_timer.is_done(FALL)) {
+                platform.shaking = false;
+                registry.assign<ObeysGravity>(falling_platform_entity,1.4f);
+                registry.remove<Timer>(falling_platform_entity);
+            }
+        }else{
+            platform_timer.save_watch(FALL, WARNING_TIME);
+        }
+
         }
     }
 }

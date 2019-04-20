@@ -221,7 +221,7 @@ void LevelSystem::generate_falling_platform(float x, float y, Blackboard &blackb
     auto scaleY = static_cast<float>(PLATFORM_HEIGHT / texture.width());
     auto falling_platform = registry.create();
 
-    registry.assign<Platform>(falling_platform);
+    registry.assign<Platform>(falling_platform, false, true);
     registry.assign<Transform>(falling_platform, x,
                                y - CELL_HEIGHT / 2 + PLATFORM_HEIGHT / 2, 0., scaleX,
                                scaleY);
@@ -229,10 +229,12 @@ void LevelSystem::generate_falling_platform(float x, float y, Blackboard &blackb
     registry.assign<Collidable>(falling_platform, texture.width() * scaleX,
                                 texture.height() * scaleY);
 
-    registry.assign<FallingPlatform>(falling_platform);
     registry.assign<Velocity>(falling_platform, 0.f, 0.f);
     registry.assign<Timer>(falling_platform);
     registry.assign<Layer>(falling_platform, TERRAIN_LAYER);
+    auto platform = registry.get<Platform>(falling_platform);
+    platform.falling=true;
+
 }
 
 void LevelSystem::generate_cave(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry) {
