@@ -10,6 +10,8 @@
 #include "components/interactable.h"
 #include "components/panda.h"
 #include "components/boss.h"
+#include "components/jacko.h"
+#include "components/dracula.h"
 #include "components/chases.h"
 #include "components/transform.h"
 #include "components/bread.h"
@@ -79,7 +81,12 @@ void ChaseSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
                 velocity.x_velocity=0;
             }else{
                 chases.stomping=false;
-                blackboard.soundManager.playSFX(SFX_JACKO_LAUGH);
+                if(registry.has<Jacko>(entity)){
+                    blackboard.soundManager.playSFX(SFX_JACKO_LAUGH);
+                }else{
+                    blackboard.soundManager.playSFX(SFX_DRACULA_LAUGH);
+                }
+
             }
 
 

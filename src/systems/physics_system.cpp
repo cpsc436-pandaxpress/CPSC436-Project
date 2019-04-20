@@ -11,6 +11,7 @@
 #include <components/food.h>
 #include <components/jacko.h>
 #include <components/boss.h>
+#include <components/dracula.h>
 #include <components/chases.h>
 #include <components/bread.h>
 #include <components/llama.h>
@@ -289,8 +290,18 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                     registry.remove<Interactable>(entry.entity);
                                     registry.remove<Chases>(entry.entity);
                                     registry.assign<ObeysGravity>(entry.entity);
+                                    if(registry.has<Jacko>(entry.entity)){
+                                        blackboard.soundManager.playSFX(SFX_JACKO_DEATH);
+                                    }else if((registry.has<Dracula>(entry.entity))){
+                                        blackboard.soundManager.playSFX(SFX_DRACULA_DEATH);
+                                    }
                                 }
                                 else {
+                                    if(registry.has<Jacko>(entry.entity)){
+                                        blackboard.soundManager.playSFX(SFX_JACKO_HIT);
+                                    }else if((registry.has<Dracula>(entry.entity))){
+                                        blackboard.soundManager.playSFX(SFX_JACKO_HIT);
+                                    }
                                     chases.evading = true;
                                 }
                             }

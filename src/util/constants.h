@@ -22,6 +22,13 @@ typedef int SceneType;
 static const SFXID SFX_JUMP = 0;
 static const SFXID SFX_JACKO_LAUGH = 1;
 static const SFXID SFX_PANDA_HURT = 2;
+static const SFXID SFX_TELEPORT = 3;
+static const SFXID SFX_BAT_SHOT = 4;
+static const SFXID SFX_DRACULA_HIT = 5;
+static const SFXID SFX_DRACULA_LAUGH = 6;
+static const SFXID SFX_DRACULA_DEATH = 7;
+static const SFXID SFX_JACKO_HIT = 8;
+static const SFXID SFX_JACKO_DEATH = 9;
 
 static const SceneID MAIN_MENU_SCENE_ID   = 0;
 static const SceneID STORY_EASY_JUNGLE_SCENE_ID  = 1;

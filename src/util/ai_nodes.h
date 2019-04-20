@@ -197,10 +197,12 @@ public:
                                         registry.assign<Seeks>(bat_entity, path);
                                         batCount++;
                                         timer.save_watch("batShooter", 0.1f);
+                                        blackboard.soundManager.playSFX(SFX_BAT_SHOT);
                                 }
 
                                 }else{
                                     timer.remove("batAttack");
+                                    timer.remove("batShooter");
                                     drac_chases.chase_speed=120.f;
                                     dracula.shooter_count++;
                                     batCount=0;
@@ -211,6 +213,7 @@ public:
                             }
                         } else {
                             timer.save_watch("batShooter", 1.f);
+                            blackboard.soundManager.playSFX(SFX_DRACULA_LAUGH);
 
                         }
                     }
@@ -231,8 +234,6 @@ public:
         Blackboard& blackboard;
         entt::DefaultRegistry& registry;
         AStarSystem& a_star_system;
-        bool pathSet = false;
-        std::vector<Coordinates *> path;
     public:
         TeleportAttack(Blackboard& blackboard, entt::DefaultRegistry& registry, AStarSystem& a_star_system):
                 blackboard(blackboard),
@@ -259,7 +260,6 @@ public:
                                     drac_chases.chase_speed=0.f;
                                     drac_velocity.x_velocity=0.f;
                                     drac_velocity.y_velocity=0.f;
-
                                     if (timer.is_done("teleportDelay")) {
                                         auto panda_view = registry.view<Panda, Transform>();
                                         for(auto panda_entity: panda_view) {
@@ -311,6 +311,7 @@ public:
                                     }
                                 }else{
                                     timer.save_watch("teleportDelay", 0.5f);
+                                    blackboard.soundManager.playSFX(SFX_TELEPORT);
                                     return false;
                                 }
 
