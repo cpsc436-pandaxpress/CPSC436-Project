@@ -175,8 +175,7 @@ void VerticalScene::go_to_next_scene(Blackboard &blackboard) {
         cleanup();
         blackboard.camera.in_transition = false;
         blackboard.camera.transition_ready = false;
-        // TODO: change to final boss scene
-        change_scene(MAIN_MENU_SCENE_ID);
+        change_scene(DRACULA_BOSS_SCENE_ID);
         init_scene(blackboard);
     }
 }
