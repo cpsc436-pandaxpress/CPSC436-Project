@@ -18,11 +18,11 @@ private:
     const float FIRST_ROW_Y = -400.f;
     Level level_;
     bool generated_;
-    SceneMode mode_;
+    bool dracula;
 
 public:
 
-    BossLevelSystem();
+    BossLevelSystem(bool dracula): dracula(dracula){};
 
     void init(entt::DefaultRegistry &registry) override;
 

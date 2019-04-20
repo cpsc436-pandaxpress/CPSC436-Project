@@ -7,7 +7,7 @@
 
 BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         GameScene(scene_manager),
-        level_system(),
+        level_system(false),
         background_transform_system(BOSS_TYPE),
         physics_system(),
         player_movement_system(BOSS_TYPE),

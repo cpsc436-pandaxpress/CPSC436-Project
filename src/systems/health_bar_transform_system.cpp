@@ -6,7 +6,7 @@
 #include <graphics/health_bar.h>
 #include <components/panda.h>
 #include <components/health.h>
-#include <components/jacko.h>
+#include <components/boss.h>
 #include "health_bar_transform_system.h"
 
 HealthBarTransformSystem::HealthBarTransformSystem() {}
@@ -32,12 +32,12 @@ void HealthBarTransformSystem::update(Blackboard &blackboard, entt::DefaultRegis
         healthBar.set_health(health.health_points / (float) health.max_health);
     }
 
-    auto viewJacko = registry.view<Jacko, Health, Transform, HealthBar>();
+    auto viewJacko = registry.view<Boss, Health, Transform, HealthBar>();
 
     // foreach loop over all entities in view
     for (auto entity: viewJacko) {
         //get the position and sprite for the current entity
-        auto &jacko = viewJacko.get<Jacko>(entity);
+        auto &jacko = viewJacko.get<Boss>(entity);
         auto &health = viewJacko.get<Health>(entity);
         auto &transform = viewJacko.get<Transform>(entity);
         auto &healthBar = viewJacko.get<HealthBar>(entity);

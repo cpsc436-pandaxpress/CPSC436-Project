@@ -8,7 +8,7 @@
 
 DraculaBossScene::DraculaBossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         GameScene(scene_manager),
-        level_system(),
+        level_system(true),
         background_transform_system(BOSS_DRACULA_TYPE),
         physics_system(),
         player_movement_system(BOSS_TYPE),
@@ -149,7 +149,7 @@ void DraculaBossScene::create_dracula(Blackboard &blackboard, uint32_t target) {
     registry_.assign<Timer>(dracula_entity);
     registry_.assign<Boss>(dracula_entity);
     registry_.assign<Chases>(dracula_entity, target);
-    registry_.assign<Health>(dracula_entity, 4);
+    registry_.assign<Health>(dracula_entity, 10);
     registry_.assign<Interactable>(dracula_entity);
     registry_.assign<CausesDamage>(dracula_entity, TOP_VULNERABLE_MASK, 1);
     registry_.assign<Velocity>(dracula_entity, 0.f, 0.f);
@@ -158,12 +158,14 @@ void DraculaBossScene::create_dracula(Blackboard &blackboard, uint32_t target) {
                                  texture.height() * scaleY
     );
 
-    //auto shaderHealth = blackboard.shader_manager.get_shader("health");
-    //auto meshHealth = blackboard.mesh_manager.get_mesh("health");
-    float height = 75.f;
-    float width = 750.f;
-    vec2 size = {width, height};
+    registry_.assign<Layer>(dracula_entity, BOSS_LAYER);
+
+    auto shaderHealth = blackboard.shader_manager.get_shader("health");
+    auto meshHealth = blackboard.mesh_manager.get_mesh("health");
+    vec2 size = {HEALTH_BAR_X_SIZE, HEALTH_BAR_Y_SIZE};
     vec2 scale = {0.3, 0.3};
+    auto &healthbar = registry_.assign<HealthBar>(dracula_entity,
+                                                  meshHealth, shaderHealth, size, scale);
 }
 
 void DraculaBossScene::create_background(Blackboard &blackboard) {

@@ -9,15 +9,17 @@
 #include <components/timer.h>
 #include "boss_level_system.h"
 
-BossLevelSystem::BossLevelSystem() : LevelSystem() {
-
-}
 
 
 void BossLevelSystem::init(entt::DefaultRegistry &registry)  {
     LevelSystem::init(registry);
-    //level_ = Level::load_from_path("jacko_level.csv");
-    level_ = Level::load_from_path("dracula_level.csv");
+
+    if(dracula){
+        level_ = Level::load_from_path("dracula_level.csv");
+    }else{
+        level_ = Level::load_from_path("jacko_level.csv");
+    }
+
 
     generated_ = false;
 }
