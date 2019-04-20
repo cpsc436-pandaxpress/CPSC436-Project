@@ -44,11 +44,21 @@ void VerticalLevelSystem::init(SceneMode mode, entt::DefaultRegistry &registry) 
     last_row_generated_ = last_row_loaded_ = FIRST_ROW_Y;
     difficulty = min_difficulty;
     difficulty_timer.save_watch(LEVEL_UP_LABEL, LEVEL_UP_INTERVAL);
-    load_next_chunk(0);
+    if(mode_==ENDLESS) {
+        load_next_chunk(2);
+    }else{
+        load_next_chunk(0);
+    }
 }
 
 void VerticalLevelSystem::load_next_chunk() {
-    int level = rng_.nextInt(std::max(0, difficulty - difficulty_range), difficulty);
+    int level;
+    if(mode_==ENDLESS){
+        level = rng_.nextInt(std::max(1, difficulty - difficulty_range), difficulty);
+    }else{
+        level = rng_.nextInt(std::max(0, difficulty - difficulty_range), difficulty);
+    }
+
     load_next_chunk(level);
 }
 
