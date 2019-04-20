@@ -5,16 +5,14 @@
 #include <graphics/fade_overlay.h>
 #include <components/panda.h>
 #include <components/timer.h>
-#include <scene/story_intro.h>
+#include <scene/story_intro_beach.h>
 #include "fade_overlay_system.h"
 
 FadeOverlaySystem::FadeOverlaySystem() {}
 
 void FadeOverlaySystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     float change_in_alpha = FADE_OUT_SPEED*blackboard.delta_time;
-    /*if (blackboard.camera.transition_ready){
-        change_in_alpha = FADE_OUT_SPEED_TRANSITION*blackboard.delta_time;
-    }*/
+
     float alpha;
 
     if(blackboard.camera.transition_ready) {
@@ -40,7 +38,10 @@ void FadeOverlaySystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
 
         float position_x = blackboard.camera.position().x;
         float position_y = blackboard.camera.position().y;
+        float scale_x = blackboard.camera.size().x;
+        float scale_y = blackboard.camera.size().y;
         fadeOverlay.set_pos(position_x, position_y);
+        fadeOverlay.set_scale({scale_x*2, scale_y*2});
         fadeOverlay.set_alpha(alpha);
     }
 }

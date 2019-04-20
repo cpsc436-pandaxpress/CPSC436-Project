@@ -29,15 +29,11 @@ static const SceneID STORY_EASY_SKY_SCENE_ID    = 2;
 static const SceneID BOSS_SCENE_ID    = 3;
 static const SceneID ENDLESS_JUNGLE_SCENE_ID = 4;
 static const SceneID ENDLESS_SKY_SCENE_ID = 5;
-
-
-
-static const SceneID STORY_INTRO_SCENE_ID  = 6;
+static const SceneID STORY_BEACH_INTRO_SCENE_ID  = 6;
 static const SceneID STORY_HARD_JUNGLE_SCENE_ID = 7;
 static const SceneID STORY_HARD_SKY_SCENE_ID = 8;
-static const SceneID DRACULA_BOSS_SCENE_ID    = 9;
-static const SceneID STORY_JUNGLE_INTRO_SCENE_ID=10;
-
+static const SceneID STORY_JUNGLE_INTRO_SCENE_ID  = 9;
+static const SceneID DRACULA_BOSS_SCENE_ID    = 10;
 
 static const SceneID INVINCIBILITY_MUSIC = 15;
 static const SceneID VAPE_HORIZONTAL_MUSIC = 16;

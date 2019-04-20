@@ -49,11 +49,17 @@ void BossScene::update(Blackboard &blackboard) {
         return;
     }
 
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+
     if (!pause) {
         if (panda.alive && !panda.dead) {
             update_camera(blackboard);
             player_movement_system.update(blackboard, registry_);
         } else if (!panda.alive && interactable.grounded) {
+            fade_overlay_system.update(blackboard, registry_);
+        }
+
+        if (fadeOverlay.alpha() > 0.f) {
             fade_overlay_system.update(blackboard, registry_);
         }
 
@@ -118,6 +124,8 @@ void BossScene::init_scene(Blackboard &blackboard) {
     create_panda(blackboard);
     create_jacko(blackboard, panda_entity);
     create_fade_overlay(blackboard);
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+    fadeOverlay.set_alpha(1.0);
     level_system.init(registry_);
     blackboard.post_process_shader = std::make_unique<Shader>(blackboard.shader_manager.get_shader("sprite"));
 }

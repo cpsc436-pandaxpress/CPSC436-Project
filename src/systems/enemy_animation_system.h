@@ -25,20 +25,28 @@ private:
     const float jackoHeight = 0.25f;
     const float spitWidth = 0.5f;
     const float spitHeight = 0.5f;
+    const float draculaWidth = 0.20f;
+    const float draculaHeight = 0.25f;
+    const float batWidth = 0.5f;
+    const float batHeight = 1.f;
 
     const int jackoFrames = 7;
     const int spitFrames = 2;
     const int ghostFrames = 7;
+    const int draculaFrames = 5;
+    const int batFrames = 2;
     float animationTime = 0.f;
     float frameRate = 4.f;
+    int counter = 0;
+    int draculaIndex = 0;
 
     void animateBread(bool alive, Sprite &sprite);
     void animateLlama(bool alive, float currentTime, float targetTime, Sprite &sprite);
     void animateJacko(bool alive, bool evading, Sprite &sprite);
     void animateGhost(Sprite &sprite);
     void animateSpit(Sprite &sprite);
-
-
+    void animateDracula(bool alive, bool evading, int shooterCount, Sprite &sprite);
+    void animateBats(Sprite &sprite);
 
 
 };
