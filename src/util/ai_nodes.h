@@ -239,13 +239,14 @@ public:
                 registry(registry),
                 a_star_system(a_star_system){}
             virtual bool run() override {
-                    auto drac_view = registry.view<Dracula, Transform, Chases, Velocity, Timer>();
+                    auto drac_view = registry.view<Dracula, Transform, Chases, Velocity, Timer, Sprite>();
                     for (auto drac_entity: drac_view) {
                         auto &dracula = drac_view.get<Dracula>(drac_entity);
                         auto &drac_transform = drac_view.get<Transform>(drac_entity);
                         auto &drac_velocity = drac_view.get<Velocity>(drac_entity);
                         auto &drac_chases = drac_view.get<Chases>(drac_entity);
                         auto &timer = drac_view.get<Timer>(drac_entity);
+                        auto &sprite = drac_view.get<Sprite>(drac_entity);
 
                         if(dracula.shooter_count<3){
                             return false;
@@ -253,6 +254,7 @@ public:
 
                         if(timer.watch_exists("teleport")) {
                             if (timer.is_done("teleport")) {
+                                sprite.set_color(0.1, 0.9, 0.f); // green
                                 if(timer.watch_exists("teleportDelay")) {
                                     drac_chases.chase_speed=0.f;
                                     drac_velocity.x_velocity=0.f;
@@ -297,6 +299,7 @@ public:
                                             timer.remove("teleportDelay");
                                             timer.remove("teleport");
                                             dracula.shooter_count++;
+                                            sprite.set_color(1.f, 1.f, 1.f);
                                             if(dracula.shooter_count>6){
                                                 dracula.shooter_count=0;
                                             }

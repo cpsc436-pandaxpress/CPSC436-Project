@@ -35,7 +35,7 @@ void SoundManager::init() {
     m_sfx[SFX_JUMP] = Mix_LoadWAV(audio_path("jump.wav"));
     m_sfx[SFX_JACKO_LAUGH] = Mix_LoadWAV(audio_path("JackoLaugh.wav"));
     m_sfx[SFX_PANDA_HURT] = Mix_LoadWAV(audio_path("PandaHurt.wav"));
-    m_background_music[STORY_INTRO_SCENE_ID] = Mix_LoadMUS(audio_path("introscene.ogg"));
+    m_background_music[STORY_BEACH_INTRO_SCENE_ID] = Mix_LoadMUS(audio_path("introscene.ogg"));
     m_background_music[STORY_JUNGLE_INTRO_SCENE_ID] = Mix_LoadMUS(audio_path("drunkscene.ogg"));
     m_background_music[MAIN_MENU_SCENE_ID] = Mix_LoadMUS(audio_path("PE.ogg"));
     m_background_music[STORY_EASY_JUNGLE_SCENE_ID] = Mix_LoadMUS(audio_path("PE.ogg"));

@@ -147,8 +147,8 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("bg_middle.png"), "bg_middle");
     blackboard.texture_manager.load_texture(textures_path("bg_top.png"), "bg_top");
     blackboard.texture_manager.load_texture(textures_path("pause_menu.png"), "pause_menu");
-    blackboard.texture_manager.load_texture(textures_path("dracula.png"), "dracula");
-    blackboard.texture_manager.load_texture(textures_path("bat.png"), "bat");
+    blackboard.texture_manager.load_texture(textures_path("dracula_sprite_sheet.png"), "dracula");
+    blackboard.texture_manager.load_texture(textures_path("boss_bats.png"), "bat");
     blackboard.texture_manager.load_texture(textures_path("jacko_sprite_sheet.png"), "jacko");
     blackboard.texture_manager.load_texture(textures_path("burger.png"), "burger");
 
@@ -188,7 +188,6 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("solid_block_2.png"), "solid_block_2");
     blackboard.texture_manager.load_texture(textures_path("falling_blocks_1.png"), "falling_blocks_1");
     blackboard.texture_manager.load_texture(textures_path("falling_blocks_2.png"), "falling_blocks_2");
-
 
     blackboard.mesh_manager.load_mesh("health", 4, HealthBar::vertices, 6, HealthBar::indices);
     blackboard.mesh_manager.load_mesh("cave", 41, Cave::vertices, 168, Cave::indices);
