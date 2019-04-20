@@ -18,14 +18,17 @@ void StoryEndAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegist
 
     int row, kellyFrames, kellyStartIndex, pandaFrames, pandaStartIndex;
 
-    auto panda_view = registry.view<Panda, Sprite, Velocity>();
+    auto panda_view = registry.view<Panda, Sprite, Timer>();
     for (auto panda_entity: panda_view) {
         auto &sprite = panda_view.get<Sprite>(panda_entity);
-        auto &velocity = panda_view.get<Velocity>(panda_entity);
 
-        if (pandaAnimationTime == 0.f) {
+        auto &timer = panda_view.get<Timer>(panda_entity);
+        float curr_time = timer.get_curr_time();
+
+        if (curr_time == 0.f) {
             resetScene();
-        } else if (pandaAnimationTime == 0.f || pandaCounter != (int) pandaAnimationTime) {
+        }
+        if (pandaAnimationTime == 0.f || pandaCounter != (int) pandaAnimationTime) {
             if (pandaRunning < PANDARUNS){
                 pandaFrames = 3;
                 pandaRunning++;

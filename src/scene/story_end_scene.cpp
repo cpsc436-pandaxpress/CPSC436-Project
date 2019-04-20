@@ -152,12 +152,13 @@ void StoryEndScene::create_panda(Blackboard &blackboard) {
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
-    float scaleY = 350.0f / texture.height();
-    float scaleX = 390.0f / texture.width();
+    float scaleY = 330.0f / texture.height();
+    float scaleX = 360.0f / texture.width();
     registry_.assign<Transform>(panda_entity, PANDA_POS_X, PANDA_POS_Y, 0., scaleX, scaleY);
     registry_.assign<Sprite>(panda_entity, texture, shader, mesh);
     registry_.assign<Panda>(panda_entity);
     registry_.assign<Velocity>(panda_entity, 200.f, 0.f);
+    registry_.assign<Timer>(panda_entity);
     registry_.assign<Layer>(panda_entity, PANDA_LAYER);
 }
 

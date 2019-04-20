@@ -26,7 +26,7 @@ private:
     const float PANDA_POS_Y = 100.f;
     const float KELLY_POS_X = 430.f;
     const float KELLY_POS_Y = 200.f;
-    const float END_SCENE_END = 13.f;
+    const float END_SCENE_END = 15.f;
     const float SKIP_POS_X = 1800.f;
     const float SKIP_POS_Y = 350.f;
     const std::string SKIP_SCENE_LABEL;
