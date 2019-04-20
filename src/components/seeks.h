@@ -19,6 +19,10 @@ struct Seeks {
     bool goingVertical;
     bool goingHorizontal;
     bool seeking;
+    enum Direction {
+        LEFT, RIGHT, UP, DOWN, WAITING
+    };
+    Direction batDirection;
 
     explicit Seeks(std::vector<Coordinates*> seeklist) :
             seekList(seeklist),
@@ -27,7 +31,8 @@ struct Seeks {
             goingVertical(false),
             bounce_speed_x(30.f),
             bounce_speed_y(30.f),
-            seeking(true)
+            seeking(true),
+            batDirection (WAITING)
 
 
     {}
