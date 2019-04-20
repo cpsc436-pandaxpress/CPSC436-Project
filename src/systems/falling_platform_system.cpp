@@ -27,14 +27,14 @@ void FallingPlatformSystem::update(Blackboard& blackboard, entt::DefaultRegistry
             platform.shakeLeft=!platform.shakeLeft;
         }
 
-        if(platform_timer.watch_exists("fall")){
-            if(platform_timer.is_done("fall")) {
+        if(platform_timer.watch_exists(FALL)){
+            if(platform_timer.is_done(FALL)) {
                 platform.shaking = false;
                 registry.assign<ObeysGravity>(falling_platform_entity,1.4f);
                 registry.remove<Timer>(falling_platform_entity);
             }
         }else{
-            platform_timer.save_watch("fall", 0.6f);
+            platform_timer.save_watch(FALL, WARNING_TIME);
         }
 
         }

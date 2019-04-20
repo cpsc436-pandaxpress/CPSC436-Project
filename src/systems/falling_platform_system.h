@@ -25,7 +25,8 @@ public:
 
     void update(Blackboard& blackboard, entt::DefaultRegistry& registry);
 private:
-
+    const std::string FALL = "FALL";
+    const float WARNING_TIME = 0.6f;
 };
 
 
