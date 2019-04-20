@@ -37,6 +37,8 @@ private:
     bool initialized = false;
     std::vector<uint32_t> bg_entities;
     uint32_t jacko_entity;
+    const std::string SHAKE_LABEL = "STROBE";
+    const float SHAKE = 2.f;
 
     BossLevelSystem level_system;
     SpriteTransformSystem sprite_transform_system;
@@ -56,6 +58,7 @@ private:
     HudTransformSystem hud_transform_system;
     RenderSystem render_system;
     TransitionSystem transition_system;
+    Timer scene_timer;
 
 
     void create_background(Blackboard &blackboard);
@@ -64,6 +67,9 @@ private:
     void update_camera(Blackboard& blackboard);
     void initial_update(Blackboard& blackboard);
     void generate_cave(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void create_shake_effect(Blackboard &blackboard);
+    void update_shake_effect(Blackboard &blackboard);
+
 public:
 
     BossScene(Blackboard &blackboard,
