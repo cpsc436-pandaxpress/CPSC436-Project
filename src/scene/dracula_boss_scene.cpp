@@ -97,7 +97,7 @@ void DraculaBossScene::update_panda(Blackboard &blackboard) {
     if (transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || panda.dead) {
         reset_scene(blackboard);
     }
-    printf("panda: (%f, %f)\n", transform.x, transform.y);
+
 }
 
 void DraculaBossScene::update_camera(Blackboard &blackboard) {
