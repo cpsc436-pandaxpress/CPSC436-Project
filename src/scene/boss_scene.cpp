@@ -97,6 +97,7 @@ void BossScene::update(Blackboard &blackboard) {
         enemy_animation_system.update(blackboard, registry_);
         transition_system.update(blackboard, registry_);
         timer_system.update(blackboard, registry_);
+        scene_timer.update(blackboard.delta_time);
         falling_platform_system.update(blackboard, registry_);
         background_transform_system.update(blackboard, registry_);
         hud_transform_system.update(blackboard, registry_); // should run last
@@ -199,7 +200,7 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
     registry_.assign<Sprite>(jacko_entity, texture, shader, mesh);
     registry_.assign<Jacko>(jacko_entity);
     registry_.assign<Chases>(jacko_entity, target);
-    registry_.assign<Health>(jacko_entity, 1);
+    registry_.assign<Health>(jacko_entity, 10);
     registry_.assign<Interactable>(jacko_entity);
     registry_.assign<CausesDamage>(jacko_entity, TOP_VULNERABLE_MASK, 1);
     registry_.assign<Velocity>(jacko_entity, 0.f, 0.f);
@@ -302,6 +303,7 @@ void BossScene::update_shake_effect(Blackboard &blackboard) {
         if (scene_timer.is_done("SHAKE")) {
             blackboard.post_process_shader = std::make_unique<Shader>(
                     blackboard.shader_manager.get_shader("sprite"));
+            scene_timer.remove("SHAKE");
         }
     }
 }
