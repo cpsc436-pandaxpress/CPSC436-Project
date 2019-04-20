@@ -29,6 +29,7 @@
 #include "game_scene.h"
 #include "../systems/seek_system.h"
 #include <systems/a_star_system.h>
+#include "../systems/transition_system.h"
 
 class DraculaBossScene: public GameScene {
 private:
@@ -58,6 +59,9 @@ private:
     RenderSystem render_system;
     //AStarSystem a_star_system;
     SeekSystem seek_system;
+    TransitionSystem transition_system;
+    Timer scene_timer;
+
 
     void create_background(Blackboard &blackboard);
     void create_dracula(Blackboard& blackboard, uint32_t panda);

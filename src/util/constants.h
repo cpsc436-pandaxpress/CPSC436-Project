@@ -42,6 +42,7 @@ static const SceneID STORY_HARD_SKY_SCENE_ID = 8;
 
 static const SceneID STORY_JUNGLE_INTRO_SCENE_ID  = 9;
 static const SceneID DRACULA_BOSS_SCENE_ID    = 10;
+static const SceneID ENDING_SCENE_ID    = 11;
 
 
 static const SceneID INVINCIBILITY_MUSIC = 15;

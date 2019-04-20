@@ -23,7 +23,8 @@ DraculaBossScene::DraculaBossScene(Blackboard &blackboard, SceneManager &scene_m
         fade_overlay_system(),
         pause_menu_transform_system(),
         seek_system(),
-        hud_transform_system()
+        hud_transform_system(),
+        transition_system(BOSS_TYPE)
 {
     init_scene(blackboard);
     reset_scene(blackboard); // idk why??? but this is required
@@ -50,6 +51,12 @@ void DraculaBossScene::update(Blackboard &blackboard) {
         pause = false;
         return;
     }
+
+    auto& jacko_health = registry_.get<Health>(dracula_entity);
+    if (jacko_health.health_points <= 0 && !blackboard.camera.in_transition) {
+        change_scene(ENDING_SCENE_ID);
+    }
+
 
     if (!pause) {
         if (panda.alive && !panda.dead) {
