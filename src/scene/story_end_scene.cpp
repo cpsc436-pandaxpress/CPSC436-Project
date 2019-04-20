@@ -98,7 +98,7 @@ void StoryEndScene::update(Blackboard &blackboard) {
 
     if (fadeOverlay.alpha() > 1.6f) {
         reset_scene(blackboard);
-        change_scene(STORY_HARD_JUNGLE_SCENE_ID);
+        change_scene(MAIN_MENU_SCENE_ID);
     }
 
 }
