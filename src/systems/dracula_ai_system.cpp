@@ -39,7 +39,7 @@ DraculaAISystem::DraculaAISystem(Blackboard& blackboard, entt::DefaultRegistry& 
     firstSelector->addChild(chasePanda);
     firstSelector->addChild(stompPanda);
 
-    checkHealth->addChild(chaseFood);
+    //checkHealth->addChild(chaseFood);
 
 }
 
