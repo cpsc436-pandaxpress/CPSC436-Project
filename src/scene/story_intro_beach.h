@@ -13,14 +13,14 @@
 #include <systems/pause_menu_transform_system.h>
 #include <systems/background_transform_system.h>
 #include <systems/render_system.h>
-#include <systems/story_animation_system.h>
+#include <systems/story_beach_animation_system.h>
 #include "scene.h"
 #include "scene_manager.h"
 #include "../systems/sprite_transform_system.h"
 #include "../util/blackboard.h"
 #include "../systems/timer_system.h"
 
-class StoryIntroScene: public GameScene {
+class StoryIntroBeachScene: public GameScene {
 private:
     const float PANDA_POS_X = -420.f;
     const float PANDA_POS_Y = 150.f;
@@ -31,10 +31,11 @@ private:
     const float JACKO_START_X = 1000.f;
     const float JACKO_START_Y = 80.f;
     const float BEACH_SCENE_END = 32.f;
-    const float SKIP_POS_X = 570.f;
+    const float SKIP_POS_X = 1800.f;
     const float SKIP_POS_Y = 350.f;
     const std::string SKIP_SCENE_LABEL;
-    const float SKIP_SCENE = 10.f;
+    const float SKIP_SCENE = 9.f;
+    const float SKIP_SPEED = 250.f;
 
 
     bool pause = false;
@@ -47,7 +48,7 @@ private:
     uint32_t skip_entity;
     std::vector<uint32_t> bg_entities;
     SpriteTransformSystem sprite_transform_system;
-    StoryAnimationSystem story_animation_system;
+    StoryBeachAnimationSystem story_animation_system;
     TimerSystem timer_system;
     FadeOverlaySystem fade_overlay_system;
     PauseMenuTransformSystem pause_menu_transform_system;
@@ -67,7 +68,7 @@ private:
 
 
 public:
-    StoryIntroScene(Blackboard &blackboard,
+    StoryIntroBeachScene(Blackboard &blackboard,
                     SceneManager &scene_manager);
 
     static const std::string BEACH_SCENE_END_LABEL;

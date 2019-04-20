@@ -41,10 +41,17 @@ HorizontalScene::HorizontalScene(Blackboard &blackboard, SceneManager &scene_man
 void HorizontalScene::update(Blackboard &blackboard) {
     auto &panda = registry_.get<Panda>(panda_entity);
     auto &interactable = registry_.get<Interactable>(panda_entity);
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+
     if (blackboard.camera.transition_ready) {
-        go_to_next_scene(blackboard);
-        return;
+        if (fadeOverlay.alpha() < 1.2f) {
+            fade_overlay_system.update(blackboard, registry_);
+        } else {
+            go_to_next_scene(blackboard);
+            return;
+        }
     }
+
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_ESCAPE)) {
         if (pause) {
             pause = false;
@@ -71,6 +78,10 @@ void HorizontalScene::update(Blackboard &blackboard) {
             }
             player_movement_system.update(blackboard, registry_);
         } else if (!panda.alive && interactable.grounded) {
+            fade_overlay_system.update(blackboard, registry_);
+        }
+
+        if (fadeOverlay.alpha() > 0.f) {
             fade_overlay_system.update(blackboard, registry_);
         }
 
@@ -184,6 +195,8 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
         timer.save_watch(END_TIMER_LABEL, END_TIMER_LENGTH);
     }
     create_fade_overlay(blackboard);
+    auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+    fadeOverlay.set_alpha(1.0);
     blackboard.post_process_shader = std::make_unique<Shader>(blackboard.shader_manager.get_shader("sprite"));
     level_system.init(mode_, registry_);
 }

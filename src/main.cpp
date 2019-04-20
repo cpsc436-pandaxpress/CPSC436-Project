@@ -26,7 +26,9 @@
 #include <graphics/cave.h>
 #include <graphics/font_manager.h>
 #include <util/property_reader.h>
-#include <scene/story_intro.h>
+#include <scene/story_intro_beach.h>
+#include <scene/story_intro_jungle.h>
+
 
 
 int start() {
@@ -114,6 +116,11 @@ int start() {
             shaders_path("split.fs.glsl"),
             "shift");
 
+    blackboard.shader_manager.load_shader(
+            shaders_path("sprite.vs.glsl"),
+            shaders_path("strobe.fs.glsl"),
+            "strobe");
+
     blackboard.texture_manager.load_texture(textures_path("panda.png"), "panda");
     blackboard.texture_manager.load_texture(textures_path("panda_sprite_sheet.png"), "panda_sprites");
     blackboard.texture_manager.load_texture(textures_path("grass_block_1.png"), "platform1");
@@ -165,6 +172,17 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("story_beach_jacko.png"), "beach_jacko");
     blackboard.texture_manager.load_texture(textures_path("skip_scene.png"), "skip_scene");
 
+    blackboard.texture_manager.load_texture(textures_path("story_jungle_background.png"), "story_jungle_background");
+    blackboard.texture_manager.load_texture(textures_path("story_jungle_panda.png"), "story_jungle_panda");
+    blackboard.texture_manager.load_texture(textures_path("story_jungle_kelly.png"), "story_jungle_kelly");
+    blackboard.texture_manager.load_texture(textures_path("story_jungle_grass.png"), "story_jungle_grass");
+    blackboard.texture_manager.load_texture(textures_path("story_jungle_vape.png"), "story_jungle_vape");
+
+    blackboard.texture_manager.load_texture(textures_path("solid_block_1.png"), "solid_block_1");
+    blackboard.texture_manager.load_texture(textures_path("solid_block_2.png"), "solid_block_2");
+    blackboard.texture_manager.load_texture(textures_path("falling_blocks_1.png"), "falling_blocks_1");
+    blackboard.texture_manager.load_texture(textures_path("falling_blocks_2.png"), "falling_blocks_2");
+
 
     blackboard.mesh_manager.load_mesh("health", 4, HealthBar::vertices, 6, HealthBar::indices);
     blackboard.mesh_manager.load_mesh("cave", 41, Cave::vertices, 168, Cave::indices);
@@ -178,7 +196,7 @@ int start() {
 
     // initialize scenes here
     MainMenuScene main_menu(blackboard, scene_manager);
-    main_menu.add_item(blackboard, "story_text", STORY_INTRO_SCENE_ID);
+    main_menu.add_item(blackboard, "story_text", STORY_BEACH_INTRO_SCENE_ID);
     main_menu.add_item(blackboard, "endless_jungle_text", ENDLESS_JUNGLE_SCENE_ID);
     main_menu.add_item(blackboard, "endless_sky_text", ENDLESS_SKY_SCENE_ID);
     main_menu.add_item(blackboard, "jacko_text",  BOSS_SCENE_ID);
@@ -196,16 +214,20 @@ int start() {
     VerticalScene vertical_scene(blackboard, scene_manager);
     vertical_scene.set_high_score(std::stoi(scores.get("sky")));
 
-    StoryIntroScene story_intro_scene(blackboard, scene_manager);
+    StoryIntroBeachScene story_beach_intro_scene(blackboard, scene_manager);
+
+    StoryIntroJungleScene story_jungle_intro_scene(blackboard, scene_manager);
 
     scene_manager.add_scene(STORY_EASY_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY_EASY);
     scene_manager.add_scene(ENDLESS_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), ENDLESS);
     scene_manager.add_scene(ENDLESS_SKY_SCENE_ID, (Scene*)(&vertical_scene), ENDLESS);
     scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene));
+    scene_manager.add_scene(STORY_BEACH_INTRO_SCENE_ID, (Scene*)(&story_beach_intro_scene), STORY_EASY);
+    scene_manager.add_scene(STORY_JUNGLE_INTRO_SCENE_ID, (Scene*)(&story_jungle_intro_scene), STORY_EASY);
     scene_manager.add_scene(STORY_EASY_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY_EASY);
-    scene_manager.add_scene(STORY_INTRO_SCENE_ID, (Scene*)(&story_intro_scene));
     scene_manager.add_scene(STORY_HARD_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY_HARD);
     scene_manager.add_scene(STORY_HARD_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY_HARD);
+
     // set the first scene
 
     scene_manager.change_scene(MAIN_MENU_SCENE_ID);
