@@ -53,11 +53,12 @@ void DraculaBossScene::update(Blackboard &blackboard) {
     }
 
     auto& jacko_health = registry_.get<Health>(dracula_entity);
+    /*
     if (jacko_health.health_points <= 0 && !blackboard.camera.in_transition) {
         change_scene(STORY_END_SCENE_ID);
     }
 
-
+*/
     if (!pause) {
         if (panda.alive && !panda.dead) {
             update_camera(blackboard);
