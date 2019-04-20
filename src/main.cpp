@@ -29,6 +29,7 @@
 #include <util/property_reader.h>
 #include <scene/story_intro_beach.h>
 #include <scene/story_intro_jungle.h>
+#include <scene/story_end_scene.h>
 
 
 
@@ -196,6 +197,10 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("story_jungle_grass.png"), "story_jungle_grass");
     blackboard.texture_manager.load_texture(textures_path("story_jungle_vape.png"), "story_jungle_vape");
 
+    blackboard.texture_manager.load_texture(textures_path("story_end_background.png"), "story_end_background");
+    blackboard.texture_manager.load_texture(textures_path("story_end_kelly.png"), "story_end_kelly");
+    blackboard.texture_manager.load_texture(textures_path("story_ending_panda_sprite_sheet.png"), "story_ending_panda");
+
     blackboard.texture_manager.load_texture(textures_path("solid_block_1.png"), "solid_block_1");
     blackboard.texture_manager.load_texture(textures_path("solid_block_2.png"), "solid_block_2");
     blackboard.texture_manager.load_texture(textures_path("falling_blocks_1.png"), "falling_blocks_1");
@@ -237,6 +242,8 @@ int start() {
 
     StoryIntroJungleScene story_jungle_intro_scene(blackboard, scene_manager);
 
+    StoryEndScene story_end_scene(blackboard, scene_manager);
+
     scene_manager.add_scene(STORY_EASY_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY_EASY);
     scene_manager.add_scene(ENDLESS_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), ENDLESS);
     scene_manager.add_scene(ENDLESS_SKY_SCENE_ID, (Scene*)(&vertical_scene), ENDLESS);
@@ -247,6 +254,7 @@ int start() {
     scene_manager.add_scene(STORY_EASY_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY_EASY);
     scene_manager.add_scene(STORY_HARD_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY_HARD);
     scene_manager.add_scene(STORY_HARD_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY_HARD);
+    scene_manager.add_scene(STORY_END_SCENE_ID, (Scene*)(&story_end_scene), STORY_EASY);
 
     // set the first scene
 
