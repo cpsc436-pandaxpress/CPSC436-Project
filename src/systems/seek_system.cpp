@@ -64,20 +64,22 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
                     velocity.x_velocity = -seeks.seek_speed;
                     velocity.y_velocity = 0;
                     transform.y = transform.y + sin(transform.x/50)*0.3f;
+                    transform.x_scale = abs(transform.x_scale);
                 }else if(seeks.batDirection==Seeks::RIGHT){
                     velocity.x_velocity = seeks.seek_speed;
                     velocity.y_velocity = 0;
                     transform.y = transform.y + sin(transform.x/50)*0.3f;
+                    transform.x_scale = -abs(transform.x_scale);
                 }else if(seeks.batDirection==Seeks::UP) {
-
                     velocity.y_velocity = -seeks.seek_speed;
                     velocity.x_velocity = 0;
                     transform.x= transform.x + sin(transform.y/50)*0.3f;
+                    transform.set_angle_degrees(90);
                 }else if(seeks.batDirection==Seeks::DOWN) {
-
                     velocity.y_velocity = seeks.seek_speed;
                     velocity.x_velocity = 0;
                     transform.x= transform.x + sin(transform.y/50)*0.3f;
+                    transform.set_angle_degrees(-90);
                 }
 
                 }

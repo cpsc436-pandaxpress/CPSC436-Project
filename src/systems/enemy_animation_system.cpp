@@ -80,7 +80,7 @@ void EnemyAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
         }
     }
 
-    auto bat_view = registry.view<Seeks, Boss, Sprite>();
+    auto bat_view = registry.view<Seeks, Sprite>();
     for (auto dracula_entity: bat_view) {
         auto &sprite = bat_view.get<Sprite>(dracula_entity);
         auto &bat = bat_view.get<Seeks>(dracula_entity);
@@ -174,6 +174,7 @@ void EnemyAnimationSystem::animateDracula(bool alive, bool evading, int shooterC
     if (alive) {
         if (evading) {
             row = 2;
+
             frameRate = 6.f;
         } else if (shooterCount > 0){
             row = 3;
