@@ -253,7 +253,7 @@ void BossScene::go_to_next_scene(Blackboard &blackboard) {
     cleanup();
     blackboard.camera.in_transition = false;
     blackboard.camera.transition_ready = false;
-    change_scene(STORY_END_SCENE_ID);
+    change_scene(STORY_HARD_JUNGLE_SCENE_ID);
 }
 
 void BossScene::generate_cave(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry) {
