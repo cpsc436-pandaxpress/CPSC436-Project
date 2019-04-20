@@ -9,7 +9,9 @@
 #include "components/velocity.h"
 #include "components/interactable.h"
 #include "components/panda.h"
+#include "components/boss.h"
 #include "components/jacko.h"
+#include "components/dracula.h"
 #include "components/chases.h"
 #include "components/transform.h"
 #include "components/bread.h"
@@ -22,11 +24,11 @@ ChaseSystem::ChaseSystem() {}
 
 
 void ChaseSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry) {
-    auto chaser_view = registry.view<Jacko, Chases, Transform, Velocity, Interactable>();
+    auto chaser_view = registry.view<Boss, Chases, Transform, Velocity, Interactable>();
     auto panda_view = registry.view<Panda, Transform, Velocity>();
 
     for (auto entity: chaser_view) {
-        auto &jacko = chaser_view.get<Jacko>(entity);
+        auto &jacko = chaser_view.get<Boss>(entity);
         auto &transform = chaser_view.get<Transform>(entity);
         auto &velocity = chaser_view.get<Velocity>(entity);
         auto &chases = chaser_view.get<Chases>(entity);
@@ -36,7 +38,7 @@ void ChaseSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
         auto chasedPosition = registry.get<Transform>(chases.target);
 
         if(chases.evading){
-            if(abs(transform.x-chasedPosition.x) > 400){
+            if(abs(transform.x-chasedPosition.x) > 500 || abs(transform.y-chasedPosition.y) > 500){
 
                     chases.evading=false;
             }
@@ -79,7 +81,12 @@ void ChaseSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
                 velocity.x_velocity=0;
             }else{
                 chases.stomping=false;
-                blackboard.soundManager.playSFX(SFX_JACKO_LAUGH);
+                if(registry.has<Jacko>(entity)){
+                    blackboard.soundManager.playSFX(SFX_JACKO_LAUGH);
+                }else{
+                    blackboard.soundManager.playSFX(SFX_DRACULA_LAUGH);
+                }
+
             }
 
 

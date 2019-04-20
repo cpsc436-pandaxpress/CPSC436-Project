@@ -7,6 +7,7 @@
 #define PANDAEXPRESS_BOSS_LEVEL_SYSTEM_H
 
 #include "level/level_system.h"
+#include "scene/scene_mode.h"
 #include "level.h"
 
 class BossLevelSystem : public LevelSystem {
@@ -17,10 +18,11 @@ private:
     const float FIRST_ROW_Y = -400.f;
     Level level_;
     bool generated_;
+    bool dracula;
 
 public:
 
-    BossLevelSystem();
+    BossLevelSystem(bool dracula): dracula(dracula){};
 
     void init(entt::DefaultRegistry &registry) override;
 

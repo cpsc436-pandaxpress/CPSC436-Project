@@ -47,7 +47,7 @@ void PandaDamageSystem::update(Blackboard &blackboard, entt::DefaultRegistry &re
             // Make invincibleh
             panda.invincible = true;
             timer.save_watch(DMG_TIMER_LABEL, DMG_INVINCIBLE_TIMER);
-            sprite.set_color(254 / 256.f, 202 / 256.f, 87 / 256.f); // yellow
+            sprite.set_color(0.9, 0.2, 0.0); // red
         }
         // Reset Panda Invincibility timer
         if (timer.exists(DMG_TIMER_LABEL) && timer.is_done(DMG_TIMER_LABEL)) {

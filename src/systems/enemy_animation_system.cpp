@@ -11,6 +11,9 @@
 #include "components/spit.h"
 #include "components/timer.h"
 #include "components/chases.h"
+#include "components/dracula.h"
+#include "components/seeks.h"
+#include "components/boss.h"
 #include "level/level_system.h"
 
 
@@ -32,24 +35,22 @@ void EnemyAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
 
     auto ghost_view = registry.view<Ghost, Sprite>();
     for (auto ghost_entity: ghost_view) {
-        auto &ghost = ghost_view.get<Ghost>(ghost_entity);
         auto &sprite = ghost_view.get<Sprite>(ghost_entity);
 
         animateGhost(sprite);
     }
 
-    auto jacko_view = registry.view<Jacko, Chases, Sprite>();
+    auto jacko_view = registry.view<Jacko, Chases, Boss, Sprite>();
     for (auto jacko_entity: jacko_view) {
-        auto &jacko = jacko_view.get<Jacko>(jacko_entity);
         auto &sprite = jacko_view.get<Sprite>(jacko_entity);
+        auto &boss = jacko_view.get<Boss>(jacko_entity);
         auto &chases = jacko_view.get<Chases>(jacko_entity);
 
-        animateJacko(jacko.alive, chases.evading, sprite);
+        animateJacko(boss.alive, chases.evading, sprite);
 
     }
     auto spit_view = registry.view<Spit, Sprite>();
     for (auto spit_entity: spit_view) {
-        auto &bread = spit_view.get<Spit>(spit_entity);
         auto &sprite = spit_view.get<Sprite>(spit_entity);
 
         animateSpit(sprite);
@@ -66,6 +67,29 @@ void EnemyAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
         animateLlama(llama.alive, curr_time, target_time, sprite);
     }
 
+    auto dracula_view = registry.view<Dracula, Boss, Sprite, Chases>();
+    for (auto dracula_entity: dracula_view) {
+        auto &sprite = dracula_view.get<Sprite>(dracula_entity);
+        auto &boss = dracula_view.get<Boss>(dracula_entity);
+        auto &chases = dracula_view.get<Chases>(dracula_entity);
+        auto &dracula = dracula_view.get<Dracula>(dracula_entity);
+
+        if (counter != animationTime) {
+            animateDracula(boss.alive, chases.evading, dracula.shooter_count, sprite);
+            draculaIndex++;
+        }
+    }
+
+    auto bat_view = registry.view<Seeks, Sprite>();
+    for (auto dracula_entity: bat_view) {
+        auto &sprite = bat_view.get<Sprite>(dracula_entity);
+        auto &bat = bat_view.get<Seeks>(dracula_entity);
+
+        animateBats(sprite);
+
+    }
+
+    counter = (int) animationTime;
     animationTime += frameRate*blackboard.delta_time;
 
 }
@@ -141,5 +165,35 @@ void EnemyAnimationSystem::animateSpit(Sprite &sprite){
     int index = ((int) animationTime % spitFrames);
     vec2 uv1 = {index*spitWidth, 0.f};
     vec2 uv2 = {(index+1)*spitWidth, spitHeight};
+    sprite.set_uvs(uv1, uv2);
+}
+
+void EnemyAnimationSystem::animateDracula(bool alive, bool evading, int shooterCount, Sprite &sprite){
+    frameRate = 4.f;
+    int row;
+    if (alive) {
+        if (evading) {
+            row = 2;
+
+            frameRate = 6.f;
+        } else if (shooterCount > 0){
+            row = 3;
+        } else {
+            row = 1;
+        }
+    } else {
+        row = 4;
+    }
+    draculaIndex = ((int) animationTime % draculaFrames);
+    vec2 uv1 = {draculaIndex*draculaWidth, (row - 1)*draculaHeight + 0.005f};
+    vec2 uv2 = {(draculaIndex+1)*draculaWidth, row*draculaHeight};
+    sprite.set_uvs(uv1, uv2);
+}
+
+void EnemyAnimationSystem::animateBats(Sprite &sprite){
+    frameRate = 5.f;
+    int index = ((int) animationTime % batFrames);
+    vec2 uv1 = {index*batWidth, 0.f};
+    vec2 uv2 = {(index+1)*batWidth, batHeight};
     sprite.set_uvs(uv1, uv2);
 }

@@ -24,7 +24,7 @@ else()
 endif()
 
 # Add source files as we code (QWERTY)
-# Generate the shader folder location to the header
+# Generate the shader folder Location to the header
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp")
 
 
@@ -60,6 +60,8 @@ set(SOURCE_FILES
         src/systems/background_transform_system.h
         src/scene/vertical_scene.cpp
         src/scene/vertical_scene.h
+        src/scene/dracula_boss_scene.cpp
+        src/scene/dracula_boss_scene.h
         src/util/csv_reader.cpp
         src/util/csv_reader.h
         src/level/level_system.cpp
@@ -73,6 +75,7 @@ set(SOURCE_FILES
         src/components/ghost.h
         src/components/llama.h src/components/spit.h
         src/components/pause_menu.h
+        src/components/seeks.h
         src/level/vertical_level_system.cpp
         src/level/vertical_level_system.h
         src/components/chases.h
@@ -80,11 +83,21 @@ set(SOURCE_FILES
         src/systems/chase_system.h
         src/util/node.cpp
         src/util/node.h
+        src/util/coordinates.cpp
+        src/util/coordinates.h
+        src/util/Location.cpp
+        src/util/Location.h
         src/components/falling_platform.h
         src/util/selector_node.h
         src/util/selector_node.cpp
+        src/systems/seek_system.cpp
+        src/systems/seek_system.h
+        src/systems/a_star_system.cpp
+        src/systems/a_star_system.h
         src/systems/jacko_ai_system.cpp
         src/systems/jacko_ai_system.h
+        src/systems/dracula_ai_system.cpp
+        src/systems/dracula_ai_system.h
         src/components/evades.h
         src/level/boss_level_system.h
         src/level/boss_level_system.cpp
@@ -166,7 +179,9 @@ set(SOURCE_FILES
         src/scene/story_intro_jungle.h
         src/systems/story_jungle_animation_system.cpp
         src/systems/story_jungle_animation_system.h
-        src/components/vape.h)
+
+        src/components/vape.h src/scene/story_end_scene.cpp src/scene/story_end_scene.h src/systems/story_end_animation_system.cpp src/systems/story_end_animation_system.h)
+
 
 
 # Create executable target

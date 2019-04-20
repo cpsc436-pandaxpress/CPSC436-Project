@@ -10,6 +10,8 @@
 #include <components/health.h>
 #include <components/food.h>
 #include <components/jacko.h>
+#include <components/boss.h>
+#include <components/dracula.h>
 #include <components/chases.h>
 #include <components/bread.h>
 #include <components/llama.h>
@@ -285,16 +287,26 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                 dv.y_velocity = 700 * entry.normal.y;
                             }
 
-                            if (registry.has<Jacko>(entry.entity)) {
+                            if (registry.has<Boss>(entry.entity)) {
                                 // panda is hitting jacko
-                                auto& jacko = registry.get<Jacko>(entry.entity);
+                                auto& jacko = registry.get<Boss>(entry.entity);
                                 auto& chases = registry.get<Chases>(entry.entity);
                                 if (health.health_points <= 0) {
                                     registry.remove<Interactable>(entry.entity);
                                     registry.remove<Chases>(entry.entity);
                                     registry.assign<ObeysGravity>(entry.entity);
+                                    if(registry.has<Jacko>(entry.entity)){
+                                        blackboard.soundManager.playSFX(SFX_JACKO_DEATH);
+                                    }else if((registry.has<Dracula>(entry.entity))){
+                                        blackboard.soundManager.playSFX(SFX_DRACULA_DEATH);
+                                    }
                                 }
                                 else {
+                                    if(registry.has<Jacko>(entry.entity)){
+                                        blackboard.soundManager.playSFX(SFX_JACKO_DEATH);
+                                    }else if((registry.has<Dracula>(entry.entity))){
+                                        blackboard.soundManager.playSFX(SFX_DRACULA_HIT);
+                                    }
                                     chases.evading = true;
                                 }
                             }

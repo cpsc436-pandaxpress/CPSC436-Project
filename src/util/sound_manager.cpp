@@ -33,8 +33,19 @@ void SoundManager::init() {
     }
 
     m_sfx[SFX_JUMP] = Mix_LoadWAV(audio_path("jump.wav"));
+    m_sfx[SFX_TELEPORT] = Mix_LoadWAV(audio_path("teleport.wav"));
     m_sfx[SFX_JACKO_LAUGH] = Mix_LoadWAV(audio_path("JackoLaugh.wav"));
     m_sfx[SFX_PANDA_HURT] = Mix_LoadWAV(audio_path("PandaHurt.wav"));
+    m_sfx[SFX_BAT_SHOT] = Mix_LoadWAV(audio_path("batShot.wav"));
+    m_sfx[SFX_DRACULA_HIT] = Mix_LoadWAV(audio_path("draculahit.wav"));
+    m_sfx[SFX_DRACULA_LAUGH] = Mix_LoadWAV(audio_path("draculalaugh.wav"));
+    m_sfx[SFX_DRACULA_DEATH] = Mix_LoadWAV(audio_path("draculadeath.wav"));
+    m_sfx[SFX_JACKO_COLLIDE] = Mix_LoadWAV(audio_path("jackohit.wav"));
+    m_sfx[SFX_JACKO_DEATH] = Mix_LoadWAV(audio_path("jackodeath.wav"));
+
+
+
+
     m_background_music[STORY_BEACH_INTRO_SCENE_ID] = Mix_LoadMUS(audio_path("introscene.ogg"));
     m_background_music[STORY_JUNGLE_INTRO_SCENE_ID] = Mix_LoadMUS(audio_path("drunkscene.ogg"));
     m_background_music[MAIN_MENU_SCENE_ID] = Mix_LoadMUS(audio_path("PE.ogg"));
@@ -45,6 +56,8 @@ void SoundManager::init() {
     m_background_music[ENDLESS_SKY_SCENE_ID] = Mix_LoadMUS(audio_path("vertical2.ogg"));
     m_background_music[STORY_EASY_SKY_SCENE_ID] = Mix_LoadMUS(audio_path("vertical2.ogg"));
     m_background_music[BOSS_SCENE_ID] = Mix_LoadMUS(audio_path("graveyard.ogg"));
+    m_background_music[DRACULA_BOSS_SCENE_ID] = Mix_LoadMUS(audio_path("draculascenemusic.ogg"));
+    m_background_music[STORY_END_SCENE_ID] = Mix_LoadMUS(audio_path("invincibility.ogg"));
 
     m_background_music[INVINCIBILITY_MUSIC] = Mix_LoadMUS(audio_path("invincibility.ogg"));
     m_background_music[VAPE_HORIZONTAL_MUSIC] = Mix_LoadMUS(audio_path("horizontalslow.ogg"));

@@ -22,6 +22,13 @@ typedef int SceneType;
 static const SFXID SFX_JUMP = 0;
 static const SFXID SFX_JACKO_LAUGH = 1;
 static const SFXID SFX_PANDA_HURT = 2;
+static const SFXID SFX_TELEPORT = 3;
+static const SFXID SFX_BAT_SHOT = 4;
+static const SFXID SFX_DRACULA_HIT = 5;
+static const SFXID SFX_DRACULA_LAUGH = 6;
+static const SFXID SFX_DRACULA_DEATH = 7;
+static const SFXID SFX_JACKO_COLLIDE = 10;
+static const SFXID SFX_JACKO_DEATH = 9;
 
 static const SceneID MAIN_MENU_SCENE_ID   = 0;
 static const SceneID STORY_EASY_JUNGLE_SCENE_ID  = 1;
@@ -33,7 +40,11 @@ static const SceneID STORY_BEACH_INTRO_SCENE_ID  = 6;
 static const SceneID STORY_HARD_JUNGLE_SCENE_ID = 7;
 static const SceneID STORY_HARD_SKY_SCENE_ID = 8;
 
-static const SceneID STORY_JUNGLE_INTRO_SCENE_ID=9;
+static const SceneID STORY_JUNGLE_INTRO_SCENE_ID  = 9;
+static const SceneID DRACULA_BOSS_SCENE_ID    = 10;
+
+static const SceneID STORY_END_SCENE_ID=12;
+
 
 
 static const SceneID INVINCIBILITY_MUSIC = 15;
@@ -45,6 +56,7 @@ static const SceneType JUNGLE_TYPE = 0;
 static const SceneType SKY_TYPE = 1;
 static const SceneType BOSS_TYPE = 2;
 static const SceneType STORY_TYPE = 3;
+static const SceneType BOSS_DRACULA_TYPE = 4;
 
 static const int MAX_LIVES = 3;
 static const int MAX_HEALTH = 3;

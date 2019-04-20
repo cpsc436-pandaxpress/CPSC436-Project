@@ -33,6 +33,7 @@ public:
 
     void story_beach_background_transform(Blackboard &blackboard, Background &background);
 
+    void boss_dracula_background_transform(Blackboard &blackboard, Background &background);
 };
 
 
