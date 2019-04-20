@@ -33,6 +33,8 @@ StoryIntroBeachScene::StoryIntroBeachScene(Blackboard &blackboard, SceneManager 
 {
     init_scene(blackboard);
     gl_has_errors();
+    blackboard.story_health = MAX_HEALTH;
+    blackboard.story_lives = MAX_LIVES;
 }
 
 void StoryIntroBeachScene::update(Blackboard &blackboard) {
@@ -121,6 +123,8 @@ void StoryIntroBeachScene::init_scene(Blackboard &blackboard) {
     if (!scene_timer.exists(SKIP_SCENE_LABEL)) {
         scene_timer.save_watch(SKIP_SCENE_LABEL, SKIP_SCENE);
     }
+    blackboard.story_health = 3;
+    blackboard.story_lives = 3;
 }
 
 void StoryIntroBeachScene::reset_scene(Blackboard &blackboard) {

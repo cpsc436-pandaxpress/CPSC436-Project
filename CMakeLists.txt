@@ -253,7 +253,7 @@ endif()
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${GLEW_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS})
 
-if($ENV{USER} STREQUAL "Avery")
+if($ENV{USER} STREQUAL "Avery" OR $ENV{USER} STREQUAL "catsrule123")
     target_link_libraries(${PROJECT_NAME} PUBLIC "/usr/local/lib/libGLEW.dylib"
             "/usr/local/lib/libSDL2.dylib"
             "/usr/local/lib/libSDL2_mixer.dylib"

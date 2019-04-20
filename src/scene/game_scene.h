@@ -49,6 +49,8 @@ protected:
 
     void create_high_score_text(Blackboard &blackboard, int high_score);
 
+    void create_lives_text(Blackboard &blackboard);
+
     void create_fade_overlay(Blackboard &blackboard);
 
     void create_pause_menu(Blackboard &blackboard);
