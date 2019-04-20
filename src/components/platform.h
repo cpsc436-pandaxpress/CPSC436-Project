@@ -10,7 +10,12 @@
  */
 struct Platform {
     bool one_way;
+    bool falling;
+    bool shakeLeft;
+    bool shaking;
+    bool trigger;
 
-    Platform(bool one_way = true) : one_way(one_way) {}
+    Platform(bool one_way = true, bool falling = false) : one_way(one_way),falling(falling), shakeLeft(false),shaking(false),trigger(false) {}
+
 };
 #endif //PANDAEXPRESS_PLATFORM_H
