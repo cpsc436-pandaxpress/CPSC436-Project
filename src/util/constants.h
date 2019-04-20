@@ -27,7 +27,7 @@ static const SFXID SFX_BAT_SHOT = 4;
 static const SFXID SFX_DRACULA_HIT = 5;
 static const SFXID SFX_DRACULA_LAUGH = 6;
 static const SFXID SFX_DRACULA_DEATH = 7;
-static const SFXID SFX_JACKO_HIT = 8;
+static const SFXID SFX_JACKO_COLLIDE = 10;
 static const SFXID SFX_JACKO_DEATH = 9;
 
 static const SceneID MAIN_MENU_SCENE_ID   = 0;

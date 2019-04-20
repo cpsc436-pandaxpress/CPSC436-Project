@@ -38,7 +38,7 @@ void ChaseSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
         auto chasedPosition = registry.get<Transform>(chases.target);
 
         if(chases.evading){
-            if(abs(transform.x-chasedPosition.x) > 400){
+            if(abs(transform.x-chasedPosition.x) > 500 || abs(transform.y-chasedPosition.y) > 500){
 
                     chases.evading=false;
             }

@@ -40,7 +40,7 @@ void SoundManager::init() {
     m_sfx[SFX_DRACULA_HIT] = Mix_LoadWAV(audio_path("draculahit.wav"));
     m_sfx[SFX_DRACULA_LAUGH] = Mix_LoadWAV(audio_path("draculalaugh.wav"));
     m_sfx[SFX_DRACULA_DEATH] = Mix_LoadWAV(audio_path("draculadeath.wav"));
-    m_sfx[SFX_JACKO_HIT] = Mix_LoadWAV(audio_path("jackohit.wav"));
+    m_sfx[SFX_JACKO_COLLIDE] = Mix_LoadWAV(audio_path("jackohit.wav"));
     m_sfx[SFX_JACKO_DEATH] = Mix_LoadWAV(audio_path("jackodeath.wav"));
 
 

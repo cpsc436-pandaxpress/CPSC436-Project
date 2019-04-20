@@ -234,6 +234,8 @@ public:
         Blackboard& blackboard;
         entt::DefaultRegistry& registry;
         AStarSystem& a_star_system;
+        float dracula_chase_speed = 200;
+        float teleport_chase_speed= 300;
     public:
         TeleportAttack(Blackboard& blackboard, entt::DefaultRegistry& registry, AStarSystem& a_star_system):
                 blackboard(blackboard),
@@ -266,8 +268,8 @@ public:
                                             auto panda_transform = panda_view.get<Transform>(panda_entity);
                                             Coordinates *teleport_coords;
                                             Location *panda_location = a_star_system.getGridLocation(panda_transform.x, panda_transform.y);
-                                            Location *teleport_location_right = a_star_system.getGridLocation(panda_transform.x+200, panda_transform.y);
-                                            Location *teleport_location_left = a_star_system.getGridLocation(panda_transform.x-200, panda_transform.y);
+                                            Location *teleport_location_right = a_star_system.getGridLocation(panda_transform.x+300, panda_transform.y);
+                                            Location *teleport_location_left = a_star_system.getGridLocation(panda_transform.x-300, panda_transform.y);
                                             Location *teleport_location_above = a_star_system.getGridLocation(panda_transform.x, panda_transform.y-400);
 
                                             if((!teleport_location_left->platform && !teleport_location_right->platform)){
@@ -295,13 +297,14 @@ public:
 
                                             drac_transform.x = teleport_coords->x;
                                             drac_transform.y = teleport_coords->y;
-                                            drac_chases.chase_speed=120.f;
+                                            drac_chases.chase_speed=teleport_chase_speed;
                                             timer.remove("teleportDelay");
                                             timer.remove("teleport");
                                             dracula.shooter_count++;
                                             sprite.set_color(1.f, 1.f, 1.f);
                                             if(dracula.shooter_count>6){
                                                 dracula.shooter_count=0;
+                                                drac_chases.chase_speed=dracula_chase_speed;
                                             }
                                             return false;
                                         }
