@@ -46,18 +46,18 @@ void ChaseSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry
 
         if(chases.evading&&jacko.alive){
             if (chasedPosition.x < transform.x) {
-                velocity.x_velocity = chases.chase_speed*5;
+                velocity.x_velocity = chases.chase_speed*6;
             } else if (chasedPosition.x > transform.x) {
-                velocity.x_velocity = -chases.chase_speed*5;
+                velocity.x_velocity = -chases.chase_speed*6;
             }
             if(abs(transform.x-chasedPosition.x) < 200){
                 if (chasedPosition.y < transform.y) {
-                    velocity.y_velocity = chases.chase_speed*4;
+                    velocity.y_velocity = chases.chase_speed*5;
                 } else if (chasedPosition.y > transform.y) {
-                    velocity.y_velocity = -chases.chase_speed*4;
+                    velocity.y_velocity = -chases.chase_speed*5;
                 }
             }else{
-                velocity.y_velocity = -chases.chase_speed*6;
+                velocity.y_velocity = -chases.chase_speed*7;
             }
 
         }
