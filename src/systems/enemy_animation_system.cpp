@@ -47,7 +47,6 @@ void EnemyAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
         auto &chases = jacko_view.get<Chases>(jacko_entity);
 
         animateJacko(boss.alive, chases.evading, sprite);
-
     }
     auto spit_view = registry.view<Spit, Sprite>();
     for (auto spit_entity: spit_view) {
@@ -78,6 +77,23 @@ void EnemyAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
             animateDracula(boss.alive, chases.evading, dracula.shooter_count, sprite);
             draculaIndex++;
         }
+    }
+
+    auto boss_view = registry.view<Boss, Sprite>();
+    for (auto boss_entity: boss_view) {
+        auto &sprite = boss_view.get<Sprite>(boss_entity);
+        auto &boss = boss_view.get<Boss>(boss_entity);
+
+            if (!boss.alive) {
+                if (registry.has<Jacko>(boss_entity)) {
+                    animateJacko(boss.alive, false, sprite);
+                } else if (registry.has<Dracula>(boss_entity)) {
+                    if (counter != animationTime) {
+                        animateDracula(boss.alive, false, 0, sprite);
+                        draculaIndex++;
+                    }
+                }
+            }
     }
 
     auto bat_view = registry.view<Seeks, Sprite>();
