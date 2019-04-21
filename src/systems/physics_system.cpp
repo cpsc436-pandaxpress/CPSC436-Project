@@ -304,7 +304,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                 }
                                 else {
                                     if(registry.has<Jacko>(entry.entity)){
-                                        blackboard.soundManager.playSFX(SFX_JACKO_DEATH);
+                                        blackboard.soundManager.playSFX(SFX_BAT_SHOT);
                                     }else if((registry.has<Dracula>(entry.entity))){
                                         blackboard.soundManager.playSFX(SFX_DRACULA_HIT);
                                     }
