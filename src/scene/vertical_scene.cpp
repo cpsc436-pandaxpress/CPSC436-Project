@@ -112,7 +112,7 @@ void VerticalScene::update(Blackboard &blackboard) {
         background_transform_system.update(blackboard, registry_);
         level_system.update(blackboard, registry_);
         physics_system.update(blackboard, registry_);
-        panda_dmg_system.update(blackboard, registry_);
+        enemy_system.update(blackboard, registry_, JUNGLE_TYPE);
         sprite_transform_system.update(blackboard, registry_);
         health_bar_transform_system.update(blackboard, registry_);
         label_system.update(blackboard, registry_);
@@ -127,7 +127,7 @@ void VerticalScene::update(Blackboard &blackboard) {
         high_score_ = std::max<int>(high_score_, (int)blackboard.score);
 
         if (!blackboard.camera.transition_ready) {
-            enemy_system.update(blackboard, registry_, JUNGLE_TYPE);
+            panda_dmg_system.update(blackboard, registry_);
         }
     } else {
         pause_menu_transform_system.update(blackboard, registry_);
