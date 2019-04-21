@@ -209,7 +209,6 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("dirt_2.png"), "dirt_2");
     blackboard.texture_manager.load_texture(textures_path("grass_1.png"), "grass_1");
     blackboard.texture_manager.load_texture(textures_path("grass_2.png"), "grass_2");
-    blackboard.texture_manager.load_texture(textures_path("grey_block.png"), "grey_block");
 
     blackboard.mesh_manager.load_mesh("health", 4, HealthBar::vertices, 6, HealthBar::indices);
     blackboard.mesh_manager.load_mesh("cave", 41, Cave::vertices, 168, Cave::indices);
