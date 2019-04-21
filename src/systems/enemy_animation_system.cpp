@@ -126,7 +126,7 @@ void EnemyAnimationSystem::animateBread(bool alive, Sprite &sprite){
     int index = ((int) animationTime % breadFrames);
 
     vec2 uv1 = {index*breadWidth, breadHeight*(row-1) + 0.01f};
-    vec2 uv2 = {(index+1)*breadWidth, (row)*breadHeight - 0.01f};
+    vec2 uv2 = {(index+1)*breadWidth, (row)*breadHeight - 0.02f};
     sprite.set_uvs(uv1, uv2);
 }
 
@@ -134,7 +134,7 @@ void EnemyAnimationSystem::animateLlama(bool alive, float currentTime, float tar
     frameRate = 6.f;
     int llamaFrames = 14;
     int row = 1;
-    float i = 0.014f;
+    float i = 0.005f;
 
     if (!alive) {
         row = 3;
