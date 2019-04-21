@@ -149,6 +149,7 @@ void VerticalScene::reset_scene(Blackboard &blackboard) {
     blackboard.camera.in_transition = false;
     blackboard.camera.transition_ready = false;
     blackboard.score = 0;
+    blackboard.soundManager.changeBackgroundMusic(blackboard.soundManager.currentStage);
     init_scene(blackboard);
 }
 
