@@ -52,13 +52,19 @@ void DraculaBossScene::update(Blackboard &blackboard) {
         return;
     }
 
-    auto& jacko_health = registry_.get<Health>(dracula_entity);
+    auto& dracula_health = registry_.get<Health>(dracula_entity);
+    auto& fade_overlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+    auto& boss = registry_.get<Boss>(dracula_entity);
 
-    if (jacko_health.health_points <= 0 && !blackboard.camera.in_transition) {
-        blackboard.camera.set_position(0, 0);
-        reset_scene(blackboard);
-
-        change_scene(STORY_END_SCENE_ID);
+    if (dracula_health.health_points <= 0 && !blackboard.camera.in_transition) {
+        if (fade_overlay.alpha() < 1.6f) {
+            fade_overlay_system.update(blackboard, registry_);
+        } else {
+            blackboard.camera.set_position(0, 0);
+            reset_scene(blackboard);
+            change_scene(STORY_END_SCENE_ID);
+            return;
+        }
     }
 
 

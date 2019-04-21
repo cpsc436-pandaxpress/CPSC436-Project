@@ -289,15 +289,16 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
 
                             if (registry.has<Boss>(entry.entity)) {
                                 // panda is hitting jacko
-                                auto& jacko = registry.get<Boss>(entry.entity);
+                                auto& boss = registry.get<Boss>(entry.entity);
                                 auto& chases = registry.get<Chases>(entry.entity);
                                 if (health.health_points <= 0) {
+                                    boss.alive = false;
                                     registry.remove<Interactable>(entry.entity);
                                     registry.remove<Chases>(entry.entity);
                                     registry.assign<ObeysGravity>(entry.entity);
                                     if(registry.has<Jacko>(entry.entity)){
                                         blackboard.soundManager.playSFX(SFX_JACKO_DEATH);
-                                    }else if((registry.has<Dracula>(entry.entity))){
+                                    } else if((registry.has<Dracula>(entry.entity))){
                                         blackboard.soundManager.playSFX(SFX_DRACULA_DEATH);
                                     }
                                 }

@@ -35,12 +35,14 @@ private:
     void generate_bread(bool move_left, float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
     void generate_ghost(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
     void generate_llama(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
-    void generate_spike(bool tall, float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void generate_spike(bool tall, bool floating, float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
     void generate_falling_platform(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
     void generate_cave(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
     void generate_food(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
     void generate_shield(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
     void generate_vial(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void generate_dirt(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void generate_grass(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
 
 protected:
     Random rng_;

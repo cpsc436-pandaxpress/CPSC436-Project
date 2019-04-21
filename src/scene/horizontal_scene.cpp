@@ -44,7 +44,7 @@ void HorizontalScene::update(Blackboard &blackboard) {
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
 
     if (blackboard.camera.transition_ready) {
-        if (fadeOverlay.alpha() < 1.2f) {
+        if (fadeOverlay.alpha() < 0.9f) {
             fade_overlay_system.update(blackboard, registry_);
         } else {
             go_to_next_scene(blackboard);
@@ -92,9 +92,8 @@ void HorizontalScene::update(Blackboard &blackboard) {
 
         level_system.update(blackboard, registry_);
         physics_system.update(blackboard, registry_);
-        panda_dmg_system.update(blackboard, registry_);
-        sprite_transform_system.update(blackboard, registry_);
         enemy_system.update(blackboard, registry_, JUNGLE_TYPE);
+        sprite_transform_system.update(blackboard, registry_);
         health_bar_transform_system.update(blackboard, registry_);
         player_animation_system.update(blackboard, registry_);
         text_transform_system.update(blackboard, registry_);
@@ -106,6 +105,10 @@ void HorizontalScene::update(Blackboard &blackboard) {
         powerup_system.update(blackboard, registry_);
         hud_transform_system.update(blackboard, registry_);// Must run last
         high_score_ = std::max<int>(high_score_, (int) blackboard.score);
+
+        if (!blackboard.camera.transition_ready) {
+            panda_dmg_system.update(blackboard, registry_);
+        }
     } else {
         pause_menu_transform_system.update(blackboard, registry_);
     }

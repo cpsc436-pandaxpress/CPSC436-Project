@@ -79,6 +79,8 @@ void BossScene::update(Blackboard &blackboard) {
         }
 
         auto& jacko_health = registry_.get<Health>(jacko_entity);
+        auto& boss = registry_.get<Boss>(jacko_entity);
+
         if (jacko_health.health_points <= 0 && !blackboard.camera.in_transition) {
             generate_cave(1350,200, blackboard, registry_);
             blackboard.camera.in_transition = true;
