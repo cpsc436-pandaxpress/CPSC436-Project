@@ -1934,7 +1934,7 @@ static int stbi__jpeg_decode_block(stbi__jpeg *j, short data[64], stbi__huffman 
 			s = r & 15; // combined length
 			j->code_buffer <<= s;
 			j->code_bits -= s;
-			// decode into unzigzag'd location
+			// decode into unzigzag'd Location
 			zig = stbi__jpeg_dezigzag[k++];
 			data[zig] = (short)((r >> 8) * dequant[zig]);
 		}
@@ -1949,7 +1949,7 @@ static int stbi__jpeg_decode_block(stbi__jpeg *j, short data[64], stbi__huffman 
 			}
 			else {
 				k += r;
-				// decode into unzigzag'd location
+				// decode into unzigzag'd Location
 				zig = stbi__jpeg_dezigzag[k++];
 				data[zig] = (short)(stbi__extend_receive(j, s) * dequant[zig]);
 			}

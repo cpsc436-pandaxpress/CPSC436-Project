@@ -32,6 +32,10 @@ void BackgroundTransformSystem::update(Blackboard &blackboard, entt::DefaultRegi
                 story_beach_background_transform(blackboard, background);
             }
                 break;
+            case BOSS_DRACULA_TYPE: {
+                boss_dracula_background_transform(blackboard, background);
+            }
+                break;
         }
     }
 }
@@ -131,5 +135,15 @@ void BackgroundTransformSystem::story_beach_background_transform(Blackboard &bla
         if (background.pos1().y > WAVE_MAX || background.pos1().y < WAVE_MIN ) {
             background.set_z_pos(background.z_pos() * -1);
         }
+    }
+}
+
+void BackgroundTransformSystem::boss_dracula_background_transform(Blackboard &blackboard,
+                                                                  Background &background) {
+    Camera camera = blackboard.camera;
+    if (background.z_pos() == 0) {
+        background.set_pos1(camera.position().x, camera.position().y);
+    } else {
+        background.set_pos1(camera.position().x, 900.f);
     }
 }

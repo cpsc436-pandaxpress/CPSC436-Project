@@ -8,7 +8,7 @@
 
 BossScene::BossScene(Blackboard &blackboard, SceneManager &scene_manager) :
         GameScene(scene_manager),
-        level_system(),
+        level_system(false),
         background_transform_system(BOSS_TYPE),
         physics_system(),
         player_movement_system(BOSS_TYPE),
@@ -79,6 +79,8 @@ void BossScene::update(Blackboard &blackboard) {
         }
 
         auto& jacko_health = registry_.get<Health>(jacko_entity);
+        auto& boss = registry_.get<Boss>(jacko_entity);
+
         if (jacko_health.health_points <= 0 && !blackboard.camera.in_transition) {
             generate_cave(1350,200, blackboard, registry_);
             blackboard.camera.in_transition = true;
@@ -199,6 +201,7 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
     registry_.assign<Transform>(jacko_entity, -300, -300, 0., scaleX, scaleY);
     registry_.assign<Sprite>(jacko_entity, texture, shader, mesh);
     registry_.assign<Jacko>(jacko_entity);
+    registry_.assign<Boss>(jacko_entity);
     registry_.assign<Chases>(jacko_entity, target);
     registry_.assign<Health>(jacko_entity, 10);
     registry_.assign<Interactable>(jacko_entity);

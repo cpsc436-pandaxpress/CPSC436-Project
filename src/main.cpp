@@ -16,6 +16,7 @@
 #include "util/blackboard.h"
 #include "util/random.h"
 #include <scene/horizontal_scene.h>
+#include <scene/dracula_boss_scene.h>
 #include <SDL_mixer.h>
 #include <sstream>
 #include <scene/vertical_scene.h>
@@ -28,6 +29,7 @@
 #include <util/property_reader.h>
 #include <scene/story_intro_beach.h>
 #include <scene/story_intro_jungle.h>
+#include <scene/story_end_scene.h>
 
 
 
@@ -72,6 +74,10 @@ int start() {
     blackboard.input_manager.track(SDL_SCANCODE_A);
     blackboard.input_manager.track(SDL_SCANCODE_D);
     blackboard.input_manager.track(SDL_SCANCODE_W);
+    blackboard.input_manager.track(SDL_SCANCODE_W);
+    blackboard.input_manager.track(SDL_SCANCODE_7);
+    blackboard.input_manager.track(SDL_SCANCODE_8);
+    blackboard.input_manager.track(SDL_SCANCODE_9);
 
 
     blackboard.shader_manager.load_shader(
@@ -149,7 +155,8 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("bg_middle.png"), "bg_middle");
     blackboard.texture_manager.load_texture(textures_path("bg_top.png"), "bg_top");
     blackboard.texture_manager.load_texture(textures_path("pause_menu.png"), "pause_menu");
-
+    blackboard.texture_manager.load_texture(textures_path("dracula_sprite_sheet.png"), "dracula");
+    blackboard.texture_manager.load_texture(textures_path("boss_bats.png"), "bat");
     blackboard.texture_manager.load_texture(textures_path("jacko_sprite_sheet.png"), "jacko");
     blackboard.texture_manager.load_texture(textures_path("burger.png"), "burger");
 
@@ -179,17 +186,29 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("story_beach_jacko.png"), "beach_jacko");
     blackboard.texture_manager.load_texture(textures_path("skip_scene.png"), "skip_scene");
 
+
+    blackboard.texture_manager.load_texture(textures_path("castle_back.png"), "castle_back");
+    blackboard.texture_manager.load_texture(textures_path("castle_ground.png"), "castle_ground");
+
+
     blackboard.texture_manager.load_texture(textures_path("story_jungle_background.png"), "story_jungle_background");
     blackboard.texture_manager.load_texture(textures_path("story_jungle_panda.png"), "story_jungle_panda");
     blackboard.texture_manager.load_texture(textures_path("story_jungle_kelly.png"), "story_jungle_kelly");
     blackboard.texture_manager.load_texture(textures_path("story_jungle_grass.png"), "story_jungle_grass");
     blackboard.texture_manager.load_texture(textures_path("story_jungle_vape.png"), "story_jungle_vape");
 
+    blackboard.texture_manager.load_texture(textures_path("story_end_background.png"), "story_end_background");
+    blackboard.texture_manager.load_texture(textures_path("story_end_kelly.png"), "story_end_kelly");
+    blackboard.texture_manager.load_texture(textures_path("story_ending_panda_sprite_sheet.png"), "story_ending_panda");
+
     blackboard.texture_manager.load_texture(textures_path("solid_block_1.png"), "solid_block_1");
     blackboard.texture_manager.load_texture(textures_path("solid_block_2.png"), "solid_block_2");
     blackboard.texture_manager.load_texture(textures_path("falling_blocks_1.png"), "falling_blocks_1");
     blackboard.texture_manager.load_texture(textures_path("falling_blocks_2.png"), "falling_blocks_2");
-
+    blackboard.texture_manager.load_texture(textures_path("dirt_1.png"), "dirt_1");
+    blackboard.texture_manager.load_texture(textures_path("dirt_2.png"), "dirt_2");
+    blackboard.texture_manager.load_texture(textures_path("grass_1.png"), "grass_1");
+    blackboard.texture_manager.load_texture(textures_path("grass_2.png"), "grass_2");
 
     blackboard.mesh_manager.load_mesh("health", 4, HealthBar::vertices, 6, HealthBar::indices);
     blackboard.mesh_manager.load_mesh("cave", 41, Cave::vertices, 168, Cave::indices);
@@ -217,6 +236,7 @@ int start() {
     horizontal_scene.set_high_score(std::stoi(scores.get("jungle")));
 
     BossScene boss_scene(blackboard, scene_manager);
+    DraculaBossScene dracula_boss_scene(blackboard, scene_manager);
 
     VerticalScene vertical_scene(blackboard, scene_manager);
     vertical_scene.set_high_score(std::stoi(scores.get("sky")));
@@ -225,15 +245,19 @@ int start() {
 
     StoryIntroJungleScene story_jungle_intro_scene(blackboard, scene_manager);
 
+    StoryEndScene story_end_scene(blackboard, scene_manager);
+
     scene_manager.add_scene(STORY_EASY_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY_EASY);
     scene_manager.add_scene(ENDLESS_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), ENDLESS);
     scene_manager.add_scene(ENDLESS_SKY_SCENE_ID, (Scene*)(&vertical_scene), ENDLESS);
-    scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene));
+    scene_manager.add_scene(BOSS_SCENE_ID, (Scene*)(&boss_scene), JACKO);
+    scene_manager.add_scene(DRACULA_BOSS_SCENE_ID, (Scene*)(&dracula_boss_scene), DRACULA);
     scene_manager.add_scene(STORY_BEACH_INTRO_SCENE_ID, (Scene*)(&story_beach_intro_scene), STORY_EASY);
     scene_manager.add_scene(STORY_JUNGLE_INTRO_SCENE_ID, (Scene*)(&story_jungle_intro_scene), STORY_EASY);
     scene_manager.add_scene(STORY_EASY_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY_EASY);
     scene_manager.add_scene(STORY_HARD_JUNGLE_SCENE_ID, (Scene*)(&horizontal_scene), STORY_HARD);
     scene_manager.add_scene(STORY_HARD_SKY_SCENE_ID, (Scene*)(&vertical_scene), STORY_HARD);
+    scene_manager.add_scene(STORY_END_SCENE_ID, (Scene*)(&story_end_scene), STORY_EASY);
 
     // set the first scene
 
