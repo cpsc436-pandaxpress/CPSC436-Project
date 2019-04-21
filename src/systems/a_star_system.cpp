@@ -8,7 +8,7 @@
 int cols=0;
 int rows=0;
 std::vector<std::vector<Location*>> grid;
-
+bool startedInPlatform=false;
 
 
 float manhattanDistance(Location *a, Location *b){
@@ -105,12 +105,24 @@ std::vector<Coordinates*> AStarSystem::getProjectilePath(Blackboard &blackboard,
         auto& transform = panda.get<Transform>(entity);
         end = getGridLocation(transform.x, transform.y);
     }
+    if(start->platform){
+        start->platform=false;
+        startedInPlatform=true;
+    }
+
 
     path = findPath(start, end);
+
+
 
     for(int i=0; i<path.size(); i++){
         Coordinates* temp = getScreenLocation(path[i]->i,path[i]->j);
         coordinatePath.push_back(temp);
+    }
+
+    if(startedInPlatform){
+        start->platform=true;
+        startedInPlatform=true;
     }
 
     return coordinatePath;
