@@ -46,6 +46,7 @@ vec2 Background::pos2() {
 
 void Background::set_pos1(const vec2 &pos) {
     sp1_.set_pos((int)pos.x, (int)pos.y);
+//    sp1_.set_pos(pos.x, pos.y);
 }
 
 void Background::set_pos1(float x, float y) {
@@ -54,6 +55,7 @@ void Background::set_pos1(float x, float y) {
 
 void Background::set_pos2(const vec2 &pos) {
     sp2_.set_pos((int)pos.x, (int)pos.y);
+//    sp2_.set_pos(pos.x, pos.y);
 }
 
 void Background::set_pos2(float x, float y) {
