@@ -82,7 +82,7 @@ void BossScene::update(Blackboard &blackboard) {
         auto& boss = registry_.get<Boss>(jacko_entity);
 
         if (jacko_health.health_points <= 0 && !blackboard.camera.in_transition) {
-            generate_cave(1350,200, blackboard, registry_);
+            generate_cave(1250, 300, blackboard, registry_);
             blackboard.camera.in_transition = true;
         }
 
@@ -271,7 +271,7 @@ void BossScene::generate_cave(float x, float y, Blackboard &blackboard, entt::De
     vec2 scaleCave = {-80, 80};
     auto &caveE = registry.assign<Cave>(cave, meshCave, shaderCave, sizeCave, scaleCave);
     caveE.set_pos(x, y - heightCave);
-    registry.assign<Layer>(cave, TERRAIN_LAYER);
+    registry.assign<Layer>(cave, BOSS_LAYER);
 
     auto caveEntrance = registry.create();
     auto shaderCaveEntrance = blackboard.shader_manager.get_shader("caveEntrance");
@@ -286,7 +286,7 @@ void BossScene::generate_cave(float x, float y, Blackboard &blackboard, entt::De
     auto &caveEntranceE = registry.assign<CaveEntrance>(caveEntrance, meshCaveEntrance, shaderCaveEntrance,
                                                         sizeCave_entrance, scaleCave_entrance);
     caveEntranceE.set_pos(x + 700, y - heightCave);
-    registry.assign<Layer>(caveEntrance, TERRAIN_LAYER + 1);
+    registry.assign<Layer>(caveEntrance, BOSS_LAYER + 1);
 }
 
 void BossScene::create_shake_effect(Blackboard &blackboard) {

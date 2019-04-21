@@ -171,14 +171,14 @@ void VerticalScene::go_to_next_scene(Blackboard &blackboard) {
         cleanup();
         blackboard.camera.in_transition = false;
         blackboard.camera.transition_ready = false;
-        change_scene(BOSS_SCENE_ID);
+        change_scene(BOSS_SCENE_ID, true);
         init_scene(blackboard);
     } else if (mode_ == STORY_HARD) {
         blackboard.camera.set_position(0, 0);
         cleanup();
         blackboard.camera.in_transition = false;
         blackboard.camera.transition_ready = false;
-        change_scene(DRACULA_BOSS_SCENE_ID);
+        change_scene(DRACULA_BOSS_SCENE_ID, true);
         init_scene(blackboard);
     }
 }
