@@ -19,7 +19,7 @@ private:
 
     const float FIRST_COL_X = -200;
     const int MIN_DIFFICULTY_EASY = 3;
-    const int MAX_DIFFICULTY_EASY = 9;
+    const int MAX_DIFFICULTY_EASY = 10;
     const int MIN_DIFFICULTY_HARD = 14;
     const int MAX_DIFFICULTY_HARD = 21;
     const int DIFFICULTY_RANGE_STORY = 2;

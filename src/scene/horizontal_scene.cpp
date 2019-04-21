@@ -155,7 +155,7 @@ void HorizontalScene::update_camera(Blackboard &blackboard) {
 
 void HorizontalScene::render(Blackboard &blackboard) {
     if (mode_ == STORY_HARD) {
-        blackboard.window.colorScreen(vec3{126.f, 19.f, 136.f});
+        blackboard.window.colorScreen(vec3{136.f, 19.f, 126.f});
     } else {
         blackboard.window.colorScreen(vec3{19.f, 136.f, 126.f});
     }
@@ -208,11 +208,13 @@ void HorizontalScene::init_scene(Blackboard &blackboard) {
     if (mode_ == ENDLESS) {
         create_score_text(blackboard);
         create_high_score_text(blackboard, high_score_);
+        physics_system.set_story(false);
     } else if (mode_ == STORY_EASY || mode_ == STORY_HARD) {
         timer_entity = registry_.create();
         auto& timer = registry_.assign<Timer>(timer_entity);
         timer.save_watch(END_TIMER_LABEL, END_TIMER_LENGTH);
         create_lives_text(blackboard);
+        physics_system.set_story(true);
     }
     create_fade_overlay(blackboard);
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);

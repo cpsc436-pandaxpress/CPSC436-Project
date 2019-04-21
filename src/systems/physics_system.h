@@ -35,11 +35,12 @@ struct CollisionEntry {
 class PhysicsSystem : public System {
 private:
     static constexpr float GRAVITY = 2500.f;
+    bool story_;
 public:
 
     PhysicsSystem();
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;
-
+    void set_story(bool story);
 private:
     void apply_gravity(Blackboard &blackboard, entt::DefaultRegistry &registry);
     void apply_velocity(Blackboard &blackboard, entt::DefaultRegistry &registry);
