@@ -65,14 +65,23 @@ void LevelSystem::generateEntity(char value, float x, float y,
            generate_food(x, y, blackboard, registry);
         }
             break;
+
         case 's': {
             generate_shield(x, y, blackboard, registry);
         }
-        break;
+            break;
         case 'v': {
             generate_vial(x, y, blackboard, registry);
         }
-        break;
+            break;
+        case 'w': {
+            generate_dirt(x, y, blackboard, registry);
+        }
+            break;
+        case 'z': {
+            generate_grass(x, y, blackboard, registry);
+        }
+            break;
         default:
             break;
     }
@@ -199,12 +208,12 @@ void LevelSystem::generate_spike(bool tall, float x, float y, Blackboard &blackb
 
     y = tall ? y : y - (float) CELL_HEIGHT * 0.75 + PLATFORM_HEIGHT;
     auto scaleX = static_cast<float>(CELL_WIDTH / texture.width());
-    auto scaleY = tall ? scaleX * 1.8 : scaleX * 0.5;
+    auto scaleY = tall ? scaleX * 1.8 : scaleX * 0.4;
     auto stalagmite2 = registry.create();
     registry.assign<Obstacle>(stalagmite2);
     registry.assign<CausesDamage>(stalagmite2, BOTTOM_VULNERABLE_MASK, 1);
     registry.assign<Platform>(stalagmite2, false);
-    registry.assign<Transform>(stalagmite2, x, y, 0., scaleX, scaleY);
+    registry.assign<Transform>(stalagmite2, x, y + 5.f, 0., scaleX, scaleY);
     registry.assign<Sprite>(stalagmite2, texture, shader, mesh);
     registry.assign<Collidable>(stalagmite2, texture.width() * scaleX,
                                 texture.height() * scaleY);
@@ -317,4 +326,43 @@ void LevelSystem::generate_vial(float x, float y, Blackboard &blackboard,
     registry.assign<Collidable>(vial, texture.width() * scaleX,
                                 texture.height() * scaleY);
     registry.assign<Layer>(vial, ITEM_LAYER);
+}
+
+void LevelSystem::generate_dirt(float x, float y, Blackboard &blackboard,
+                                entt::DefaultRegistry &registry) {
+    auto dirt = registry.create();
+    auto texture = blackboard.texture_manager.get_texture(
+            (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "dirt_1"
+                                                                   : "dirt_2");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+    auto scaleX = static_cast<float>((CELL_WIDTH / texture.width()));
+    auto scaleY = static_cast<float>(CELL_HEIGHT*2.8 / texture.height());
+    registry.assign<Sprite>(dirt, texture, shader, mesh);
+    registry.assign<Transform>(dirt, x, y, 0.f, scaleX, scaleY);
+    registry.assign<Interactable>(dirt);
+    registry.assign<Platform>(dirt, true);
+    registry.assign<Collidable>(dirt, texture.width() * scaleX,
+                                texture.height() * scaleY);
+    registry.assign<Layer>(dirt, TERRAIN_LAYER - 1);
+}
+
+void LevelSystem::generate_grass(float x, float y, Blackboard &blackboard,
+                                entt::DefaultRegistry &registry) {
+    auto grass = registry.create();
+    auto texture = blackboard.texture_manager.get_texture(
+            (blackboard.randNumGenerator.nextInt(0, 100) % 2 == 0) ? "grass_1"
+                                                                   : "grass_2");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+    auto scaleX = static_cast<float>(CELL_WIDTH / texture.width());
+    auto scaleY = static_cast<float>(CELL_HEIGHT / texture.width());
+    registry.assign<Platform>(grass, true);
+    registry.assign<Transform>(grass, x, y, 0.,
+                               scaleX,
+                               scaleY);
+    registry.assign<Sprite>(grass, texture, shader, mesh);
+    registry.assign<Collidable>(grass, texture.width() * scaleX,
+                                texture.height() * scaleY);
+    registry.assign<Layer>(grass, TERRAIN_LAYER);
 }

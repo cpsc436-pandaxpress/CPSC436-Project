@@ -41,6 +41,8 @@ private:
     void generate_food(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
     void generate_shield(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
     void generate_vial(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void generate_dirt(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void generate_grass(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
 
 protected:
     Random rng_;

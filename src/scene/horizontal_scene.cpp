@@ -94,7 +94,6 @@ void HorizontalScene::update(Blackboard &blackboard) {
         physics_system.update(blackboard, registry_);
         panda_dmg_system.update(blackboard, registry_);
         sprite_transform_system.update(blackboard, registry_);
-        enemy_system.update(blackboard, registry_, JUNGLE_TYPE);
         health_bar_transform_system.update(blackboard, registry_);
         player_animation_system.update(blackboard, registry_);
         text_transform_system.update(blackboard, registry_);
@@ -106,6 +105,10 @@ void HorizontalScene::update(Blackboard &blackboard) {
         powerup_system.update(blackboard, registry_);
         hud_transform_system.update(blackboard, registry_);// Must run last
         high_score_ = std::max<int>(high_score_, (int) blackboard.score);
+
+        if (!blackboard.camera.transition_ready) {
+            enemy_system.update(blackboard, registry_, JUNGLE_TYPE);
+        }
     } else {
         pause_menu_transform_system.update(blackboard, registry_);
     }

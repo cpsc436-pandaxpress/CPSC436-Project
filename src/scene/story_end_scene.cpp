@@ -96,7 +96,7 @@ void StoryEndScene::update(Blackboard &blackboard) {
         }
     }
 
-    if (fadeOverlay.alpha() > 1.6f) {
+    if (fadeOverlay.alpha() > 2.0f) {
         reset_scene(blackboard);
         change_scene(MAIN_MENU_SCENE_ID);
     }
