@@ -65,7 +65,7 @@ public:
     virtual void destroy_entities(entt::DefaultRegistry &registry);
     const std::string FALLING_PLATFORM_TIMER_LABEL = "fall";
     const std::string SPIT_TIMER_LABEL = "spit";
-    static const unsigned int STORY_SEED = 1;
+    static const unsigned int STORY_SEED = 7;
 
 };
 

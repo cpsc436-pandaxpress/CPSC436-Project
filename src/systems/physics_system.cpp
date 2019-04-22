@@ -26,10 +26,9 @@
 #include "util/entity_pairs.h"
 #include "util/scene_helper.h"
 
-PhysicsSystem::PhysicsSystem() {}
+PhysicsSystem::PhysicsSystem(): story_(false) {}
 
 void PhysicsSystem::update(Blackboard& blackboard, entt::DefaultRegistry& registry) {
-
     apply_gravity(blackboard, registry);
     check_collisions(blackboard, registry);
     apply_velocity(blackboard, registry);
@@ -317,18 +316,20 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                 if (registry.has<Interactable>(entry.entity)) {
                                     registry.remove<Interactable>(entry.entity);
                                 }
-                                if (registry.has<Bread>(entry.entity)) {
-                                    blackboard.score += BREAD_KILL_POINTS;
-                                    std::string str = "+" + std::to_string(BREAD_KILL_POINTS);
-                                    create_label_text(blackboard, registry,
-                                                      vec2{transform.x, transform.y - 100.f},
-                                                      str.c_str());
-                                } else if (registry.has<Llama>(entry.entity)) {
-                                    blackboard.score += LLAMA_KILL_POINTS;
-                                    std::string str = "+" + std::to_string(LLAMA_KILL_POINTS);
-                                    create_label_text(blackboard, registry,
-                                                      vec2{transform.x, transform.y - 100.f},
-                                                      str.c_str());
+                                if (!story_) {
+                                    if (registry.has<Bread>(entry.entity)) {
+                                        blackboard.score += BREAD_KILL_POINTS;
+                                        std::string str = "+" + std::to_string(BREAD_KILL_POINTS);
+                                        create_label_text(blackboard, registry,
+                                                          vec2{transform.x, transform.y - 100.f},
+                                                          str.c_str());
+                                    } else if (registry.has<Llama>(entry.entity)) {
+                                        blackboard.score += LLAMA_KILL_POINTS;
+                                        std::string str = "+" + std::to_string(LLAMA_KILL_POINTS);
+                                        create_label_text(blackboard, registry,
+                                                          vec2{transform.x, transform.y - 100.f},
+                                                          str.c_str());
+                                    }
                                 }
                             }
                         }
@@ -588,4 +589,8 @@ bool PhysicsSystem::static_collision(
         || s_bot < d_top + buffer;
 
     return !no_collide;
+}
+
+void PhysicsSystem::set_story(bool story) {
+    story_ = story;
 }
