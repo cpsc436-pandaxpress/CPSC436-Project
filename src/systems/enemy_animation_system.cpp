@@ -29,7 +29,8 @@ void EnemyAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
         auto &bread = bread_view.get<Bread>(bread_entity);
         auto &sprite = bread_view.get<Sprite>(bread_entity);
 
-         animateBread(bread.alive, sprite);
+        bool alive = registry.has<Interactable>(bread_entity);
+        animateBread(alive, sprite);
     }
 
 
@@ -63,7 +64,8 @@ void EnemyAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
         float curr_time = timer.get_curr_time();
         float target_time = timer.get_target_time("spit");
 
-        animateLlama(llama.alive, curr_time, target_time, sprite);
+        bool alive = registry.has<Interactable>(llama_entity);
+        animateLlama(alive, curr_time, target_time, sprite);
     }
 
     auto dracula_view = registry.view<Dracula, Boss, Sprite, Chases>();
