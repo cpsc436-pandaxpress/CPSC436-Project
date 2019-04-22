@@ -23,9 +23,9 @@
 class StoryEndScene: public GameScene {
 private:
     const float PANDA_POS_X = -2200.f;
-    const float PANDA_POS_Y = 100.f;
+    const float PANDA_POS_Y = 130.f;
     const float KELLY_POS_X = 430.f;
-    const float KELLY_POS_Y = 200.f;
+    const float KELLY_POS_Y = 230.f;
     const float END_SCENE_END = 15.f;
     const float SKIP_POS_X = 1800.f;
     const float SKIP_POS_Y = 350.f;
