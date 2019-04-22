@@ -98,7 +98,7 @@ void DraculaBossScene::update(Blackboard &blackboard) {
 }
 
 void DraculaBossScene::render(Blackboard &blackboard) {
-    blackboard.window.colorScreen(vec3{12.f, 19.f, 35.f});
+    blackboard.window.colorScreen(vec3{25.f, 42.f, 86.f});
     render_system.update(blackboard, registry_);
 }
 
