@@ -5,10 +5,7 @@
 #include "a_star_system.h"
 
 
-int cols=0;
-int rows=0;
-std::vector<std::vector<Location*>> grid;
-bool startedInPlatform=false;
+
 
 
 float manhattanDistance(Location *a, Location *b){
@@ -200,11 +197,14 @@ return path;
 void AStarSystem::cleanup() {
     for(int i = 0; i<rows; i++){
         for(int j = 0; i<cols; i++) {
-            delete grid[j][i];
+            Location* temp = grid[j][i];
+            delete(temp);
         }
         grid[i].clear();
+        grid[i].shrink_to_fit();
     }
     grid.clear();
+    grid.shrink_to_fit();
 }
 
 void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {

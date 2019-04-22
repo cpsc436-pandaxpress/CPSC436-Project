@@ -31,6 +31,10 @@ public:
 private:
     float Y_OFFSET = 30.f;
     float X_OFFSET = -50.f;
+    int cols=0;
+    int rows=0;
+    std::vector<std::vector<Location*>> grid;
+    bool startedInPlatform=false;
 };
 
 
