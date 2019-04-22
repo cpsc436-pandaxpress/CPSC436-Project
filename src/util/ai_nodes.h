@@ -297,6 +297,7 @@ public:
 
                                             drac_transform.x = teleport_coords->x;
                                             drac_transform.y = teleport_coords->y;
+                                            delete(teleport_coords);
                                             drac_chases.chase_speed=teleport_chase_speed;
                                             timer.remove("teleportDelay");
                                             timer.remove("teleport");

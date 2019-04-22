@@ -26,13 +26,12 @@ bool contains(std::vector<Location*> list, Location* location){
 
 
 AStarSystem::AStarSystem(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    createGrid(blackboard, registry);
+    //createGrid(blackboard, registry);
 }
 
 
 
 void AStarSystem::createGrid(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    int level = 0;
     std::string level_path = levels_path("");
     std::string levelFile = level_path + "dracula_level.csv";
     CSVReader reader(levelFile);
@@ -113,6 +112,7 @@ std::vector<Coordinates*> AStarSystem::getProjectilePath(Blackboard &blackboard,
         coordinatePath.push_back(temp);
     }
 
+
     return coordinatePath;
 
 }
@@ -184,6 +184,12 @@ std::vector<Location*> AStarSystem::findPath(Location* start, Location* end){
 return path;
 }
 
+void AStarSystem::cleanup() {
+    for(int i = 0; i<rows; i++){
+        grid[i].clear();
+    }
+    grid.clear();
+}
 
 void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
 

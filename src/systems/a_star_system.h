@@ -26,6 +26,7 @@ public:
     std::vector<Coordinates*> getProjectilePath(Blackboard &blackboard, entt::DefaultRegistry &registry);
     Location* getGridLocation(float x, float y);
     Coordinates* getScreenLocation(int i, int j);
+    void cleanup();
 
 private:
     float Y_OFFSET = 30.f;

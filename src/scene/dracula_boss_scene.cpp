@@ -128,6 +128,7 @@ void DraculaBossScene::init_scene(Blackboard &blackboard) {
     blackboard.randNumGenerator.init(0);
     blackboard.camera.set_position(CAMERA_START_X, CAMERA_START_Y);
     blackboard.camera.compose();
+    dracula_ai_system.a_star_system.createGrid(blackboard, registry_);
     create_background(blackboard);
     create_panda(blackboard);
     create_dracula(blackboard, panda_entity);
@@ -142,7 +143,7 @@ void DraculaBossScene::reset_scene(Blackboard &blackboard) {
 
 void DraculaBossScene::cleanup() {
     level_system.destroy_entities(registry_);
-
+    dracula_ai_system.cleanup();
     registry_.destroy(dracula_entity);
     for (uint32_t e: bg_entities) {
         registry_.destroy(e);

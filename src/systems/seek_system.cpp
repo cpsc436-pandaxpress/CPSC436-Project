@@ -97,8 +97,10 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
                 timer.save_watch("batTimer", 1.f);
                 seeks.batDirection=Seeks::WAITING;
             }
-
+            seeks.seekList.clear();
+            seeks.seekList.shrink_to_fit();
         }
+
 
     }
 
