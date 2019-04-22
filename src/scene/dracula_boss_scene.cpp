@@ -98,8 +98,7 @@ void DraculaBossScene::update(Blackboard &blackboard) {
 }
 
 void DraculaBossScene::render(Blackboard &blackboard) {
-    glClearColor(30.f / 256.f, 55.f / 256.f, 153.f / 256.f, 1); // same colour as the top of the background
-    glClear(GL_COLOR_BUFFER_BIT);
+    blackboard.window.colorScreen(vec3{25.f, 42.f, 86.f});
     render_system.update(blackboard, registry_);
 }
 
@@ -189,17 +188,17 @@ void DraculaBossScene::create_background(Blackboard &blackboard) {
     std::vector<Texture> textures;
     textures.reserve(2);
     // This order matters for rendering
-    textures.push_back(blackboard.texture_manager.get_texture("castle_ground"));
+    textures.push_back(blackboard.texture_manager.get_texture("castle_front"));
     textures.push_back(blackboard.texture_manager.get_texture("castle_back"));
     // end order
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
     int i = 0;
-    int indices[4] = {1, 0};
+    int indices[4] = {4, 1};
     for (Texture t: textures) {
         auto bg_entity = registry_.create();
-        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, indices[i], false);
+        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, indices[i], indices[i] == 4);
         registry_.assign<Layer>(bg_entity, BACKGROUND_LAYER - i);
         bg.set_pos1(0.0f, 0.0f);
         if (indices[i] != 0) {
