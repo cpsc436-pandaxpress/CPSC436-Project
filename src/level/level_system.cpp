@@ -4,6 +4,7 @@
 
 #include <components/timer.h>
 #include <components/layer.h>
+#include <components/new_entrance.h>
 #include <components/food.h>
 #include <components/powerup.h>
 #include "level_system.h"
@@ -270,22 +271,20 @@ void LevelSystem::generate_cave(float x, float y, Blackboard &blackboard, entt::
     vec2 scaleCave = {-80, 80};
     auto &caveE = registry.assign<Cave>(cave, meshCave, shaderCave, sizeCave, scaleCave, false);
     caveE.set_pos(x, y - heightCave);
-    registry.assign<Layer>(cave, TERRAIN_LAYER);
+    registry.assign<Layer>(cave, TERRAIN_LAYER - 4);
 
-    auto caveEntrance = registry.create();
-    auto shaderCaveEntrance = blackboard.shader_manager.get_shader("caveEntrance");
-    auto meshCaveEntrance = blackboard.mesh_manager.get_mesh("caveEntrance");
-    registry.assign<Transform>(caveEntrance, x, y, 0.f, 80, 80);
-    registry.assign<Interactable>(caveEntrance);
+    auto new_entrance_entity = registry.create();
+    auto texture = blackboard.texture_manager.get_texture("cave_entrance");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
     float heightCave_entrance = 2 * 80;
     float widthCave_entrance = 2 * 80;
-    vec2 sizeCave_entrance = {widthCave_entrance, heightCave_entrance};
-    vec2 scaleCave_entrance = {80, 80};
-    registry.assign<Collidable>(caveEntrance, heightCave_entrance, widthCave_entrance);
-    auto &caveEntranceE = registry.assign<CaveEntrance>(caveEntrance, meshCaveEntrance, shaderCaveEntrance,
-                                                        sizeCave_entrance, scaleCave_entrance);
-    caveEntranceE.set_pos(x + 700, y - heightCave);
-    registry.assign<Layer>(caveEntrance, TERRAIN_LAYER + 1);
+    registry.assign<NewEntrance>(new_entrance_entity);
+    registry.assign<Transform>(new_entrance_entity, x + 380, y, 0.f, 1, 1);
+    registry.assign<Interactable>(new_entrance_entity);
+    registry.assign<Collidable>(new_entrance_entity, heightCave_entrance, widthCave_entrance);
+    registry.assign<Layer>(new_entrance_entity, TERRAIN_LAYER - 2);
+    registry.assign<Sprite>(new_entrance_entity, texture, shader, mesh);
 }
 
 void LevelSystem::generate_food(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry) {

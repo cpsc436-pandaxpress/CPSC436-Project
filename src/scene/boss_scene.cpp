@@ -274,31 +274,18 @@ void BossScene::generate_cave(float x, float y, Blackboard &blackboard, entt::De
     caveE.set_pos(x, y);
     registry.assign<Layer>(cave, TERRAIN_LAYER - 5);
 
-    auto caveEntrance = registry.create();
-    auto shaderCaveEntrance = blackboard.shader_manager.get_shader("caveEntrance");
-    auto meshCaveEntrance = blackboard.mesh_manager.get_mesh("caveEntrance");
-    registry.assign<Transform>(caveEntrance, x, y, 0.f, 80, 80);
-    registry.assign<Interactable>(caveEntrance);
-    float heightCave_entrance = 2 * 80;
-    float widthCave_entrance = 2 * 80;
-    vec2 sizeCave_entrance = {widthCave_entrance, heightCave_entrance};
-    vec2 scaleCave_entrance = {80, 80};
-    registry.assign<Collidable>(caveEntrance, heightCave_entrance, widthCave_entrance);
-    auto &caveEntranceE = registry.assign<CaveEntrance>(caveEntrance, meshCaveEntrance, shaderCaveEntrance,
-                                                        sizeCave_entrance, scaleCave_entrance);
-    caveEntranceE.set_pos(x + 700, y);
-    registry.assign<Layer>(caveEntrance, TERRAIN_LAYER - 4);
-
-    /*auto new_entrance_entity = registry.create();
-    auto texture = blackboard.texture_manager.get_texture("new_entrance");
+    auto new_entrance_entity = registry.create();
+    auto texture = blackboard.texture_manager.get_texture("cave_entrance");
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+    float heightCave_entrance = 2 * 80;
+    float widthCave_entrance = 2 * 80;
     registry.assign<NewEntrance>(new_entrance_entity);
-    registry.assign<Transform>(new_entrance_entity, x + 700, y, 0.f, 1, 1);
+    registry.assign<Transform>(new_entrance_entity, x + 380, y + 750, 0.f, 1, 1);
     registry.assign<Interactable>(new_entrance_entity);
     registry.assign<Collidable>(new_entrance_entity, heightCave_entrance, widthCave_entrance);
-    registry.assign<Layer>(new_entrance_entity, TERRAIN_LAYER - 3);
-    registry.assign<Sprite>(new_entrance_entity, texture, shader, mesh);*/
+    registry.assign<Layer>(new_entrance_entity, TERRAIN_LAYER - 2);
+    registry.assign<Sprite>(new_entrance_entity, texture, shader, mesh);
 
 }
 
@@ -314,23 +301,15 @@ void BossScene::update_cave(Blackboard &blackboard, entt::DefaultRegistry &regis
                 cave.growing = false;
             }
         }
-        auto cave_entrance_view = registry.view<CaveEntrance, Transform>();
-        for (auto cave_entrance_entity : cave_entrance_view) {
-            auto &cave_entrance = cave_entrance_view.get<CaveEntrance>(cave_entrance_entity);
-            auto &cave_transform = cave_entrance_view.get<Transform>(cave_entrance_entity);
-            if (cave_entrance.pos().y > -550) {
-                cave_entrance.set_pos(cave_entrance.pos().x, cave_entrance.pos().y - speed);
-            }
-        }
 
-        /*auto new_entrance_view = registry.view<NewEntrance, Transform>();
+        auto new_entrance_view = registry.view<NewEntrance, Transform>();
         for (auto cave_entrance_entity : new_entrance_view) {
             auto &cave_entrance = new_entrance_view.get<NewEntrance>(cave_entrance_entity);
             auto &cave_transform = new_entrance_view .get<Transform>(cave_entrance_entity);
-            if (cave_transform.y > -550) {
+            if (cave_transform.y > 200) {
                 cave_transform.y -= speed;
             }
-        }*/
+        }
     }
 }
 
