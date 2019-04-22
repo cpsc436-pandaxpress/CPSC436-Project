@@ -49,7 +49,6 @@ private:
     RenderSystem render_system;
     PhysicsSystem physics_system;
     Timer scene_timer;
-    BackgroundTransformSystem background_transform_system;
 
 
     void create_background(Blackboard &blackboard);
