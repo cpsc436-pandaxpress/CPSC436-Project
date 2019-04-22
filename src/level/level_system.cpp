@@ -196,7 +196,7 @@ void LevelSystem::generate_llama(float x, float y, Blackboard &blackboard, entt:
     registry.assign<Health>(llama, 1);
     registry.assign<Velocity>(llama, 0.f, 0.f);
     registry.assign<Interactable>(llama);
-    registry.assign<Collidable>(llama, texture.width() * scaleX - 150.f,
+    registry.assign<Collidable>(llama, texture.width() * scaleX - 90.f,
                                 texture.height() * scaleY - 10.f);
     registry.assign<ObeysGravity>(llama);
     registry.assign<Layer>(llama, ENEMY_LAYER);
