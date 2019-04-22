@@ -47,6 +47,8 @@ void DraculaBossScene::update(Blackboard &blackboard) {
         blackboard.camera.set_position(0, 0);
         reset_scene(blackboard);
         registry_.destroy(pause_menu_entity);
+        blackboard.story_health = MAX_HEALTH;
+        blackboard.story_lives = MAX_LIVES;
         change_scene(MAIN_MENU_SCENE_ID);
         pause = false;
         return;
@@ -111,7 +113,18 @@ void DraculaBossScene::update_panda(Blackboard &blackboard) {
     auto &panda_collidable = registry_.get<Collidable>(panda_entity);
 
     if (transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || panda.dead) {
-        reset_scene(blackboard);
+        if (blackboard.story_lives > 1) {
+            blackboard.story_lives -= 1;
+            blackboard.story_health = MAX_HEALTH;
+            reset_scene(blackboard);
+        } else {
+            blackboard.story_health = MAX_HEALTH;
+            blackboard.story_lives = MAX_LIVES;
+            blackboard.camera.set_position(0, 0);
+            reset_scene(blackboard);
+            change_scene(MAIN_MENU_SCENE_ID);
+            return;
+        }
     }
 
 }
@@ -131,6 +144,7 @@ void DraculaBossScene::init_scene(Blackboard &blackboard) {
     create_panda(blackboard);
     create_dracula(blackboard, panda_entity);
     create_fade_overlay(blackboard);
+    create_lives_text(blackboard);
     level_system.init(registry_);
 }
 
