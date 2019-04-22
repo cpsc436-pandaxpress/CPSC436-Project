@@ -99,8 +99,18 @@ void StoryJungleAnimationSystem::update(Blackboard &blackboard, entt::DefaultReg
                 pandaGetsVape++;
                 pandaStartIndex = 2;
 
-                if (pandaGetsVape < 12) {
+                if (pandaGetsVape < PANDAHOLDSVAPE) {
                     pandaIndex = 0;
+                }
+
+            } else if (pandaVapes < PANDAVAPES){
+                pandaFrameRate = 2.f;
+                row = 5;
+                pandaFrames = 5;
+                pandaVapes++;
+                pandaStartIndex = 9;
+                if (pandaVapes == 1) {
+                    pandaIndex = 5;
                 }
 
             } else if (pandaRuns < PANDARUNS) {
@@ -200,4 +210,5 @@ void StoryJungleAnimationSystem::resetScene() {
     vapeEnters = false;
     pandaFrameRate = 4.f;
     pandaGetsVape = 0;
+    pandaVapes = 0;
 }

@@ -28,7 +28,7 @@ private:
     const float VAPE_POS_X = 0.f;
     const float VAPE_POS_Y = -1200.f;
     const std::string SCENE_END_LABEL = "end_scene";
-    const float SCENE_END = 33.f;
+    const float SCENE_END = 36.f;
     const float SKIP_POS_X = 1800.f;
     const float SKIP_POS_Y = 350.f;
     const std::string SKIP_SCENE_LABEL = "skip";

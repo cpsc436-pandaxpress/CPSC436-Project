@@ -31,7 +31,9 @@ private:
     const int PANDARISES = 10;
     const int PANDASEESVAPE = 10;
     const int PANDAGETSVAPE = 30;
+    const int PANDAVAPES = 5;
     const int PANDARUNS = 20;
+    const int PANDAHOLDSVAPE = 12;
 
     float animationTime = 0.f;
     float pandaAnimationTime = 0.f;
@@ -43,6 +45,7 @@ private:
     int pandaHearsKelly = 0;
     int pandaRises = 0;
     int pandaSeesVape = 0;
+    int pandaVapes = 0;
     int pandaRuns = 0;
     bool kellyCallsForHelp = false;
     int kellyCallingForHelp = 0;
