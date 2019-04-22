@@ -9,6 +9,7 @@
 #include <queue>
 #include <level/boss_level_system.h>
 #include "components/boss.h"
+#include "components/new_entrance.h"
 #include <systems/background_transform_system.h>
 #include <systems/panda_damage_system.h>
 #include <systems/timer_system.h>
@@ -68,6 +69,7 @@ private:
     void update_camera(Blackboard& blackboard);
     void initial_update(Blackboard& blackboard);
     void generate_cave(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void update_cave(Blackboard &blackboard, entt::DefaultRegistry &registry, int speed);
     void create_shake_effect(Blackboard &blackboard);
     void update_shake_effect(Blackboard &blackboard);
 
