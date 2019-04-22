@@ -188,7 +188,7 @@ int start() {
 
 
     blackboard.texture_manager.load_texture(textures_path("castle_back.png"), "castle_back");
-    blackboard.texture_manager.load_texture(textures_path("castle_ground.png"), "castle_ground");
+    blackboard.texture_manager.load_texture(textures_path("castle_front.png"), "castle_front");
 
 
     blackboard.texture_manager.load_texture(textures_path("story_jungle_background.png"), "story_jungle_background");

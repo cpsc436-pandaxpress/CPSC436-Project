@@ -135,9 +135,32 @@ void BackgroundTransformSystem::story_beach_background_transform(Blackboard &bla
 void BackgroundTransformSystem::boss_dracula_background_transform(Blackboard &blackboard,
                                                                   Background &background) {
     Camera camera = blackboard.camera;
-    if (background.z_pos() == 0) {
-        background.set_pos1(camera.position().x, camera.position().y);
+    if (background.z_pos() == 4){
+        // This is the columns
+        float halfWidth = camera.size().x / 2.0f;
+        if (camera.position().x <= -halfWidth) {
+            background.set_pos1(-halfWidth, background.pos1().y);
+            background.set_pos2(-camera.size().x - halfWidth, background.pos1().y);
+        } else if(camera.position().x >= halfWidth) {
+            background.set_pos1(halfWidth + camera.size().x, background.pos1().y);
+            background.set_pos2(halfWidth, background.pos1().y);
+        } else {
+            background.set_pos1(-halfWidth, background.pos1().y);
+            background.set_pos2(halfWidth, background.pos1().y);
+        }
     } else {
-        background.set_pos1(camera.position().x, 900.f);
+        float og_pos1 = 0.0;
+        float clampValue = blackboard.camera.size().x / 0.5f;
+        float displacement = clamp(
+                (og_pos1 - blackboard.camera.position().x) * (background.z_pos() / 10.0f),
+                -clampValue,
+                clampValue
+        );
+        float maxDist = blackboard.camera.size().y / 0.8f;
+        float displacementY = clamp(
+                (og_pos1 - background.pos1().y) * (background.z_pos() / 2.0f),
+                0, maxDist);
+        background.set_pos1(blackboard.camera.position().x + displacement,
+                            background.pos1().y + displacementY);
     }
 }
