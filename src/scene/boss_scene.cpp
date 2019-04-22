@@ -82,7 +82,7 @@ void BossScene::update(Blackboard &blackboard) {
         auto& boss = registry_.get<Boss>(jacko_entity);
 
         if (jacko_health.health_points <= 0 && !blackboard.camera.in_transition) {
-            generate_cave(1250,200, blackboard, registry_);
+            generate_cave(1250,300, blackboard, registry_);
             blackboard.camera.in_transition = true;
         }
 
@@ -204,7 +204,7 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
     registry_.assign<Jacko>(jacko_entity);
     registry_.assign<Boss>(jacko_entity);
     registry_.assign<Chases>(jacko_entity, target);
-    registry_.assign<Health>(jacko_entity, 10);
+    registry_.assign<Health>(jacko_entity, 1);
     registry_.assign<Interactable>(jacko_entity);
     registry_.assign<CausesDamage>(jacko_entity, TOP_VULNERABLE_MASK, 1);
     registry_.assign<Velocity>(jacko_entity, 0.f, 0.f);
@@ -281,7 +281,7 @@ void BossScene::generate_cave(float x, float y, Blackboard &blackboard, entt::De
     float heightCave_entrance = 2 * 80;
     float widthCave_entrance = 2 * 80;
     registry.assign<NewEntrance>(new_entrance_entity);
-    registry.assign<Transform>(new_entrance_entity, x + 380, y + 750, 0.f, 1, 1);
+    registry.assign<Transform>(new_entrance_entity, x + 380, y + 700, 0.f, 1, 1);
     registry.assign<Interactable>(new_entrance_entity);
     registry.assign<Collidable>(new_entrance_entity, heightCave_entrance, widthCave_entrance);
     registry.assign<Layer>(new_entrance_entity, TERRAIN_LAYER - 2);
@@ -295,7 +295,7 @@ void BossScene::update_cave(Blackboard &blackboard, entt::DefaultRegistry &regis
         for (auto cave_entity : cave_view) {
             auto &cave = cave_view.get<Cave>(cave_entity);
             auto &cave_transform = cave_view.get<Transform>(cave_entity);
-            if (cave.pos().y > -550) {
+            if (cave.pos().y > -450) {
                 cave.set_pos(cave.pos().x, cave.pos().y - speed);
             } else {
                 cave.growing = false;
@@ -306,7 +306,7 @@ void BossScene::update_cave(Blackboard &blackboard, entt::DefaultRegistry &regis
         for (auto cave_entrance_entity : new_entrance_view) {
             auto &cave_entrance = new_entrance_view.get<NewEntrance>(cave_entrance_entity);
             auto &cave_transform = new_entrance_view .get<Transform>(cave_entrance_entity);
-            if (cave_transform.y > 200) {
+            if (cave_transform.y > 300) {
                 cave_transform.y -= speed;
             }
         }

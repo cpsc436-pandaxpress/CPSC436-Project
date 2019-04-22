@@ -41,7 +41,7 @@ private:
 
     uint32_t timer_entity;
     const std::string END_TIMER_LABEL = "end";
-    const float END_TIMER_LENGTH = 30;
+    const float END_TIMER_LENGTH = 40;
 
     std::vector<uint32_t> bg_entities;
     HorizontalLevelSystem level_system;

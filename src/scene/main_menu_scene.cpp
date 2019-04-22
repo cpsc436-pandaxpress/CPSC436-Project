@@ -80,10 +80,24 @@ void MainMenuScene::update(Blackboard& blackboard) {
     }
 
     // Hidden scene access
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_5)) {
+        change_scene(STORY_EASY_JUNGLE_SCENE_ID, true);
+    }
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_6)) {
+        change_scene(STORY_EASY_SKY_SCENE_ID, true);
+    }
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_7)) {
+        change_scene(BOSS_SCENE_ID, true);
+    }
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_8)) {
+        change_scene(STORY_HARD_JUNGLE_SCENE_ID, true);
+    }
     if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_9)) {
+        change_scene(STORY_HARD_SKY_SCENE_ID, true);
+    }
+    if (blackboard.input_manager.key_just_pressed(SDL_SCANCODE_0)) {
         change_scene(DRACULA_BOSS_SCENE_ID, true);
     }
-
 }
 
 void MainMenuScene::render(Blackboard& blackboard) {
