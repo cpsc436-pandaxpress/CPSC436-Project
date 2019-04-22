@@ -249,7 +249,7 @@ uint16_t Cave::indices[] = {
         18,24,29
 };
 
-Cave::Cave(Mesh mesh, Shader shader, vec2 size, vec2 scale) :
+Cave::Cave(Mesh mesh, Shader shader, vec2 size, vec2 scale, bool growing) :
         shader_(shader),
         mesh_(mesh),
         size_(size),
@@ -257,6 +257,7 @@ Cave::Cave(Mesh mesh, Shader shader, vec2 size, vec2 scale) :
     position_ = {0.f, 0.f};
     rotation_ = 0.f;
     status_ = 0;
+    growing = growing;
 }
 
 Cave::Cave(const Cave &other) :

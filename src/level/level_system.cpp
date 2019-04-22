@@ -268,7 +268,7 @@ void LevelSystem::generate_cave(float x, float y, Blackboard &blackboard, entt::
     float widthCave = 750.f;
     vec2 sizeCave = {widthCave, heightCave};
     vec2 scaleCave = {-80, 80};
-    auto &caveE = registry.assign<Cave>(cave, meshCave, shaderCave, sizeCave, scaleCave);
+    auto &caveE = registry.assign<Cave>(cave, meshCave, shaderCave, sizeCave, scaleCave, false);
     caveE.set_pos(x, y - heightCave);
     registry.assign<Layer>(cave, TERRAIN_LAYER);
 

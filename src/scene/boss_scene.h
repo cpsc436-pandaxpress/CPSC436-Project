@@ -68,6 +68,7 @@ private:
     void update_camera(Blackboard& blackboard);
     void initial_update(Blackboard& blackboard);
     void generate_cave(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry);
+    void update_cave(Blackboard &blackboard, entt::DefaultRegistry &registry, int speed);
     void create_shake_effect(Blackboard &blackboard);
     void update_shake_effect(Blackboard &blackboard);
 
