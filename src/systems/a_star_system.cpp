@@ -186,6 +186,9 @@ return path;
 
 void AStarSystem::cleanup() {
     for(int i = 0; i<rows; i++){
+        for(int j = 0; i<cols; i++) {
+            delete grid[j][i];
+        }
         grid[i].clear();
     }
     grid.clear();
