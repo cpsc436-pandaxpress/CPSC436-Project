@@ -98,7 +98,7 @@ void DraculaBossScene::update(Blackboard &blackboard) {
 }
 
 void DraculaBossScene::render(Blackboard &blackboard) {
-    blackboard.window.colorScreen(vec3{48.f, 1.f, 8.f});
+    blackboard.window.colorScreen(vec3{5.f, 13.f, 36.f});
     render_system.update(blackboard, registry_);
 }
 
@@ -198,7 +198,7 @@ void DraculaBossScene::create_background(Blackboard &blackboard) {
     int indices[4] = {4, 1};
     for (Texture t: textures) {
         auto bg_entity = registry_.create();
-        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, indices[i], indices[i] == 4);
+        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, indices[i], true);
         registry_.assign<Layer>(bg_entity, BACKGROUND_LAYER - i);
         bg.set_pos1(0.0f, 0.0f);
         if (indices[i] != 0) {
