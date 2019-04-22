@@ -204,7 +204,7 @@ void BossScene::create_jacko(Blackboard &blackboard, uint32_t target) {
     registry_.assign<Jacko>(jacko_entity);
     registry_.assign<Boss>(jacko_entity);
     registry_.assign<Chases>(jacko_entity, target);
-    registry_.assign<Health>(jacko_entity, 1);
+    registry_.assign<Health>(jacko_entity, 10);
     registry_.assign<Interactable>(jacko_entity);
     registry_.assign<CausesDamage>(jacko_entity, TOP_VULNERABLE_MASK, 1);
     registry_.assign<Velocity>(jacko_entity, 0.f, 0.f);
@@ -288,6 +288,18 @@ void BossScene::generate_cave(float x, float y, Blackboard &blackboard, entt::De
                                                         sizeCave_entrance, scaleCave_entrance);
     caveEntranceE.set_pos(x + 700, y);
     registry.assign<Layer>(caveEntrance, TERRAIN_LAYER - 4);
+
+    /*auto new_entrance_entity = registry.create();
+    auto texture = blackboard.texture_manager.get_texture("new_entrance");
+    auto shader = blackboard.shader_manager.get_shader("sprite");
+    auto mesh = blackboard.mesh_manager.get_mesh("sprite");
+    registry.assign<NewEntrance>(new_entrance_entity);
+    registry.assign<Transform>(new_entrance_entity, x + 700, y, 0.f, 1, 1);
+    registry.assign<Interactable>(new_entrance_entity);
+    registry.assign<Collidable>(new_entrance_entity, heightCave_entrance, widthCave_entrance);
+    registry.assign<Layer>(new_entrance_entity, TERRAIN_LAYER - 3);
+    registry.assign<Sprite>(new_entrance_entity, texture, shader, mesh);*/
+
 }
 
 void BossScene::update_cave(Blackboard &blackboard, entt::DefaultRegistry &registry, int speed){
@@ -310,6 +322,15 @@ void BossScene::update_cave(Blackboard &blackboard, entt::DefaultRegistry &regis
                 cave_entrance.set_pos(cave_entrance.pos().x, cave_entrance.pos().y - speed);
             }
         }
+
+        /*auto new_entrance_view = registry.view<NewEntrance, Transform>();
+        for (auto cave_entrance_entity : new_entrance_view) {
+            auto &cave_entrance = new_entrance_view.get<NewEntrance>(cave_entrance_entity);
+            auto &cave_transform = new_entrance_view .get<Transform>(cave_entrance_entity);
+            if (cave_transform.y > -550) {
+                cave_transform.y -= speed;
+            }
+        }*/
     }
 }
 

@@ -193,6 +193,15 @@ uint16_t Cave::entrance_indices[] = {
 uint16_t Cave::indices[] = {
         37,39,38,
         38,39,40,
+        18,24,29,
+        18,29,36,
+        34,35,36,
+        8,34,35,
+        8,33,34,
+        30,31,32,
+        29,30,31,
+        31,32,33,
+        31,33,34,
         0,1,2,
         0,2,3,
         2,3,4,
@@ -237,16 +246,6 @@ uint16_t Cave::indices[] = {
         11,32,33,
         8,11,33,
         7,8,35,
-        34,35,36,
-        8,34,35,
-        8,33,34,
-        30,31,32,
-        29,30,31,
-        31,32,33,
-        31,33,34,
-        18,24,29,
-        18,29,36,
-        18,24,29
 };
 
 Cave::Cave(Mesh mesh, Shader shader, vec2 size, vec2 scale, bool growing) :
@@ -301,14 +300,14 @@ void Cave::draw(const mat3 &projection) {
     shader_.set_input_vec3(
             "in_color",
             sizeof(Vertex), // No values between vertices
-            0  // offset = sizeOf(vec3)
+            sizeof(vec3)  // offset = sizeOf(vec3)
     );
 
     shader_.set_uniform_mat3("transform", transform);
     shader_.set_uniform_mat3("projection", projection);
 
     // draw!
-    glDrawElements(GL_TRIANGLES, 168, GL_UNSIGNED_SHORT, nullptr);
+    glDrawElements(GL_TRIANGLES, 165, GL_UNSIGNED_SHORT, nullptr);
 
     // unbind buffer
     mesh_.unbind();
