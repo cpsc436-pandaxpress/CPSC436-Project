@@ -75,9 +75,12 @@ int start() {
     blackboard.input_manager.track(SDL_SCANCODE_D);
     blackboard.input_manager.track(SDL_SCANCODE_W);
     blackboard.input_manager.track(SDL_SCANCODE_W);
+    blackboard.input_manager.track(SDL_SCANCODE_5);
+    blackboard.input_manager.track(SDL_SCANCODE_6);
     blackboard.input_manager.track(SDL_SCANCODE_7);
     blackboard.input_manager.track(SDL_SCANCODE_8);
     blackboard.input_manager.track(SDL_SCANCODE_9);
+    blackboard.input_manager.track(SDL_SCANCODE_0);
 
 
     blackboard.shader_manager.load_shader(
@@ -225,7 +228,7 @@ int start() {
     main_menu.add_item(blackboard, "story_text", STORY_BEACH_INTRO_SCENE_ID);
     main_menu.add_item(blackboard, "endless_jungle_text", ENDLESS_JUNGLE_SCENE_ID);
     main_menu.add_item(blackboard, "endless_sky_text", ENDLESS_SKY_SCENE_ID);
-    main_menu.add_item(blackboard, "jacko_text",  BOSS_SCENE_ID);
+//    main_menu.add_item(blackboard, "jacko_text",  BOSS_SCENE_ID);
     scene_manager.add_scene(MAIN_MENU_SCENE_ID, (Scene*)(&main_menu));
 
 
