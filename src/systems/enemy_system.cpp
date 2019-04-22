@@ -37,11 +37,11 @@ void EnemySystem::generate_projectile(float x, float y, bool spit_left, Blackboa
     float spit_x;
     if (spit_left) {
         registry.assign<Velocity>(projectile, PROJECTILE_SPEED_X, PROJECTILE_SPEED_Y);
-        spit_x = -60.f;
+        spit_x = -90.f;
     } else {
         scaleX = -scaleX; // flip projectile
         registry.assign<Velocity>(projectile, -PROJECTILE_SPEED_X, PROJECTILE_SPEED_Y);
-        spit_x = 60.f;
+        spit_x = 90.f;
     }
     registry.assign<Transform>(projectile, x + spit_x, y + 30.f, 0., scaleX, scaleY);
     registry.assign<Interactable>(projectile);
