@@ -22,8 +22,9 @@ public:
     static uint16_t indices[168];
     static Vertex entrance_vertices[4];
     static uint16_t entrance_indices[6];
+    bool growing;
 
-    Cave(Mesh mesh, Shader shader, vec2 size, vec2 scale);
+    Cave(Mesh mesh, Shader shader, vec2 size, vec2 scale, bool growing);
     Cave(const Cave& other);
 
     void draw(const mat3& projection);

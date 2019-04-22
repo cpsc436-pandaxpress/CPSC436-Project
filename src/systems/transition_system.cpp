@@ -54,6 +54,9 @@ void TransitionSystem::update(Blackboard &blackboard, entt::DefaultRegistry& reg
             }
                 break;
             case BOSS_TYPE: {
+                if (cave.growing){
+                    return;
+                }
                 for (auto panda_entity : panda_view) {
                     auto &panda = panda_view.get<Panda>(panda_entity);
                     auto &panda_transform = panda_view.get<Transform>(panda_entity);

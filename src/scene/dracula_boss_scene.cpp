@@ -47,6 +47,8 @@ void DraculaBossScene::update(Blackboard &blackboard) {
         blackboard.camera.set_position(0, 0);
         reset_scene(blackboard);
         registry_.destroy(pause_menu_entity);
+        blackboard.story_health = MAX_HEALTH;
+        blackboard.story_lives = MAX_LIVES;
         change_scene(MAIN_MENU_SCENE_ID);
         pause = false;
         return;
@@ -98,8 +100,7 @@ void DraculaBossScene::update(Blackboard &blackboard) {
 }
 
 void DraculaBossScene::render(Blackboard &blackboard) {
-    glClearColor(30.f / 256.f, 55.f / 256.f, 153.f / 256.f, 1); // same colour as the top of the background
-    glClear(GL_COLOR_BUFFER_BIT);
+    blackboard.window.colorScreen(vec3{5.f, 13.f, 36.f});
     render_system.update(blackboard, registry_);
 }
 
@@ -112,7 +113,18 @@ void DraculaBossScene::update_panda(Blackboard &blackboard) {
     auto &panda_collidable = registry_.get<Collidable>(panda_entity);
 
     if (transform.y - panda_collidable.height > cam_position.y + cam_size.y / 2 || panda.dead) {
-        reset_scene(blackboard);
+        if (blackboard.story_lives > 1) {
+            blackboard.story_lives -= 1;
+            blackboard.story_health = MAX_HEALTH;
+            reset_scene(blackboard);
+        } else {
+            blackboard.story_health = MAX_HEALTH;
+            blackboard.story_lives = MAX_LIVES;
+            blackboard.camera.set_position(0, 0);
+            reset_scene(blackboard);
+            change_scene(MAIN_MENU_SCENE_ID);
+            return;
+        }
     }
 
 }
@@ -133,6 +145,7 @@ void DraculaBossScene::init_scene(Blackboard &blackboard) {
     create_panda(blackboard);
     create_dracula(blackboard, panda_entity);
     create_fade_overlay(blackboard);
+    create_lives_text(blackboard);
     level_system.init(registry_);
 }
 
@@ -190,17 +203,17 @@ void DraculaBossScene::create_background(Blackboard &blackboard) {
     std::vector<Texture> textures;
     textures.reserve(2);
     // This order matters for rendering
-    textures.push_back(blackboard.texture_manager.get_texture("castle_ground"));
+    textures.push_back(blackboard.texture_manager.get_texture("castle_front"));
     textures.push_back(blackboard.texture_manager.get_texture("castle_back"));
     // end order
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
     int i = 0;
-    int indices[4] = {1, 0};
+    int indices[4] = {4, 1};
     for (Texture t: textures) {
         auto bg_entity = registry_.create();
-        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, indices[i], false);
+        auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, indices[i], true);
         registry_.assign<Layer>(bg_entity, BACKGROUND_LAYER - i);
         bg.set_pos1(0.0f, 0.0f);
         if (indices[i] != 0) {
