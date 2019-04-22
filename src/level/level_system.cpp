@@ -280,7 +280,7 @@ void LevelSystem::generate_cave(float x, float y, Blackboard &blackboard, entt::
     float heightCave_entrance = 2 * 80;
     float widthCave_entrance = 2 * 80;
     registry.assign<NewEntrance>(new_entrance_entity);
-    registry.assign<Transform>(new_entrance_entity, x + 380, y, 0.f, 1, 1);
+    registry.assign<Transform>(new_entrance_entity, x + 380, y - 35, 0.f, 1, 1);
     registry.assign<Interactable>(new_entrance_entity);
     registry.assign<Collidable>(new_entrance_entity, heightCave_entrance, widthCave_entrance);
     registry.assign<Layer>(new_entrance_entity, TERRAIN_LAYER - 2);
