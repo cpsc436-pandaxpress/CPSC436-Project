@@ -75,19 +75,19 @@ Location* AStarSystem::getGridLocation(float x, float y){
     return grid[j][i];
 }
 
-Coordinates* AStarSystem::getScreenLocation(int j, int i){
+Coordinates AStarSystem::getScreenLocation(int j, int i){
     float x = (i*100)-800;
     float y = (j*100)-450+Y_OFFSET;
 
-    Coordinates* c = new Coordinates(x,y);
+    Coordinates c = Coordinates(x,y);
     return c;
 }
 
-std::vector<Coordinates*> AStarSystem::getProjectilePath(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+std::vector<Coordinates> AStarSystem::getProjectilePath(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     Location* start;
     Location* end;
     std::vector<Location*> path;
-    std::vector<Coordinates*> coordinatePath;
+    std::vector<Coordinates> coordinatePath;
 
     auto dracula = registry.view<Dracula, Transform>();
 
@@ -108,7 +108,7 @@ std::vector<Coordinates*> AStarSystem::getProjectilePath(Blackboard &blackboard,
     path = findPath(start, end);
 
     for(int i=0; i<path.size(); i++){
-        Coordinates* temp = getScreenLocation(path[i]->i,path[i]->j);
+        Coordinates temp = getScreenLocation(path[i]->i,path[i]->j);
         coordinatePath.push_back(temp);
     }
 

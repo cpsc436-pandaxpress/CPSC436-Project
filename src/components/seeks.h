@@ -12,7 +12,7 @@
  * Seeks a series of coordinates
  */
 struct Seeks {
-    std::vector<Coordinates*> seekList;
+    std::vector<Coordinates> seekList;
     float seek_speed;
     float bounce_speed_x;
     float bounce_speed_y;
@@ -24,7 +24,7 @@ struct Seeks {
     };
     Direction batDirection;
 
-    explicit Seeks(std::vector<Coordinates*> seeklist) :
+    explicit Seeks(std::vector<Coordinates> seeklist) :
             seekList(seeklist),
             seek_speed(720.f),
             goingHorizontal(false),

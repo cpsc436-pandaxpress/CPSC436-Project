@@ -26,17 +26,17 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
         auto& timer  = seeker_view.get<Timer>(entity);
         auto& transform  = seeker_view.get<Transform>(entity);
         if(seeks.seekList.size()>0){
-            Coordinates* target = seeks.seekList[0];
+            Coordinates target = seeks.seekList[0];
             if(seeks.batDirection==Seeks::WAITING) {
 
-                if (abs(target->x - transform.x) > abs(target->y - transform.y)) {
-                    if (target->x > transform.x) {
+                if (abs(target.x - transform.x) > abs(target.y - transform.y)) {
+                    if (target.x > transform.x) {
                         seeks.batDirection = Seeks::RIGHT;
                     } else {
                         seeks.batDirection = Seeks::LEFT;
                     }
                 } else {
-                    if (target->y > transform.y) {
+                    if (target.y > transform.y) {
                         seeks.batDirection = Seeks::DOWN;
                     } else {
                         seeks.batDirection = Seeks::UP;
@@ -45,14 +45,14 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
             }
 
 
-            if(abs(target->x - transform.x) < 3 && (seeks.batDirection==Seeks::LEFT || seeks.batDirection==Seeks::RIGHT)){
+            if(abs(target.x - transform.x) < 3 && (seeks.batDirection==Seeks::LEFT || seeks.batDirection==Seeks::RIGHT)){
 
                 seeks.seekList.erase(seeks.seekList.begin());
                 seeks.batDirection=Seeks::WAITING;
                 velocity.y_velocity=0;
                 velocity.x_velocity=0;
 
-            }else if(abs(target->y - transform.y) < 3 && (seeks.batDirection==Seeks::UP || seeks.batDirection==Seeks::DOWN)){
+            }else if(abs(target.y - transform.y) < 3 && (seeks.batDirection==Seeks::UP || seeks.batDirection==Seeks::DOWN)){
 
                 seeks.seekList.erase(seeks.seekList.begin());
                 seeks.batDirection=Seeks::WAITING;
