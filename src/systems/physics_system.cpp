@@ -1,4 +1,5 @@
 //
+//
 // Created by cowan on 30/01/19.
 //
 
@@ -20,6 +21,7 @@
 #include <components/powerup.h>
 #include <components/spit.h>
 #include <components/dracula.h>
+#include <components/boss.h>
 
 
 #include "util/scene_helper.h"
@@ -287,14 +289,23 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                 dv.y_velocity = 700 * entry.normal.y;
                             }
 
-                            if (registry.has<Jacko>(entry.e1)) {
-                                // panda is hitting jacko
-                                auto& jacko = registry.get<Jacko>(entry.e1);
+                            if (registry.has<Boss>(entry.e1)) {
+                                // panda is hitting a boss
                                 auto& chases = registry.get<Chases>(entry.e1);
                                 if (health.health_points <= 0) {
+                                    auto& boss = registry.get<Boss>(entry.e1);
+
                                     registry.remove<Interactable>(entry.e1);
                                     registry.remove<Chases>(entry.e1);
                                     registry.assign<ObeysGravity>(entry.e1);
+
+                                    boss.alive = false;
+                                    if (registry.has<Jacko>(entry.e1)) {
+                                        blackboard.soundManager.playSFX(SFX_JACKO_DEATH);
+                                    }
+                                    else if (registry.has<Dracula>(entry.e1)) {
+                                        blackboard.soundManager.playSFX(SFX_DRACULA_DEATH);
+                                    }
                                 }
                                 else {
                                     if(registry.has<Jacko>(entry.e1)){
