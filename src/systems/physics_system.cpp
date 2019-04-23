@@ -449,28 +449,50 @@ void PhysicsSystem::swept_collision(
         return;
     }
 
-    // find the distance between the objects on the near and far sides for both x and y
+    // the distance between the objects on the near and far sides for both x and y
     float x_inv_entry, y_inv_entry, x_inv_exit, y_inv_exit;
 
-    if (d_vx >= 0) {
+    if (d_vx > 0) {
         x_inv_entry = s_left - d_right;
         x_inv_exit = s_right - d_left;
     }
-    else {
+    else if (d_vx < 0) {
         x_inv_entry = s_right - d_left;
         x_inv_exit = s_left - d_right;
     }
+    else { //d_vx == 0
+        //TODO
+        if (d_position.x < s_position.x) {
+            x_inv_entry = s_left - d_right;
+            x_inv_exit = s_right - d_left;
+        }
+        else {
+            x_inv_entry = s_right - d_left;
+            x_inv_exit = s_left - d_right;
+        }
+    }
 
-    if (d_vy >= 0) {
+    if (d_vy > 0) {
         y_inv_entry = s_top - d_bot;
         y_inv_exit = s_bot - d_top;
     }
-    else {
+    else if (d_vy < 0) {
         y_inv_entry = s_bot - d_top;
         y_inv_exit = s_top - d_bot;
     }
+    else { //d_vy == 0
+        //TODO
+        if (d_position.y < s_position.y) {
+            y_inv_entry = s_top - d_bot;
+            y_inv_exit = s_bot - d_top;
+        }
+        else {
+            y_inv_entry = s_bot - d_top;
+            y_inv_exit = s_top - d_bot;
+        }
+    }
 
-    // find time of collision and time of leaving for each axis (if statement is to prevent divide by zero)
+    // time of collision and time of leaving for each axis (if statement is to prevent divide by zero)
     float x_entry, y_entry, x_exit, y_exit;
 
     if (d_vx == 0) {
@@ -517,7 +539,7 @@ void PhysicsSystem::swept_collision(
                 time = 1;
                 return;
             }
-            else if (x_inv_entry == 0.0f) {
+            else if (x_inv_entry == 0) {
                 if (d_vx < 0) {
                     x_norm = 1;
                 }
@@ -531,7 +553,7 @@ void PhysicsSystem::swept_collision(
                 x_norm = 1.0f;
                 y_norm = 0.0f;
             }
-            else
+            else // x_inv_entry > 0
             {
                 x_norm = -1.0f;
                 y_norm = 0.0f;
@@ -544,21 +566,21 @@ void PhysicsSystem::swept_collision(
                 time = 1;
                 return;
             }
-            else if (y_inv_entry == 0.0f) {
+            else if (y_inv_entry == 0) {
                 if (d_vy < 0) {
                     y_norm = 1;
                 }
-                else {
+                else if (d_vy > 0) {
                     y_norm = -1;
                 }
                 x_norm = 0;
             }
-            else if (y_inv_entry < 0.0f)
+            else if (y_inv_entry < 0)
             {
                 x_norm = 0.0f;
                 y_norm = 1.0f;
             }
-            else
+            else // y_inv_entry > 0
             {
                 x_norm = 0.0f;
                 y_norm = -1.0f;

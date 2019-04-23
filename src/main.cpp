@@ -225,7 +225,7 @@ int start() {
     main_menu.add_item(blackboard, "story_text", STORY_BEACH_INTRO_SCENE_ID);
     main_menu.add_item(blackboard, "endless_jungle_text", ENDLESS_JUNGLE_SCENE_ID);
     main_menu.add_item(blackboard, "endless_sky_text", ENDLESS_SKY_SCENE_ID);
-    main_menu.add_item(blackboard, "jacko_text",  STORY_EASY_SKY_SCENE_ID);
+    main_menu.add_item(blackboard, "jacko_text",  BOSS_SCENE_ID);
     scene_manager.add_scene(MAIN_MENU_SCENE_ID, (Scene*)(&main_menu));
 
 

@@ -43,9 +43,6 @@ void BackgroundTransformSystem::update(Blackboard &blackboard, entt::DefaultRegi
 void BackgroundTransformSystem::horizontal_background_transform(Blackboard &blackboard,
                                                                 Background &background) {
     float displacement = background.z_pos() * HORIZONTAL_LAYER_SPEED * blackboard.delta_time;
-    if (displacement < 1) {
-        displacement = 1;
-    }
     Camera camera = blackboard.camera;
     background.set_pos1(background.pos1().x + displacement, background.pos1().y);
     background.set_pos2(background.pos2().x + displacement, background.pos2().y);
@@ -62,9 +59,6 @@ void BackgroundTransformSystem::vertical_background_transform(Blackboard &blackb
     if (background.z_pos() != 0) {
         Camera camera = blackboard.camera;
         float displacement = background.z_pos() * VERTICAL_LAYER_SPEED * blackboard.delta_time;
-        if (displacement < 1) {
-            displacement = 1;
-        }
         background.set_pos1(background.pos1().x + displacement, background.pos1().y);
         background.set_pos2(background.pos2().x + displacement, background.pos2().y);
         if (background.pos1().y > (camera.position().y + camera.size().y)) {
