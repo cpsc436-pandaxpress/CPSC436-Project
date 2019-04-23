@@ -179,7 +179,7 @@ void LevelSystem::generate_ghost(float x, float y, Blackboard &blackboard, entt:
     registry.assign<Velocity>(ghost, -0.f, 0.f);
     registry.assign<Collidable>(ghost, texture.width() * scaleX,
                                 texture.height() * scaleY);
-    registry.assign<Layer>(ghost, ENEMY_LAYER);
+    registry.assign<Layer>(ghost, ENEMY_LAYER + 1);
 }
 
 void LevelSystem::generate_llama(float x, float y, Blackboard &blackboard, entt::DefaultRegistry &registry) {
