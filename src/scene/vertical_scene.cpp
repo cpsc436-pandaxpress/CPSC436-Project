@@ -114,7 +114,7 @@ void VerticalScene::update(Blackboard &blackboard) {
         background_transform_system.update(blackboard, registry_);
         level_system.update(blackboard, registry_);
         physics_system.update(blackboard, registry_);
-        enemy_system.update(blackboard, registry_, JUNGLE_TYPE);
+        enemy_system.update(blackboard, registry_, SKY_TYPE);
         sprite_transform_system.update(blackboard, registry_);
         health_bar_transform_system.update(blackboard, registry_);
         label_system.update(blackboard, registry_);

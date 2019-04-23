@@ -210,7 +210,7 @@ void DraculaBossScene::create_background(Blackboard &blackboard) {
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
     int i = 0;
-    int indices[4] = {4, 1};
+    int indices[4] = {5, 2};
     for (Texture t: textures) {
         auto bg_entity = registry_.create();
         auto &bg = registry_.assign<Background>(bg_entity, t, shader, mesh, indices[i], true);

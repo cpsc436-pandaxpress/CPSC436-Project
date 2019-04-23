@@ -368,7 +368,7 @@ void LevelSystem::generate_grass(float x, float y, Blackboard &blackboard,
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
     auto scaleX = static_cast<float>(CELL_WIDTH / texture.width());
     auto scaleY = static_cast<float>(CELL_HEIGHT / texture.width());
-    registry.assign<Platform>(grass, true);
+    registry.assign<Platform>(grass, false);
     registry.assign<Transform>(grass, x, y, 0.,
                                scaleX,
                                scaleY);

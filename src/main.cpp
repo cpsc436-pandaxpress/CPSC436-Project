@@ -73,6 +73,7 @@ int start() {
     blackboard.input_manager.track(SDL_SCANCODE_ESCAPE);
     blackboard.input_manager.track(SDL_SCANCODE_A);
     blackboard.input_manager.track(SDL_SCANCODE_D);
+    blackboard.input_manager.track(SDL_SCANCODE_I);
     blackboard.input_manager.track(SDL_SCANCODE_W);
     blackboard.input_manager.track(SDL_SCANCODE_W);
     blackboard.input_manager.track(SDL_SCANCODE_5);
@@ -213,6 +214,9 @@ int start() {
     blackboard.texture_manager.load_texture(textures_path("grass_1.png"), "grass_1");
     blackboard.texture_manager.load_texture(textures_path("grass_2.png"), "grass_2");
     blackboard.texture_manager.load_texture(textures_path("cave_entrance.png"), "cave_entrance");
+
+    blackboard.texture_manager.load_texture(textures_path("tutorial_button.png"), "tutorial_button");
+    blackboard.texture_manager.load_texture(textures_path("tutorial.png"), "tutorial");
 
     blackboard.mesh_manager.load_mesh("health", 4, HealthBar::vertices, 6, HealthBar::indices);
     blackboard.mesh_manager.load_mesh("cave", 41, Cave::vertices, 168, Cave::indices);
