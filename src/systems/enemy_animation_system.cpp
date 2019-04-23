@@ -171,8 +171,8 @@ void EnemyAnimationSystem::animateJacko(bool alive, bool evading, Sprite &sprite
 void EnemyAnimationSystem::animateGhost(Sprite &sprite){
     frameRate = 4.f;
     int index = ((int) animationTime % ghostFrames);
-    vec2 uv1 = {index*ghostWidth + 0.005f, index*ghostHeight};
-    vec2 uv2 = {(index+1)*ghostWidth + 0.005f, (1+index)*ghostHeight};
+    vec2 uv1 = {index*ghostWidth, 0};
+    vec2 uv2 = {(index+1)*ghostWidth , 1};
     sprite.set_uvs(uv1, uv2);
 }
 
