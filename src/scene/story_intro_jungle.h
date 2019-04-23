@@ -12,6 +12,7 @@
 #include <systems/physics_system.h>
 #include <systems/pause_menu_transform_system.h>
 #include <systems/render_system.h>
+//#include <systems/powerup_system.h>
 #include <systems/story_jungle_animation_system.h>
 #include "scene.h"
 #include "scene_manager.h"
@@ -21,14 +22,14 @@
 
 class StoryIntroJungleScene: public GameScene {
 private:
-    const float PANDA_POS_X = -240.f;
-    const float PANDA_POS_Y = 190.f;
+    const float PANDA_POS_X = -330.f;
+    const float PANDA_POS_Y = 220.f;
     const float KELLY_POS_X = 550.f;
     const float KELLY_POS_Y = -150.f;
     const float VAPE_POS_X = 0.f;
     const float VAPE_POS_Y = -1200.f;
     const std::string SCENE_END_LABEL = "end_scene";
-    const float SCENE_END = 36.f;
+    const float SCENE_END = 38.f;
     const float SKIP_POS_X = 1800.f;
     const float SKIP_POS_Y = 350.f;
     const std::string SKIP_SCENE_LABEL = "skip";
@@ -36,6 +37,8 @@ private:
     const float SKIP_SPEED = 250.f;
     const std::string STROBE_LABEL = "STROBE";
     const float STROBE = 2.f;
+    const std::string VAPE_TIMER_LABEL = "VAPE";
+    const float VAPE_TIMER = 2.f;
 
 
     bool pause = false;
@@ -79,6 +82,11 @@ public:
     void create_strobe_effect(Blackboard &blackboard);
 
     void update_strobe_effect(Blackboard &blackboard);
+
+    void create_vape_effect(Blackboard &blackboard);
+
+    void update_vape_effect(Blackboard &blackboard);
+
 };
 
 #endif //PANDAEXPRESS_STORY_INTRO_JUNGLE_H

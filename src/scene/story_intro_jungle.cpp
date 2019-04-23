@@ -57,6 +57,7 @@ void StoryIntroJungleScene::update(Blackboard &blackboard) {
     }
 
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
+    auto &panda = registry_.get<Panda>(panda_entity);
 
     if (!pause) {
         story_animation_system.update(blackboard, registry_);
@@ -69,6 +70,8 @@ void StoryIntroJungleScene::update(Blackboard &blackboard) {
         }
         if (story_animation_system.pandaGetsVape == 1) {
             create_strobe_effect(blackboard);
+        } else if (story_animation_system.pandaVapes == 4) {
+            create_vape_effect(blackboard);
         }
     } else {
         pause_menu_transform_system.update(blackboard, registry_);
@@ -97,6 +100,7 @@ void StoryIntroJungleScene::update(Blackboard &blackboard) {
     }
 
     update_strobe_effect(blackboard);
+    update_vape_effect(blackboard);
 
 }
 
@@ -153,14 +157,15 @@ void StoryIntroJungleScene::create_panda(Blackboard &blackboard) {
     auto shader = blackboard.shader_manager.get_shader("sprite");
     auto mesh = blackboard.mesh_manager.get_mesh("sprite");
 
-    float scaleY = 1000.0f / texture.height();
-    float scaleX = 1170.0f / texture.width();
+    float scaleY = 980.0f / texture.height();
+    float scaleX = 1100.0f / texture.width();
     registry_.assign<Transform>(panda_entity, PANDA_POS_X, PANDA_POS_Y, 0., scaleX, scaleY);
     registry_.assign<Sprite>(panda_entity, texture, shader, mesh);
     registry_.assign<Panda>(panda_entity);
     registry_.assign<Timer>(panda_entity);
     registry_.assign<Velocity>(panda_entity, 0.f, 0.f);
     registry_.assign<Layer>(panda_entity, PANDA_LAYER);
+    registry_.assign<Powerup>(panda_entity, VAPE_POWERUP);
 }
 
 void StoryIntroJungleScene::create_kelly(Blackboard &blackboard) {
@@ -246,6 +251,30 @@ void StoryIntroJungleScene::update_strobe_effect(Blackboard &blackboard) {
         if (scene_timer.is_done("STROBE")) {
             blackboard.post_process_shader = std::make_unique<Shader>(
                     blackboard.shader_manager.get_shader("sprite"));
+            scene_timer.remove("STROBE");
+        }
+    }
+}
+
+void StoryIntroJungleScene::create_vape_effect(Blackboard &blackboard) {
+    blackboard.time_multiplier *= 0.6f;
+    scene_timer.save_watch(VAPE_TIMER_LABEL, VAPE_TIMER);
+    blackboard.post_process_shader = std::make_unique<Shader>(
+            blackboard.shader_manager.get_shader("shift"));
+}
+
+void StoryIntroJungleScene::update_vape_effect(Blackboard &blackboard) {
+    if (scene_timer.exists(VAPE_TIMER_LABEL)) {
+        float val = (((scene_timer.get_target_time(VAPE_TIMER_LABEL) - scene_timer.get_curr_time()) /
+                      VAPE_TIMER));
+        blackboard.post_process_shader->bind();
+        blackboard.post_process_shader->set_uniform_float("timeElapsed", val);
+        blackboard.post_process_shader->unbind();
+        blackboard.time_multiplier = fmax(0.5f, 1 - val);
+        if (scene_timer.is_done(VAPE_TIMER_LABEL)) {
+            blackboard.post_process_shader = std::make_unique<Shader>(
+                    blackboard.shader_manager.get_shader("sprite"));
+            scene_timer.remove(VAPE_TIMER_LABEL);
         }
     }
 }

@@ -106,13 +106,12 @@ void StoryJungleAnimationSystem::update(Blackboard &blackboard, entt::DefaultReg
             } else if (pandaVapes < PANDAVAPES){
                 pandaFrameRate = 2.f;
                 row = 5;
-                pandaFrames = 5;
+                pandaFrames = 10;
                 pandaVapes++;
                 pandaStartIndex = 9;
                 if (pandaVapes == 1) {
                     pandaIndex = 5;
                 }
-
             } else if (pandaRuns < PANDARUNS) {
                 pandaFrameRate = 7.f;
                 row = 6;
@@ -127,8 +126,8 @@ void StoryJungleAnimationSystem::update(Blackboard &blackboard, entt::DefaultReg
                 }
 
             }
-             if (pandaIndex == pandaFrames - 1) {
-                    pandaIndex = pandaStartIndex;
+             if (pandaIndex >= pandaFrames - 1) {
+                 pandaIndex = pandaStartIndex;
                 }
              animatePanda(row, sprite);
              pandaIndex++;
@@ -166,8 +165,8 @@ void StoryJungleAnimationSystem::update(Blackboard &blackboard, entt::DefaultReg
 }
 
 void StoryJungleAnimationSystem::animatePanda(int row, Sprite &sprite){
-    vec2 uv1 = {pandaIndex * PANDAWIDTH, (row - 1)*PANDAHEIGHT};
-    vec2 uv2 = {(pandaIndex + 1) * PANDAWIDTH, row*PANDAHEIGHT};
+    vec2 uv1 = {pandaIndex * PANDAWIDTH, (row - 1)*PANDAHEIGHT + 0.015f};
+    vec2 uv2 = {(pandaIndex + 1) * PANDAWIDTH - 0.015f, row*PANDAHEIGHT};
     sprite.set_uvs(uv1, uv2);
 }
 

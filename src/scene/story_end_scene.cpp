@@ -32,8 +32,7 @@ StoryEndScene::StoryEndScene(Blackboard &blackboard, SceneManager &scene_manager
         physics_system(),
         fade_overlay_system(),
         pause_menu_transform_system(),
-        render_system(),
-        background_transform_system(STORY_TYPE)
+        render_system()
 {
     init_scene(blackboard);
     gl_has_errors();
@@ -70,7 +69,6 @@ void StoryEndScene::update(Blackboard &blackboard) {
         timer_system.update(blackboard, registry_);
         scene_timer.update(blackboard.delta_time);
         physics_system.update(blackboard, registry_);
-        background_transform_system.update(blackboard, registry_);
         if (endScene || (!endScene && fadeOverlay.alpha() > 0.f)) {
             fade_overlay_system.update(blackboard, registry_);
         }

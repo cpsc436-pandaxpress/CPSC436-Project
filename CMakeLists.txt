@@ -179,8 +179,12 @@ set(SOURCE_FILES
         src/scene/story_intro_jungle.h
         src/systems/story_jungle_animation_system.cpp
         src/systems/story_jungle_animation_system.h
-
-        src/components/vape.h src/scene/story_end_scene.cpp src/scene/story_end_scene.h src/systems/story_end_animation_system.cpp src/systems/story_end_animation_system.h src/components/new_entrance.h)
+        src/components/vape.h
+        src/scene/story_end_scene.cpp
+        src/scene/story_end_scene.h
+        src/systems/story_end_animation_system.cpp
+        src/systems/story_end_animation_system.h
+        src/components/new_entrance.h)
 
 
 
