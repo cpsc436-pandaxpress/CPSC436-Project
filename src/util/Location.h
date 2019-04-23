@@ -20,6 +20,7 @@ public:
     bool platform = false;
     std::vector<Location*> neighbours;
     Location(){};
+    ~Location(){};
     Location(int i, int j){
         this->i = i;
         this->j = j;

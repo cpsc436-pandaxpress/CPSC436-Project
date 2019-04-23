@@ -67,3 +67,6 @@ int DraculaAISystem::getDraculaHealth(Blackboard& blackboard, entt::DefaultRegis
     return 0;
 }
 
+void DraculaAISystem::cleanup(){
+    a_star_system.cleanup();
+}

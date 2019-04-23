@@ -145,6 +145,7 @@ void DraculaBossScene::init_scene(Blackboard &blackboard) {
     create_dracula(blackboard, panda_entity);
     create_fade_overlay(blackboard);
     create_lives_text(blackboard);
+    dracula_ai_system.a_star_system.createGrid(blackboard, registry_);
     level_system.init(registry_);
 }
 
@@ -155,7 +156,7 @@ void DraculaBossScene::reset_scene(Blackboard &blackboard) {
 
 void DraculaBossScene::cleanup() {
     level_system.destroy_entities(registry_);
-
+    dracula_ai_system.cleanup();
     registry_.destroy(dracula_entity);
     for (uint32_t e: bg_entities) {
         registry_.destroy(e);
