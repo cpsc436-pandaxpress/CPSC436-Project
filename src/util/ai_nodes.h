@@ -179,7 +179,7 @@ public:
                                         auto &pa_transform = panda_view.get<Transform>(panda_entity);
 
 
-                                        uint32_t bat_entity = registry.create();
+                                        auto bat_entity = registry.create();
 
                                         auto texture = blackboard.texture_manager.get_texture("bat");
                                         auto shader = blackboard.shader_manager.get_shader("sprite");
