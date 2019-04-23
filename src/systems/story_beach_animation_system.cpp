@@ -18,7 +18,7 @@ StoryBeachAnimationSystem::StoryBeachAnimationSystem() {}
 
 void StoryBeachAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
 
-    int row;
+    int row = 1;
     auto fade_view = registry.view<FadeOverlay, Timer>();
     for (auto fade_entity: fade_view) {
         auto &timer = fade_view.get<Timer>(fade_entity);

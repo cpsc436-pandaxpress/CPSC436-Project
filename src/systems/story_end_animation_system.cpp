@@ -16,7 +16,8 @@ StoryEndAnimationSystem::StoryEndAnimationSystem() {}
 
 void StoryEndAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
 
-    int row, kellyFrames, kellyStartIndex, pandaFrames, pandaStartIndex;
+    int row, kellyFrames, kellyStartIndex, pandaFrames;
+    pandaFrames = 3;
 
     auto panda_view = registry.view<Panda, Sprite, Timer>();
     for (auto panda_entity: panda_view) {
@@ -30,15 +31,11 @@ void StoryEndAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegist
         }
         if (pandaAnimationTime == 0.f || pandaCounter != (int) pandaAnimationTime) {
             if (pandaRunning < PANDARUNS){
-                pandaFrames = 3;
                 pandaRunning++;
-                pandaStartIndex = 0;
             }
-            if (pandaIndex == pandaFrames) {
-                pandaIndex = pandaStartIndex;
-            }
-            animatePanda(sprite);
             pandaIndex++;
+            pandaIndex %= pandaFrames;
+            animatePanda(sprite);
         }
     }
 

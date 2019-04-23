@@ -2,6 +2,7 @@
 // Created by alex on 27/01/19.
 //
 
+#include <components/panda.h>
 #include "sprite_transform_system.h"
 
 #include "components/transform.h"

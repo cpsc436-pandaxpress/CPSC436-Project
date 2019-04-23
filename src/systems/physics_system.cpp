@@ -1,4 +1,5 @@
 //
+//
 // Created by cowan on 30/01/19.
 //
 
@@ -10,8 +11,6 @@
 #include <components/health.h>
 #include <components/food.h>
 #include <components/jacko.h>
-#include <components/boss.h>
-#include <components/dracula.h>
 #include <components/chases.h>
 #include <components/bread.h>
 #include <components/llama.h>
@@ -21,18 +20,21 @@
 #include <graphics/cave_entrance.h>
 #include <components/powerup.h>
 #include <components/spit.h>
+#include <components/dracula.h>
+#include <components/boss.h>
 
 
-#include "util/entity_pairs.h"
 #include "util/scene_helper.h"
 
 PhysicsSystem::PhysicsSystem(): story_(false) {}
 
 void PhysicsSystem::update(Blackboard& blackboard, entt::DefaultRegistry& registry) {
+
     apply_gravity(blackboard, registry);
     check_collisions(blackboard, registry);
     apply_velocity(blackboard, registry);
 }
+
 
 void PhysicsSystem::apply_gravity(Blackboard &blackboard, entt::DefaultRegistry &registry){
     /***
@@ -88,7 +90,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
 
     auto static_view = registry.view<Collidable, Transform>();
 
-    auto recorded_collisions = entity_pair_set();
+    auto recorded_collisions = std::unordered_set<uint_pair, PairHash>();
 
     for (auto d_entity : dynamic_view) {
         auto& interactible = dynamic_view.get<Interactable>(d_entity);
@@ -112,7 +114,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                     continue;
                 }
                 //if the entities already collided this frame
-                if (ordered_pair_check(recorded_collisions, d_entity, s_entity)) {
+                if (recorded_collisions.count(uint_pair(d_entity, s_entity)) > 0) {
                     continue;
                 }
 
@@ -145,6 +147,7 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
 
                 collisions.emplace_back(
                     s_entity,
+                    d_entity,
                     vec2{x_norm, y_norm},
                     time
                 );
@@ -173,16 +176,16 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
             }
 
             for (auto entry : sorted_collisions) {
-                if (registry.has<Platform>(entry.entity)) {
+                if (registry.has<Platform>(entry.e1)) {
 
-                    recorded_collisions.insert(uint_pair(d_entity, entry.entity));
+                    recorded_collisions.insert(uint_pair(d_entity, entry.e1));
 
                     if (entry.normal.x == 0 && entry.normal.y == 0) {
                         // static collision; ignore for platforms
                         continue;
                     }
 
-                    auto& platform = registry.get<Platform>(entry.entity);
+                    auto& platform = registry.get<Platform>(entry.e1);
 
                     if (platform.one_way) {
                         if (entry.normal.y != -1) {
@@ -192,10 +195,10 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
 
                     }
                     else {
-                        if ( registry.has<CausesDamage>(entry.entity)
+                        if ( registry.has<CausesDamage>(entry.e1)
                              && registry.has<Panda>(d_entity)
-                                ) {
-                            auto& cd = registry.get<CausesDamage>(entry.entity);
+                            ) {
+                            auto& cd = registry.get<CausesDamage>(entry.e1);
                             auto& health = registry.get<Health>(d_entity);
                             auto& panda = registry.get<Panda>(d_entity);
                             auto& transform = registry.get<Transform>(d_entity);
@@ -232,14 +235,14 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                 }
                 else {
                     //handle non-blocking collisions
-                    recorded_collisions.insert(uint_pair(d_entity, entry.entity));
+                    recorded_collisions.insert(uint_pair(d_entity, entry.e1));
 
 
                     // check for causing damage to the panda
-                    if ( registry.has<CausesDamage>(entry.entity)
-                        && registry.has<Panda>(d_entity)
-                    ) {
-                        auto& cd = registry.get<CausesDamage>(entry.entity);
+                    if ( registry.has<CausesDamage>(entry.e1)
+                         && registry.has<Panda>(d_entity)
+                        ) {
+                        auto& cd = registry.get<CausesDamage>(entry.e1);
                         auto& health = registry.get<Health>(d_entity);
                         auto& panda = registry.get<Panda>(d_entity);
                         auto& transform = registry.get<Transform>(d_entity);
@@ -251,12 +254,12 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                         }
                     }
                     else if ( registry.has<CausesDamage>(d_entity)
-                              && registry.has<Panda>(entry.entity)
+                              && registry.has<Panda>(entry.e1)
                         ) {
                         auto& cd = registry.get<CausesDamage>(d_entity);
-                        auto& health = registry.get<Health>(entry.entity);
-                        auto& panda = registry.get<Panda>(entry.entity);
-                        auto& transform = registry.get<Transform>(entry.entity);
+                        auto& health = registry.get<Health>(entry.e1);
+                        auto& panda = registry.get<Panda>(entry.e1);
+                        auto& transform = registry.get<Transform>(entry.e1);
 
                         if (entry.normal.x == 0 && entry.normal.y == 0) {
                             panda.hurt = true;
@@ -267,15 +270,15 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                     }
 
                     // check for the panda causing damage
-                    if ( registry.has<Health>(entry.entity)
+                    if ( registry.has<Health>(entry.e1)
                          && registry.has<Panda>(d_entity)
-                    ) {
+                        ) {
                         auto& cd = registry.get<CausesDamage>(d_entity);
                         auto& panda = registry.get<Panda>(d_entity);
                         auto& transform = registry.get<Transform>(d_entity);
-                        auto& health = registry.get<Health>(entry.entity);
+                        auto& health = registry.get<Health>(entry.e1);
                         if (cd.normal_matches_mask(-entry.normal.x, -entry.normal.y)
-                        && !panda.recovering){
+                            && !panda.recovering){
                             //do damage
                             health.health_points -= cd.hp;
 
@@ -286,44 +289,47 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                 dv.y_velocity = 700 * entry.normal.y;
                             }
 
-                            if (registry.has<Boss>(entry.entity)) {
-                                // panda is hitting jacko
-                                auto& boss = registry.get<Boss>(entry.entity);
-                                auto& chases = registry.get<Chases>(entry.entity);
+                            if (registry.has<Boss>(entry.e1)) {
+                                // panda is hitting a boss
+                                auto& chases = registry.get<Chases>(entry.e1);
                                 if (health.health_points <= 0) {
+                                    auto& boss = registry.get<Boss>(entry.e1);
+
+                                    registry.remove<Interactable>(entry.e1);
+                                    registry.remove<Chases>(entry.e1);
+                                    registry.assign<ObeysGravity>(entry.e1);
+
                                     boss.alive = false;
-                                    registry.remove<Interactable>(entry.entity);
-                                    registry.remove<Chases>(entry.entity);
-                                    registry.assign<ObeysGravity>(entry.entity);
-                                    if(registry.has<Jacko>(entry.entity)){
+                                    if (registry.has<Jacko>(entry.e1)) {
                                         blackboard.soundManager.playSFX(SFX_JACKO_DEATH);
-                                    } else if((registry.has<Dracula>(entry.entity))){
+                                    }
+                                    else if (registry.has<Dracula>(entry.e1)) {
                                         blackboard.soundManager.playSFX(SFX_DRACULA_DEATH);
                                     }
                                 }
                                 else {
-                                    if(registry.has<Jacko>(entry.entity)){
+                                    if(registry.has<Jacko>(entry.e1)){
                                         blackboard.soundManager.playSFX(SFX_BAT_SHOT);
-                                    }else if((registry.has<Dracula>(entry.entity))){
+                                    }else if((registry.has<Dracula>(entry.e1))){
                                         blackboard.soundManager.playSFX(SFX_DRACULA_HIT);
                                     }
                                     chases.evading = true;
                                 }
                             }
-                            //else if to exclude jacko from normal dying stuff
+                                //else if to exclude jacko from normal dying stuff
                             else if (health.health_points <= 0) {
                                 //normal way to kill stuff
-                                if (registry.has<Interactable>(entry.entity)) {
-                                    registry.remove<Interactable>(entry.entity);
+                                if (registry.has<Interactable>(entry.e1)) {
+                                    registry.remove<Interactable>(entry.e1);
                                 }
                                 if (!story_) {
-                                    if (registry.has<Bread>(entry.entity)) {
+                                    if (registry.has<Bread>(entry.e1)) {
                                         blackboard.score += BREAD_KILL_POINTS;
                                         std::string str = "+" + std::to_string(BREAD_KILL_POINTS);
                                         create_label_text(blackboard, registry,
                                                           vec2{transform.x, transform.y - 100.f},
                                                           str.c_str());
-                                    } else if (registry.has<Llama>(entry.entity)) {
+                                    } else if (registry.has<Llama>(entry.e1)) {
                                         blackboard.score += LLAMA_KILL_POINTS;
                                         std::string str = "+" + std::to_string(LLAMA_KILL_POINTS);
                                         create_label_text(blackboard, registry,
@@ -336,37 +342,37 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                     }
 
                     //check for food
-                    if ( registry.has<Food>(entry.entity)) {
+                    if ( registry.has<Food>(entry.e1)) {
                         if (registry.has<Panda>(d_entity)) {
                             auto &panda = registry.get<Panda>(d_entity);
                             auto &health = registry.get<Health>(d_entity);
                             if (panda.alive && health.health_points < health.max_health) {
                                 health.health_points++;
                             }
-                            registry.destroy(entry.entity);
+                            registry.destroy(entry.e1);
                             continue;
 
-                        } else if (registry.has<Food>(entry.entity) && registry.has<Jacko>(d_entity)) {
+                        } else if (registry.has<Food>(entry.e1) && registry.has<Jacko>(d_entity)) {
                             auto &health = registry.get<Health>(d_entity);
                             if (health.health_points < health.max_health) {
                                 health.health_points++;
                             }
-                            registry.destroy(entry.entity);
+                            registry.destroy(entry.e1);
                             continue;
                         }
                     }
 
-                    if (registry.has<Powerup>(entry.entity) && registry.has<Panda>(d_entity)) {
+                    if (registry.has<Powerup>(entry.e1) && registry.has<Panda>(d_entity)) {
                         auto &panda = registry.get<Panda>(d_entity);
-                        auto &powerup = registry.get<Powerup>(entry.entity);
+                        auto &powerup = registry.get<Powerup>(entry.e1);
                         if (panda.alive) {
                             panda.powerups.push(powerup.powerup_type);
                         }
-                        registry.destroy(entry.entity);
+                        registry.destroy(entry.e1);
                         continue;
                     }
 
-                    /*if ( registry.has<CaveEntrance>(entry.entity)) {
+                    /*if ( registry.has<CaveEntrance>(entry.e1)) {
                         if (registry.has<Panda>(d_entity)) {
                             blackboard.camera.transition_ready = true;
                         }
@@ -441,28 +447,50 @@ void PhysicsSystem::swept_collision(
         return;
     }
 
-    // find the distance between the objects on the near and far sides for both x and y
+    // the distance between the objects on the near and far sides for both x and y
     float x_inv_entry, y_inv_entry, x_inv_exit, y_inv_exit;
 
-    if (d_vx >= 0) {
+    if (d_vx > 0) {
         x_inv_entry = s_left - d_right;
         x_inv_exit = s_right - d_left;
     }
-    else {
+    else if (d_vx < 0) {
         x_inv_entry = s_right - d_left;
         x_inv_exit = s_left - d_right;
     }
+    else { //d_vx == 0
+        //TODO
+        if (d_position.x < s_position.x) {
+            x_inv_entry = s_left - d_right;
+            x_inv_exit = s_right - d_left;
+        }
+        else {
+            x_inv_entry = s_right - d_left;
+            x_inv_exit = s_left - d_right;
+        }
+    }
 
-    if (d_vy >= 0) {
+    if (d_vy > 0) {
         y_inv_entry = s_top - d_bot;
         y_inv_exit = s_bot - d_top;
     }
-    else {
+    else if (d_vy < 0) {
         y_inv_entry = s_bot - d_top;
         y_inv_exit = s_top - d_bot;
     }
+    else { //d_vy == 0
+        //TODO
+        if (d_position.y < s_position.y) {
+            y_inv_entry = s_top - d_bot;
+            y_inv_exit = s_bot - d_top;
+        }
+        else {
+            y_inv_entry = s_bot - d_top;
+            y_inv_exit = s_top - d_bot;
+        }
+    }
 
-    // find time of collision and time of leaving for each axis (if statement is to prevent divide by zero)
+    // time of collision and time of leaving for each axis (if statement is to prevent divide by zero)
     float x_entry, y_entry, x_exit, y_exit;
 
     if (d_vx == 0) {
@@ -509,7 +537,7 @@ void PhysicsSystem::swept_collision(
                 time = 1;
                 return;
             }
-            else if (x_inv_entry == 0.0f) {
+            else if (x_inv_entry == 0) {
                 if (d_vx < 0) {
                     x_norm = 1;
                 }
@@ -523,7 +551,7 @@ void PhysicsSystem::swept_collision(
                 x_norm = 1.0f;
                 y_norm = 0.0f;
             }
-            else
+            else // x_inv_entry > 0
             {
                 x_norm = -1.0f;
                 y_norm = 0.0f;
@@ -536,21 +564,21 @@ void PhysicsSystem::swept_collision(
                 time = 1;
                 return;
             }
-            else if (y_inv_entry == 0.0f) {
+            else if (y_inv_entry == 0) {
                 if (d_vy < 0) {
                     y_norm = 1;
                 }
-                else {
+                else if (d_vy > 0) {
                     y_norm = -1;
                 }
                 x_norm = 0;
             }
-            else if (y_inv_entry < 0.0f)
+            else if (y_inv_entry < 0)
             {
                 x_norm = 0.0f;
                 y_norm = 1.0f;
             }
-            else
+            else // y_inv_entry > 0
             {
                 x_norm = 0.0f;
                 y_norm = -1.0f;

@@ -45,7 +45,7 @@ vec2 Background::pos2() {
 }
 
 void Background::set_pos1(const vec2 &pos) {
-    sp1_.set_pos(pos);
+    sp1_.set_pos(pos.x, pos.y);
 }
 
 void Background::set_pos1(float x, float y) {
@@ -53,25 +53,34 @@ void Background::set_pos1(float x, float y) {
 }
 
 void Background::set_pos2(const vec2 &pos) {
-    sp2_.set_pos(pos);
+    sp2_.set_pos(pos.x, pos.y);
 }
 
 void Background::set_pos2(float x, float y) {
     set_pos2({x, y});
 }
 
+
 vec2 Background::scale() {
     return sp1_.scale();
 }
 
 void Background::set_scale(const vec2 &scale) {
-    sp1_.set_scale(scale);
-    sp2_.set_scale(scale);
+    sp1_.set_scale_int(scale.x, scale.y);
+    sp2_.set_scale_int(scale.x, scale.y);
 }
 
 void Background::set_scale(float x_scale, float y_scale) {
     set_scale({x_scale, y_scale});
 }
+
+void Background::set_size(int x_size, int y_size) {
+    set_scale(
+        (float)x_size / texture_.width(),
+        (float)y_size / texture_.height()
+    );
+}
+
 
 float Background::rotation_rad() {
     return sp1_.rotation_rad();

@@ -19,7 +19,7 @@ private:
     const float breadHeight = 0.5;
     const float llamaWidth = 0.0714;
     const float llamaHeight = 0.25;
-    const float ghostWidth = 0.1428;
+    const float ghostWidth = 1. / 7.;
     const float ghostHeight = 1.f;
     const float jackoWidth = 0.143f;
     const float jackoHeight = 0.25f;

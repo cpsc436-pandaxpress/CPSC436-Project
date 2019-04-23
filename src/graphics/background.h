@@ -35,11 +35,16 @@ public:
 
     void set_pos2(float x, float y);
 
+
     vec2 scale();
 
     void set_scale(const vec2 &scale);
 
     void set_scale(float x_scale, float y_scale);
+
+
+    void set_size(int x_size, int y_size);
+
 
     float rotation_rad();
 

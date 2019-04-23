@@ -28,7 +28,6 @@ endif()
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp")
 
 
-#file(GLOB SOURCE_FILES src/*.cpp src/*.hpp)
 
 set(SOURCE_FILES
         src/main.cpp
@@ -201,6 +200,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS 0)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ext/stb_image/)
 target_include_directories(${PROJECT_NAME} PUBLIC ext/entt/)
+target_include_directories(${PROJECT_NAME} PUBLIC ext/Box2D/)
 target_include_directories(${PROJECT_NAME} PUBLIC /usr/local/include/freetype2/)
 # Find OpenGL
 find_package(OpenGL REQUIRED)

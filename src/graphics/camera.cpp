@@ -41,8 +41,6 @@ void Camera::compose() {
     float sy = 2.f / (top - bottom);
     float tx = -(right + left) / (right - left);
     float ty = -(top + bottom) / (top - bottom);
-
-
     projection_ = { { sx, 0.f, 0.f },{ 0.f, sy, 0.f },{ tx, ty, 1.f } };
 }
 

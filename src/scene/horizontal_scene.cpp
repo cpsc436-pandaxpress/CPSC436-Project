@@ -246,8 +246,7 @@ void HorizontalScene::create_background(Blackboard &blackboard) {
         bg.set_pos1(0.0f, 0.0f);
         bg.set_pos2(blackboard.camera.size().x, 0.0f);
         bg.set_rotation_rad(0.0f);
-        bg.set_scale(blackboard.camera.size().x / t.width(),
-                     blackboard.camera.size().y / t.height());
+        bg.set_size(blackboard.camera.size().x, blackboard.camera.size().y);
         bg_entities.push_back(bg_entity);
         i++;
     }
