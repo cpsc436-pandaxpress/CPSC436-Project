@@ -85,7 +85,6 @@ void StoryEndAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegist
 }
 
 void StoryEndAnimationSystem::animatePanda(Sprite &sprite){
-    printf("%d, %f \n", pandaIndex, pandaIndex * PANDAWIDTH);
     vec2 uv1 = {pandaIndex * PANDAWIDTH + 0.01f, 0.f};
     vec2 uv2 = {(pandaIndex + 1) * PANDAWIDTH, PANDAHEIGHT};
     sprite.set_uvs(uv1, uv2);
