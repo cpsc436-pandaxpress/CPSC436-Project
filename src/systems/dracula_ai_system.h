@@ -24,14 +24,15 @@ class DraculaAISystem: public System {
         SelectorNode root;
         AINodes::CheckHealth* checkHealth;
         AINodes::CheckPandaDeath* checkPandaDeath;
-        AStarSystem a_star_system;
+
 
     public:
     DraculaAISystem(Blackboard& blackboard, entt::DefaultRegistry& registry);
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;
     int getPandaHealth(Blackboard& blackboard, entt::DefaultRegistry& registry);
     int getDraculaHealth(Blackboard& blackboard, entt::DefaultRegistry& registry);
-    void evasion(Blackboard& blackboard, entt::DefaultRegistry& registry);
+    void cleanup();
+    AStarSystem a_star_system;
 };
 
 

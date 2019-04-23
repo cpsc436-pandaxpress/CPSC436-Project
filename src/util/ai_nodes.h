@@ -140,7 +140,7 @@ public:
         AStarSystem& a_star_system;
         int batCount = 0;
         bool pathSet = false;
-        std::vector<Coordinates *> path;
+        std::vector<Coordinates> path;
     public:
         ShootBat(Blackboard& blackboard, entt::DefaultRegistry& registry, AStarSystem& a_star_system) :
                 blackboard(blackboard),
@@ -179,7 +179,7 @@ public:
                                         auto &pa_transform = panda_view.get<Transform>(panda_entity);
 
 
-                                        uint32_t bat_entity = registry.create();
+                                        auto bat_entity = registry.create();
 
                                         auto texture = blackboard.texture_manager.get_texture("bat");
                                         auto shader = blackboard.shader_manager.get_shader("sprite");
@@ -187,7 +187,7 @@ public:
 
                                         float scaleY = 50.0 / texture.height();
                                         float scaleX = 50.0 / texture.width();
-                                        registry.assign<Transform>(bat_entity, path[0]->x, path[0]->y, 0., scaleX, scaleY);
+                                        registry.assign<Transform>(bat_entity, path[0].x, path[0].y, 0., scaleX, scaleY);
                                         registry.assign<Sprite>(bat_entity, texture, shader, mesh);
                                         registry.assign<Velocity>(bat_entity);
                                         registry.assign<Timer>(bat_entity);
@@ -266,7 +266,7 @@ public:
                                         auto panda_view = registry.view<Panda, Transform>();
                                         for(auto panda_entity: panda_view) {
                                             auto panda_transform = panda_view.get<Transform>(panda_entity);
-                                            Coordinates *teleport_coords;
+                                            Coordinates teleport_coords(0,0);
                                             Location *panda_location = a_star_system.getGridLocation(panda_transform.x, panda_transform.y);
                                             Location *teleport_location_right = a_star_system.getGridLocation(panda_transform.x+300, panda_transform.y);
                                             Location *teleport_location_left = a_star_system.getGridLocation(panda_transform.x-300, panda_transform.y);
@@ -295,8 +295,8 @@ public:
                                             }
 
 
-                                            drac_transform.x = teleport_coords->x;
-                                            drac_transform.y = teleport_coords->y;
+                                            drac_transform.x = teleport_coords.x;
+                                            drac_transform.y = teleport_coords.y;
                                             drac_chases.chase_speed=teleport_chase_speed;
                                             timer.remove("teleportDelay");
                                             timer.remove("teleport");
@@ -366,7 +366,7 @@ public:
                                 auto panda_view = registry.view<Panda, Transform>();
                                 for(auto panda_entity: panda_view) {
                                     auto panda_transform = panda_view.get<Transform>(panda_entity);
-                                    Coordinates *teleport_coords;
+                                    Coordinates teleport_coords=Coordinates(0,0);
                                     int teleportOffset;
                                     Location *teleport_location;
 
@@ -380,8 +380,8 @@ public:
                                                                                       teleport_location->j);
 
 
-                                    drac_transform.x = teleport_coords->x;
-                                    drac_transform.y = teleport_coords->y;
+                                    drac_transform.x = teleport_coords.x;
+                                    drac_transform.y = teleport_coords.y;
                                     drac_chases.chase_speed=120.f;
                                     timer.remove("teleportDelay");
                                     timer.remove("teleportIntoFrame");

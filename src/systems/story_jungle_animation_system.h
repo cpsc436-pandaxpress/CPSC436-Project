@@ -12,6 +12,7 @@ public:
     StoryJungleAnimationSystem();
 
     int pandaGetsVape = 0;
+    int pandaVapes = 0;
 
     virtual void update(Blackboard &blackboard, entt::DefaultRegistry &registry) override;
 
@@ -30,8 +31,10 @@ private:
     const int PANDASIGHS = 10;
     const int PANDARISES = 10;
     const int PANDASEESVAPE = 10;
-    const int PANDAGETSVAPE = 30;
     const int PANDARUNS = 20;
+    const int PANDAHOLDSVAPE = 12;
+    const int PANDAGETSVAPE = 30;
+    const int PANDAVAPES = 8;
 
     float animationTime = 0.f;
     float pandaAnimationTime = 0.f;

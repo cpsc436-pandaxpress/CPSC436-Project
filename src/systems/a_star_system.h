@@ -23,13 +23,18 @@ public:
     virtual void update(Blackboard &blackboard, entt::DefaultRegistry &registry);
     void createGrid(Blackboard &blackboard, entt::DefaultRegistry &registry);
     std::vector<Location*> findPath(Location* start, Location* end);
-    std::vector<Coordinates*> getProjectilePath(Blackboard &blackboard, entt::DefaultRegistry &registry);
+    std::vector<Coordinates> getProjectilePath(Blackboard &blackboard, entt::DefaultRegistry &registry);
     Location* getGridLocation(float x, float y);
-    Coordinates* getScreenLocation(int i, int j);
+    Coordinates getScreenLocation(int i, int j);
+    void cleanup();
 
 private:
     float Y_OFFSET = 30.f;
     float X_OFFSET = -50.f;
+    int cols=0;
+    int rows=0;
+    std::vector<std::vector<Location*>> grid;
+    bool startedInPlatform=false;
 };
 
 

@@ -19,34 +19,14 @@
 #include <graphics/cave_entrance.h>
 #include <components/powerup.h>
 #include <components/spit.h>
+#include <components/dracula.h>
 
 
 #include "util/scene_helper.h"
 
-
-
-PhysicsSystem::PhysicsSystem(){}
+PhysicsSystem::PhysicsSystem(): story_(false) {}
 
 void PhysicsSystem::update(Blackboard& blackboard, entt::DefaultRegistry& registry) {
-    // maintain entity <-> box2d obj map
-    // set velocities and gravity scales accordingly
-    // step world
-    // check for registered collisions
-    // set transforms accordingly
-
-//    registry_ = &registry;
-//
-//
-//    // update mappings and set velocities / gravity
-//    maintain(registry);
-//
-//    // step the world
-//    world_.Step(blackboard.delta_time, 10, 8);
-//
-//    handle_collisions(blackboard, registry);
-//    set_transforms(registry);
-
-
 
     apply_gravity(blackboard, registry);
     check_collisions(blackboard, registry);
@@ -317,6 +297,11 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                     registry.assign<ObeysGravity>(entry.e1);
                                 }
                                 else {
+                                    if(registry.has<Jacko>(entry.e1)){
+                                        blackboard.soundManager.playSFX(SFX_BAT_SHOT);
+                                    }else if((registry.has<Dracula>(entry.e1))){
+                                        blackboard.soundManager.playSFX(SFX_DRACULA_HIT);
+                                    }
                                     chases.evading = true;
                                 }
                             }
@@ -326,18 +311,20 @@ void PhysicsSystem::check_collisions(Blackboard &blackboard, entt::DefaultRegist
                                 if (registry.has<Interactable>(entry.e1)) {
                                     registry.remove<Interactable>(entry.e1);
                                 }
-                                if (registry.has<Bread>(entry.e1)) {
-                                    blackboard.score += BREAD_KILL_POINTS;
-                                    std::string str = "+" + std::to_string(BREAD_KILL_POINTS);
-                                    create_label_text(blackboard, registry,
-                                                      vec2{transform.x, transform.y - 100.f},
-                                                      str.c_str());
-                                } else if (registry.has<Llama>(entry.e1)) {
-                                    blackboard.score += LLAMA_KILL_POINTS;
-                                    std::string str = "+" + std::to_string(LLAMA_KILL_POINTS);
-                                    create_label_text(blackboard, registry,
-                                                      vec2{transform.x, transform.y - 100.f},
-                                                      str.c_str());
+                                if (!story_) {
+                                    if (registry.has<Bread>(entry.e1)) {
+                                        blackboard.score += BREAD_KILL_POINTS;
+                                        std::string str = "+" + std::to_string(BREAD_KILL_POINTS);
+                                        create_label_text(blackboard, registry,
+                                                          vec2{transform.x, transform.y - 100.f},
+                                                          str.c_str());
+                                    } else if (registry.has<Llama>(entry.e1)) {
+                                        blackboard.score += LLAMA_KILL_POINTS;
+                                        std::string str = "+" + std::to_string(LLAMA_KILL_POINTS);
+                                        create_label_text(blackboard, registry,
+                                                          vec2{transform.x, transform.y - 100.f},
+                                                          str.c_str());
+                                    }
                                 }
                             }
                         }
@@ -619,4 +606,8 @@ bool PhysicsSystem::static_collision(
         || s_bot < d_top + buffer;
 
     return !no_collide;
+}
+
+void PhysicsSystem::set_story(bool story) {
+    story_ = story;
 }

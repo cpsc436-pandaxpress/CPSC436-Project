@@ -53,11 +53,12 @@ private:
     static constexpr float GRAVITY = 2500.f;
     static constexpr float METER = 100.f;
 
+    bool story_;
 public:
 
     PhysicsSystem();
     virtual void update(Blackboard& blackboard, entt::DefaultRegistry& registry) override;
-
+    void set_story(bool story);
 private:
 
 

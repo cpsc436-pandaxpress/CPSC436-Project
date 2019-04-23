@@ -43,11 +43,13 @@ void VerticalScene::init_scene(Blackboard &blackboard) {
     if (mode_ == ENDLESS) {
         create_score_text(blackboard);
         create_high_score_text(blackboard, high_score_);
+        physics_system.set_story(false);
     } else if (mode_ == STORY_EASY || mode_ == STORY_HARD) {
         timer_entity = registry_.create();
         auto& timer = registry_.assign<Timer>(timer_entity);
         timer.save_watch(END_TIMER_LABEL, END_TIMER_LENGTH);
         create_lives_text(blackboard);
+        physics_system.set_story(true);
     }
     create_fade_overlay(blackboard);
     auto &fadeOverlay = registry_.get<FadeOverlay>(fade_overlay_entity);
@@ -112,7 +114,7 @@ void VerticalScene::update(Blackboard &blackboard) {
         background_transform_system.update(blackboard, registry_);
         level_system.update(blackboard, registry_);
         physics_system.update(blackboard, registry_);
-        enemy_system.update(blackboard, registry_, JUNGLE_TYPE);
+        enemy_system.update(blackboard, registry_, SKY_TYPE);
         sprite_transform_system.update(blackboard, registry_);
         health_bar_transform_system.update(blackboard, registry_);
         label_system.update(blackboard, registry_);
@@ -149,6 +151,7 @@ void VerticalScene::reset_scene(Blackboard &blackboard) {
     blackboard.camera.in_transition = false;
     blackboard.camera.transition_ready = false;
     blackboard.score = 0;
+    blackboard.soundManager.changeBackgroundMusic(blackboard.soundManager.currentStage);
     init_scene(blackboard);
 }
 
@@ -171,14 +174,14 @@ void VerticalScene::go_to_next_scene(Blackboard &blackboard) {
         cleanup();
         blackboard.camera.in_transition = false;
         blackboard.camera.transition_ready = false;
-        change_scene(BOSS_SCENE_ID);
+        change_scene(BOSS_SCENE_ID, true);
         init_scene(blackboard);
     } else if (mode_ == STORY_HARD) {
         blackboard.camera.set_position(0, 0);
         cleanup();
         blackboard.camera.in_transition = false;
         blackboard.camera.transition_ready = false;
-        change_scene(DRACULA_BOSS_SCENE_ID);
+        change_scene(DRACULA_BOSS_SCENE_ID, true);
         init_scene(blackboard);
     }
 }

@@ -5,9 +5,6 @@
 #include "a_star_system.h"
 
 
-int cols=0;
-int rows=0;
-std::vector<std::vector<Location*>> grid;
 
 
 
@@ -26,13 +23,12 @@ bool contains(std::vector<Location*> list, Location* location){
 
 
 AStarSystem::AStarSystem(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    createGrid(blackboard, registry);
+    //createGrid(blackboard, registry);
 }
 
 
 
 void AStarSystem::createGrid(Blackboard &blackboard, entt::DefaultRegistry &registry) {
-    int level = 0;
     std::string level_path = levels_path("");
     std::string levelFile = level_path + "dracula_level.csv";
     CSVReader reader(levelFile);
@@ -76,19 +72,19 @@ Location* AStarSystem::getGridLocation(float x, float y){
     return grid[j][i];
 }
 
-Coordinates* AStarSystem::getScreenLocation(int j, int i){
+Coordinates AStarSystem::getScreenLocation(int j, int i){
     float x = (i*100)-800;
     float y = (j*100)-450+Y_OFFSET;
 
-    Coordinates* c = new Coordinates(x,y);
+    Coordinates c = Coordinates(x,y);
     return c;
 }
 
-std::vector<Coordinates*> AStarSystem::getProjectilePath(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+std::vector<Coordinates> AStarSystem::getProjectilePath(Blackboard &blackboard, entt::DefaultRegistry &registry) {
     Location* start;
     Location* end;
     std::vector<Location*> path;
-    std::vector<Coordinates*> coordinatePath;
+    std::vector<Coordinates> coordinatePath;
 
     auto dracula = registry.view<Dracula, Transform>();
 
@@ -105,13 +101,27 @@ std::vector<Coordinates*> AStarSystem::getProjectilePath(Blackboard &blackboard,
         auto& transform = panda.get<Transform>(entity);
         end = getGridLocation(transform.x, transform.y);
     }
+    if(start->platform){
+        start->platform=false;
+        startedInPlatform=true;
+    }
+
 
     path = findPath(start, end);
 
+
+
     for(int i=0; i<path.size(); i++){
-        Coordinates* temp = getScreenLocation(path[i]->i,path[i]->j);
+        Coordinates temp = getScreenLocation(path[i]->i,path[i]->j);
         coordinatePath.push_back(temp);
     }
+
+
+    if(startedInPlatform){
+        start->platform=true;
+        startedInPlatform=true;
+    }
+
 
     return coordinatePath;
 
@@ -184,6 +194,18 @@ std::vector<Location*> AStarSystem::findPath(Location* start, Location* end){
 return path;
 }
 
+void AStarSystem::cleanup() {
+    for(int i = 0; i<rows; i++){
+        for(int j = 0; i<cols; i++) {
+            Location* temp = grid[j][i];
+            delete(temp);
+        }
+        grid[i].clear();
+        grid[i].shrink_to_fit();
+    }
+    grid.clear();
+    grid.shrink_to_fit();
+}
 
 void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
 

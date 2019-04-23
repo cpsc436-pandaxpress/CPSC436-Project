@@ -135,9 +135,29 @@ void BackgroundTransformSystem::story_beach_background_transform(Blackboard &bla
 void BackgroundTransformSystem::boss_dracula_background_transform(Blackboard &blackboard,
                                                                   Background &background) {
     Camera camera = blackboard.camera;
-    if (background.z_pos() == 0) {
-        background.set_pos1(camera.position().x, camera.position().y);
-    } else {
-        background.set_pos1(camera.position().x, 900.f);
+    float og_pos1 = 0.0;
+    float clampValue = blackboard.camera.size().x / 0.5f;
+    float displacement = clamp(
+            (og_pos1 - blackboard.camera.position().x) * (background.z_pos() / 10.0f),
+            -clampValue,
+            clampValue
+    );
+    float maxDist = blackboard.camera.size().y / 0.8f;
+    float displacementY = clamp(
+            (og_pos1 - background.pos1().y) * (background.z_pos() / 2.0f),
+            0, maxDist);
+    background.set_pos1(blackboard.camera.position().x + displacement,
+                        background.pos1().y + displacementY);
+    float halfWidth = camera.size().x / 2.0f;
+    float camLeft = camera.position().x - halfWidth;
+    float camRight = camera.position().x + halfWidth;
+    float bgLeft = background.pos1().x - halfWidth;
+    float bgRight = background.pos1().x + halfWidth;
+    if (camLeft < bgLeft) {
+        // camLeft is farther than background's left (space)
+        background.set_pos2(background.pos1().x - camera.size().x, background.pos1().y);
+    } else if (camRight >= bgRight) {
+        // camRight is farther than background's right (space)
+        background.set_pos2(background.pos1().x + camera.size().x, background.pos1().y);
     }
 }

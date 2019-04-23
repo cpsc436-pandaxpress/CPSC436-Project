@@ -29,7 +29,8 @@ void EnemyAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
         auto &bread = bread_view.get<Bread>(bread_entity);
         auto &sprite = bread_view.get<Sprite>(bread_entity);
 
-         animateBread(bread.alive, sprite);
+        bool alive = registry.has<Interactable>(bread_entity);
+        animateBread(alive, sprite);
     }
 
 
@@ -63,7 +64,8 @@ void EnemyAnimationSystem::update(Blackboard &blackboard, entt::DefaultRegistry 
         float curr_time = timer.get_curr_time();
         float target_time = timer.get_target_time("spit");
 
-        animateLlama(llama.alive, curr_time, target_time, sprite);
+        bool alive = registry.has<Interactable>(llama_entity);
+        animateLlama(alive, curr_time, target_time, sprite);
     }
 
     auto dracula_view = registry.view<Dracula, Boss, Sprite, Chases>();
@@ -126,7 +128,7 @@ void EnemyAnimationSystem::animateBread(bool alive, Sprite &sprite){
     int index = ((int) animationTime % breadFrames);
 
     vec2 uv1 = {index*breadWidth, breadHeight*(row-1) + 0.01f};
-    vec2 uv2 = {(index+1)*breadWidth, (row)*breadHeight - 0.01f};
+    vec2 uv2 = {(index+1)*breadWidth, (row)*breadHeight - 0.02f};
     sprite.set_uvs(uv1, uv2);
 }
 
@@ -134,7 +136,7 @@ void EnemyAnimationSystem::animateLlama(bool alive, float currentTime, float tar
     frameRate = 6.f;
     int llamaFrames = 14;
     int row = 1;
-    float i = 0.014f;
+    float i = 0.005f;
 
     if (!alive) {
         row = 3;
