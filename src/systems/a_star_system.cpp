@@ -22,13 +22,19 @@ bool contains(std::vector<Location*> list, Location* location){
 }
 
 
-AStarSystem::AStarSystem(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+AStarSystem::AStarSystem(Blackboard &blackboard, entt::DefaultRegistry &registry) :
+    grid(),
+    data()
+{
     //createGrid(blackboard, registry);
 }
 
 
 
 void AStarSystem::createGrid(Blackboard &blackboard, entt::DefaultRegistry &registry) {
+    grid.clear();
+    data.clear();
+
     std::string level_path = levels_path("");
     std::string levelFile = level_path + "dracula_level.csv";
     CSVReader reader(levelFile);
@@ -42,12 +48,18 @@ void AStarSystem::createGrid(Blackboard &blackboard, entt::DefaultRegistry &regi
 
     }
     cols = dataList[0].size();
+
     rows =21;
+
+    data.reserve(cols * rows);
+
 
     for(int i = 0; i<rows; i++){
         std::vector<Location*> row;
         for(int j=0; j<cols; j++){
-            row.push_back(new Location(i,j));
+            size_t index = data.size();
+            data.push_back(Location(i, j));
+            row.push_back(&data.at(index));
             if(dataList[i][j]=='1' || dataList[i][j]=='b'){
                 row[row.size()-1]->platform=true;
             }
@@ -195,16 +207,8 @@ return path;
 }
 
 void AStarSystem::cleanup() {
-    for(int i = 0; i<rows; i++){
-        for(int j = 0; i<cols; i++) {
-            Location* temp = grid[j][i];
-            delete(temp);
-        }
-        grid[i].clear();
-        grid[i].shrink_to_fit();
-    }
     grid.clear();
-    grid.shrink_to_fit();
+    data.clear();
 }
 
 void AStarSystem::update(Blackboard &blackboard, entt::DefaultRegistry &registry) {
