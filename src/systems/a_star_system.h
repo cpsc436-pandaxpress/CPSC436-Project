@@ -34,6 +34,7 @@ private:
     int cols=0;
     int rows=0;
     std::vector<std::vector<Location*>> grid;
+    std::vector<Location> data;
     bool startedInPlatform=false;
 };
 
