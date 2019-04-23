@@ -131,7 +131,7 @@ void DraculaBossScene::update_panda(Blackboard &blackboard) {
 
 void DraculaBossScene::update_camera(Blackboard &blackboard) {
     auto &panda_transform = registry_.get<Transform>(panda_entity);
-    float y_offset = std::min(900.f, panda_transform.y + MAX_CAMERA_Y_DIFF);
+    float y_offset = std::min(1200.f, panda_transform.y + MAX_CAMERA_Y_DIFF);
     blackboard.camera.set_position(panda_transform.x, y_offset);
     blackboard.camera.compose();
 }
@@ -217,7 +217,7 @@ void DraculaBossScene::create_background(Blackboard &blackboard) {
         registry_.assign<Layer>(bg_entity, BACKGROUND_LAYER - i);
         bg.set_pos1(0.0f, 0.0f);
         if (indices[i] != 0) {
-            bg.set_pos1(0.f, 900.f);
+            bg.set_pos1(0.f, 1200.f);
         }
         bg.set_rotation_rad(0.0f);
         bg.set_scale(blackboard.camera.size().x / t.width(),
