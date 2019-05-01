@@ -45,19 +45,31 @@ void SeekSystem::update(Blackboard &blackboard, entt::DefaultRegistry& registry)
             }
 
 
-            if(abs(target.x - transform.x) < 5 && (seeks.batDirection==Seeks::LEFT || seeks.batDirection==Seeks::RIGHT)){
+            if((transform.x - target.x) < 5 && seeks.batDirection==Seeks::LEFT){
 
                 seeks.seekList.erase(seeks.seekList.begin());
                 seeks.batDirection=Seeks::WAITING;
                 velocity.y_velocity=0;
                 velocity.x_velocity=0;
 
-            }else if(abs(target.y - transform.y) < 5 && (seeks.batDirection==Seeks::UP || seeks.batDirection==Seeks::DOWN)){
+            }else if((target.x - transform.x) < 5 && seeks.batDirection==Seeks::RIGHT){
 
                 seeks.seekList.erase(seeks.seekList.begin());
                 seeks.batDirection=Seeks::WAITING;
                 velocity.y_velocity=0;
                 velocity.x_velocity=0;
+            }else if((target.y - transform.y) < 5 && (seeks.batDirection==Seeks::DOWN)){
+
+                seeks.seekList.erase(seeks.seekList.begin());
+                seeks.batDirection=Seeks::WAITING;
+                velocity.y_velocity=0;
+                velocity.x_velocity=0;
+            }else if((transform.y - target.y) < 5 && (seeks.batDirection==Seeks::UP)){
+
+            seeks.seekList.erase(seeks.seekList.begin());
+            seeks.batDirection=Seeks::WAITING;
+            velocity.y_velocity=0;
+            velocity.x_velocity=0;
             }else{
 
                 if(seeks.batDirection==Seeks::LEFT){
