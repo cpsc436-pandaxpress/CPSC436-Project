@@ -4,6 +4,14 @@ without the use of any external game engines. The video game is an infinite runn
 both horizontal/vertical scrolling gameplay. We offer a detailed story mode comprised of vertical/horizontal and a boss level
 alongside endless modes which will put your skills to the ultimate test.
 
+# Authors
+- Alex Hoar ([@thealexhoar](https://github.com/thealexhoar))
+- Avery Brown ([@averybrown](https://github.com/averybrown))
+- Cowan Cumming ([@cowmanjoe](https://github.com/cowmanjoe))
+- Kenneth William ([@kennethwilliamm](https://github.com/kennethwilliamm))
+- Rebecca Roth ([@rdroth](https://github.com/rdroth))
+- Prayansh Srivastava ([@prayansh](https://github.com/prayansh))
+
 # Pre-Requisites
 - C++ 11
 - CMake
