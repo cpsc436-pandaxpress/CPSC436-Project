@@ -2,8 +2,9 @@
 #define ENTT_CORE_MONOSTATE_HPP
 
 
+#include <atomic>
 #include <cassert>
-#include "../config/config.h"
+#include "family.hpp"
 #include "hashed_string.hpp"
 
 
@@ -21,8 +22,8 @@ namespace entt {
  * both during an assignment and when they try to read back their data.
  * Otherwise, they can incur in unexpected results.
  */
-template<hashed_string::hash_type>
-struct monostate {
+template<HashedString::hash_type>
+struct Monostate {
     /**
      * @brief Assigns a value of a specific type to a given key.
      * @tparam Type Type of the value to assign.
@@ -30,7 +31,7 @@ struct monostate {
      */
     template<typename Type>
     void operator=(Type val) const ENTT_NOEXCEPT {
-        value<Type> = val;
+        Monostate::value<Type> = val;
     }
 
     /**
@@ -40,21 +41,18 @@ struct monostate {
      */
     template<typename Type>
     operator Type() const ENTT_NOEXCEPT {
-        return value<Type>;
+        return Monostate::value<Type>;
     }
 
 private:
     template<typename Type>
-    inline static maybe_atomic_type<Type> value{};
+    static std::atomic<Type> value;
 };
 
 
-/**
- * @brief Helper variable template.
- * @tparam Value Value used to differentiate between different variables.
- */
-template<hashed_string::hash_type Value>
-inline monostate<Value> monostate_v = {};
+template<HashedString::hash_type ID>
+template<typename Type>
+std::atomic<Type> Monostate<ID>::value{};
 
 
 }

@@ -6,7 +6,8 @@ project(pandaExpress)
 if (POLICY CMP0025)
     cmake_policy(SET CMP0025 NEW)
 endif ()
-set (CMAKE_CXX_STANDARD 17)
+set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_STANDARD_REQUIRED)
 
 # nice hierarchichal structure in MSVC
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -23,15 +24,168 @@ else()
 endif()
 
 # Add source files as we code (QWERTY)
-#file(GLOB SOURCE_FILES src/*.cpp src/*.hpp)
+# Generate the shader folder Location to the header
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/project_path.hpp")
+
+
 
 set(SOURCE_FILES
-    src/main.cpp
-    src/scene/scene_manager.cpp
-    src/scene/scene.cpp
-    src/util/input_manager.cpp
-    src/graphics/window.cpp
-)
+        src/main.cpp
+        src/scene/scene_manager.cpp
+        src/scene/scene.cpp
+        src/util/input_manager.cpp
+        src/graphics/window.cpp
+        src/graphics/texture.cpp
+        src/graphics/texture_manager.cpp
+        src/graphics/shader.cpp
+        src/graphics/shader_manager.cpp
+        src/util/gl_utils.cpp
+        src/graphics/sprite.cpp
+        src/graphics/mesh.cpp
+        src/graphics/camera.cpp
+        src/systems/player_movement_system.cpp
+        src/systems/sprite_transform_system.cpp
+        src/util/constants.h
+        src/systems/physics_system.cpp
+        src/systems/physics_system.h
+        src/components/bread.h
+        src/util/random.cpp
+        src/util/random.h
+        src/scene/main_menu_scene.h
+        src/scene/main_menu_scene.cpp
+        src/components/obstacle.h
+        src/graphics/background.cpp
+        src/systems/background_transform_system.cpp
+        src/systems/background_transform_system.h
+        src/scene/vertical_scene.cpp
+        src/scene/vertical_scene.h
+        src/scene/dracula_boss_scene.cpp
+        src/scene/dracula_boss_scene.h
+        src/util/csv_reader.cpp
+        src/util/csv_reader.h
+        src/level/level_system.cpp
+        src/level/level_system.h
+        src/scene/horizontal_scene.cpp
+        src/scene/horizontal_scene.h
+        src/scene/boss_scene.cpp
+        src/scene/boss_scene.h
+        src/level/horizontal_level_system.h
+        src/level/horizontal_level_system.cpp
+        src/components/ghost.h
+        src/components/llama.h src/components/spit.h
+        src/components/pause_menu.h
+        src/components/seeks.h
+        src/level/vertical_level_system.cpp
+        src/level/vertical_level_system.h
+        src/components/chases.h
+        src/systems/chase_system.cpp
+        src/systems/chase_system.h
+        src/util/node.cpp
+        src/util/node.h
+        src/util/coordinates.cpp
+        src/util/coordinates.h
+        src/util/Location.cpp
+        src/util/Location.h
+        src/components/falling_platform.h
+        src/util/selector_node.h
+        src/util/selector_node.cpp
+        src/systems/seek_system.cpp
+        src/systems/seek_system.h
+        src/systems/a_star_system.cpp
+        src/systems/a_star_system.h
+        src/systems/jacko_ai_system.cpp
+        src/systems/jacko_ai_system.h
+        src/systems/dracula_ai_system.cpp
+        src/systems/dracula_ai_system.h
+        src/components/evades.h
+        src/level/boss_level_system.h
+        src/level/boss_level_system.cpp
+        src/systems/ghost_movement_system.cpp
+        src/systems/ghost_movement_system.h
+        src/graphics/mesh_manager.cpp
+        src/systems/player_animation_system.cpp
+        src/systems/player_animation_system.h
+        src/components/timer.cpp
+        src/components/timer.h
+        src/systems/timer_system.cpp
+        src/systems/timer_system.h
+        src/systems/falling_platform_system.cpp
+        src/systems/falling_platform_system.h
+        src/systems/panda_damage_system.cpp
+        src/systems/enemy_system.cpp
+        src/systems/enemy_system.h
+        src/systems/enemy_animation_system.cpp
+        src/systems/enemy_animation_system.h
+        src/util/sound_manager.cpp
+        src/util/sound_manager.h
+        src/graphics/health_bar.cpp
+        src/graphics/health_bar.h
+        src/systems/health_bar_transform_system.cpp
+        src/systems/health_bar_transform_system.h
+        src/graphics/cave.cpp src/graphics/cave.h
+        src/graphics/text.cpp
+        src/graphics/text.h
+        src/graphics/font.cpp
+        src/graphics/font.h
+        src/systems/text_transform_system.cpp
+        src/systems/text_transform_system.h
+        src/systems/score_system.cpp
+        src/systems/score_system.h
+        src/components/score.h
+        src/level/level.cpp
+        src/level/level.h
+        src/components/layer.h
+        src/graphics/fade_overlay.h
+        src/graphics/fade_overlay.cpp
+        src/systems/fade_overlay_system.cpp
+        src/systems/fade_overlay_system.h
+        src/scene/scene_mode.h
+        src/systems/pause_menu_transform_system.cpp
+        src/systems/pause_menu_transform_system.h
+        src/systems/transition_system.cpp
+        src/systems/transition_system.h
+        src/graphics/cave_entrance.h
+        src/graphics/cave_entrance.cpp
+        src/components/hud_element.h
+        src/systems/hud_transform_system.cpp
+        src/systems/hud_transform_system.h
+        src/graphics/font_manager.cpp
+        src/graphics/font_manager.h
+        src/components/label.h
+        src/systems/label_system.cpp
+        src/systems/label_system.h
+        src/util/scene_helper.h
+        src/util/property_reader.cpp
+        src/util/property_reader.h
+        src/systems/render_system.cpp
+        src/systems/render_system.h
+        src/scene/game_scene.cpp
+        src/scene/game_scene.h
+        src/scene/story_intro_beach.cpp
+        src/scene/story_intro_beach.h
+        src/systems/story_beach_animation_system.cpp
+        src/systems/story_beach_animation_system.h
+        src/components/kelly.h
+        src/components/hearts.h
+        src/components/powerup.h
+        src/systems/powerup_system.cpp
+        src/systems/powerup_system.h
+        src/components/kelly.h
+        src/components/hearts.h
+        src/graphics/framebuffer.h
+        src/graphics/framebuffer.cpp
+        src/scene/story_intro_jungle.cpp
+        src/scene/story_intro_jungle.h
+        src/systems/story_jungle_animation_system.cpp
+        src/systems/story_jungle_animation_system.h
+        src/components/vape.h
+        src/scene/story_end_scene.cpp
+        src/scene/story_end_scene.h
+        src/systems/story_end_animation_system.cpp
+        src/systems/story_end_animation_system.h
+        src/components/new_entrance.h)
+
+
 
 # Create executable target
 
@@ -46,7 +200,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS 0)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ext/stb_image/)
 target_include_directories(${PROJECT_NAME} PUBLIC ext/entt/)
-
+target_include_directories(${PROJECT_NAME} PUBLIC ext/Box2D/)
+target_include_directories(${PROJECT_NAME} PUBLIC /usr/local/include/freetype2/)
 # Find OpenGL
 find_package(OpenGL REQUIRED)
 
@@ -55,7 +210,10 @@ if (OPENGL_FOUND)
     target_link_libraries(${PROJECT_NAME} PUBLIC ${OPENGL_gl_LIBRARY})
 endif()
 
-
+# Find FreeType
+find_package(Freetype REQUIRED)
+target_include_directories(${PROJECT_NAME} PUBLIC ${FREETYPE_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${FREETYPE_LIBRARIES})
 
 if (IS_OS_LINUX OR IS_OS_MAC)
     # Try to find packages rather than to use the precompiled ones
@@ -112,11 +270,22 @@ if (NOT SDL2_FOUND)
     message(FATAL_ERROR "Can't find SDL." )
 endif()
 
-message("${CMAKE_CURRENT_SOURCE_DIR}")
-
 target_include_directories(${PROJECT_NAME} PUBLIC ${GLEW_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS})
 
-target_link_libraries(${PROJECT_NAME} PUBLIC ${GLEW_LIBRARIES} ${SDL2_LIBRARIES} ${SDL2MIXER_LIBRARIES})
+if($ENV{USER} STREQUAL "Avery" OR $ENV{USER} STREQUAL "catsrule123")
+    target_link_libraries(${PROJECT_NAME} PUBLIC "/usr/local/lib/libGLEW.dylib"
+            "/usr/local/lib/libSDL2.dylib"
+            "/usr/local/lib/libSDL2_mixer.dylib"
+            "-framework Foundation"
+            "-framework Cocoa"
+            "-framework CoreAudio"
+            "-framework AVFoundation"
+            "-framework CoreGraphics"
+            "-framework MediaPlayer"
+            "-framework QuartzCore")
+else()
+    target_link_libraries(${PROJECT_NAME} PUBLIC ${GLEW_LIBRARIES} ${SDL2_LIBRARIES} ${SDL2MIXER_LIBRARIES})
+endif()
 
 # Needed to add this
 if(IS_OS_LINUX)

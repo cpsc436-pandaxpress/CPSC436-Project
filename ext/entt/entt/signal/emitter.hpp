@@ -6,7 +6,7 @@
 #include <functional>
 #include <algorithm>
 #include <utility>
-#include <cstddef>
+#include <cstdint>
 #include <memory>
 #include <vector>
 #include <list>
@@ -23,11 +23,11 @@ namespace entt {
  * The emitter class template follows the CRTP idiom. To create a custom emitter
  * type, derived classes must inherit directly from the base class as:
  *
- * @code{.cpp}
- * struct my_emitter: emitter<my_emitter> {
+ * ```cpp
+ * struct MyEmitter: Emitter<MyEmitter> {
  *     // ...
  * }
- * @endcode
+ * ```
  *
  * Handlers for the type of events are created internally on the fly. It's not
  * required to specify in advance the full list of accepted types.<br/>
@@ -39,17 +39,17 @@ namespace entt {
  * @tparam Derived Actual type of emitter that extends the class template.
  */
 template<typename Derived>
-class emitter {
-    using handler_family = family<struct internal_emitter_handler_family>;
+class Emitter {
+    using handler_family = Family<struct InternalEmitterHandlerFamily>;
 
-    struct base_handler {
-        virtual ~base_handler() = default;
+    struct BaseHandler {
+        virtual ~BaseHandler() = default;
         virtual bool empty() const ENTT_NOEXCEPT = 0;
         virtual void clear() ENTT_NOEXCEPT = 0;
     };
 
     template<typename Event>
-    struct event_handler final: base_handler {
+    struct Handler final: BaseHandler {
         using listener_type = std::function<void(const Event &, Derived &)>;
         using element_type = std::pair<bool, listener_type>;
         using container_type = std::list<element_type>;
@@ -58,27 +58,27 @@ class emitter {
         bool empty() const ENTT_NOEXCEPT override {
             auto pred = [](auto &&element) { return element.first; };
 
-            return std::all_of(once_list.cbegin(), once_list.cend(), pred) &&
-                    std::all_of(on_list.cbegin(), on_list.cend(), pred);
+            return std::all_of(onceL.cbegin(), onceL.cend(), pred) &&
+                    std::all_of(onL.cbegin(), onL.cend(), pred);
         }
 
         void clear() ENTT_NOEXCEPT override {
             if(publishing) {
                 auto func = [](auto &&element) { element.first = true; };
-                std::for_each(once_list.begin(), once_list.end(), func);
-                std::for_each(on_list.begin(), on_list.end(), func);
+                std::for_each(onceL.begin(), onceL.end(), func);
+                std::for_each(onL.begin(), onL.end(), func);
             } else {
-                once_list.clear();
-                on_list.clear();
+                onceL.clear();
+                onL.clear();
             }
         }
 
         inline connection_type once(listener_type listener) {
-            return once_list.emplace(once_list.cend(), false, std::move(listener));
+            return onceL.emplace(onceL.cend(), false, std::move(listener));
         }
 
         inline connection_type on(listener_type listener) {
-            return on_list.emplace(on_list.cend(), false, std::move(listener));
+            return onL.emplace(onL.cend(), false, std::move(listener));
         }
 
         void erase(connection_type conn) ENTT_NOEXCEPT {
@@ -86,14 +86,14 @@ class emitter {
 
             if(!publishing) {
                 auto pred = [](auto &&element) { return element.first; };
-                once_list.remove_if(pred);
-                on_list.remove_if(pred);
+                onceL.remove_if(pred);
+                onL.remove_if(pred);
             }
         }
 
         void publish(const Event &event, Derived &ref) {
-            container_type swap_list;
-            once_list.swap(swap_list);
+            container_type currentL;
+            onceL.swap(currentL);
 
             auto func = [&event, &ref](auto &&element) {
                 return element.first ? void() : element.second(event, ref);
@@ -101,39 +101,39 @@ class emitter {
 
             publishing = true;
 
-            std::for_each(on_list.rbegin(), on_list.rend(), func);
-            std::for_each(swap_list.rbegin(), swap_list.rend(), func);
+            std::for_each(onL.rbegin(), onL.rend(), func);
+            std::for_each(currentL.rbegin(), currentL.rend(), func);
 
             publishing = false;
 
-            on_list.remove_if([](auto &&element) { return element.first; });
+            onL.remove_if([](auto &&element) { return element.first; });
         }
 
     private:
         bool publishing{false};
-        container_type once_list{};
-        container_type on_list{};
+        container_type onceL{};
+        container_type onL{};
     };
 
     template<typename Event>
-    event_handler<Event> & handler() ENTT_NOEXCEPT {
-        const std::size_t family = handler_family::type<Event>;
+    Handler<Event> & handler() ENTT_NOEXCEPT {
+        const std::size_t family = handler_family::type<Event>();
 
         if(!(family < handlers.size())) {
             handlers.resize(family+1);
         }
 
         if(!handlers[family]) {
-            handlers[family] = std::make_unique<event_handler<Event>>();
+            handlers[family] = std::make_unique<Handler<Event>>();
         }
 
-        return static_cast<event_handler<Event> &>(*handlers[family]);
+        return static_cast<Handler<Event> &>(*handlers[family]);
     }
 
 public:
     /** @brief Type of listeners accepted for the given event. */
     template<typename Event>
-    using listener = typename event_handler<Event>::listener_type;
+    using Listener = typename Handler<Event>::listener_type;
 
     /**
      * @brief Generic connection type for events.
@@ -145,56 +145,56 @@ public:
      * @tparam Event Type of event for which the connection is created.
      */
     template<typename Event>
-    struct connection final: private event_handler<Event>::connection_type {
+    struct Connection final: private Handler<Event>::connection_type {
         /** @brief Event emitters are friend classes of connections. */
-        friend class emitter;
+        friend class Emitter;
 
         /*! @brief Default constructor. */
-        connection() ENTT_NOEXCEPT = default;
+        Connection() ENTT_NOEXCEPT = default;
 
         /**
          * @brief Creates a connection that wraps its underlying instance.
          * @param conn A connection object to wrap.
          */
-        connection(typename event_handler<Event>::connection_type conn)
-            : event_handler<Event>::connection_type{std::move(conn)}
+        Connection(typename Handler<Event>::connection_type conn)
+            : Handler<Event>::connection_type{std::move(conn)}
         {}
 
         /*! @brief Default copy constructor. */
-        connection(const connection &) = default;
+        Connection(const Connection &) = default;
         /*! @brief Default move constructor. */
-        connection(connection &&) = default;
+        Connection(Connection &&) = default;
 
         /**
          * @brief Default copy assignment operator.
          * @return This connection.
          */
-        connection & operator=(const connection &) = default;
+        Connection & operator=(const Connection &) = default;
 
         /**
          * @brief Default move assignment operator.
          * @return This connection.
          */
-        connection & operator=(connection &&) = default;
+        Connection & operator=(Connection &&) = default;
     };
 
     /*! @brief Default constructor. */
-    emitter() ENTT_NOEXCEPT = default;
+    Emitter() ENTT_NOEXCEPT = default;
 
     /*! @brief Default destructor. */
-    virtual ~emitter() ENTT_NOEXCEPT {
-        static_assert(std::is_base_of_v<emitter<Derived>, Derived>);
+    virtual ~Emitter() ENTT_NOEXCEPT {
+        static_assert(std::is_base_of<Emitter<Derived>, Derived>::value, "!");
     }
 
     /*! @brief Copying an emitter isn't allowed. */
-    emitter(const emitter &) = delete;
+    Emitter(const Emitter &) = delete;
     /*! @brief Default move constructor. */
-    emitter(emitter &&) = default;
+    Emitter(Emitter &&) = default;
 
     /*! @brief Copying an emitter isn't allowed. @return This emitter. */
-    emitter & operator=(const emitter &) = delete;
+    Emitter & operator=(const Emitter &) = delete;
     /*! @brief Default move assignment operator. @return This emitter. */
-    emitter & operator=(emitter &&) = default;
+    Emitter & operator=(Emitter &&) = default;
 
     /**
      * @brief Emits the given event.
@@ -233,7 +233,7 @@ public:
      * @return Connection object that can be used to disconnect the listener.
      */
     template<typename Event>
-    connection<Event> on(listener<Event> listener) {
+    Connection<Event> on(Listener<Event> listener) {
         return handler<Event>().on(std::move(listener));
     }
 
@@ -258,7 +258,7 @@ public:
      * @return Connection object that can be used to disconnect the listener.
      */
     template<typename Event>
-    connection<Event> once(listener<Event> listener) {
+    Connection<Event> once(Listener<Event> listener) {
         return handler<Event>().once(std::move(listener));
     }
 
@@ -272,7 +272,7 @@ public:
      * @param conn A valid connection.
      */
     template<typename Event>
-    void erase(connection<Event> conn) ENTT_NOEXCEPT {
+    void erase(Connection<Event> conn) ENTT_NOEXCEPT {
         handler<Event>().erase(std::move(conn));
     }
 
@@ -308,11 +308,11 @@ public:
      */
     template<typename Event>
     bool empty() const ENTT_NOEXCEPT {
-        const std::size_t family = handler_family::type<Event>;
+        const std::size_t family = handler_family::type<Event>();
 
         return (!(family < handlers.size()) ||
                 !handlers[family] ||
-                static_cast<event_handler<Event> &>(*handlers[family]).empty());
+                static_cast<Handler<Event> &>(*handlers[family]).empty());
     }
 
     /**
@@ -326,7 +326,7 @@ public:
     }
 
 private:
-    std::vector<std::unique_ptr<base_handler>> handlers{};
+    std::vector<std::unique_ptr<BaseHandler>> handlers{};
 };
 
 

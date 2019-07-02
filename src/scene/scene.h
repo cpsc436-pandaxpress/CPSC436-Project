@@ -8,9 +8,11 @@
 
 #include "../util/blackboard.h"
 #include "../util/input_manager.h"
+#include "../util/constants.h"
+#include "scene_mode.h"
 
 // Simple int ID
-typedef uint32_t SceneID;
+
 
 //prototype declaration to avoid circular references
 class SceneManager;
@@ -20,7 +22,8 @@ private:
     SceneManager& scene_manager_;
 
 protected:
-    entt::registry<uint32_t> registry_;
+    entt::DefaultRegistry registry_;
+    SceneMode mode_;
 
 public:
     Scene(SceneManager& scene_manager);
@@ -29,13 +32,16 @@ public:
     // which establish the Scene class as abstract
 
     // update the scene
-    virtual void update(float delta_time, Blackboard& blackboard) = 0;
+    virtual void update(Blackboard& blackboard) = 0;
 
     // render the scene
     virtual void render(Blackboard& blackboard) = 0;
 
+    virtual void set_mode(SceneMode mode, Blackboard &blackboard);
+
+    virtual void reset_scene(Blackboard& blackboard) = 0;
 
 protected:
     // wraps SceneManager::change_scene()
-    bool change_scene(SceneID id);
+    bool change_scene(SceneID id, bool reset = false);
 };

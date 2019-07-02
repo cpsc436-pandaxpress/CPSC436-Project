@@ -23,14 +23,14 @@ namespace entt {
  * @tparam Service Type of service managed by the locator.
  */
 template<typename Service>
-struct service_locator final {
+struct ServiceLocator final {
     /*! @brief Type of service offered. */
     using service_type = Service;
 
     /*! @brief Default constructor, deleted on purpose. */
-    service_locator() = delete;
+    ServiceLocator() = delete;
     /*! @brief Default destructor, deleted on purpose. */
-    ~service_locator() = delete;
+    ~ServiceLocator() = delete;
 
     /**
      * @brief Tests if a valid service implementation is set.
@@ -102,8 +102,12 @@ struct service_locator final {
     }
 
 private:
-    inline static std::shared_ptr<Service> service = nullptr;
+    static std::shared_ptr<Service> service;
 };
+
+
+template<typename Service>
+std::shared_ptr<Service> ServiceLocator<Service>::service{};
 
 
 }

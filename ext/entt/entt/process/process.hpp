@@ -2,8 +2,9 @@
 #define ENTT_PROCESS_PROCESS_HPP
 
 
-#include <utility>
 #include <type_traits>
+#include <functional>
+#include <utility>
 #include "../config/config.h"
 
 
@@ -63,14 +64,14 @@ namespace entt {
  * `succeed` and `fail` protected member functions and even pause or unpause the
  * process itself.
  *
- * @sa scheduler
+ * @sa Scheduler
  *
  * @tparam Derived Actual type of process that extends the class template.
  * @tparam Delta Type to use to provide elapsed time.
  */
 template<typename Derived, typename Delta>
-class process {
-    enum class state: unsigned int {
+class Process {
+    enum class State: unsigned int {
         UNINITIALIZED = 0,
         RUNNING,
         PAUSED,
@@ -80,44 +81,41 @@ class process {
         FINISHED
     };
 
-    template<state value>
-    using state_value_t = std::integral_constant<state, value>;
-
-    template<state value>
-    inline static state_value_t<value> state_value{};
+    template<State state>
+    using tag = std::integral_constant<State, state>;
 
     template<typename Target = Derived>
-    auto tick(int, state_value_t<state::UNINITIALIZED>, void *data)
+    auto tick(int, tag<State::UNINITIALIZED>, void *data)
     -> decltype(std::declval<Target>().init(data)) {
         static_cast<Target *>(this)->init(data);
     }
 
     template<typename Target = Derived>
-    auto tick(int, state_value_t<state::RUNNING>, Delta delta, void *data)
+    auto tick(int, tag<State::RUNNING>, Delta delta, void *data)
     -> decltype(std::declval<Target>().update(delta, data)) {
         static_cast<Target *>(this)->update(delta, data);
     }
 
     template<typename Target = Derived>
-    auto tick(int, state_value_t<state::SUCCEEDED>)
+    auto tick(int, tag<State::SUCCEEDED>)
     -> decltype(std::declval<Target>().succeeded()) {
         static_cast<Target *>(this)->succeeded();
     }
 
     template<typename Target = Derived>
-    auto tick(int, state_value_t<state::FAILED>)
+    auto tick(int, tag<State::FAILED>)
     -> decltype(std::declval<Target>().failed()) {
         static_cast<Target *>(this)->failed();
     }
 
     template<typename Target = Derived>
-    auto tick(int, state_value_t<state::ABORTED>)
+    auto tick(int, tag<State::ABORTED>)
     -> decltype(std::declval<Target>().aborted()) {
         static_cast<Target *>(this)->aborted();
     }
 
-    template<state value, typename... Args>
-    void tick(char, state_value_t<value>, Args &&...) const ENTT_NOEXCEPT {}
+    template<State S, typename... Args>
+    void tick(char, tag<S>, Args &&...) const ENTT_NOEXCEPT {}
 
 protected:
     /**
@@ -128,7 +126,7 @@ protected:
      */
     void succeed() ENTT_NOEXCEPT {
         if(alive()) {
-            current = state::SUCCEEDED;
+            current = State::SUCCEEDED;
         }
     }
 
@@ -140,7 +138,7 @@ protected:
      */
     void fail() ENTT_NOEXCEPT {
         if(alive()) {
-            current = state::FAILED;
+            current = State::FAILED;
         }
     }
 
@@ -151,8 +149,8 @@ protected:
      * running.
      */
     void pause() ENTT_NOEXCEPT {
-        if(current == state::RUNNING) {
-            current = state::PAUSED;
+        if(current == State::RUNNING) {
+            current = State::PAUSED;
         }
     }
 
@@ -163,8 +161,8 @@ protected:
      * paused.
      */
     void unpause() ENTT_NOEXCEPT {
-        if(current  == state::PAUSED) {
-            current  = state::RUNNING;
+        if(current  == State::PAUSED) {
+            current  = State::RUNNING;
         }
     }
 
@@ -173,8 +171,8 @@ public:
     using delta_type = Delta;
 
     /*! @brief Default destructor. */
-    virtual ~process() ENTT_NOEXCEPT {
-        static_assert(std::is_base_of_v<process, Derived>);
+    virtual ~Process() ENTT_NOEXCEPT {
+        static_assert(std::is_base_of<Process, Derived>::value, "!");
     }
 
     /**
@@ -187,7 +185,7 @@ public:
      */
     void abort(const bool immediately = false) ENTT_NOEXCEPT {
         if(alive()) {
-            current = state::ABORTED;
+            current = State::ABORTED;
 
             if(immediately) {
                 tick(0);
@@ -200,7 +198,7 @@ public:
      * @return True if the process is still alive, false otherwise.
      */
     bool alive() const ENTT_NOEXCEPT {
-        return current == state::RUNNING || current == state::PAUSED;
+        return current == State::RUNNING || current == State::PAUSED;
     }
 
     /**
@@ -208,7 +206,7 @@ public:
      * @return True if the process is terminated, false otherwise.
      */
     bool dead() const ENTT_NOEXCEPT {
-        return current == state::FINISHED;
+        return current == State::FINISHED;
     }
 
     /**
@@ -216,7 +214,7 @@ public:
      * @return True if the process is paused, false otherwise.
      */
     bool paused() const ENTT_NOEXCEPT {
-        return current == state::PAUSED;
+        return current == State::PAUSED;
     }
 
     /**
@@ -234,12 +232,12 @@ public:
      */
     void tick(const Delta delta, void *data = nullptr) {
         switch (current) {
-        case state::UNINITIALIZED:
-            tick(0, state_value_t<state::UNINITIALIZED>{}, data);
-            current = state::RUNNING;
-            [[fallthrough]];
-        case state::RUNNING:
-            tick(0, state_value_t<state::RUNNING>{}, delta, data);
+        case State::UNINITIALIZED:
+            tick(0, tag<State::UNINITIALIZED>{}, data);
+            current = State::RUNNING;
+            // no break on purpose, tasks are executed immediately
+        case State::RUNNING:
+            tick(0, tag<State::RUNNING>{}, delta, data);
         default:
             // suppress warnings
             break;
@@ -247,18 +245,18 @@ public:
 
         // if it's dead, it must be notified and removed immediately
         switch(current) {
-        case state::SUCCEEDED:
-            tick(0, state_value_t<state::SUCCEEDED>{});
-            current = state::FINISHED;
+        case State::SUCCEEDED:
+            tick(0, tag<State::SUCCEEDED>{});
+            current = State::FINISHED;
             break;
-        case state::FAILED:
-            tick(0, state_value_t<state::FAILED>{});
-            current = state::FINISHED;
+        case State::FAILED:
+            tick(0, tag<State::FAILED>{});
+            current = State::FINISHED;
             stopped = true;
             break;
-        case state::ABORTED:
-            tick(0, state_value_t<state::ABORTED>{});
-            current = state::FINISHED;
+        case State::ABORTED:
+            tick(0, tag<State::ABORTED>{});
+            current = State::FINISHED;
             stopped = true;
             break;
         default:
@@ -268,7 +266,7 @@ public:
     }
 
 private:
-    state current{state::UNINITIALIZED};
+    State current{State::UNINITIALIZED};
     bool stopped{false};
 };
 
@@ -306,21 +304,21 @@ private:
  * create them internally each and avery time a lambda or a functor is used as
  * a process.
  *
- * @sa process
- * @sa scheduler
+ * @sa Process
+ * @sa Scheduler
  *
  * @tparam Func Actual type of process.
  * @tparam Delta Type to use to provide elapsed time.
  */
 template<typename Func, typename Delta>
-struct process_adaptor: process<process_adaptor<Func, Delta>, Delta>, private Func {
+struct ProcessAdaptor: Process<ProcessAdaptor<Func, Delta>, Delta>, private Func {
     /**
      * @brief Constructs a process adaptor from a lambda or a functor.
      * @tparam Args Types of arguments to use to initialize the actual process.
      * @param args Parameters to use to initialize the actual process.
      */
     template<typename... Args>
-    process_adaptor(Args &&... args)
+    ProcessAdaptor(Args &&... args)
         : Func{std::forward<Args>(args)...}
     {}
 
